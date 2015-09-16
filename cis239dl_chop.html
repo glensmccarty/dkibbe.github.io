@@ -1,99 +1,132 @@
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 
-<h1>Chopping Strings</h1>
+<h1 id="chopping-strings">Chopping Strings</h1>
 
 <p>Sometimes you need to remove part of a string. For example a phone number.</p>
 
-<pre><code>$ myphone="123-456-7890"
-$ echo $myphone
-123-456-7890
-</code></pre>
 
-<h2>Chop from the Start of a String</h2>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ myphone=<span class="hljs-string">"123-456-7890"</span>
+$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</span>
+<span class="hljs-number">123</span>-<span class="hljs-number">456</span>-<span class="hljs-number">7890</span></code></pre>
+
+
+
+<h2 id="chop-from-the-start-of-a-string">Chop from the Start of a String</h2>
 
 <p>This chops all characters <em>before</em> the first dash. Note the curly braces not parenthesis. This example matches the <em>shortest</em> string starting from the beginning of the string.</p>
 
-<pre><code>$ echo ${myphone#*-}
-456-7890
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone#*-}</span>
+<span class="hljs-number">456</span>-<span class="hljs-number">7890</span></code></pre>
 
 <p>To chop all the characters before the second dash use this. This matches the <em>longest</em> string from the beginning.</p>
 
-<pre><code>$ echo ${myphone##*-}
-7890
-</code></pre>
 
-<p>You can remember that <strong>#</strong> and <strong>##</strong>chop from the start of the string since <strong>#</strong> is <em>before</em> the <strong>$</strong> which denotes variables.</p>
 
-<h2>Chop from the End of a String</h2>
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone##*-}</span>
+<span class="hljs-number">7890</span></code></pre>
+
+<p>You can remember that <strong>#</strong> and <strong>##<em>*chop from the start of the string since </em></strong>#* is <em>before</em> the <strong>$</strong> which denotes variables.</p>
+
+
+
+<h2 id="chop-from-the-end-of-a-string">Chop from the End of a String</h2>
 
 <p>The percent character is used to chop from the end of a string matching the first dash. </p>
 
-<pre><code>$ echo ${myphone%-*}
-123-456
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone%-*}</span>
+<span class="hljs-number">123</span>-<span class="hljs-number">456</span></code></pre>
 
 <p>To match the second dash from the end.</p>
 
-<pre><code> $ echo ${myphone%%-*}
-123
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone%%-*}</span>
+<span class="hljs-number">123</span></code></pre>
 
 <p>An way to remember which character to use is to note that <strong>$</strong> represents the expression itself and to chop from the start of the string you use <strong>#</strong> and <strong>##</strong> and to chop from the end of the string <strong>%</strong> and <strong>%%</strong>.</p>
 
-<h2>Greedy vs. Non-Greedy</h2>
+
+
+<h2 id="greedy-vs-non-greedy">Greedy vs. Non-Greedy</h2>
 
 <p>Both <strong>##</strong> and <strong>%%</strong> are known as greedy matches since they match the longest string. While <em>#</em> and <em>%</em> are non-greedy.</p>
 
-<h2>Chopping Directories</h2>
+
+
+<h2 id="chopping-directories">Chopping Directories</h2>
 
 <p>Linux provides two commands for parsing a directory string.</p>
 
-<h3>basename</h3>
 
-<pre><code>$ basename /usr/share/doc/bash/changelog.Debian.gz 
-</code></pre>
 
-<p>changelog.Debian.gz</p>
+<h3 id="basename">basename</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ basename /usr/share/doc/bash/changelog.Debian.gz 
+changelog.Debian.gz</code></pre>
 
 <p>You can specify the suffix to remove as well.</p>
 
-<pre><code>$ basename /usr/share/doc/bash/changelog.Debian.gz .Debian.gz
-changelog
-</code></pre>
 
-<h3>dirname</h3>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ basename /usr/share/doc/bash/changelog.Debian.gz .Debian.gz
+changelog</code></pre>
+
+
+
+<h3 id="dirname">dirname</h3>
 
 <p><code>dirname</code> returns the last directory in the string</p>
 
-<pre><code>$ dirname /usr/share/doc/bash/changelog.Debian.gz
-/usr/share/doc/bash
 
-$ dirname /usr/share/doc/
-/usr/share
-</code></pre>
 
-<h2>Command Substitution</h2>
+<pre class="prettyprint"><code class="language-bash hljs ">$ dirname /usr/share/doc/bash/changelog.Debian.gz
+/usr/share/doc/bash</code></pre>
 
-<h3>basename</h3>
+<p>and</p>
 
-<pre><code>$ mybase=$(basename /usr/share/doc/bash/copyright)
-copyright
-</code></pre>
 
-<h3>dirname</h3>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ dirname /usr/share/doc/
+/usr/share</code></pre>
+
+
+
+<h2 id="command-substitution">Command Substitution</h2>
+
+
+
+<h3 id="basename-1">basename</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ mybase=$(basename /usr/share/doc/bash/copyright)
+copyright</code></pre>
+
+
+
+<h3 id="dirname-1">dirname</h3>
 
 <pre><code>$ mydir=$(dirname /usr/share/doc/bash/copyright)
 /usr/share/doc/bash
 </code></pre>
 
-<h2>What to Submit</h2>
+
+
+<h2 id="what-to-submit">What to Submit</h2>
 
 <p>123-456-7890 x123</p>
 
-<p>Write a script that will return only the 10 digit phone number stripping the extension. Write a second script that strips both "123" and "x123"  returning 456-7890.</p>
+<p>Write a script that will return only the 10 digit phone number stripping the extension. Write a second script that strips both â€œ123â€ and â€œx123â€  returning 456-7890.</p>
 
-<h1>Resources</h1>
+
+
+<h1 id="resources">Resources</h1>
 
 <ul>
 <li><a href="http://www.ibm.com/developerworks/library/l-bash/index.html">Chopping Strings Like a Pro</a></li>
@@ -102,4 +135,3 @@ copyright
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
 </blockquote>
-
