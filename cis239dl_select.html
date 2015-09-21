@@ -14,54 +14,51 @@
 
 <ol>
 <li>Use <em>select</em> to create a menu</li>
-<li>Use PS3 to provide a custom prmpt.</li>
+<li>Use PS3 to provide a custom prompt.</li>
 </ol>
 
 
 
 <h2 id="syntax">Syntax</h2>
 
-<pre><code>select i in [list]
-do
-    do something with $i
-done    
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">    select i <span class="hljs-keyword">in</span> [list]
+    <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">do</span> something with <span class="hljs-variable">$i</span>
+    <span class="hljs-keyword">done</span>    </code></pre>
 
 <h2 id="example">Example</h2>
 
-<pre><code>select i in "German" "English" "Spanish" "Quit"
-  do
-    if [[ "$i" = "German" ]]
-    then echo "Guten Tag"
-    break
-    elif [[ "$i" = "English" ]]
-    then echo "Hello"
-    break
-    elif [[ "$i" = "Spanish" ]]
-    then echo "Holla"
-    break
-    elif [[ "$i" = "Quit" ]]
-    then
-    exit 
-fi
-done
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">    select i <span class="hljs-keyword">in</span> <span class="hljs-string">"German"</span> <span class="hljs-string">"English"</span> <span class="hljs-string">"Spanish"</span> <span class="hljs-string">"Quit"</span>
+      <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"German"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Guten Tag"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"English"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hello"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"Spanish"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Holla"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"Quit"</span> ]]
+        <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">exit</span> 
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">done</span></code></pre>
 
 <h2 id="the-ps3-prompt">The PS3 Prompt</h2>
 
 <p>You can prompt using the PS3 prompt set before the select menu is run.</p>
 
-<pre><code>PS3="Choose a language by number. "
-select
-...
-done
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">    PS3=<span class="hljs-string">"Choose a language by number. "</span>
+    select
+    ...
+    <span class="hljs-keyword">done</span></code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
