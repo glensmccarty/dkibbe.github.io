@@ -1,0 +1,71 @@
+<!-- &lt;script src=&#34;https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;amp;skin=sunburst&#34;&gt;&lt;/script&gt; -->
+
+<h1 id="select-menu">Select Menu</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p><em>select</em> lets you create simple menus.</p>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>After successfully completing this assignment you will be able to:</em></p>
+
+<ol>
+<li>Use <em>select</em> to create a menu</li>
+<li>Use PS3 to provide a custom prompt.</li>
+</ol>
+
+
+
+<h2 id="syntax">Syntax</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">    select i <span class="hljs-keyword">in</span> [list]
+    <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">do</span> something with <span class="hljs-variable">$i</span>
+    <span class="hljs-keyword">done</span>    </code></pre>
+
+<h2 id="example">Example</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">    select i <span class="hljs-keyword">in</span> <span class="hljs-string">"German"</span> <span class="hljs-string">"English"</span> <span class="hljs-string">"Spanish"</span> <span class="hljs-string">"Quit"</span>
+      <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"German"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Guten Tag"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"English"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hello"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"Spanish"</span> ]]
+        <span class="hljs-keyword">then</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"Holla"</span>
+        <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">elif</span> [[ <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> = <span class="hljs-string">"Quit"</span> ]]
+        <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">exit</span> 
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">done</span></code></pre>
+
+<h2 id="the-ps3-prompt">The PS3 Prompt</h2>
+
+<p>You can prompt using the PS3 prompt set before the select menu is run.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">    PS3=<span class="hljs-string">"Choose a language by number. "</span>
+    select
+    ...
+    <span class="hljs-keyword">done</span></code></pre>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Redo the “Rock, Paper, Scissors” assignment using a select menu. Use a custom PS3 prompt to make the menu selection more intuitive.</p>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
