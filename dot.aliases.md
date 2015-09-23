@@ -1,4 +1,4 @@
-```bash
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 #################################################################
 # To list active aliases, run:                                  #
 # alias                                                         #
@@ -69,7 +69,6 @@ alias nyc1s="xfreerdp -f -u student 140.198.245.197:6092"
 alias nyc2s="xfreerdp -f -u student 140.198.245.197:6093"
 alias nyc1a='xfreerdp -f -u contoso\Administrator 140.198.245.197:6092'
 alias nyc2a='xfreerdp -f -u contoso\Administrator 140.198.245.197:6093'
-```
 
 
 > Written with [StackEdit](https://stackedit.io/).
