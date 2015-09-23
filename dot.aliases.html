@@ -1,0 +1,74 @@
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment">#################################################################</span>
+<span class="hljs-comment"># To list active aliases, run:                                  #</span>
+<span class="hljs-comment"># alias                                                         #</span>
+<span class="hljs-comment">#                                                               #</span>
+<span class="hljs-comment"># To see names of all active functions, run:                    #</span>
+<span class="hljs-comment"># declare -F                                                    #</span>
+<span class="hljs-comment">#                                                               #</span>
+<span class="hljs-comment"># To see the names and definitions of all active functions.     #</span>
+<span class="hljs-comment"># declare -f                                                    #</span>
+<span class="hljs-comment">#################################################################</span>
+
+<span class="hljs-comment"># Backup to Blackbox</span>
+<span class="hljs-function"><span class="hljs-title">blackbox</span></span>() {
+
+  [ <span class="hljs-operator">-d</span> /run/media/dennisk/blackbox ]
+
+  <span class="hljs-keyword">if</span> [ $? = <span class="hljs-number">0</span> ]; <span class="hljs-keyword">then</span>
+  rsync -aqz --delete --exclude .cache --exclude .mozilla --progress /home/dennisk /run/media/dennisk/blackbox/ <span class="hljs-number">2</span>&gt;/dev/null
+  sleep <span class="hljs-number">5</span>
+  df -h /run/media/dennisk/blackbox
+  <span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">'Did you mount the external drive?'</span>
+  <span class="hljs-keyword">fi</span> 
+}
+
+<span class="hljs-comment"># Use Ditaa to create a PNG.</span>
+<span class="hljs-function"><span class="hljs-title">ditaa</span></span>() { java -jar ~/bin/ditaa.jar <span class="hljs-variable">$1</span>; }
+
+<span class="hljs-comment"># Simple way to make a backup of a file: backup [file]</span>
+<span class="hljs-function"><span class="hljs-title">backup</span></span>() { cp <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span>{,.$(date +%Y%b%d)};}
+
+<span class="hljs-comment"># Generate passwords</span>
+alias genpasswd=<span class="hljs-string">"strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"</span>
+
+alias du=<span class="hljs-string">"du -ach | sort -h"</span>
+
+alias free=<span class="hljs-string">"free -mt"</span>
+
+<span class="hljs-comment"># List disk usage in human-readable units including filesystem type, and print a total at the bottom:</span>
+alias df=<span class="hljs-string">"df -Tha --total"</span>
+
+alias ps=<span class="hljs-string">"ps auxf"</span>
+
+alias df=<span class="hljs-string">"df -Tha --total"</span>
+
+<span class="hljs-comment"># Searches our process for an argument we'll pass:</span>
+alias psg=<span class="hljs-string">"ps aux | grep -v grep | grep -i -e VSZ -e"</span>
+
+alias mkdir=<span class="hljs-string">"mkdir -pv"</span>
+
+<span class="hljs-comment"># Find files in current directory easily.</span>
+alias fhere=<span class="hljs-string">"find . -iname "</span>
+
+<span class="hljs-comment"># An alias to pipe our output to less for viewing large directory listings with the long format.</span>
+alias lsl=<span class="hljs-string">"ls -lhFA | less"</span>
+
+<span class="hljs-comment"># Clear the screen</span>
+alias c=<span class="hljs-string">"clear"</span>
+
+<span class="hljs-comment"># Download entirely a website: websiteget [URL]</span>
+alias websiteget=<span class="hljs-string">"wget --random-wait -r -p -e robots=off -U mozilla"</span>
+
+<span class="hljs-comment"># Show which applications are connecting to the network.</span>
+alias listen=<span class="hljs-string">"lsof -P -i -n"</span>
+
+<span class="hljs-comment"># These are for MST150SV</span>
+alias nyc1s=<span class="hljs-string">"xfreerdp -f -u student 140.198.245.197:6092"</span>
+alias nyc2s=<span class="hljs-string">"xfreerdp -f -u student 140.198.245.197:6093"</span>
+alias nyc1a=<span class="hljs-string">'xfreerdp -f -u contoso\Administrator 140.198.245.197:6092'</span>
+alias nyc2a=<span class="hljs-string">'xfreerdp -f -u contoso\Administrator 140.198.245.197:6093'</span></code></pre>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
