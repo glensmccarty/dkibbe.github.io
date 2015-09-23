@@ -1,0 +1,103 @@
+<h1 id="reiteration-using-a-for-loop">Reiteration Using a for loop</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Often you want to repeat an action on a list of files. A <code>for</code> loop will do this. For this assignment you will create a <code>for</code> loop that will use the <code>tr</code> command to convert upper case file names to lower case.</p>
+
+
+
+<h2 id="term-you-should-know">Term You Should Know</h2>
+
+<ul>
+<li><code>tr</code></li>
+<li><code>for</code></li>
+<li><code>seq</code></li>
+<li><code>touch</code></li>
+<li>Character classes</li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<ol>
+<li>Create a directory in your home directory named <code>~/temp</code> and change to that directory.</li>
+<li>Use the <code>touch</code> command to create the files.</li>
+</ol>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ touch FILE{<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>}.txt</code></pre>
+
+<h2 id="seq-command"><code>seq</code> Command</h2>
+
+<p>You can also create the files using a <code>for</code> loop and the <code>seq</code> command.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $(seq <span class="hljs-number">1</span> <span class="hljs-number">9</span>); <span class="hljs-keyword">do</span> touch FILE<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>.txt; <span class="hljs-keyword">done</span></code></pre>
+
+<p>This will create a sequence from 1 to 9. Each instance of the variable <strong>i</strong> is replaced by the output of the <code>seq</code> command.</p>
+
+<h2 id="the-tr-command">The <code>tr</code> Command</h2>
+
+<p>The <code>tr</code> command can translate a string of characters. Here you will use <code>tr</code> to convert file names from upper to lower case. try the command by its self before you use it in a script.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ touch FILE{<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>}
+$ ls FILE?
+FILE1
+FILE2
+FILE3
+FILE4
+FILE5</code></pre>
+
+<p>The syntax for <code>tr</code> is <em>command</em>, <em>options</em>, <em>set1</em>, <em>set2</em></p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ls FILE* | tr [:upper:] [:lower:]
+file1
+file2
+file3
+file4
+file5</code></pre>
+
+<h2 id="for-loop"><code>for</code> Loop</h2>
+
+<p>The syntax for the <code>for</code> loop looks like this:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> &lt;list&gt;
+<span class="hljs-keyword">do</span>
+&lt;<span class="hljs-keyword">do</span> something to <span class="hljs-variable">$i</span>&gt;
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>There is nothing special about the variable <strong>$i</strong>. You can call it what ever you want just be careful not to use a variable name already in use.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> myvar <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">$(ls file?)</span>"</span>
+<span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$myvar</span>"</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>Get in the habit now of quoting variables so that they will always expand correctly.</p>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Write a script that uses a <code>for</code> loop to remove the files you created. For 5 extra points use a <code>for</code> to remove only the odd numbered files leaving the even numbered files untouched.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">Bash Reference Manual (pattern matching)</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/TestsAndConditionals">Tests and Conditionals</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
