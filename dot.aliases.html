@@ -28,7 +28,7 @@
 <span class="hljs-function"><span class="hljs-title">ditaa</span></span>() { java -jar ~/bin/ditaa.jar <span class="hljs-variable">$1</span>; }
 
 <span class="hljs-comment"># Simple way to make a backup of a file: backup [file]</span>
-<span class="hljs-function"><span class="hljs-title">backup</span></span>() { cp <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span>{,.$(date +%Y%b%d)};}
+<span class="hljs-function"><span class="hljs-title">backup</span></span>() { cp <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span>{,.$(date +%Y%b%d)}; }
 
 <span class="hljs-comment"># Generate passwords</span>
 alias genpasswd=<span class="hljs-string">"strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"</span>
