@@ -1,0 +1,150 @@
+<h1 id="introduction">Introduction</h1>
+
+<p>A <strong>function</strong> is a script within a script. Using functions in your scripts makes the script cleaner. A function can contain any commands you can place in a script. Functions can take arguments. While functions appear similar to aliases, aliases can not be used in scripts.</p>
+
+
+
+<h1 id="terms-and-concepts">Terms and Concepts</h1>
+
+<ul>
+<li>declare (-f, -F)</li>
+<li>function name()</li>
+<li>source (.)</li>
+<li>unset -f <em>function name</em></li>
+</ul>
+
+
+
+<h1 id="write-a-function-to-the-cli">Write a Function to the CLI</h1>
+
+<p>While you will use functions in a script they can be written directly to the command line as most Bash shell programming can. The syntax is:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-function"><span class="hljs-title">func_name</span></span>() { command;}</code></pre>
+
+<p>Start by writing each part on a separate line. Pessing enter at the end of each line.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ myfunc()
+&gt; {
+&gt; ls /etc/passwd
+&gt; }
+$</code></pre>
+
+<p>Note that when the function is complete your will exit the subshell. Run the function like any other command.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ myfunc
+/etc/passwd</code></pre>
+
+<p>Press the up arrow key to see your function correctly formatted. Note that the shell placed a semi-colon ( ; ) at the end of the last command. If your function is in a script the semi-colon is not needed unless the function is on one line.</p>
+
+<p>Type <code>unset myfunc</code> to remove the function.</p>
+
+<h1 id="create-first-function">Create First Function</h1>
+
+<p>This script has three functions. Use the <code>source</code> command to make the functions active then call each function by name to run it.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">    <span class="hljs-comment">#!/usr/bin/env bash</span>
+
+    <span class="hljs-comment"># Date: Today</span>
+    <span class="hljs-comment"># Author: Tux Penguin</span>
+    <span class="hljs-comment"># Purpose: Demo functions</span>
+    <span class="hljs-comment"># Assignment: Functions</span>
+
+    function <span class="hljs-function"><span class="hljs-title">showdate</span></span>() {
+      date +%F
+    }
+
+    function <span class="hljs-function"><span class="hljs-title">showtime</span></span>() {
+      date +%r
+    }
+
+    function <span class="hljs-function"><span class="hljs-title">getname</span></span>() {
+      clear
+      <span class="hljs-built_in">echo</span> Please <span class="hljs-built_in">type</span> your first and last name
+      <span class="hljs-built_in">read</span> firstname lastname
+      <span class="hljs-built_in">echo</span> <span class="hljs-variable">$firstname</span> <span class="hljs-variable">$lastname</span>, Nice to meet you
+    }
+
+    <span class="hljs-comment"># END</span></code></pre>
+
+<h1 id="source-the-script">Source the Script</h1>
+
+<p>When a script is called directly Bash opens a <strong>subshell</strong> to run the script. Calling the script with the <code>source</code> command assures that the functions are available to the current shell and not a subshell.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS239DL/img/bash_subshell.png" alt="Diagram showing running a script in a shell vs. a subshell." title=""></p>
+
+<p>You can demonstrate this by creating a simple script that echos a message to the console and then exits.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash
+</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Bye now"</span>  
+<span class="hljs-keyword">exit</span>
+
+<span class="hljs-comment"># END</span></code></pre>
+
+<p>Run the script first with <code>bash</code>.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ bash exit.sh
+Bye now</code></pre>
+
+<p>then with <code>source</code>.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">source</span> exit.sh</code></pre>
+
+<p>or</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ . exit.sh</code></pre>
+
+<p>Since <code>source</code> runs the script in the same shell the <code>exit</code> command exits from the shell closing the terminal window. Run from <code>bash</code> the script runs in a subshell than returns to the main shell when it exits.</p>
+
+<h1 id="bashrc-or-bashaliases">~/.bashrc or ~/.bash_aliases</h1>
+
+<p>To have functions available after login you can put the functions in <code>~/.bashrc</code> or source a separate function library.</p>
+
+
+
+<h1 id="order-of-precedence">Order of Precedence</h1>
+
+<p>The Bash shell search for commands in this order. So, if you have an alias <code>ls --color=auto</code> that will run in place of <code>/bin/ls</code>.</p>
+
+<table border="1">
+<tbody><tr><th>Order of Precedence</th>
+</tr><tr><td>Aliases</td></tr>
+<tr><td>Keywords</td></tr>
+<tr><td>Functions</td></tr>
+<tr><td>Build-ins</td></tr>
+<tr><td>Scripts &amp; Programs</td></tr>
+</tbody></table>
+
+
+
+<h1 id="what-to-submit">What to Submit</h1>
+
+<p>Create a simple function named <em>gping</em> which pings google.com twice  either on the CLI of in a script. If in a script use the correct format for the class..</p>
+
+
+
+<h1 id="resources">Resources</h1>
+
+<ul>
+<li><a href="http://mywiki.wooledge.org/BashGuide">Greg’s Bash Guide</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">Bash Reference Manual</a></li>
+</ul>
+
+<p></p>
+
+<h1 id="creative-commons-license">Creative Commons License</h1>
+
+<p><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" alt="Creative Commons License" title=""></a> <br>
+This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
