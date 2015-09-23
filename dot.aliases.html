@@ -15,7 +15,7 @@
 
   [ <span class="hljs-operator">-d</span> /run/media/dennisk/blackbox ]
 
-  <span class="hljs-keyword">if</span> [ $? = <span class="hljs-number">0</span> ]; <span class="hljs-keyword">then</span>
+  <span class="hljs-keyword">if</span> [[ $? = <span class="hljs-number">0</span> ]]; <span class="hljs-keyword">then</span>
   rsync -aqz --delete --exclude .cache --exclude .mozilla --progress /home/dennisk /run/media/dennisk/blackbox/ <span class="hljs-number">2</span>&gt;/dev/null
   sleep <span class="hljs-number">5</span>
   df -h /run/media/dennisk/blackbox
