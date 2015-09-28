@@ -1,3 +1,5 @@
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+
 <h1 id="here-docs">Here Docs</h1>
 
 <p>Sometimes you need to output some text to the command line to inform the user of a script. a <em>here doc</em> lets you do that easily.</p>
@@ -8,10 +10,10 @@
 
 
 
-<pre class="prettyprint prettyprinted"><code class="language-bash"><span class="pln">$ cat </span><span class="pun">&lt;&lt;</span><span class="pln"> EOF
-</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">This</span><span class="pln"> is a basic here doc</span><span class="pun">.</span><span class="pln">
-</span><span class="pun">&gt;</span><span class="pln"> EOF
-</span><span class="typ">This</span><span class="pln"> is a basic here doc</span><span class="pun">.</span></code></pre>
+<pre class="prettyprint"><code class="language-bash">$ cat &lt;&lt; EOF
+&gt; This is a basic here doc.
+&gt; EOF
+This is a basic here doc.</code></pre>
 
 <p>The <strong>EOF</strong> delimiter can be anything that is not likely to appear in the script. EOF (End Of File) is a good choice. You should keep your here docs short.</p>
 
@@ -23,29 +25,29 @@
 
 
 
-<pre class="prettyprint prettyprinted"><code class="language-bash"><span class="com">#!/usr/bin/env bash</span><span class="pln">
+<pre class="prettyprint"><code class="language-bash">#!/usr/bin/env bash
 
-usage </span><span class="pun">()</span><span class="pln">
-</span><span class="pun">{</span><span class="pln">
-cat </span><span class="pun">&lt;&lt;</span><span class="pln"> EOF
-</span><span class="typ">No</span><span class="pln"> postional parameter given</span><span class="pun">.</span><span class="pln">
+usage ()
+{
+cat &lt;&lt; EOF
+No postional parameter given.
 EOF
-</span><span class="pun">}</span><span class="pln">
+}
 
-right </span><span class="pun">()</span><span class="pln">
-</span><span class="pun">{</span><span class="pln">
-cat </span><span class="pun">&lt;&lt;</span><span class="pln"> EOF
-</span><span class="typ">You</span><span class="pln"> did it right</span><span class="pun">.</span><span class="pln">
+right ()
+{
+cat &lt;&lt; EOF
+You did it right.
 EOF
-</span><span class="pun">}</span><span class="pln">
+}
 
-</span><span class="kwd">if</span><span class="pln">
-</span><span class="pun">[[</span><span class="pln"> $</span><span class="com"># -lt 1 ]]</span><span class="pln">
-</span><span class="kwd">then</span><span class="pln">
+if
+[[ $# -lt 1 ]]
+then
 usage
-</span><span class="kwd">else</span><span class="pln">
+else
 right
-</span><span class="kwd">fi</span></code></pre>
+fi</code></pre>
 
 
 
