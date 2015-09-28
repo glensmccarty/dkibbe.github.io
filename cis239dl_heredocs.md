@@ -1,3 +1,4 @@
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="here-docs">Here Docs</h1>
 
 <p>Sometimes you need to output some text to the command line to inform the user of a script. a <em>here doc</em> lets you do that easily.</p>
