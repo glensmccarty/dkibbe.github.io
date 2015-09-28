@@ -1,4 +1,14 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+<p><div class="toc">
+<ul>
+<li><a href="#here-docs">Here Docs</a><ul>
+<li><a href="#a-basic-here-doc">A Basic here doc</a></li>
+<li><a href="#here-docs-and-functions">Here Docs and Functions</a></li>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</p>
 
 <h1 id="here-docs">Here Docs</h1>
 
@@ -10,7 +20,7 @@
 
 
 
-<pre class="prettyprint"><code class="language-bash">$ cat &lt;&lt; EOF
+<pre class="prettyprint"><code class="language-bash hljs ">$ cat &lt;&lt; EOF
 &gt; This is a basic here doc.
 &gt; EOF
 This is a basic here doc.</code></pre>
@@ -25,29 +35,29 @@ This is a basic here doc.</code></pre>
 
 
 
-<pre class="prettyprint"><code class="language-bash">#!/usr/bin/env bash
-
-usage ()
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash
+</span>
+<span class="hljs-function"><span class="hljs-title">usage</span></span> ()
 {
 cat &lt;&lt; EOF
 No postional parameter given.
 EOF
 }
 
-right ()
+<span class="hljs-function"><span class="hljs-title">right</span></span> ()
 {
 cat &lt;&lt; EOF
 You did it right.
 EOF
 }
 
-if
-[[ $# -lt 1 ]]
-then
+<span class="hljs-keyword">if</span>
+[[ <span class="hljs-variable">$#</span> <span class="hljs-operator">-lt</span> <span class="hljs-number">1</span> ]]
+<span class="hljs-keyword">then</span>
 usage
-else
+<span class="hljs-keyword">else</span>
 right
-fi</code></pre>
+<span class="hljs-keyword">fi</span></code></pre>
 
 
 
