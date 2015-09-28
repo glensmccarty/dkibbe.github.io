@@ -1,4 +1,3 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="here-docs">Here Docs</h1>
 
 <p>Sometimes you need to output some text to the command line to inform the user of a script. a <em>here doc</em> lets you do that easily.</p>
@@ -50,6 +49,7 @@ right
 
 <ul>
 <li><a href="http://mywiki.wooledge.org/BashGuide/InputAndOutput#Heredocs_And_Herestrings">Greg’s Bash Guide</a></li>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-unixtext/">Introduction to text manipulation on UNIX-based systems</a></li>
 </ul>
 
 <blockquote>
