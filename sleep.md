@@ -1,3 +1,4 @@
+``` bash
 #!/bin/bash
 
 echo "paper rock scissors"
@@ -9,3 +10,4 @@ rock) sleep 2s; echo "Tie:  Rock, vs. Rock" ;;
 paper) sleep 2s; echo "You win:  Paper beats rock!" ;;
 scissors) sleep 2s; echo "Computer wins:  Rock beats scissors!";;
 esac
+```
