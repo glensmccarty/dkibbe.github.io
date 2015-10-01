@@ -1,4 +1,5 @@
-```bash#! /bin/bash
+```bash
+#! /bin/bash
 
 # Purpose: Create a for loop that deletes files created previously
 
