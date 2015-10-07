@@ -1,6 +1,6 @@
 # Traps
 
-In bash you can use the `trap` command to catch certain signals then run a command based on the trap.
+In bash you can use the `trap` command to catch certain signals then run a command based on the trap.  This script will *trap* SIGINT and SIGTERM. SIGKILL is required to stop the process.
 
 ```bash
 #!/usr/bin/env bash
