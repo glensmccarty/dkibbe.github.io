@@ -1,0 +1,30 @@
+<h1 id="traps">Traps</h1>
+
+<p>In bash you can use the <code>trap</code> command to catch certain signals then run a command based on the trap.  This script will <em>trap</em> SIGINT and SIGTERM. SIGKILL is required to stop the process.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash
+</span>
+<span class="hljs-comment"># Author: Tux</span>
+<span class="hljs-comment"># Script to demo trap</span>
+
+trap <span class="hljs-string">"echo 'You pressed CTL+C!'"</span> INT
+trap <span class="hljs-string">"echo 'You tries to kill me'"</span> TERM
+
+<span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>
+
+<span class="hljs-keyword">do</span>
+
+sleep <span class="hljs-number">60</span>
+
+<span class="hljs-keyword">done</span></code></pre>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://redsymbol.net/articles/bash-exit-traps/">How “Exit Traps” Can Make Your Bash Scripts Way More Robust And Reliable</a></li>
+<li><a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_12_02.html">Bash Guide</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
