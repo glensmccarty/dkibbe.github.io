@@ -1,10 +1,22 @@
 # Python vs. Perl
 
+### Bash
+
+```bash
+#!/usr/bin/env bash
+i=0
+while [ $i -lt 10 ]
+do
+echo "This is iteration $i"
+i=$(( $i +1 ))
+echo "Round and round"
+done
+```
 ## Python
 ``` python
 i =0
 while i < 10:
-        print "This is interation " ,i
+        print "This is iteration " ,i
         i=i+1
         print "Round and round"
 ```
