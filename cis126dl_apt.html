@@ -1,0 +1,248 @@
+<h1 id="installing-software-using-apt">Installing Software Using APT</h1>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p>In this assignment you will find and install the <code>htop</code> process viewer.  <code>htop</code> is an improved version of <code>top</code>.</p>
+
+<p><em>After completing this assignment you will be able to:</em></p>
+
+<ol>
+<li>Find a package using <code>apt-cache</code>.</li>
+<li>Obtain a additional informant ion on a package.</li>
+<li>Install a package using <code>apt-get</code>.</li>
+<li>Find the version of a package.</li>
+<li>Remove a package.</li>
+</ol>
+
+
+
+<h2 id="terms-and-commands-you-should-know">Terms and Commands You Should Know</h2>
+
+<ul>
+<li><strong>APT:</strong> Debian’s Advanced Package Tool</li>
+<li><strong>apt-cache:</strong> Query the APT cache</li>
+<li><strong>apt-get</strong> APT package handling utility – command-line interface</li>
+<li><strong>apt-get update:</strong> Resynchronize the local package index files from their sources.</li>
+<li><strong>apt-get upgrade:</strong> Install the newest versions of all packages currently installed on the system.</li>
+<li><strong>add-apt-repository:</strong> Enable a repository.</li>
+<li><strong>dpkg:</strong> Package manager for Debian</li>
+<li><strong>/etc/apt/sources.list:</strong> List of configured APT data sources</li>
+<li><strong>/var/log/apt/history.log:</strong> Install history log</li>
+<li><strong>Repository:</strong> A collection of software build for a specific Linux distribution.</li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>You need <code>sudo</code> privileges so do this assignment in the Ubuntu virtual machine.</p>
+
+
+
+<h2 id="adding-a-repository">Adding a Repository</h2>
+
+<p>Canonical, the company that sponsors Ubuntu does not support all the available software itself. Community supported software is in a separate repository. First you need to add that <em>repo</em> to the <em>/etc/apt/sources.list</em>.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby">    <span class="hljs-variable">$ </span>cat /etc/apt/sources.lists</code></pre>
+
+<p>The output shows the repositories that are enabled. To fin the program we are looking for we’ll add the <em>Universa</em> repository.</p>
+
+<pre><code>$ sudo add-apt-repository universe
+'universe' distribution component added for all sources.
+</code></pre>
+
+<p>Next run <code>apt-get update</code> to refresh the local package database.</p>
+
+<h2 id="finding-a-package-to-install">Finding a Package to Install</h2>
+
+<p>Someone told you that there is a real-time interactive command line process viewer like top but nicer. However you don’t know the name of the package. Use <code>apt-cache</code> to find the correct package.</p>
+
+<p>First update the local package list if not already done.</p>
+
+<pre><code>$ sudo apt-get update
+</code></pre>
+
+<p>Next use <code>apt-cache</code> to find the package:</p>
+
+<pre><code>$ apt-cache search "process viewer"
+gnome-system-monitor - Process viewer and system resource monitor for GNOME
+htop - interactive process viewer
+</code></pre>
+
+<p><code>htop</code> looks like what we want.  Let’s find out more about the package.</p>
+
+<pre><code>$ apt-cache show htop
+</code></pre>
+
+<p>Description-en: interactive processes viewer Htop is an ncursed-based process viewer similar to top, but it allows one to scroll the list vertically and horizontally to see  all processes and their full command lines.</p>
+
+<p>The <code>show</code> option to <code>apt-cache</code> lists a lot more information about the program.</p>
+
+<h2 id="installing-htop">Installing <code>htop</code></h2>
+
+<p>You can install <code>htop</code> with <code>apt-get</code>.  Installing software on Ubuntu requires sudo privileges.</p>
+
+<pre><code>$ sudo apt-get install htop
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+htop
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 69.0 kB of archives.
+After this operation, 188 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu/ raring/universe htop amd64 1.0.2-1 [69.0 kB]
+Fetched 69.0 kB in 0s (84.3 kB/s)
+Selecting previously unselected package htop.
+(Reading database ... 251318 files and directories currently installed.)
+Unpacking htop (from .../htop_1.0.2-1_amd64.deb) ...
+Processing triggers for bamfdaemon ...
+Rebuilding /usr/share/applications/bamf-2.index...
+Processing triggers for desktop-file-utils ...
+Processing triggers for gnome-menus ...
+Processing triggers for man-db ...
+Setting up htop (1.0.2-1) ...
+</code></pre>
+
+<p>APT installs <code>htop</code> along with any dependencies and installs the manpage as well</p>
+
+<p>Run the new program:</p>
+
+<pre><code>$ htop
+</code></pre>
+
+<p><img src="https://s3.amazonaws.com/CIS126DL/Images/htop2.png" alt="htop screenshot" title="htop"></p>
+
+<p>To find out more about <code>htop</code> see the manpage.</p>
+
+<pre><code>$ man htop
+</code></pre>
+
+<h2 id="program-version">Program Version</h2>
+
+<p>Most programs accept the <code>-v</code> option to show the version number.</p>
+
+<pre><code>$ htop -v
+htop 1.0.2 - (C) 2004-2011 Hisham Muhammad
+Released under the GNU GPL.
+</code></pre>
+
+<p>The <code>dpkg</code> command can also be used:</p>
+
+<pre><code>$ dpkg --list htop
+    Desired=Unknown/Install/Remove/Purge/Hold
+| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||/ Name               Version        Architecture   Description
++++-==================-==============-==============-============================
+ii  htop               1.0.2-1        amd64          interactive processes viewer
+</code></pre>
+
+<h2 id="package-archive">Package Archive</h2>
+
+<p>The installed Debian archives (deb packages) are stored in the <em>/var</em> directory.</p>
+
+<pre><code>$ ls /var/cache/apt/archives/ | grep htop
+htop_1.0.2-1_amd64.deb
+</code></pre>
+
+<h2 id="removing-an-installed-package">Removing an Installed Package</h2>
+
+<p>APT can also remove an installed package:</p>
+
+<pre><code>$ sudo apt-get remove htop
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+htop*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 188 kB disk space will be freed.
+Do you want to continue [Y/n]?
+</code></pre>
+
+<p>The <code>remove</code> option will not remove any configuration files. To remove configuration files as well use <code>purge</code>.</p>
+
+<pre><code>$ sudo apt-get purge htop
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+htop*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+Purge htop [1.0.2-1]
+</code></pre>
+
+<h2 id="install-aptitude">Install <code>aptitude</code></h2>
+
+<p>Aptitude is not installed by default.</p>
+
+<pre><code>$ apt-cache show aptitude
+Description-en: terminal-based package manager
+aptitude is a package manager with a number of useful features,
+including: a mutt-like syntax for matching packages in a flexible
+manner, dselect-like persistence of user actions, the ability to
+retrieve and display the Debian changelog of most packages, and a
+command-line mode similar to that of apt-get.
+
+aptitude is also Y2K-compliant, non-fattening, naturally cleansing, and housebroken.
+</code></pre>
+
+<p>Here the <code>-s</code> option will simulate the installation:</p>
+
+<pre><code>$ sudo apt-get -s install aptitude
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+aptitude-common libboost-iostreams1.49.0 libcwidget3 libept1.4.12
+Suggested packages:
+aptitude-doc-en aptitude-doc tasksel debtags libcwidget-dev
+The following NEW packages will be installed:
+aptitude aptitude-common libboost-iostreams1.49.0 libcwidget3 libept1.4.12
+0 upgraded, 5 newly installed, 0 to remove and 0 not upgraded.
+Inst aptitude-common (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [all])
+Inst libboost-iostreams1.49.0 (1.49.0-3.2ubuntu1 Ubuntu:13.04/raring [amd64])
+Inst libcwidget3 (0.5.16-3.4ubuntu1 Ubuntu:13.04/raring [amd64])
+Inst libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
+Inst aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64])
+Conf aptitude-common (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [all])
+Conf libboost-iostreams1.49.0 (1.49.0-3.2ubuntu1 Ubuntu:13.04/raring [amd64])
+Conf libcwidget3 (0.5.16-3.4ubuntu1 Ubuntu:13.04/raring [amd64])
+Conf libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
+Conf aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64]) 
+</code></pre>
+
+<h2 id="keeping-your-system-up-to-date">Keeping Your System Up to Date</h2>
+
+<p>The <code>apt-get update</code> and <code>apt-get upgrade</code> commands are used to keep a Debian system up to date.  The <code>apt-get dist-upgrade</code> will upgrade a system to the latest stable release. <em>Example:</em> From Squeeze to Wheezy.</p>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a cropped screenshot of the last 10 lines of the history log showing that <code>htop</code> was install than uninstalled..</p>
+
+<p>First:</p>
+
+<pre><code>$ sudo  tail /var/log/apt/history.log
+</code></pre>
+
+<p>Next open the graphical Screenshot utility to take a cropped screenshot of the virtual machine terminal.</p>
+
+<!--![Take Screenshot]()-->
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://debian-handbook.info/browse/stable/" title="The Debian Administrator's Handbook">The Debian Administrator’s Handbook</a></li>
+<li>man apt</li>
+<li>man apt-cache</li>
+<li>man apt-get</li>
+<li>man add-apt-repository</li>
+<li>man 5 sources.list</li>
+</ul>
