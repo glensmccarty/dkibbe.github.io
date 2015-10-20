@@ -1,4 +1,3 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="file-globbing-and-regular-expressions">File Globbing and Regular Expressions</h1>
 
 
@@ -31,16 +30,38 @@
 
 <p>Wild cards can be used with common commands to match file names. While similar to regular expressions there are not the same. Regular expressions do not match file or directory names but strings.</p>
 
-<table border="1">
-<tbody><tr><th>Symbol</th><th>Description</th>
-</tr><tr><td>?</td><td>Matches any single character</td></tr>
-<tr><td>*</td><td>Matches any string, including the empty string.</td></tr>
-<tr><td>[a,i,o]</td><td>Matches Ja, Ji or Jo.</td></tr>
-<tr><td>[0-9]</td><td>Matches example0 to example9.</td></tr>
-<tr><td>[a-z]</td><td>Matches examplea to examplez.</td></tr>
-<tr><td>[A-Z]</td><td>Matches exampleA to exampleZ.</td></tr>
+<table>
+<thead>
+<tr>
+  <th>Symbol</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>?</td>
+  <td>Matches any single character</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td>Matches any string, including the empty string.</td>
+</tr>
+<tr>
+  <td>[a,i,o]</td>
+  <td>Matches Ja, Ji or Jo.</td>
+</tr>
+<tr>
+  <td>[0-9]</td>
+  <td>Matches example0 to example9.</td>
+</tr>
+<tr>
+  <td>[a-z]</td>
+  <td>Matches examplea to examplez.</td>
+</tr>
+<tr>
+  <td>[A-Z]</td>
+  <td>Matches exampleA to exampleZ.</td>
+</tr>
 </tbody></table>
-
 
 
 <h3 id="example-1">Example 1</h3>
@@ -84,19 +105,34 @@ Exam  Example
 
 <p>Regular expressions are strings of special characters that describe a pattern for searching. The following table show some of the characters special to regular expressions.</p>
 
-<table border="1">
-<tbody><tr><th>Symbol</th><th>Description</th>
-</tr><tr><td>.</td><td>Matches any single character.</td></tr>
-<tr><td>*</td><td>Matches preceding character zero or more times.</td></tr>
-<tr><td>^</td><td>Matches start of line.</td></tr>
-<tr><td>$</td><td>Matches end of line.</td></tr>
-<tr><td>\</td><td>Represent special characters.</td></tr>
-<!-- &lt;tr&gt;&lt;td&gt;()&lt;/td&gt;&lt;td&gt;Groups regular expressions&lt;/td&gt;&lt;/tr&gt; -->
-<tr><td>?</td><td>Matches preceding character zero or one times</td></tr>
-<!-- &lt;tr&gt;&lt;td&gt;{n}&lt;/td&gt;&lt;td&gt;Matches the preceding character appearing 'n' times&lt;/td&gt;&lt;/tr&gt;&#10;&lt;tr&gt;&lt;td&gt;{n,m}&lt;/td&gt;&lt;td&gt;Matches the preceding character appearing 'n' times but not more than 'm' times&lt;/td&gt;&lt;/tr&gt;&#10;&lt;tr&gt;&lt;td&gt;{n,}&lt;/td&gt;&lt;td&gt;Matches the preceding character only when it appears 'n' times or more&lt;/td&gt;&lt;/tr&gt;-->
+<table>
+<thead>
+<tr>
+  <th>Symbol</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>.</td>
+  <td>Matches any single character.</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td>Matches preceding character zero or more times.</td>
+</tr>
+<tr>
+  <td>^</td>
+  <td>Matches start of line.</td>
+</tr>
+<tr>
+  <td>$</td>
+  <td>Matches end of line.</td>
+</tr>
 </tbody></table>
 
 
+<p>|Escapes special characters <br>
+?|Matches preceding character zero or one times.</p>
 
 <h3 id="literal-strings">Literal Strings</h3>
 
@@ -162,9 +198,7 @@ $ cat -E twain.txt
 Space at end  Mark Twain $
 </code></pre>
 
-<!--## Extended Regular Expressions&#10;&#10;*** p\{2}&#10;&#10;    grep -E p\{2} regex_sample&#10;&#10;** &#34;a+t&#34;&#10;&#10;    grep -E &#34;a+t&#34; regex_sample-->
-
-
+<!--## Extended Regular Expressions&#10;&#10;*** p\{2}&#10;&#10;   $ grep -E p\{2} regex_sample&#10;&#10;** &#34;a+t&#34;&#10;&#10;    grep -E &#34;a+t&#34; regex_sample-->
 
 <h2 id="brace-expansion">Brace Expansion</h2>
 
@@ -179,25 +213,15 @@ file0 file1 file2 file3 file4 file5 file6 file7 file8 file9
 
 <h3 id="sequence">Sequence</h3>
 
-<pre><code>{1..10}
-
-{a..bb}
-
-echo {a..z}
+<pre><code>$ echo {a..z}
 
 $ touch file-{1..5}.txt
 </code></pre>
 
-
-
 <h2 id="comma-separated-list">Comma Separated List</h2>
-
-<p>{ aa,bb,cc,dd }</p>
 
 <pre><code>$ echo {aaa,bbb,ccc,ddd}
 </code></pre>
-
-
 
 <h2 id="logical-or">Logical OR</h2>
 
@@ -208,25 +232,23 @@ $ touch file-{1..5}.txt
 
 <p>Usage: grep [[:alnum:]]</p>
 
-<table border="1">
-<tbody><tr><td>[:alnum:]</td><td>[:alpha:]</td><td>[:blank:]</td><td>[:cntrl:]</td></tr>
-<tr><td>[:digit:]</td><td>[:graph:]</td><td>[:lower:]</td><td>[:print:]</td></tr>
-<tr><td>[:punct:]</td><td>[:space:]</td><td>[:upper:]</td><td>[:xdigit:]</td></tr>
-</tbody></table>
+<p>[:alnum:]|[:alpha:]|[:blank:]|[:cntrl:] <br>
+[:digit:]|[:graph:]|[:lower:]|[:print:] <br>
+[:punct:]|[:space:]|[:upper:]|[:xdigit:]</p>
 
 <p>Modify <em>twain.txt</em> to quote ‘Mark’ “Twain”. (note: both single and double quotes. Try <code>grep -E " twain.txt</code>. Which fails as the shell tries to interpret the quote.</p>
 
 <p>It’s possible to escape the quote.</p>
 
-<pre><code>grep -E \" twain.txt
+<pre><code>$ grep -E \" twain.txt
 </code></pre>
 
 <p>or use a character set to capure all the punctuation.</p>
 
-<pre><code>grep -E [[:punct:]] twain.txt
+<pre><code>$ grep -E [[:punct:]] twain.txt
 </code></pre>
 
-<!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    sed s/apple/orange/ regex_sample&#10;&#10;    sed s/^apple/orange/ regex_sample&#10;-->
+<!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
 
 <h2 id="tr">tr</h2>
 
@@ -234,17 +256,15 @@ $ touch file-{1..5}.txt
 
 <p>This example will replace the new line character with a space putting all words on one line. </p>
 
-<pre><code>tr '\n' ' ' &lt; regex_sample
+<pre><code>$ tr '\n' ' ' &lt; regex_sample
 </code></pre>
 
 <p>This example will replace all lower case letters with upper case letters.</p>
 
-<pre><code>tr '[:lower:]' '[:upper:]' &lt; regex_sample
+<pre><code>$ tr '[:lower:]' '[:upper:]' &lt; regex_sample
 </code></pre>
 
 <!--## Debug the Assignment-->
-
-
 
 <h2 id="xkcd">XKCD</h2>
 
