@@ -6,6 +6,8 @@
 
 <p>File globing and regular expressions are powerful tools needed by every system administrator. With these tools you can quickly filter text files to find what you are looking for.</p>
 
+
+
 <h2 id="learning-objectives">Learning Objectives</h2>
 
 <p>When you have successfully completed this assignment you will be able to:*</p>
@@ -15,6 +17,8 @@
 <li>Write a simple regular expression.</li>
 <li>Use <code>tr</code> to replace non-printing characters.</li>
 </ul>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
@@ -64,6 +68,8 @@
 </tbody></table>
 
 
+
+
 <h3 id="example-1">Example 1</h3>
 
 <p>Match all files beginning with <em>exam</em> followed by any number of characters.</p>
@@ -76,6 +82,8 @@
 <pre><code>$ ls example*
 example examples example12
 </code></pre>
+
+
 
 <h3 id="example-2">Example 2</h3>
 
@@ -95,11 +103,15 @@ examples
 Exam  exam12  example  Example  examples
 </code></pre>
 
+
+
 <h3 id="example-4">Example 4</h3>
 
 <pre><code>$ ls [!e]xam*
 Exam  Example
 </code></pre>
+
+
 
 <h2 id="regular-expressions-regex">Regular Expressions (regex)</h2>
 
@@ -128,11 +140,16 @@ Exam  Example
   <td>$</td>
   <td>Matches end of line.</td>
 </tr>
+<tr>
+  <td>\</td>
+  <td>Escapes special characters</td>
+</tr>
+<tr>
+  <td>?</td>
+  <td>Matches preceding character zero or one times.</td>
+</tr>
 </tbody></table>
 
-
-<p>|Escapes special characters <br>
-?|Matches preceding character zero or one times.</p>
 
 <h3 id="literal-strings">Literal Strings</h3>
 
@@ -200,6 +217,8 @@ Space at end  Mark Twain $
 
 <!--## Extended Regular Expressions&#10;&#10;*** p\{2}&#10;&#10;   $ grep -E p\{2} regex_sample&#10;&#10;** &#34;a+t&#34;&#10;&#10;    grep -E &#34;a+t&#34; regex_sample-->
 
+
+
 <h2 id="brace-expansion">Brace Expansion</h2>
 
 <p>Here brace expansion is used to create files and bracket expansion is used to display them.</p>
@@ -218,15 +237,21 @@ file0 file1 file2 file3 file4 file5 file6 file7 file8 file9
 $ touch file-{1..5}.txt
 </code></pre>
 
+
+
 <h2 id="comma-separated-list">Comma Separated List</h2>
 
 <pre><code>$ echo {aaa,bbb,ccc,ddd}
 </code></pre>
 
+
+
 <h2 id="logical-or">Logical OR</h2>
 
 <pre><code>$ grep -E '(Mark|Huck)' twain.txt
 </code></pre>
+
+
 
 <h2 id="character-classes">Character Classes</h2>
 
@@ -250,6 +275,8 @@ $ touch file-{1..5}.txt
 
 <!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
 
+
+
 <h2 id="tr">tr</h2>
 
 <p>The <code>tr</code> command can replace non-printing characters.</p>
@@ -265,6 +292,8 @@ $ touch file-{1..5}.txt
 </code></pre>
 
 <!--## Debug the Assignment-->
+
+
 
 <h2 id="xkcd">XKCD</h2>
 
