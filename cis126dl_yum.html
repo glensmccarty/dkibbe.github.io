@@ -1,0 +1,265 @@
+<h1 id="package-management-with-yum-rpm">Package Management with YUM &amp; RPM</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Yellowdog Updater Modified or YUM is the package management system for <a href="http://redhat.com" title="Red Hat">Red Hat</a> based distributions such as <a href="http://centos.org" title="CentOS">CentOS</a>, <a href="http://scientificlinux.org" title="Scientific Linux">Scientific Linux</a> and <a href="http://opensuse.org" title="openSuSE">openSuSE</a>.</p>
+
+
+
+<h2 id="why-a-package-management-system">Why a Package Management System</h2>
+
+<p>If you are used to Goggling for a software program and that downloading the <em>exe</em> file you may wonder why Linux is different. First, Software programs like <a href="http://libreoffice.org" title="LibreOffice">LibreOffice</a> are maintained by an upstream project often consisting of hundreds of volunteer that code and update the software. Each distribution downloads the latest source code, compiles the program for that that distribution and assures there are no bugs that prevents the program from running smoothly on that distro.</p>
+
+<p>Once the software is compiled and tested the binary is digitally signed and placed in an online software repository from which the package management system can download and install.</p>
+
+<p>Wherever possible you should only install software from a distribution’s official repository or a reliable third-part repo. The advantages are:</p>
+
+<ol>
+<li>The software has been compiled and tested to work well with that distro.</li>
+<li>The required dependencies will be automatically downloaded as needed.</li>
+<li>The package will have a digital signature assuring that it is authentic.</li>
+<li>Security updates will be provided automatically.</li>
+<li>Installation is easily done even from the command line.</li>
+</ol>
+
+
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Install a software package using <code>yum</code>. <br>
+<ol><li>Remove a software package using <code>yum</code>.</li></ol></li>
+<li>Use <code>rpm</code> to obtain package information.</li>
+<li>Use <code>rpm</code> to add a third-party repository to the system. (pending)</li>
+<li>Check for package dependencies using <code>rpm</code>.</li>
+</ol>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>yum</strong></li>
+<li><strong>rpm</strong></li>
+<li><strong>/etc/yum.repos.d</strong></li>
+<li><strong>/etc/yum.conf</strong></li>
+<li><strong>source code</strong></li>
+<li><strong>object code</strong></li>
+<li><strong>distro</strong></li>
+<li><strong>software repository</strong></li>
+<li><strong>mirror</strong></li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Do this assignment on the Fedora virtual machine. Clear the Bash history before starting.</p>
+
+<pre><code>$ history -c
+</code></pre>
+
+<p>You will need a command history to submit.</p>
+
+
+
+<h2 id="package-naming">Package Naming</h2>
+
+<p>Red Hat names packages using a specific format.</p>
+
+<ul>
+<li><p>kernel-3.10.0-123.el7.x86_64.rpm</p></li>
+<li><p>bash-completion-2.1-6.el7.noarch.rpm</p></li>
+</ul>
+
+<p>The bash-completion package can be installed on any architecture.</p>
+
+
+
+<h2 id="yum-and-rpm">YUM and RPM</h2>
+
+
+
+<h3 id="check-for-package-updates">Check for Package Updates</h3>
+
+<p>Installing software requires root privileges. Since CentOS does not use Sodo by default the first step is to become root. </p>
+
+<pre><code>$ su -
+# yum check-update
+</code></pre>
+
+
+
+<h3 id="update-the-system">Update the System</h3>
+
+<p>This command will update all installed packages.</p>
+
+<pre><code># yum update
+</code></pre>
+
+
+
+<h3 id="using-yum-to-search-for-a-software-package">Using Yum to Search for a Software Package</h3>
+
+<p>You can search using <code>yum</code> without root privileges. Here we’ll search for Zenmap which is a GUI for the Nmap network Scanner.</p>
+
+<pre><code>$ yum search "Zenmap"
+nmap-frontend.noarch : The GTK+ front end for nmap..
+</code></pre>
+
+
+
+<h3 id="get-information-on-a-package">Get Information on a Package</h3>
+
+<pre><code># yum info nmap
+</code></pre>
+
+
+
+<h3 id="install-software">Install Software</h3>
+
+<p>Yum can download and install new software. Notice that you do not need the full package name.</p>
+
+<pre><code># yum install nmap-frontend
+</code></pre>
+
+<p>If Zenmap requires any dependencies <code>yum</code> will download them as well.</p>
+
+
+
+<h3 id="find-the-version-of-installed-software">Find the Version of Installed Software</h3>
+
+<pre><code>$ rpmquery nmap
+nmap-1.2.1-1-fc20.x86_64
+</code></pre>
+
+<p><em>Note:</em> See Backporting Security Fixes below.</p>
+
+
+
+<h3 id="check-dependencies">Check Dependencies</h3>
+
+<p>You can use <code>rpm</code> to check the dependencies of an installed package.</p>
+
+<pre><code>$ rpm -qR &lt;package-name&gt;
+</code></pre>
+
+
+
+<h3 id="list-all-installed-packages">List All Installed Packages</h3>
+
+<p>This command will list all installed packages.</p>
+
+<pre><code>$ rpm -qa
+</code></pre>
+
+<p>Pipe the command though <code>less</code> to view on screen at a time. </p>
+
+<pre><code>$ rpm -qa | less
+</code></pre>
+
+<p>Press the spacebar to move through the list one screen at a time. Type <strong>q</strong> to quit <code>less</code> and return to the prompt.</p>
+
+<p>Pipe though <code>wc</code> to get a count of the number of installed packages.</p>
+
+<pre><code>S rpm -qa | wc -l
+</code></pre>
+
+
+
+<h3 id="remove-a-software-package">Remove a Software Package</h3>
+
+<p>Yum can remove a package as easily as it can install one.</p>
+
+<pre><code># yum remove nmap
+</code></pre>
+
+
+
+<h3 id="list-all-the-files-in-an-installed-package">List all the Files in an Installed Package</h3>
+
+<pre><code>$ rpm -ql nmap
+</code></pre>
+
+
+
+<h3 id="discover-which-package-a-file-belongs-to">Discover Which Package a File Belongs to</h3>
+
+<pre><code>$ rpm -qf /etc/passwd
+setup-2.8.71.2-2.fc20.noarch
+</code></pre>
+
+
+
+<h3 id="verify-a-package">Verify a Package</h3>
+
+<p>This command will list any missing files or simply return to the prompt if there are no missing files.</p>
+
+<pre><code># rm /usr/share/doc/nmap/README
+# rpm -V nmap
+missing d /usr/share/doc/nmap/README
+</code></pre>
+
+<p>Verify all files</p>
+
+<pre><code># rpm -qaV
+</code></pre>
+
+<!-- ## Debug the Assignment -->
+
+<!--## XKCD-->
+
+
+
+<h3 id="adding-a-third-party-repository-to-centos">Adding a Third Party Repository to CentOS</h3>
+
+<p>Search for htop.</p>
+
+<pre><code>$ yum search htop
+</code></pre>
+
+<p>The package is not in the offical CentOS repositories. Not all distributions have the same software in their repositories. Debian has more packages over more architectures while CentOS and RHEL have a much narrower focus. So what if a program you want to install isn’t in the official CentOS repositories? Are you out of luck? No, you can add a third party repo which has additional software built for CentOS.</p>
+
+<p>There are times, however, when you may not want to change CentOS too much. See the link under Resources about CentOS Package Management.</p>
+
+
+
+<h4 id="adding-the-epel-repository">Adding the EPEL Repository</h4>
+
+<p>A reliable third party repository for CentOS is <a href="https://fedoraproject.org/wiki/EPEL" title="Extra Packages for Enterprise Linux">EPEL</a> or Extra Packages for Enterprise Linux. EPEL packages are usually based on their Fedora counterparts and will never conflict with or replace packages in the base Enterprise Linux distributions.</p>
+
+<p>Adding EPEL to CentOS is easy as the latest releases of CentOS include the EPEL setup package in the official CentOS repository.</p>
+
+<pre><code># yum search epel
+epel-release.noarch
+# yum install epel-release
+</code></pre>
+
+<p>The package installs a set of small configuration files in the <em>etc/yum.repos.d/</em> directory. The next time <code>yum update</code> is run the package names available from EPEL will be added to the local package database.</p>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Copy and paste the command history you saved.</p>
+
+<pre><code>$ history &gt; history.txt
+</code></pre>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://nmap.org/" title=" Nmap - the network scanner">Nmap – The Network Scanner</a></li>
+<li><a href="https://access.redhat.com/security/updates/backporting/" title="Backporting Security Fixes">Backporting Security Fixes</a></li>
+<li><a href="http://wiki.centos.org/TipsAndTricks/YumAndRPM" title="Yum and RPM Tricks">Yum and RPM Tricks</a></li>
+<li><a href="http://wiki.centos.org/PackageManagement" title="CentOS package management">CentOS Package Management</a></li>
+<li><a href="http://wiki.centos.org/AdditionalResources/Repositories" title="Available Repositories for CentOS">Available Repositories for CentOS</a></li>
+</ul>
+
+<!-- Links&#10;&#10;This is [an example](http://example.com/ &#34;Title&#34;) inline link.&#10;This is [an example][id] reference-style link.&#10;-->
