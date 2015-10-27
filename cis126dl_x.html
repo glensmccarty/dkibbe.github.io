@@ -1,0 +1,100 @@
+<h2 id="overview">Overview</h2>
+
+<p>Linux is a module system.  Like Legos the components can be combined in different ways.  This includes the graphical user interface (GUI).</p>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p>When you have successfully completed this assignment you will be able to:</p>
+
+<ul>
+<li><p>Explain the role of the X server.</p></li>
+<li><p>Start an application on the display.</p></li>
+<li><p>Describe the function of the window manager.</p>
+
+<ul><li>Terms You Should Know</li></ul></li>
+<li><p>Desktop Environment :: Such as GNOME, KDE, XFCE, Enlightenment provide custom apps like a file manager, calculator, editor, graphical front ends for managing printers, keyboards, etc.</p></li>
+<li><p>Window Manager :: Handles the placement and size of windows on the desktop and the window decorations.</p></li>
+<li><p>X Window :: The GUI server Linux /Note:/ X Window /not/ X Windows</p></li>
+<li><p>Virtual Terminal :: Non-graphical terminals accessible outside of the GUI.</p></li>
+<li><p>GUI :: Graphic User Interface.</p></li>
+<li><p>CLI :: Command Line Interface</p></li>
+<li><p>GNOME :: The GNOME shell is one of the most popular desktop environments.</p></li>
+<li><p>KDE :: KDE is a popular desktop environments.</p></li>
+</ul>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Do this assignment on the workstation.</p>
+
+<ul>
+<li><p>Virtual Terminals</p>
+
+<p>Outside the glaring graphical facade of the desktop is the inky blackness that is the virtual terminal.  There are six <em>Ctrl+Alt+F1</em> to <em>Ctrl+Alt+F6</em> with <em>Ctrl+Alt+F7</em> returning you to the GUI.  Some distros swap <em>F7</em> and <em>F1</em> putting the GUI on <em>F1</em>.  If there is some program locking up the browser (Flash comes to mind) you can abandon the GUI and swiftly dispatch the offender from a virtual terminal.</p>
+
+<ol><li><p>Type <em>Ctrl+Alt+F1</em> to go to the first virtual terminal.</p></li>
+<li><p>Log in with your user name and password.  Unlike the GUI the terminal does not show and character when you type your password.</p></li>
+<li><p>Type =w= to list the users logged in.  You will see that you are logged in twice.</p></li>
+<li><p>Type <em>Ctrl+Alt+F7</em> to return to the GUI.</p></li></ol></li>
+<li><p>Starting Another Desktop</p>
+
+<p>Linux can have multiple desktops running at once.</p>
+
+<ol><li><p>Type <em>Ctrl+Alt+F1</em> to reach a virtual terminal.</p></li>
+<li><p>Type =startx – :1= which will start a new desktop on <em>Ctrl+Alt+F8</em>.</p></li>
+<li><p>Type <em>Ctrl+Alt+F7</em> to see your main desktop.</p></li>
+<li><p>Type <em>Ctrl+Alt+F8</em> and you out.  You will be returned to the virtual terminal where you launched the desktop.</p></li>
+<li><p>Try to start =mousepad=.  You can’t because Mousepad is a graphical program</p></li>
+<li><p>Start X (capital) =X :1&amp;=.  The ampersand places the program in the background so you can start other programs from the prompt.</p></li>
+<li><p>A new display starts on <em>Ctrl+Alt+F8</em>.  This is just the xorg graphical server – nothing but a black screen.</p></li>
+<li><p>Type <em>Ctrl+Alt+F1</em> to return to the virtual terminal 1.</p></li>
+<li><p>Start =mousepad= on display 1 =mousepad –display :1&amp;=</p></li>
+<li><p>Go to <em>Ctrl+Alt+F8</em>.  Mousepad is running but you can’t move it around or resize it.</p></li>
+<li><p>Start =xfce4-about= on display 1 =xfce4-about –display :1&amp;=</p></li>
+<li><p>About XFCE obstructs Mousepad and again you can’t move it around or resize it.  You need a way to manage windows.</p></li></ol></li>
+<li><p>Window Maker</p></li>
+</ul>
+
+<dl>
+<dt>Window Maker is a simple window manager that, well, manages windows.  Start it on display 1</dt>
+<dd>
+<p>wmaker –display :1&amp;</p>
+</dd>
+</dl>
+
+<p>Now return to the desktop and you’ll something much different.  You can access a menu by right clicking the desktop.</p>
+
+<p>When you are finished close About XFCE but leave Mousepad open. Select <em>Session, Exit</em> from the Window Maker menu to close Window Maker.  Notice you can no longer move or resize Mousepad.  </p>
+
+<ul>
+<li>COMMENT Troubleshoot the Assignment</li>
+</ul>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.</p>
+
+<ol>
+<li>What desktop environment is on your workstation?</li>
+<li><p>Try starting a display :2 with Enlightenment.</p>
+
+<ul><li>COMMENT XKCD</li></ul></li>
+</ol>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><p>[[<a href="https://en.wikipedia.org/wiki/Linux_desktop#Desktop][Linux">https://en.wikipedia.org/wiki/Linux_desktop#Desktop][Linux</a> Desktops]]</p></li>
+<li><p>[[<a href="http://windowmaker.org/][Window">http://windowmaker.org/][Window</a> Maker]]</p></li>
+<li><p>[[<a href="http://fluxbox.org/][Fluxbox]]">http://fluxbox.org/][Fluxbox]]</a></p></li>
+<li><p>[[<a href="http://www.enlightenment.org/][Enlightenment]]">http://www.enlightenment.org/][Enlightenment]]</a></p></li>
+</ul>
+
+
+
+<h1 id="license">License</h1>
