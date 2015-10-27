@@ -1,328 +1,74 @@
-
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
-<head>
-<title>Extending a LVM Logical Volume   </title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-24 17:27:34 MST"/>
-<meta name="author" content="Dennis Kibbe"/>
-<meta name="description" content=""/>
-<meta name="keywords" content="lvm cis238dl"/>
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
-  html { font-family: Times, serif; font-size: 12pt; }
-  .title  { text-align: center; }
-  .todo   { color: red; }
-  .done   { color: green; }
-  .tag    { background-color: #add8e6; font-weight:normal }
-  .target { }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  p.verse { margin-left: 3% }
-  pre {
-	border: 1pt solid #AEBDCC;
-	background-color: #F3F5F7;
-	padding: 5pt;
-	font-family: courier, monospace;
-        font-size: 90%;
-        overflow:auto;
-  }
-  table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
-  dt { font-weight: bold; }
-  div.figure { padding: 0.5em; }
-  div.figure p { text-align: center; }
-  .linenr { font-size:smaller }
-  .code-highlighted {background-color:#ffff00;}
-  .org-info-js_info-navigation { border-style:none; }
-  #org-info-js_console-label { font-size:10px; font-weight:bold;
-                               white-space:nowrap; }
-  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
-                                 font-weight:bold; }
-  /*]]>*/-->
-</style>
-<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
-<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
-<style type="text/css"> code {color: blue; font-weight:bold;} </style>
-<script type="text/javascript">
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
-</head>
-<body>
-<div id="content">
-
-<h1 class="title">Extending a LVM Logical Volume   </h1>
+<h1 id="extending-a-lvm-logical-volume">Extending a LVM Logical Volume</h1>
 
 
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#sec-1">1 Assignment Objectives </a></li>
-<li><a href="#sec-2">2 Terms and Commands  You Should Know </a></li>
-<li><a href="#sec-3">3 Preparation </a></li>
-<li><a href="#sec-4">4 Add a Second Virtual Drive to the Virtual Machine </a></li>
-<li><a href="#sec-5">5 Create the Physical Volume (PV) </a></li>
-<li><a href="#sec-6">6 Add the Physical Volume to the Volume Group </a></li>
-<li><a href="#sec-7">7 Extend the logical Volume </a></li>
-<li><a href="#sec-8">8 Extend the filesystem </a></li>
-<li><a href="#sec-9">9 What to Submit </a></li>
-<li><a href="#sec-10">10 Resources </a></li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Assignment Objectives </h2>
-<div class="outline-text-2" id="text-1">
+<h2 id="assignment-objectives">Assignment Objectives</h2>
 
+<p>An advantage of Logical Volume Management (LVM) is how easy it can be extended.  In this assignment you will extend the <code>lv_home</code> logical volume you created by adding LVM extents.</p>
 
-<p>
-An advantage of Logical Volume Management (LVM) is how easy it can be extended.  In this assignment you will extend the <code>lv_home</code> logical volume you created by adding LVM extents.
-</p>
-<p>
-<i>When you have successfully completed this assignment you will be able to:</i>
-</p>
-<ul>
-<li>
-Add a second virtual hard drive in VirtualBox.
-</li>
-<li>
-Create a LVM Physical Volume (PV).
-</li>
-<li>
-Add a PV to a LVM Volume Group (VG).
-</li>
-<li>
-Extend a LVM Logical Volume (LV).
-</li>
-<li>
-Extend an ext4 filesystem.
-
-</li>
-</ul>
-</div>
-
-</div>
-
-<div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Terms and Commands  You Should Know </h2>
-<div class="outline-text-2" id="text-2">
-
-
-<dl>
-<dt>Extents</dt><dd>
-LVM divides storage into extents (physical and logical extents)
-</dd>
-<dt>Physical Volume</dt><dd>
-LVM physical volume are built on block devices such as a partition or physical disk.
-</dd>
-<dt>Volume Group</dt><dd>
-Physical volumes are combined into volumes groups creating a pool of storage.
-</dd>
-<dt>Logical Volume</dt><dd>
-Volume Groups are divided into logical volumes.
-</dd>
-<dt><code>pvcreate</code></dt><dd>
-Creates a LVM Physical Volume.
-</dd>
-<dt><code>vgextend</code></dt><dd>
-Extends the size of a volume group.
-</dd>
-<dt><code>lvextend</code></dt><dd>
-Extends the size of a logical volume.
-</dd>
-<dt><code>resize2fs</code></dt><dd>
-ext2/ext3/ext4 file system resizer
-
-</dd>
-</dl>
-</div>
-
-</div>
-
-<div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Preparation </h2>
-<div class="outline-text-2" id="text-3">
-
-
-<p>
-This assignment should be done on the CentOS virtual machine that you created with a separate /home partition.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Add a Second Virtual Drive to the Virtual Machine </h2>
-<div class="outline-text-2" id="text-4">
-
-
-<p>
-Add a second virtual 1 GiB hard disk to your virtual machine.  You will need to power down the virtual machine before adding the drive.
-</p>
-<p>
-<img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png"  alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" />
-</p>
-<p>
-<img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png"  alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" />
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Create the Physical Volume (PV) </h2>
-<div class="outline-text-2" id="text-5">
-
-
-<p>
-Before you can attach additional storage to the volume group /dev/sdb must be formatted as an physical volume.
-</p>
-<pre class="example">
-# pvcreate /dev/sdb
-Physical Volume created
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Add the Physical Volume to the Volume Group </h2>
-<div class="outline-text-2" id="text-6">
-
-
-<p>
-Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no Free PEs available.
-Now add the physical volume to the volume group. <i>Note:</i> Your volume group name will be different.
-</p>
-<pre class="example">
-# vgextend /dev/mapper/vg_vm /dev/sdb
-Volume Group "vg_vm" successfully extended
-</pre>
-
-
-<p>
-Run <code>vgdisplay</code> again and you should now have about 255/1024 MiB available.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> Extend the logical Volume </h2>
-<div class="outline-text-2" id="text-7">
-
-
-<p>
-Use the <code>lvextend</code> command to extent the lv<sub>home</sub> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we'll add all the available extents.
-</p>
-<pre class="example">
-lvextend /dev/mapper/vg_virtual -l +255 machine-lv_home
-Extending logical volume lv-home to 1.96 GiB
-Logical volume lv_home successfully resized.
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Extend the filesystem </h2>
-<div class="outline-text-2" id="text-8">
-
-
-<p>
-Extending the logical volume isn't enough you also need to extend the filesystem.  The <code>df</code> command shows that <code>lv_home</code> is still 1 GiB. in size.
-</p>
-<pre class="example">
-df -h
-resize2fs /dev/mapper/vg_vm-lv_home
-The filesystem on /dev/mapper/vg_vm-lv_home is now 515072 blocks long.
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> What to Submit </h2>
-<div class="outline-text-2" id="text-9">
-
-
-<p>
-Submit a screen-shot (cropped, of course) of the <code>df -h</code> command showing that <code>/home</code> has been extended.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Resources </h2>
-<div class="outline-text-2" id="text-10">
-
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
 <ul>
-<li>
-man lvm
-</li>
-<li>
-<a href="https://www.youtube.com/watch?v=BysRGDgqtwY">Managing Storage with the Linux Logical Volume Manager (LVM)</a>
-</li>
-<li>
-<a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6-Beta/html/Logical_Volume_Manager_Administration/index.html">Logical Volume Manager Administration</a>
-</li>
-<li>
-<a href="http://debian-handbook.info/browse/stable/advanced-administration.html#section.lvm">The Debian Administrator's Handbook</a>
-</li>
-<li>
-<a href="#dennisk.freeshell.org/cis238dl_lvm.html">Extending a LVM Logical Volume</a>
-
-</li>
+<li>Add a second virtual hard drive in VirtualBox.</li>
+<li>Create a LVM Physical Volume (PV).</li>
+<li>Add a PV to a LVM Volume Group (VG).</li>
+<li>Extend a LVM Logical Volume (LV).</li>
+<li>Extend an ext4 filesystem.</li>
 </ul>
 
+<h2 id="terms-and-commands-you-should-know">Terms and Commands  You Should Know</h2>
 
-<hr/>
+<ul>
+<li>Extents - LVM divides storage into extents (physical and logical extents)</li>
+<li>Physical Volume - LVM physical volume are built on block devices such as a partition or physical disk.</li>
+<li>Volume Group - Physical volumes are combined into volumes groups creating a pool of storage.</li>
+<li>Logical Volume - Volume Groups are divided into logical volumes.</li>
+<li><code>pvcreate</code> - Creates a LVM Physical Volume.</li>
+<li><code>vgextend</code> - Extends the size of a volume group.</li>
+<li><code>lvextend</code> - Extends the size of a logical volume.</li>
+<li><code>resize2fs</code> - ext2/ext3/ext4 file system resizer</li>
+</ul>
 
+<h2 id="preparation">Preparation</h2>
 
+<p>This assignment should be done on the CentOS virtual machine that you created with a separate <em>/home</em> partition.</p>
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
-</div>
-</div>
-<div id="postamble">
-<p class="author"> Author: Dennis Kibbe
-<a href="mailto:dennis.kibbe@mesacc.edu">&lt;dennis.kibbe@mesacc.edu&gt;</a>
-</p>
-<p class="date"> Date: 2013-10-24 17:27:34 MST</p>
-<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
-</div>
-</div>
-</body>
-</html>
+<h2 id="add-a-second-virtual-drive-to-the-virtual-machine">Add a Second Virtual Drive to the Virtual Machine</h2>
+
+<p>Add a second virtual 1 GiB hard disk to your virtual machine.  You will need to power down the virtual machine before adding the drive.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" title=""></p>
+
+<p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" title=""></p>
+
+<h2 id="create-the-physical-volume-pv">Create the Physical Volume (PV)</h2>
+
+<p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume.</p>
+
+<h2 id="add-the-physical-volume-to-the-volume-group">Add the Physical Volume to the Volume Group</h2>
+
+<p>Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no Free PEs available. Now add the physical volume to the volume group. <em>Note:</em> Your volume group name will be different.</p>
+
+<p>Run <code>vgdisplay</code> again and you should now have about 255/1024 MiB available.</p>
+
+<h2 id="extend-the-logical-volume">Extend the logical Volume</h2>
+
+<p>Use the <code>lvextend</code> command to extent the <em>lv_home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add all the available extents.</p>
+
+<h2 id="extend-the-filesystem">Extend the filesystem</h2>
+
+<p>Extending the logical volume isn’t enough you also need to extend the filesystem.  The <code>df</code> command shows that <em>lv_home</em> is still 1 GiB. in size.</p>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screen-shot (cropped, of course) of the <code>df -h</code> command showing that <em>/home</em> has been extended.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>man lvm</li>
+<li><a href="https://www.youtube.com/watch?v=BysRGDgqtwY">Managing Storage with the Linux Logical Volume Manager (LVM)</a></li>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6-Beta/html/Logical_Volume_Manager_Administration/index.html">Logical Volume Manager Administration</a></li>
+<li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html#section.lvm">The Debian Administrator’s Handbook</a></li>
+<li><a href="#dennisk.freeshell.org/cis238dl_lvm.html">Extending a LVM Logical Volume</a></li>
+</ul>
