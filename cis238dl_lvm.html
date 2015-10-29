@@ -13,51 +13,90 @@
 <li>Create a LVM Physical Volume (PV).</li>
 <li>Add a PV to a LVM Volume Group (VG).</li>
 <li>Extend a LVM Logical Volume (LV).</li>
-<li>Extend an ext4 filesystem.</li>
+<li>Extend an XFS filesystem.</li>
 </ul>
 
 <h2 id="terms-and-commands-you-should-know">Terms and Commands  You Should Know</h2>
 
 <ul>
-<li>Extents - LVM divides storage into extents (physical and logical extents)</li>
-<li>Physical Volume - LVM physical volume are built on block devices such as a partition or physical disk.</li>
-<li>Volume Group - Physical volumes are combined into volumes groups creating a pool of storage.</li>
-<li>Logical Volume - Volume Groups are divided into logical volumes.</li>
+<li><strong>Extents</strong> - LVM divides storage into extents (physical and logical extents)</li>
+<li><strong>Physical Volume</strong> - LVM physical volume are built on block devices such as a partition or physical disk.</li>
+<li><strong>Volume Group</strong> - Physical volumes are combined into volumes groups creating a pool of storage.</li>
+<li><strong>Logical Volume</strong> - Volume Groups are divided into logical volumes.</li>
 <li><code>pvcreate</code> - Creates a LVM Physical Volume.</li>
-<li><code>vgextend</code> - Extends the size of a volume group.</li>
-<li><code>lvextend</code> - Extends the size of a logical volume.</li>
+<li><code>pvdisplay</code> - Display info for PVs</li>
+<li><code>vgdisplay</code> - Display info for VGs</li>
+<li><code>vgextend</code> - Extend the size of a VG</li>
+<li><code>lvdisplay</code> - Display info for LVs</li>
+<li><code>lvextend</code> - Extend the size of a LV</li>
 <li><code>resize2fs</code> - ext2/ext3/ext4 file system resizer</li>
+<li>-<code>xfs_growfs</code> - XFS resizer</li>
 </ul>
 
 <h2 id="preparation">Preparation</h2>
 
-<p>This assignment should be done on the CentOS virtual machine that you created with a separate <em>/home</em> partition.</p>
-
-
+<p>Use the CentOS 7 minimal installation ISO to create a new virtual machine.</p>
 
 <h2 id="install-centos-7-with-a-custom-layout">Install CentOS 7 with a Custom Layout</h2>
 
+
+
+<h3 id="create-a-virtual-machine-with-the-default-settings">Create a virtual machine with the default settings</h3>
+
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-1.png" alt="Centos LVM Screenshot" title=""></p>
+
+<h3 id="set-the-correct-time-zone-and-enable-networking">Set the correct time zone and enable networking</h3>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-2.png" alt="CentOS LVM screenshot" title=""></p>
 
+<h3 id="click-installation-destination-and-select-i-will-configure-partitioning">Click <strong>INSTALLATION DESTINATION</strong> and select <em>I will configure partitioning</em></h3>
+
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-3.png" alt="CentOS LVM screenshot" title=""></p>
+
+<h3 id="select-standard-partition">Select <em>Standard Partition</em></h3>
+
+<p>Make a note of how much space is available</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-4.png" alt="CentOS LVM screenshot" title=""></p>
 
+<h3 id="add-mount-points-for">Add mount points for:</h3>
+
+<ul>
+<li>/boot (500MB)</li>
+<li>/ home (1GB)</li>
+<li>swap (500MB)</li>
+<li>/ (what’s left)</li>
+</ul>
+
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-5.png" alt="CentOS LVM screenshot" title=""></p>
+
+<h3 id="set-root-home-and-swap-to-lvm-partition">Set root, home and swap to <em>LVM Partition</em></h3>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-6.png" alt="CentOS LVM screenshot" title=""></p>
 
+
+
+<h3 id="click-begin-installation">Click <em>Begin Installation</em></h3>
+
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-7.png" alt="CentOS LVM screenshot" title=""></p>
+
+<h3 id="set-the-root-password-to-paw0rd">Set the root password to Pa$$w0rd</h3>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-8.png" alt="CentOS LVM screenshot" title=""></p>
 
 <h2 id="add-a-second-virtual-drive-to-the-virtual-machine">Add a Second Virtual Drive to the Virtual Machine</h2>
 
-<p>Add a second virtual 1 GiB hard disk to your virtual machine.  You will need to power down the virtual machine before adding the drive.</p>
+<p>Add a second virtual 1 GiB hard disk to your virtual machine.  You will need to <code>poweroff</code> the virtual machine before adding the drive.</p>
+
+
+
+<h4 id="select-the-sata-controller">Select the SATA controller</h4>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" title=""></p>
+
+
+
+<h4 id="add-a-second-virtual-drive-to-the-sata-controller">Add a second virtual drive to the SATA controller</h4>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" title=""></p>
 
@@ -65,23 +104,50 @@
 
 <p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume.</p>
 
+<pre><code># pvcreate /dev/sdb
+</code></pre>
+
 <h2 id="add-the-physical-volume-to-the-volume-group">Add the Physical Volume to the Volume Group</h2>
 
-<p>Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no Free PEs available. Now add the physical volume to the volume group. <em>Note:</em> Your volume group name will be different.</p>
+<p>Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no Free PEs available.</p>
 
-<p>Run <code>vgdisplay</code> again and you should now have about 255/1024 MiB available.</p>
+<p>Now add the physical volume to the volume group.</p>
+
+<pre><code># vgextend centos /dev/sdb
+</code></pre>
+
+<p>Run <code>vgdisplay</code> again and you should now have about 255 free extents or 1024 MiB available.</p>
 
 <h2 id="extend-the-logical-volume">Extend the logical Volume</h2>
 
-<p>Use the <code>lvextend</code> command to extent the <em>lv_home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add all the available extents.</p>
+<p>Use the <code>lvextend</code> command to extent the <em>lv_home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add half the available extents.</p>
 
-<h2 id="extend-the-filesystem">Extend the filesystem</h2>
+<pre><code># lvextend -l +125 /dev/centos/home
+</code></pre>
 
-<p>Extending the logical volume isn’t enough you also need to extend the filesystem.  The <code>df</code> command shows that <em>lv_home</em> is still 1 GiB. in size.</p>
+<p>Usie <code>vgdisplay</code> again to show that there are fewer extents available.</p>
+
+<h2 id="extend-the-home-filesystem">Extend the /home filesystem</h2>
+
+<p>Extending the logical volume isn’t enough you also need to extend the filesystem as well.  The <code>df</code> command shows that <em>lv_home</em> is still 1 GiB. in size.</p>
+
+<pre><code># df -h
+</code></pre>
+
+<p>Use <code>xfs_growfs</code> to extend the XFS filesystem to the full capacity of the logical volume.</p>
+
+<pre><code># xfs_growfs /dev/centos/home
+</code></pre>
+
+
+
+<h2 id="extend-the-file-system">Extend the / file system</h2>
+
+<p>Follow the same procedure to extend / by the remaining extents.</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screen-shot (cropped, of course) of the <code>df -h</code> command showing that <em>/home</em> has been extended.</p>
+<p>Submit a screen-shot (cropped, of course) of the <code>df -h</code> command showing that <em>/home</em> and <em>/</em> have been extended.</p>
 
 <h2 id="resources">Resources</h2>
 
