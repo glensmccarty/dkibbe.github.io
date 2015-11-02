@@ -1,0 +1,176 @@
+<p><img src="https://s3.amazonaws.com/CIS238DL/img/tux_raid.png" alt="Tux Raid" title=""></p>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p><em>RAID is a data storage technology that combines multiple disk drive components into a logical unit for the purposes of data redundancy and performance improvement.</em> – Wikipedia</p>
+
+<p>In this assignment you’ll create a new CentOS minimal virtual machine with the <code>/home</code> directory mounted on a RAID 1 array comprising of three 1GiB virtual disks.  Two being active members of the RAID array and one being held as a hot spare.  A fourth drive will be left unformatted for later addition to the array.</p>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ul>
+<li>Explain the purpose of RAID</li>
+<li>Describe several common RAID set ups</li>
+<li>Explain the purpose of the <code>/etc/fstab</code> and <code>/etc/mtab</code> files.</li>
+<li>Demonstrate how RAID is used to protect data.</li>
+<li>Degrade a RAID array by failing a device</li>
+<li>Monitor the rebuild process.</li>
+<li>Add a new drive to the RAID array.</li>
+</ul>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>RAID</strong> - Redundant Array of Independent Disks</li>
+<li><strong>RAID 0</strong> - Stripping for performance, no redundancy</li>
+<li><strong>RAID 1</strong> - Mirroring for redundancy</li>
+<li><strong>RAID 5</strong> - Comprises block-level striping with distributed parity (fault tolerance).</li>
+<li><code>/etc/fstab</code> - Lists device names mounted at boot time.</li>
+<li><code>/etc/mtab</code> - Shows current mounted filesystems. </li>
+<li><code>mdadm</code> - CLI tool for administering RAID.</li>
+<li><code>fsck</code> - No, not what you think.  It’s Filesystem check.</li>
+<li><strong>Mirror</strong> - Data duplicated over multiple disks.</li>
+<li><strong>Strip</strong> - Data fragments spread over multiple disks.</li>
+<li><code>/proc/mdstat</code> - Lists existing RAID volumes and their states.</li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Create a new virtual machine using the CentOS 7 minimal installation ISO.</p>
+
+<p>Add a second and third 8GiB virtual drive in VirtualBox.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS238DL/raid-2.png" alt="Second virtual drive in VirtualBox" title=""></p>
+
+
+
+<h2 id="configure-raid-during-the-install">Configure RAID During the Install</h2>
+
+<p>Start the installation and check <em>I will configure partitioning.</em> Select the first 2 drives but leave the third unselected which you will add later as a hot spare.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS238DL/raid-3.png" alt="Selecting drives during install" title=""></p>
+
+<p>Click done and on the custom partitioning screen click on <em>Automatically create partitions</em> and then select <em>Device Type</em> as RAID and I as Raid 1.</p>
+
+<p>When done the layout should look like this.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS238DL/raid-5.png" alt="Installation screen" title=""></p>
+
+<p>On the <em>Installation Summary</em> screen click <em>Begin Installation</em>.</p>
+
+<p>When the installation is finished reboot the virtual machine.</p>
+
+<h2 id="raid-management">RAID Management</h2>
+
+
+
+<h3 id="install-mutt">Install Mutt</h3>
+
+<p>Install the <code>mutt</code>client so you can read the messages <code>mdadm</code> will send.</p>
+
+<h3 id="examining-the-current-setup">Examining the Current Setup</h3>
+
+<p>Login in as root and run <code>df -h</code> to show that <code>/</code> is mounted on <code>/dev/md127</code>.</p>
+
+<p>The <code>mdadm</code> command is used for monitoring and troubleshooting RAID.  See the <em>Debian Handbook</em> for an excellent chapter on working with RAID.</p>
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127</span>
+/dev/md0 <span class="hljs-number">1022.44</span>MiB raid1 <span class="hljs-number">2</span> devices, <span class="hljs-number">1</span> spare. Use mdadm --detail <span class="hljs-keyword">for</span> more detail.</code></pre>
+
+<p>Using the <em>–detail</em> option you will see that the RAID 1 array is active, in good health but has no spare drive.</p>
+
+
+
+<h3 id="add-a-spare-drive">Add a Spare Drive</h3>
+
+
+
+<h2 id="add-a-new-drive">Add a New Drive</h2>
+
+
+
+<h3 id="prepare-the-unformatted-drive">Prepare the Unformatted Drive</h3>
+
+<p>Use <code>fdisk</code> to prepare <code>/dev/sde</code>.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sde</span></code></pre>
+
+<p>Type <em>m</em> to access the help manual from within <code>fdisk</code>.</p>
+
+<p>Type <em>p</em> to “print” the current partition table which is empty.</p>
+
+<p>Create a new primary partition as /sdc1/ using all the space (the default).</p>
+
+<p>Typing <em>p</em> will show the default type is /linux/.</p>
+
+<ol>
+<li>Use <em>t</em> to change the type to <em>Linux raid auto</em> or type <em>fd</em>.</li>
+</ol>
+
+<p>Type <em>p</em> to see the partition table.  The type should now be <em>Linux raid auto</em>.</p>
+
+<p>Type <em>w</em> to write the partition table and <em>q</em> to exit <code>fdisk</code>.</p>
+
+<h3 id="add-the-drive-to-the-array">Add the Drive to the Array</h3>
+
+<ol>
+<li>Add the new drive to the array using <code>mdadm</code>.</li>
+</ol>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md0 --add /dev/sdc</span></code></pre>
+
+<p><code>mdadm --detail /dev/md127</code> will show that <em>sdc</em> was added as a spare.</p>
+
+<h3 id="fail-a-raid-drive">Fail a RAID Drive</h3>
+
+<p>The <code>mdadm</code> command can simulate the failure of a drive.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --fail /dev/sdc1</span></code></pre>
+
+<p>The <code>mdadm --detail /dev/md127</code> command shows the array is recovering and that there is one faulty device and no spares.</p>
+
+<p>Open <code>mutt</code> and root will have mail reporting the event.</p>
+
+<h2 id="removing-the-faulty-drive">Removing the Faulty Drive</h2>
+
+<p>Remove the failed drive.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --remove /dev/sdb</span></code></pre>
+
+<p>The RAID array no longer has a hot spare.</p>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of the email from mdadm monitoring.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/ch-raid.html">Redundant Array of Independent Disks (RAID)</a></li>
+<li><a href="http://wiki.centos.org/TipsAndTricks/Repair_RAID5_Volumes">How to repair a software RAID5 volume with more than one failed disk</a></li>
+<li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html">RAID and LVM (The Debian Handbook)</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
