@@ -46,13 +46,11 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Create a new virtual machine using the CentOS 7 minimal installation ISO.</p>
+<p>Create a new virtual machine using the CentOS 7 minimal installation ISO <em>not</em> the CentOS OVA.</p>
 
 <p>Add a second and third 8GiB virtual drive in VirtualBox.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/raid-2.png" alt="Second virtual drive in VirtualBox" title=""></p>
-
-
 
 <h2 id="configure-raid-during-the-install">Configure RAID During the Install</h2>
 
@@ -60,9 +58,7 @@
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/raid-3.png" alt="Selecting drives during install" title=""></p>
 
-<p>Click done and on the custom partitioning screen click on <em>Automatically create partitions</em> and then select <em>Device Type</em> as RAID and I as Raid 1.</p>
-
-<p>When done the layout should look like this.</p>
+<p>Click done and on the custom partitioning screen click on <em>Automatically create partitions</em> and then select <em>Device Type</em> as RAID and <em>RAID Level</em> as Raid 1. When done the layout should look like this.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/raid-5.png" alt="Installation screen" title=""></p>
 
@@ -76,13 +72,15 @@
 
 <h3 id="install-mutt">Install Mutt</h3>
 
-<p>Install the <code>mutt</code>client so you can read the messages <code>mdadm</code> will send.</p>
+<p>Install the <code>mutt</code> email client so you can read the messages <code>mdadm</code> will send.</p>
 
 <h3 id="examining-the-current-setup">Examining the Current Setup</h3>
 
 <p>Login in as root and run <code>df -h</code> to show that <code>/</code> is mounted on <code>/dev/md127</code>.</p>
 
 <p>The <code>mdadm</code> command is used for monitoring and troubleshooting RAID.  See the <em>Debian Handbook</em> for an excellent chapter on working with RAID.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127</span>
 /dev/md0 <span class="hljs-number">1022.44</span>MiB raid1 <span class="hljs-number">2</span> devices, <span class="hljs-number">1</span> spare. Use mdadm --detail <span class="hljs-keyword">for</span> more detail.</code></pre>
@@ -93,25 +91,19 @@
 
 <h3 id="add-a-spare-drive">Add a Spare Drive</h3>
 
+<p>If the active drives are <code>/dev/sda</code> and <code>/dev/sdb</code> the spare should be the next letter <code>/dev/sdc</code>. Your actual drives could be different.</p>
 
+<h4 id="prepare-the-unformatted-drive">Prepare the Unformatted Drive</h4>
 
-<h2 id="add-a-new-drive">Add a New Drive</h2>
+<p>Use <code>fdisk</code> to prepare <code>/dev/sdc</code>.</p>
 
-
-
-<h3 id="prepare-the-unformatted-drive">Prepare the Unformatted Drive</h3>
-
-<p>Use <code>fdisk</code> to prepare <code>/dev/sde</code>.</p>
-
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sde</span></code></pre>
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sdc</span></code></pre>
 
 <p>Type <em>m</em> to access the help manual from within <code>fdisk</code>.</p>
 
 <p>Type <em>p</em> to “print” the current partition table which is empty.</p>
 
-<p>Create a new primary partition as /sdc1/ using all the space (the default).</p>
+<p>Create a new primary partition as <code>sdc1</code> using all the space (the default).</p>
 
 <p>Typing <em>p</em> will show the default type is /linux/.</p>
 
@@ -135,13 +127,15 @@
 
 <p><code>mdadm --detail /dev/md127</code> will show that <em>sdc</em> was added as a spare.</p>
 
+
+
 <h3 id="fail-a-raid-drive">Fail a RAID Drive</h3>
 
 <p>The <code>mdadm</code> command can simulate the failure of a drive.</p>
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --fail /dev/sdc1</span></code></pre>
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --fail /dev/sda</span></code></pre>
 
 <p>The <code>mdadm --detail /dev/md127</code> command shows the array is recovering and that there is one faulty device and no spares.</p>
 
@@ -153,9 +147,9 @@
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --remove /dev/sdb</span></code></pre>
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --remove /dev/sda</span></code></pre>
 
-<p>The RAID array no longer has a hot spare.</p>
+<p>The RAID array will be healthy but lacking a spare drive.. </p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -169,6 +163,7 @@
 <li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/ch-raid.html">Redundant Array of Independent Disks (RAID)</a></li>
 <li><a href="http://wiki.centos.org/TipsAndTricks/Repair_RAID5_Volumes">How to repair a software RAID5 volume with more than one failed disk</a></li>
 <li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html">RAID and LVM (The Debian Handbook)</a></li>
+<li><a href="https://www.youtube.com/watch?v=wTcxRObq738">What is RAID</a></li>
 </ul>
 
 <blockquote>
