@@ -4,7 +4,7 @@
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
-<p>An advantage of Logical Volume Management (LVM) is how easy it can be extended.  In this assignment you will extend the <code>lv_home</code> logical volume you created by adding LVM extents.</p>
+<p>An advantage of Logical Volume Management (LVM) is how easy it can be extended.  In this assignment you will extend the <code>/home</code> logical volume you created by adding LVM extents.</p>
 
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
@@ -15,6 +15,8 @@
 <li>Extend a LVM Logical Volume (LV).</li>
 <li>Extend an XFS filesystem.</li>
 </ul>
+
+
 
 <h2 id="terms-and-commands-you-should-know">Terms and Commands  You Should Know</h2>
 
@@ -30,86 +32,88 @@
 <li><code>lvdisplay</code> - Display info for LVs</li>
 <li><code>lvextend</code> - Extend the size of a LV</li>
 <li><code>resize2fs</code> - ext2/ext3/ext4 file system resizer</li>
-<li>-<code>xfs_growfs</code> - XFS resizer</li>
+<li>xfs_growfs` - XFS resizer</li>
 </ul>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Use the CentOS 7 minimal installation ISO to create a new virtual machine.</p>
+<p>Use the CentOS 7 minimal installation ISO to create a new virtual machine. Do <em>not</em> use the CentOS ova.</p>
+
+
 
 <h2 id="install-centos-7-with-a-custom-layout">Install CentOS 7 with a Custom Layout</h2>
 
-
-
-<h3 id="create-a-virtual-machine-with-the-default-settings">Create a virtual machine with the default settings</h3>
+<p>Create a virtual machine with the default settings.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-1.png" alt="Centos LVM Screenshot" title=""></p>
 
-<h3 id="set-the-correct-time-zone-and-enable-networking">Set the correct time zone and enable networking</h3>
+<p>Set the correct time zone and enable networking</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-2.png" alt="CentOS LVM screenshot" title=""></p>
 
-<h3 id="click-installation-destination-and-select-i-will-configure-partitioning">Click <strong>INSTALLATION DESTINATION</strong> and select <em>I will configure partitioning</em></h3>
+<p>Click INSTALLATION DESTINATION and select <em>I will configure partitioning</em></p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-3.png" alt="CentOS LVM screenshot" title=""></p>
 
-<h3 id="select-standard-partition">Select <em>Standard Partition</em></h3>
+<p>Select <em>Standard Partition</em></p>
 
 <p>Make a note of how much space is available</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-4.png" alt="CentOS LVM screenshot" title=""></p>
 
-<h3 id="add-mount-points-for">Add mount points for:</h3>
+<p>Add mount points for:</p>
 
 <ul>
 <li>/boot (500MB)</li>
 <li>/ home (1GB)</li>
 <li>swap (500MB)</li>
-<li>/ (what’s left)</li>
+<li>/ (remaining space)</li>
 </ul>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-5.png" alt="CentOS LVM screenshot" title=""></p>
 
-<h3 id="set-root-home-and-swap-to-lvm-partition">Set root, home and swap to <em>LVM Partition</em></h3>
+<p>Set root, home and swap to <em>LVM Partition</em>. Leave <code>/boot</code> as XFS.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-6.png" alt="CentOS LVM screenshot" title=""></p>
 
-
-
-<h3 id="click-begin-installation">Click <em>Begin Installation</em></h3>
+<p>Click <em>Begin Installation</em></p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-7.png" alt="CentOS LVM screenshot" title=""></p>
 
-<h3 id="set-the-root-password-to-paw0rd">Set the root password to Pa$$w0rd</h3>
+<p>Set the root password to Pa$$w0rd <br>
+<img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-8.png" alt="CentOS LVM screenshot" title=""></p>
 
-<p><img src="https://s3.amazonaws.com/CIS238DL/img/centos_lvm-8.png" alt="CentOS LVM screenshot" title=""></p>
+
 
 <h2 id="add-a-second-virtual-drive-to-the-virtual-machine">Add a Second Virtual Drive to the Virtual Machine</h2>
 
 <p>Add a second virtual 1 GiB hard disk to your virtual machine.  You will need to <code>poweroff</code> the virtual machine before adding the drive.</p>
 
-
-
-<h4 id="select-the-sata-controller">Select the SATA controller</h4>
+<p>Select the SATA controller</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage.png" title=""></p>
 
-
-
-<h4 id="add-a-second-virtual-drive-to-the-sata-controller">Add a second virtual drive to the SATA controller</h4>
+<p>Add a second virtual drive to the SATA controller</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" alt="https://s3.amazonaws.com/CIS238DL/vbox-add_storage2.png" title=""></p>
 
+
+
 <h2 id="create-the-physical-volume-pv">Create the Physical Volume (PV)</h2>
 
-<p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume.</p>
+<p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume using <code>pvcreate</code>.</p>
 
-<pre><code># pvcreate /dev/sdb
-</code></pre>
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># pvcreate /dev/sdb</span></code></pre>
+
+
 
 <h2 id="add-the-physical-volume-to-the-volume-group">Add the Physical Volume to the Volume Group</h2>
 
-<p>Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no Free PEs available.</p>
+<p>Use the <code>vgdisplay</code> command to display information about the volume group.  Note that there are no free Physical Extents (PE) available.</p>
 
 <p>Now add the physical volume to the volume group.</p>
 
@@ -118,26 +122,33 @@
 
 <p>Run <code>vgdisplay</code> again and you should now have about 255 free extents or 1024 MiB available.</p>
 
+
+
 <h2 id="extend-the-logical-volume">Extend the logical Volume</h2>
 
-<p>Use the <code>lvextend</code> command to extent the <em>lv_home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add half the available extents.</p>
+<p>Use the <code>lvextend</code> command to extent the <em>home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add half the available extents.</p>
 
-<pre><code># lvextend -l +125 /dev/centos/home
-</code></pre>
 
-<p>Usie <code>vgdisplay</code> again to show that there are fewer extents available.</p>
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># lvextend -l +125 /dev/centos/home</span></code></pre>
+
+<p>Use <code>vgdisplay</code> again to show that there are fewer extents available.</p>
+
+
 
 <h2 id="extend-the-home-filesystem">Extend the /home filesystem</h2>
 
-<p>Extending the logical volume isn’t enough you also need to extend the filesystem as well.  The <code>df</code> command shows that <em>lv_home</em> is still 1 GiB. in size.</p>
+<p>Extending the logical volume isn’t enough you also need to extend the filesystem as well.  The <code>df</code> command shows that <em>/home</em> is still 1 GiB. in size.</p>
 
-<pre><code># df -h
-</code></pre>
+
+
+<pre class="prettyprint"><code class=" hljs bash">    <span class="hljs-comment"># df -h</span></code></pre>
 
 <p>Use <code>xfs_growfs</code> to extend the XFS filesystem to the full capacity of the logical volume.</p>
 
-<pre><code># xfs_growfs /dev/centos/home
-</code></pre>
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># xfs_growfs /dev/centos/home</span></code></pre>
 
 
 
@@ -145,9 +156,13 @@
 
 <p>Follow the same procedure to extend / by the remaining extents.</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screen-shot (cropped, of course) of the <code>df -h</code> command showing that <em>/home</em> and <em>/</em> have been extended.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
@@ -158,3 +173,7 @@
 <li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html#section.lvm">The Debian Administrator’s Handbook</a></li>
 <li><a href="#dennisk.freeshell.org/cis238dl_lvm.html">Extending a LVM Logical Volume</a></li>
 </ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
