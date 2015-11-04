@@ -1,0 +1,166 @@
+<h1 id="create-a-command-aliases">Create a Command Aliases</h1>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p>Aliases and Bash functions let a Linux system administrator create custom commands. In this assignment you will create a custom alias.</p>
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Determine a command type using the <code>type</code> command.</li>
+<li>Use the <code>alias</code> command to create a new alias.</li>
+<li>Use the <code>unalias</code> command to remove an alias.</li>
+<li>Make aliases and fuctions permanent by adding it to <code>~/.bashrc</code> or <code>~/.bash_aliases</code>.</li>
+</ol>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><code>type</code></li>
+<li><code>alias</code></li>
+<li><code>unalias</code></li>
+<li><code>ls</code></li>
+<li><code>~/bash.bashrc</code></li>
+<li><code>~/.bash_aliases</code></li>
+<li><code>Dot files</code></li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Tested on Ubuntu 14.04</p>
+
+
+
+<h2 id="scenario">Scenario</h2>
+
+<p>You are a system administration who works on both Windows and Linux servers. You want to create an alias to the <code>ping</code> command so it works the same way on both servers.</p>
+
+
+
+<h2 id="using-the-type-command">Using the <code>type</code> Command</h2>
+
+<p>When you type the <code>ls</code> command you are actually running this alias:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs asciidoc">$ type ls
+ls is aliased to <span class="hljs-smartquote">`ls --color=auto'</span></code></pre>
+
+<p>The <code>type</code> shows the alias. The <code>--color=auto</code> option to <code>ls</code> displays files, directories, links and executables in different color.</p>
+
+
+
+<h2 id="using-the-unalias-command">Using the <code>unalias</code> Command</h2>
+
+<p>The color option on a dark background makes directories very hard to see. Let’s remove the color option with the <code>unalias</code> command. Using Tab completion you only need to type the first three letters of <code>unalias</code> the command.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>unalias ls</code></pre>
+
+<p>The <code>type</code> command now shows that <code>ls</code> has no options when you run the command.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs mel">$ type <span class="hljs-keyword">ls</span>
+<span class="hljs-keyword">ls</span> is /bin/<span class="hljs-keyword">ls</span></code></pre>
+
+
+
+<h2 id="using-the-alias-command">Using the <code>alias</code> Command</h2>
+
+<p>Without the color option it is hard to tell whether a file is an ordinary file, directory, executable or a link so we’ll use <code>alias</code> to map <code>ls</code> to <code>ls -</code> which will add an indicator to each file type (See the table below). Be sure to include the quote marks in the command so the shell treats the space character correctly.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Indicator</th>
+  <th>Type of File</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>none</td>
+  <td>ordinary file</td>
+</tr>
+<tr>
+  <td>slash (/)</td>
+  <td>directory</td>
+</tr>
+<tr>
+  <td>at (@)</td>
+  <td>symbolic link</td>
+</tr>
+<tr>
+  <td>asterisk (*)</td>
+  <td>executable</td>
+</tr>
+</tbody></table>
+
+
+<p>Here us a sample output.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs applescript">$ <span class="hljs-type">alias</span> ls=<span class="hljs-string">"ls -F"</span>
+$ ls /home/jstudent/
+Desktop/ Documents/ Downloads/ Music/ /Videos
+<span class="hljs-keyword">some</span>-link@ <span class="hljs-keyword">some</span>-<span class="hljs-type">file</span>.txt <span class="hljs-keyword">some</span>-<span class="hljs-keyword">script</span>.sh*</code></pre>
+
+<p>The new alias isn’t permanent and will disappear when the current shell closes. To make the alias permanent add it to the <code>.bashrc</code> or <code>.bash_aliases</code> file in your home directory. The <code>.bash_aliases</code> may not exist but you can create it using the <code>vi</code> text editor. Using a separate file from <code>.bashrc</code> is safer.</p>
+
+<p>Here is a sample <code>.bash_aliases</code> file.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs asciidoc">alias ls=<span class="hljs-emphasis">'ls -F'</span>
+alias ll=<span class="hljs-emphasis">'l -lh'</span>
+alias du=<span class="hljs-smartquote">`du -sh * | sort -nr'</span></code></pre>
+
+
+
+<h2 id="unalias-an-alias">Unalias an Alias</h2>
+
+<p>To run a command without the alias use <em>**</em> before the command.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>\ls</code></pre>
+
+
+
+<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
+
+<ol>
+<li>Files that start with a period like <code>.bashrc</code> are hidden from the <code>ls</code> command unless you use the <code>-a</code> option.</li>
+<li>Don’t forget the quotes around <code>ls -F</code> they are required because of the space character.</li>
+</ol>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit the line you would add to the <code>.bash_alias</code> file to have the <code>ping</code> command function the same on Linux as on Windows.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-useful-bash-aliases-and-functions" title="An Introduction to Useful Bash Aliases and Functions">An Introduction to Useful Bash Aliases and Functions</a></li>
+<li><a href="http://www.freebsd.org/cgi/man.cgi%3Fquery%3Dls" title="BSD ls manpage">The very complete BSD <code>ls</code> manpage</a></li>
+<li><a href="http://www.codeuniversity.com/templates/bash_alias" title="sample bash_alias file">Sample bash_alias file</a></li>
+</ul>
+
+<!-- links -->
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
