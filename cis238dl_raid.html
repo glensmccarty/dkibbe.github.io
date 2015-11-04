@@ -52,6 +52,8 @@
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/raid-2.png" alt="Second virtual drive in VirtualBox" title=""></p>
 
+
+
 <h2 id="configure-raid-during-the-install">Configure RAID During the Install</h2>
 
 <p>Start the installation and check <em>I will configure partitioning.</em> Select the first 2 drives but leave the third unselected which you will add later as a hot spare.</p>
@@ -66,6 +68,8 @@
 
 <p>When the installation is finished reboot the virtual machine.</p>
 
+
+
 <h2 id="raid-management">RAID Management</h2>
 
 
@@ -73,6 +77,8 @@
 <h3 id="install-mutt">Install Mutt</h3>
 
 <p>Install the <code>mutt</code> email client so you can read the messages <code>mdadm</code> will send.</p>
+
+
 
 <h3 id="examining-the-current-setup">Examining the Current Setup</h3>
 
@@ -83,19 +89,21 @@
 
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127</span>
-/dev/md0 <span class="hljs-number">1022.44</span>MiB raid1 <span class="hljs-number">2</span> devices, <span class="hljs-number">1</span> spare. Use mdadm --detail <span class="hljs-keyword">for</span> more detail.</code></pre>
+/dev/md127 <span class="hljs-number">1022.44</span>MiB raid1 <span class="hljs-number">2</span> devices, <span class="hljs-number">1</span> spare. Use mdadm --detail <span class="hljs-keyword">for</span> more detail.</code></pre>
 
 <p>Using the <em>–detail</em> option you will see that the RAID 1 array is active, in good health but has no spare drive.</p>
-
-
 
 <h3 id="add-a-spare-drive">Add a Spare Drive</h3>
 
 <p>If the active drives are <code>/dev/sda</code> and <code>/dev/sdb</code> the spare should be the next letter <code>/dev/sdc</code>. Your actual drives could be different.</p>
 
+
+
 <h4 id="prepare-the-unformatted-drive">Prepare the Unformatted Drive</h4>
 
 <p>Use <code>fdisk</code> to prepare <code>/dev/sdc</code>.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sdc</span></code></pre>
 
@@ -115,6 +123,8 @@
 
 <p>Type <em>w</em> to write the partition table and <em>q</em> to exit <code>fdisk</code>.</p>
 
+
+
 <h3 id="add-the-drive-to-the-array">Add the Drive to the Array</h3>
 
 <ol>
@@ -123,11 +133,9 @@
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md0 --add /dev/sdc</span></code></pre>
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --add /dev/sdc</span></code></pre>
 
 <p><code>mdadm --detail /dev/md127</code> will show that <em>sdc</em> was added as a spare.</p>
-
-
 
 <h3 id="fail-a-raid-drive">Fail a RAID Drive</h3>
 
@@ -141,6 +149,8 @@
 
 <p>Open <code>mutt</code> and root will have mail reporting the event.</p>
 
+
+
 <h2 id="removing-the-faulty-drive">Removing the Faulty Drive</h2>
 
 <p>Remove the failed drive.</p>
@@ -150,6 +160,8 @@
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># mdadm /dev/md127 --remove /dev/sda</span></code></pre>
 
 <p>The RAID array will be healthy but lacking a spare drive.. </p>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
