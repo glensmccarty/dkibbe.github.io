@@ -2,6 +2,8 @@
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/lvm_layout.png" alt="Logical Volume Management" title=""></p>
 
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>An advantage of Logical Volume Management (LVM) is how easy it can be extended.  In this assignment you will extend the <code>/home</code> logical volume you created by adding LVM extents.</p>
@@ -101,6 +103,16 @@
 
 
 
+<h2 id="format-the-drive">Format the Drive</h2>
+
+<p>Before the drive can be added as a Physical Volume it needs to be formated using <code>fdisk</code>.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sdb</span></code></pre>
+
+<p>Add a new primary partition set to type <em>Linux LVM (8e)</em>.</p>
+
 <h2 id="create-the-physical-volume-pv">Create the Physical Volume (PV)</h2>
 
 <p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume using <code>pvcreate</code>.</p>
@@ -149,8 +161,6 @@
 
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># xfs_growfs /dev/centos/home</span></code></pre>
-
-
 
 <h2 id="extend-the-file-system">Extend the / file system</h2>
 
