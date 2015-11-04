@@ -1,0 +1,282 @@
+<h1 id="vsftp-the-very-secure-ftp-server">vsFTP - The Very Secure FTP Server</h1>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p>FTP or File Transfer Protocol is one oldest protocols used on the Net.</p>
+
+<p><em>After completing this assignment you will be able to:</em></p>
+
+<ol>
+<li>Install the <code>vsFTPd</code> daemon using <code>yum</code>.</li>
+<li>Configure <code>vsFTPd</code> for anonymous use.</li>
+<li>Create virtual FTP accounts.</li>
+<li>Deny and allow specific user access to FTP.</li>
+<li>Add a login banner.</li>
+<li>Demonstrate how SELinux works to protect system files.</li>
+</ol>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<ul>
+<li><p>You will need two user accounts for this assignment.  Create an account for <code>tux</code> and <code>jstudent</code> on the CentOS virtual machine.  Be sure to assign a simple password to each account so you can remember it.</p></li>
+<li><p>FTP is covered in Chapter 17 of the textbook.</p></li>
+<li><p>You should also watch Thomas Cameron’s <a href="https://www.youtube.com/watch?v=MxjenQ31b70">SELinux For Mere Mortals</a>.</p></li>
+<li><p>Check that <em>eth0</em> is active and the interface has an IP address on the 192.168.201.0 network.  If no, set VirtualBox networking to Bridging and reboot the virtual machine.</p></li>
+<li><p>This assignment can be done from a CentOS minimal virtual machine or from a CentOS liveCD or LiveUSB.  If you are using the LiveCD or LiveUSB the FTP client will need to be installed also.</p></li>
+</ul>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<p>File Transfer Protocol</p>
+
+<ul>
+<li><p><code>/usr/sbin/vsftpd</code> The Very Secure FTP Daemon</p></li>
+<li><p><code>/etc/vsftpd/vsftpd.conf</code></p><dd> <br>
+Main configuration file for <code>vsftp</code>.</dd><p></p></li>
+<li><p><code>/etc/vsftpd/ftpusers</code></p><dd> <br>
+Lists users <em>not</em> allowed to log into the FTP server.</dd><p></p></li>
+<li><p><code>/etc/vsftpd/userlist</code></p><dd> <br>
+Either allow or deny users depending on <em>userlist<sub>deny</sub></em> in vsftpd.conf.</dd><p></p></li>
+<li><p><code>/var/ftp</code></p><dd> <br>
+FTP working directory</dd><p></p></li>
+<li><p><code>/var/ftp/pub</code></p><dd> <br>
+Files for anonymous FTP access.</dd><p></p></li>
+<li><p><code>etc/services</code></p><dd> <br>
+A plain  ASCII  file  providing a mapping between human-friendly textual names for  internet  services,  and  their  underlying assigned  port  numbers  and  protocol types.</dd><p></p></li>
+<li><p>MOTD</p><dd> <br>
+Message of the Day</dd><p></p></li>
+<li><p>FileZilla</p><dd> <br>
+Popular cross-platform FTP client.</dd><p></p></li>
+<li><p>SELinux</p><dd> <br>
+Security Enhanced Linux</dd><p></p></li>
+</ul>
+
+
+
+<h2 id="how-ftp-works">How FTP works</h2>
+
+
+
+<h3 id="active-vs-passive-mode">&gt; Active vs. Passive mode</h3>
+
+
+
+<h4 id="active-mode">Active Mode</h4>
+
+<ol>
+<li>Client imitates data transfer to local unprivileged (&gt;1023) port.</li>
+<li>Server opens data connection from port 20 to client’s selected port.</li>
+</ol>
+
+
+
+<h4 id="passive-mode">Passive Mode</h4>
+
+<ol>
+<li>Client asks server to listen on an unprivileged port of the server’s choice.  Server responses with the high port it’s listening on.</li>
+</ol>
+
+
+
+<h2 id="installing-the-very-secure-ftp-daemon">Installing the Very Secure FTP Daemon</h2>
+
+<p>vsFTPd is in the CentOS official repository and can be installed with:</p>
+
+<p>The service must be started before it can be used and configured to start on reboot if desired.</p>
+
+
+
+<h2 id="configure-iptables">Configure <code>iptables</code></h2>
+
+<p><img src="http://dennisk.freeshell.org/img/firewall_ftp.png" alt="http://dennisk.freeshell.org/img/firewall_ftp.png" title=""></p>
+
+<p>The standard ftp ports need to be opened in the firewall.  Do this using <code>system-config-firewall-tui</code>.  FTP is a trusted service.</p>
+
+
+
+<h2 id="anonymous-logins">Anonymous Logins</h2>
+
+<ol>
+<li>First make a date-stamped backup of the <code>vsftpd</code> mail configuration file.</li>
+<li>Anonymous connections are allowed by default so you don’t need to make any changes.</li>
+<li>Find the section with the login banner string.</li>
+<li>Create a new FTP banner warning users that all activity on the server is logged.</li>
+<li>If your banner has more than a single line point to it with this directive.</li>
+<li>Place a test file in the FTP directory.</li>
+<li>From another workstation log in as <em>anonymous</em> using your email address as the password and download the test file you created using <code>get</code> at the FTP prompt.  You can use the <code>help</code> command to find other FTP commands.</li>
+</ol>
+
+
+
+<h2 id="setting-a-different-root-directory-for-anonymous-logins">Setting a Different Root Directory For anonymous Logins</h2>
+
+<p>The default login directory for <em>anonymous</em> user is <code>/var/ftp/</code>.  Next you’ll change the default to <code>/var/ftp/pub/</code> by adding a new directive to the vsftpd configuration file.</p>
+
+<ol>
+<li>Add <code>anon_root=/var/ftp/pub</code> below the line that allows <em>anonymous</em> logins.</li>
+<li>Reload the configuration file. <br>
+or</li>
+<li>Log out and log back in as an anonymous user.  The FTP client keeps a command history so you can use the up arrow to re-run the previous open command.</li>
+<li>Use <code>ls</code> to show that you are in the /var/ftp/pub directory containing your test file.  An anonymous user has no access to a higher directory.</li>
+</ol>
+
+
+
+<h2 id="disable-anonymous-logins">Disable anonymous Logins</h2>
+
+<p>Anonymous downloads are allowed by default.  Next you’ll disable anonymous logins.</p>
+
+<ol>
+<li>Change the line in the <em>vsftpd.conf</em> allowing anonymous logins from YES to NO.</li>
+<li>Reload the vsFTPd daemon.</li>
+<li>Try to login as anonymous.</li>
+<li>The login should fail.</li>
+</ol>
+
+
+
+<h2 id="allow-local-users-to-use-ftp">Allow Local Users To Use FTP</h2>
+
+<ol>
+<li>Uncomment <em>local<sub>enable</sub>=YES</em> to allow local user account to use FTP.</li>
+<li>The change won’t be effective until you run <code>service vsftpd</code> reload.  This will cause <code>vsftpd</code> to reload its configuration file.</li>
+<li>On CentOS also need to configure SELinux. <br>
+<ol><li>Check SELinux for ftp status with <code>getsebool -a | grep ftp</code>.</li>
+<li>Check if <code>ftp_home_dir –&gt; on</code>.</li>
+<li>If it is not enabled change it with the <code>setsebool</code> command. <em>Note:</em> This command will take a minute to complete.</li>
+<li>Now login from the workstation using an account you have on the ftp server.  The <code>pwd</code> command show you are in your home directory.</li></ol></li>
+</ol>
+
+
+
+<h2 id="root-login">Root login</h2>
+
+<p>The <code>ftpusers</code> file lists accounts that are not permitted to use FTP.  The root user is included in this list.</p>
+
+<ol>
+<li>Try logging in as the root user.</li>
+<li>The login should fail and the attempt logged.</li>
+</ol>
+
+
+
+<h2 id="removing-the-ability-of-a-user-to-use-ftp">Removing the ability of a user to use ftp</h2>
+
+<p>Even if local users are allowed to use FTP you can blacklist a user by adding them to <code>ftpusers</code> or <code>userlist</code>.</p>
+
+
+
+<h2 id="selinux">SELinux</h2>
+
+<p>This part of the assignment will demonstrate how SELinux steps in to prevent vsFTP from serving a mislabeled file.</p>
+
+
+
+<h3 id="selinux-copy">SELinux Copy</h3>
+
+<ol>
+<li>Create two empty files in root’s home directory.</li>
+<li>Use <code>ls -Z</code> to display the SELinux contexts for the files in root’s home directory.</li>
+<li>Next copy the <em>example.copy</em> to the <code>/var/ftp/pub</code> directory.</li>
+<li>Change to the <code>/var/ftp/pub</code> directory and use <code>ls -Z</code> to show that the SELinux security context type is correct.</li>
+<li>Refresh the page in Firefox and you will now see <em>example.copy</em> as well as <em>example.txt</em>.</li>
+</ol>
+
+
+
+<h3 id="selinux-move">SELinux Move</h3>
+
+<ol>
+<li>Move (don’t copy) <em>example.move</em> from root’s home directory to <code>/var/ftp/pub</code>.</li>
+<li>Refresh Firefox the new file does not show up.</li>
+<li>Use <code>ls -Z</code> to show that the type for this file is wrong.</li>
+<li>Use the <code>chmod</code> command to add read/write permissions for all to <em>example.move</em>.</li>
+<li>Refresh Firefox.  The file still doesn’t show.</li>
+</ol>
+
+
+
+<h2 id="show-that-selinux-is-working">Show that SELinux is Working</h2>
+
+<p>SELinux has stepped in to prevent vsFTP from serving a mis-configured file.</p>
+
+<ol>
+<li>Run <code>getenforce</code> to show that SELinux is in <em>enforcing</em> mode.</li>
+<li>Next put SELinux in <em>permissive</em> mode.</li>
+<li>Refresh Firefox and <em>example.move</em> will be visible.</li>
+<li>Reset SELinux to <em>enforcing</em> mode.</li>
+<li>Refresh Firefox again and <em>example.move</em> disappears from the list.  SELinux is clearly working.</li>
+</ol>
+
+
+
+<h2 id="correcting-a-mis-configured-file">Correcting a Mis-configured File</h2>
+
+<p>The most common problem is moving a file rather than copying a file.  Moved files retain the original security context.  Next you’ll use SELinux tools to fix the problem.</p>
+
+
+
+<h3 id="restoring-the-correct-security-contexts">Restoring the Correct Security Contexts</h3>
+
+<p>The <code>restorecon</code> tool will restore the correct contexts for all files in a directory.</p>
+
+
+
+<h3 id="change-the-security-context-of-a-file">Change the Security Context of a File</h3>
+
+<p>Another tool <code>chcon</code> can be used to manually configure the security contexts of a file.  You can use the <strong>–reference=</strong> option to copy the security contexts from another file.</p>
+
+<ol>
+<li>Reset the type context for <em>example.copy</em> to /admin_home_t using the original file still in root’s home directory.</li>
+<li>Refresh the browser window and notice what happens.</li>
+<li>Use the <code>restorecon -R</code> command to restore the correct SELinux context to the /var/ftp/pub directory and its contents.</li>
+<li>Refresh the browser window and the file will be visible again.</li>
+</ol>
+
+
+
+<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
+
+<ul>
+<li><p>Are there spaces before or after the equal signs (=) in the vsFTP configuration file?</p></li>
+<li><p>Did you restart the daemon after each edit to the configuration main file?</p></li>
+<li><p>Do you type <a href="ftp://192.168.201.xxx">ftp://192.168.201.xxx</a> in Firefox?</p></li>
+<li><p>If SELinux doesn’t appear to be working use <code>getenforce</code> to check if SELinux is in <em>permissive</em> mode.</p></li>
+</ul>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p><em>Copy and paste these questions along with your answers into the text submission box.</em></p>
+
+<ol>
+<li>What directive is used to set the default directory for anonymous logins to <code>/var/ftp/pub</code>?</li>
+<li>Create an account for another user and add them to <code>/etc/vsftpd/user_list</code>.  Are they able to log in to the vsftpd server?</li>
+<li>Try accessing your FTP server from Firefox.  How must you enter the URL so that Firefox knows you want to use the FTP protocol?</li>
+<li>Create a symbolic link in <code>/var/ftp/pub</code> to <code>/tmp</code>.  Login as anonymous and try to change to <code>/tmp</code> using the link. What happens?</li>
+<li>What default ports number does FTP use?</li>
+<li>Using <code>yum search</code> what other FTP server is available.</li>
+</ol>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/index.html">RHEL Deployment Guide</a></li>
+<li><a href="http://wiki.centos.org/HowTos/SELinux">CentOS Wiki page for SELinux</a></li>
+<li><a href="https://www.youtube.com/watch?v=MxjenQ31b70">SELinux For Mere Mortals</a></li>
+<li><code>man vsftpd</code> Man page for vsFTP daemon</li>
+<li><code>man 5 vsftpd.conf</code> Man page for the <code>vsftp</code> configuration file</li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
