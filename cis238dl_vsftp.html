@@ -2,6 +2,76 @@
 
 
 
+<h2 id="major-revision-for-centos-7-work-in-progress">Major revision for CentOS 7 (work in progress)</h2>
+
+<pre><code>1  sysctl poweroff
+2  poweroff
+</code></pre>
+
+
+
+<h3 id="firewall">Firewall</h3>
+
+<p>CentOS 7 has be default an open firewall. You can list out the firewall rules with this command.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># iptables -L</span></code></pre>
+
+
+
+<h3 id="install-the-ftp-server-and-ftp-client">Install the FTP server and FTP Client</h3>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># yum install vsftpd ftp</span></code></pre>
+
+
+
+<h3 id="start-the-ftp-service">Start the FTP Service</h3>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl start vsftpd.service</span></code></pre>
+
+<p>and check that the is running</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">systemctl status vsftpd<span class="hljs-preprocessor">.service</span></code></pre>
+
+<p>15  useradd tux <br>
+   16  passwd tux <br>
+   17  su - tux <br>
+   18  cd /var/ftp/pub/ <br>
+   19  touch dennisk.txt <br>
+   20  ls <br>
+   21  ls -l <br>
+   22  ls -lZ <br>
+   23  cd <br>
+   24  cd - <br>
+   25  ls <br>
+   26  chmod 0777 anaconda-ks.cfg.move  <br>
+   27  ls -l  <br>
+   28  cd <br>
+   29  ftp localhost <br>
+   30  ls -lZ /var/ftp/pub/ <br>
+   31  setenforce 0 <br>
+   32  getenforce  <br>
+   33  ftp localhost <br>
+   34  less /var/log/audit/audit.log  <br>
+   35  cat /var/log/audit/audit.log | grep move <br>
+   36  ls -lZ /var/ftp/pub/ <br>
+   37  restorecon /var/ftp/pub/* <br>
+   38  ls -lZ /var/ftp/pub/ <br>
+   39  setenforce 1 <br>
+   40  getenforce  <br>
+   41  ftp localhost <br>
+   42  ip a s <br>
+   43  ftp <br>
+   44  ls -ldZ /var/ftp/pub/ <br>
+   45  history &gt;ftp.txt</p>
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>FTP or File Transfer Protocol is one oldest protocols used on the Net.</p>
@@ -180,6 +250,87 @@ or</li>
 
 <h3 id="selinux-copy">SELinux Copy</h3>
 
+
+
+<h4 id="create-files">Create Files</h4>
+
+<p>In root’s home directory is a configuration file for Kickstart. You’ll use that file to create files to serve out of the <code>/var/ftp/pub</code> directory.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls </span>
+anaconda-ks.cfg
+<span class="hljs-preprocessor"># cp anaconda-ks.cfg anaconda-ks.cfg.copy</span>
+<span class="hljs-preprocessor"># cp anaconda-ks.cfg anaconda-ks.cfg.move</span></code></pre>
+
+<h4 id="check-the-selinux-security-context">Check the SELinux security context</h4>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -lZ anaconda*</span></code></pre>
+
+<p>All three files have the same security context.</p>
+
+
+
+<h3 id="copy-and-move-the-files">Copy and Move the files</h3>
+
+<p>Use the <code>cp</code> command to <em>copy</em> <code>anaconda-ks.cfg.copy to</code>/var/ftp/pub`</p>
+
+<pre class="prettyprint"><code class=" hljs rust">#  cp anaconda-ks.cfg.<span class="hljs-keyword">copy</span> /var/ftp/<span class="hljs-keyword">pub</span>/</code></pre>
+
+<p>and the <code>mv</code> command to <em>move</em> <code>anaconda-ks.cfg.move</code> to <code>/var/ftp/pub</code></p>
+
+<pre class="prettyprint"><code class=" hljs rust"># mv anaconda-ks.cfg.<span class="hljs-keyword">move</span> /var/ftp/<span class="hljs-keyword">pub</span></code></pre>
+
+
+
+<h4 id="use-ftp-to-list-the-files">Use FTP to list the files</h4>
+
+<p>Use the FTP client to login as <em>anonymous</em> and list the files in the pub directory. <code>anacond-ks-cfg.move</code> is missing.</p>
+
+
+
+<h4 id="change-the-permissions">Change the permissions</h4>
+
+<p>Use <code>chmod</code> to change the permissions on <code>anaconda-ks.cfg.move</code> to 0777. Everyone should be able to read the files but they can’t.</p>
+
+<p>SELinux has stepped in to block vsFTP from serving the file because the security context is wrong.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash"><span class="hljs-comment"># cd /var/ftp/pub</span>
+ls <span class="hljs-operator">-l</span>Z</code></pre>
+
+
+
+<h3 id="restoring-the-correct-security-context">Restoring the correct security context</h3>
+
+<p>Use <code>restorecon</code> restore the correct security context to all files.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -ldZ /var/ftp/pub</span></code></pre>
+
+<p>shows that the correct security context for files in this directory is <em>public_content_t</em>.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm"><span class="hljs-preprocessor"># ls -lZ /var/ftp/pub/*</span>
+public_content_t anaconda-ks<span class="hljs-preprocessor">.cfg</span><span class="hljs-preprocessor">.copy</span>
+admin_home_t anaconda-ks<span class="hljs-preprocessor">.cfg</span><span class="hljs-preprocessor">.move</span>
+public_content_t hello<span class="hljs-preprocessor">.txt</span>
+</code></pre>
+
+<pre><code>9  cp anaconda-ks.cfg anaconda-ks.cfg.copy
+</code></pre>
+
+<p>10  cp anaconda-ks.cfg anaconda-ks.cfg.move <br>
+   11  ls <br>
+   12  cp anaconda-ks.cfg.copy /var/ftp/pub/ <br>
+   13  mv anaconda-ks.cfg.move /var/ftp/pub/ <br>
+   14  ls -lZ /var/ftp/pub/-ks</p>
+
 <ol>
 <li>Create two empty files in root’s home directory.</li>
 <li>Use <code>ls -Z</code> to display the SELinux contexts for the files in root’s home directory.</li>
@@ -187,8 +338,6 @@ or</li>
 <li>Change to the <code>/var/ftp/pub</code> directory and use <code>ls -Z</code> to show that the SELinux security context type is correct.</li>
 <li>Refresh the page in Firefox and you will now see <em>example.copy</em> as well as <em>example.txt</em>.</li>
 </ol>
-
-
 
 <h3 id="selinux-move">SELinux Move</h3>
 
