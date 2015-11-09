@@ -46,8 +46,11 @@
 
 <p>The <code>ls</code> command is used to show information about a file.</p>
 
-<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-l</span> cpuhog<span class="hljs-built_in">.</span>sh
-<span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog<span class="hljs-built_in">.</span>sh</code></pre>
+<pre class="prettyprint"><code class=" hljs lasso">$ touch foo
+$ ls <span class="hljs-attribute">-l</span> foo
+<span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> ubuntu ubuntu <span class="hljs-number">0</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> foo</code></pre>
+
+<p>The listing shows:</p>
 
 <ul>
 <li>File type (-, d-, l, etc.)</li>
@@ -65,8 +68,8 @@
 
 
 
-<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-il</span> cpuhog<span class="hljs-built_in">.</span>sh
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog<span class="hljs-built_in">.</span>sh</code></pre>
+<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-il</span> foo
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> ubuntu ubuntu <span class="hljs-number">0</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> foo</code></pre>
 
 <p>As long as there is at least one pointer to the inode of a file the file still exist. When the pointer counter is zero the data is still there but the file is not accessible.</p>
 
@@ -81,14 +84,14 @@
 
 <p>The <code>ln</code> or link command creates multiple pointer to the data.</p>
 
-<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-il</span> cpuhog<span class="hljs-built_in">.</span>sh
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog<span class="hljs-built_in">.</span>sh
+<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-il</span> foo
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> ubuntu ubuntu <span class="hljs-number">0</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> foo
 
-$ ln cpuhog<span class="hljs-built_in">.</span>sh cpuhog
+$ ln foo cpuhog
 
 $ ls <span class="hljs-attribute">-il</span> cpuhog<span class="hljs-subst">*</span>
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span>  <span class="hljs-number">2012</span> cpuhog
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span>  <span class="hljs-number">2012</span> cpuhog<span class="hljs-built_in">.</span>sh</code></pre>
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> ubuntu ubuntu <span class="hljs-number">0</span> Feb <span class="hljs-number">13</span>  <span class="hljs-number">2012</span> cpuhog
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> ubuntu ubuntu <span class="hljs-number">0</span> Feb <span class="hljs-number">13</span>  <span class="hljs-number">2012</span> foo</code></pre>
 
 <h2 id="symbolic-links">Symbolic Links</h2>
 
@@ -107,12 +110,12 @@ $ ls -il README<span class="hljs-preprocessor">.txt</span>
 <p>Either file name can be deleted and the data will still be accessible.</p>
 
 <pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-il</span> cpuhog<span class="hljs-subst">*</span>
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog<span class="hljs-built_in">.</span>sh
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> ubuntu ubuntu <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">2</span> ubuntu ubuntu <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> foo
 
-$ rm cpuhog<span class="hljs-built_in">.</span>sh
+$ rm foo
 $ ls <span class="hljs-attribute">-il</span> cpuhog
-<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> dennisk dennisk <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog</code></pre>
+<span class="hljs-number">16914416</span> <span class="hljs-attribute">-rwxrwxr</span><span class="hljs-attribute">-x</span> <span class="hljs-number">1</span> ubuntu ubuntu <span class="hljs-number">401</span> Feb <span class="hljs-number">13</span> <span class="hljs-number">2012</span> cpuhog</code></pre>
 
 <h3 id="hard-links-limitations">Hard Links Limitations</h3>
 
