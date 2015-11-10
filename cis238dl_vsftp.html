@@ -122,11 +122,9 @@
 
 <h2 id="use-ftp-to-access-the-file">Use FTP to access the file</h2>
 
-<p>Open a new virtual terminal by pressing the <em>host</em> key (right Ctrl plus F2  and log in as user Tux. </p>
+<p>Open a new virtual terminal by pressing the <em>host</em> key (right Ctrl plus F2)  and log in as user Tux. </p>
 
 <p>Start the FTP client and open a connection to <em>localhost</em>.</p>
-
-
 
 <pre class="prettyprint"><code class=" hljs livecodeserver">$ <span class="hljs-keyword">ftp</span>
 <span class="hljs-keyword">ftp</span>&gt; <span class="hljs-built_in">open</span> localhost</code></pre>
@@ -139,33 +137,23 @@
 
 <ol>
 <li>Add <code>anon_root=/var/ftp/pub</code> below the line that allows <em>anonymous</em> logins.</li>
-<li>Close the connection as <em>anonymous</em></li>
-<li>Place a file in <code>/var/ftp/pub</code></li>
-<li>Open the connection again as <em>anonymous</em></li>
+<li>Close the connection as <em>anonymous</em>.</li>
+<li>Place a file in <code>/var/ftp/pub</code>.</li>
+<li>Open the connection again as <em>anonymous</em>.</li>
 <li>Use <code>ls</code> to show that you are in the directory containing your test file.  An <em>anonymous</em> user has no access to a higher directory.</li>
 </ol>
 
+
+
 <h2 id="disable-anonymous-logins">Disable anonymous Logins</h2>
 
-<p>Anonymous downloads are allowed by default.  Next you’ll disable anonymous logins.</p>
+<p>Anonymous logins are allowed by default.  Next you’ll disable anonymous logins.</p>
 
 <ol>
 <li>Change the line in the <em>vsftpd.conf</em> allowing anonymous logins from YES to NO.</li>
 <li>Restart the vsFTPd daemon.</li>
 <li>Try to login as <em>anonymous</em>.</li>
 <li>The login should fail.</li>
-</ol>
-
-<h2 id="allow-local-users-to-use-ftp">Allow Local Users To Use FTP</h2>
-
-<ol>
-<li>Uncomment <em>local_enable=YES</em> to allow local user account to use FTP.</li>
-<li>The change won’t be effective until you run <code>service vsftpd</code> reload.  This will cause <code>vsftpd</code> to reload its configuration file.</li>
-<li>On CentOS also need to configure SELinux. <br>
-<ol><li>Check SELinux for ftp status with <code>getsebool -a | grep ftp</code>.</li>
-<li>Check if <code>ftp_home_dir –&gt; on</code>.</li>
-<li>If it is not enabled change it with the <code>setsebool</code> command. <em>Note:</em> This command will take a minute to complete.</li>
-<li>Now login from the workstation using an account you have on the ftp server.  The <code>pwd</code> command show you are in your home directory.</li></ol></li>
 </ol>
 
 <h2 id="root-login">Root login</h2>
@@ -179,7 +167,7 @@
 
 
 
-<h2 id="removing-the-ability-of-a-user-to-use-ftp">Removing the ability of a user to use ftp</h2>
+<h2 id="disable-ftp-for-a-user">Disable FTP for a User</h2>
 
 <p>Even if local users are allowed to use FTP you can blacklist a user by adding them to <code>ftpusers</code> or <code>userlist</code>. See the comments in these files to see which takes priority.</p>
 
@@ -288,16 +276,7 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Copy and paste these questions along with your answers into the text submission box.</p>
-
-<ol>
-<li>What directive is used to set the default directory for anonymous logins to <code>/var/ftp/pub</code>?</li>
-<li>Create an account for another user and add them to <code>/etc/vsftpd/user_list</code>.  Are they able to log in to the vsftpd server?</li>
-<li>Try accessing your FTP server from Firefox.  How must you enter the URL so that Firefox knows you want to use the FTP protocol?</li>
-<li>Create a symbolic link in <code>/var/ftp/pub</code> to <code>/tmp</code>.  Login as anonymous and try to change to <code>/tmp</code> using the link. What happens?</li>
-<li>What default ports number does FTP use?</li>
-<li>Using <code>yum search</code> what other FTP server is available.</li>
-</ol>
+<p>Submit a screenshot of <code>ls -lZ /var/ftp/pub/*</code> showing that each file has the correct security context.</p>
 
 <h2 id="resources">Resources</h2>
 
