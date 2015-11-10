@@ -1,42 +1,5 @@
 <h1 id="vsftp-the-very-secure-ftp-server">vsFTP - The Very Secure FTP Server</h1>
 
-
-
-<h2 id="major-revision-for-centos-7-work-in-progress">Major revision for CentOS 7 (work in progress)</h2>
-
-<p>15  useradd tux <br>
-   16  passwd tux <br>
-   17  su - tux <br>
-   18  cd /var/ftp/pub/ <br>
-   20  ls <br>
-   21  ls -l <br>
-   22  ls -lZ <br>
-   23  cd <br>
-   24  cd - <br>
-   25  ls <br>
-   26  chmod 0777 anaconda-ks.cfg.move  <br>
-   27  ls -l  <br>
-   28  cd <br>
-   29  ftp localhost <br>
-   30  ls -lZ /var/ftp/pub/ <br>
-   31  setenforce 0 <br>
-   32  getenforce  <br>
-   33  ftp localhost <br>
-   34  less /var/log/audit/audit.log  <br>
-   35  cat /var/log/audit/audit.log | grep move <br>
-   36  ls -lZ /var/ftp/pub/ <br>
-   37  restorecon /var/ftp/pub/* <br>
-   38  ls -lZ /var/ftp/pub/ <br>
-   39  setenforce 1 <br>
-   40  getenforce  <br>
-   41  ftp localhost <br>
-   42  ip a s <br>
-   43  ftp <br>
-   44  ls -ldZ /var/ftp/pub/ <br>
-   45  history &gt;ftp.txt</p>
-
-
-
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>FTP or File Transfer Protocol is one of the oldest protocols used on the Net. Before there was Dropbox or Google Drive files were shared using the File Transfer Protocol</p>
