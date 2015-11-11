@@ -2,6 +2,8 @@
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/checklist.png" alt="Checklist" title=""></p>
 
+
+
 <h2 id="overview">Overview</h2>
 
 <p>Traditional Unix/Linux file permissions do not let you narrow permissions beyond UGO.  Access Control Lists let users define finer-grained permissions for files and directories.</p>
@@ -19,6 +21,8 @@
 <li>Modify ACL permissions for a file.</li>
 <li>Add a group to ACL permissions.</li>
 </ul>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -53,11 +57,15 @@
 
 <h2 id="setup-acl-on-ext4">Setup ACL on ext4</h2>
 
+
+
 <h3 id="remounting-a-filesystem">Remounting a Filesystem</h3>
 
 <p><em>Not needed for CentOS 7</em></p>
 
 <p>To use ACL permissions without first rebooting the system you need to remount root with the <code>acl</code> option. <em>note:</em> Your actual device name may be difference.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-preprocessor"># mount -o remount -o acl /</span>
 /dev/mapper/centos/root on / <span class="hljs-typedef"><span class="hljs-keyword">type</span> ext4 <span class="hljs-container">(<span class="hljs-title">rw</span>,<span class="hljs-title">acl</span>)</span></span></code></pre>
@@ -70,7 +78,11 @@
 
 <p>The <code>/etc/fstab</code> file defines filesystems mounted on boot and their options.  You need to add the <code>acl</code> option to root to use Access Control Lists.  Edit <code>/etc/fstab</code> adding the <code>acl</code> option after <code>defaults</code>.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs coffeescript"><span class="hljs-regexp">/dev/mapper/centos/root /</span> ext4 defaults,acl <span class="hljs-number">1</span> <span class="hljs-number">1</span></code></pre>
+
+
 
 <h2 id="modify-the-acl-permissions">Modify the ACL Permissions</h2>
 
@@ -79,6 +91,8 @@
 <h3 id="create-a-file-and-list-its-permissions">Create a File and List its Permissions</h3>
 
 <p>Sam wants other users to read <em>report.txt</em> and also to allow Tux to add comments to the file.  With ordinary Linux permissions Sam would have to allow all users to write to the file not just Tux.  With Access Control Lists Sam can accomplish his goal.  Sam puts the <em>report.txt</em> file in the <code>/var/tmp</code> directory so all can read the file and then assigns <em>read/write</em> permissions for Tux.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs cs">$ touch /<span class="hljs-keyword">var</span>/tmp/report.txt</code></pre>
 
@@ -109,6 +123,8 @@
 
 <p>The <code>getfacl</code> command shows the change.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>getfacl --omit-header report.txt
 <span class="hljs-symbol">user:</span><span class="hljs-symbol">:rw-</span>
 <span class="hljs-symbol">user:</span><span class="hljs-symbol">:tux</span>;rw-
@@ -117,12 +133,16 @@
 
 <p>The <code>ls</code> command shows a plus sign indicating the file has ACL permissions.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-l</span> report<span class="hljs-built_in">.</span>txt
 <span class="hljs-attribute">-rw</span><span class="hljs-attribute">-rw</span><span class="hljs-attribute">-r</span><span class="hljs-subst">--+</span> <span class="hljs-number">1</span> sam Apr <span class="hljs-number">24</span> report<span class="hljs-built_in">.</span>txt</code></pre>
 
 <p>Have Tux open the file again and this time Tux can edit the file.</p>
 
 <p>Open another terminal and log in as Jill.  Try to edit the <em>reports.txt</em> file as Jill.  Jill can’t edit the file.</p>
+
+
 
 <h3 id="remove-acl-permissions">Remove ACL Permissions</h3>
 
@@ -134,21 +154,25 @@
 
 <p>The <code>getfacl</code> command shows Tux no longer has write permissions.</p>
 
+
+
 <h3 id="add-a-group-to-the-acl-permissions">Add a Group to the ACL Permissions</h3>
 
 <p>Sam has several users that he would like to comment on the report so he asks the administrator to create the <em>docmaster</em> group and add both Jill and Tux to the group.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-comment"># groupadd docmaster &amp;&amp; usermod -aG docmaster tux &amp;&amp; usermod -aG docmaster jill</span>
-<span class="hljs-comment"># grep docmaster /etc/groups</span>
+<span class="hljs-comment"># grep docmaster /etc/group</span>
 <span class="hljs-symbol">docmaster:</span><span class="hljs-number">506</span><span class="hljs-symbol">:x</span><span class="hljs-symbol">:tux</span>,jill</code></pre>
 
 <p>Now Sam modifies <em>reports.txt</em> to allow members of the <em>docmaster</em> group to edit the file.</p>
 
-
-
 <pre class="prettyprint"><code class=" hljs css">$ <span class="hljs-tag">setfacl</span> <span class="hljs-tag">-m</span> <span class="hljs-tag">g</span><span class="hljs-pseudo">:docmaster</span><span class="hljs-pseudo">:rw</span> <span class="hljs-tag">report</span><span class="hljs-class">.txt</span></code></pre>
 
 <p>Sam uses the <code>getfacl</code> command to confirm the change.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>getfacl --omit-header /var/tmp/report.txt
 <span class="hljs-symbol">user:</span><span class="hljs-symbol">:rw-</span>
@@ -157,13 +181,19 @@
 <span class="hljs-symbol">mask:</span><span class="hljs-symbol">:rwx</span>
 <span class="hljs-symbol">other:</span><span class="hljs-symbol">:r--</span></code></pre>
 
+
+
 <h3 id="applications-and-acl">Applications and ACL</h3>
 
 <p>Not all applications support Access Control Lists.</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>After completing the assignment submit a screenshot of <code>getfacl</code> showing that the <em>docmaster</em> group has <em>rw-</em> permissions to <em>report.txt</em>.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
