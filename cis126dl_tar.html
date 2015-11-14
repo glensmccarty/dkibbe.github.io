@@ -12,8 +12,8 @@
 
 <ol>
 <li>Create a Tar archive with and without compression.</li>
-<li>Extract files from a Tar archive</li>
-<li>List files in a Tar archive</li>
+<li>Extract files from a Tar archive.</li>
+<li>List files in a Tar archive.</li>
 <li>Use Gzip and Bzip2 to compress files.</li>
 <li>Identify the advantages of Xz compression.</li>
 </ol>
@@ -39,15 +39,14 @@
 
 <p>Archiving data is covered in chapter 8 of the textbook.</p>
 
-
-
 <h3 id="create-files">Create Files</h3>
 
-<p>Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size. this for loop will create the files.</p>
+<p>Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size. this for loop will create the files in one step.</p>
 
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span>
-&gt; <span class="hljs-keyword">do</span> dd <span class="hljs-keyword">if</span>=<span class="hljs-regexp">/dev/zero</span> of=foo<span class="hljs-variable">$i</span> bs=<span class="hljs-number">1</span>M count=<span class="hljs-number">1</span>
-&gt; done</code></pre>
+<pre><code>$ for i in 1 2 3 4 5
+&gt; do dd if=/dev/zero of=foo$i bs=1M count=1
+&gt; done
+</code></pre>
 
 <h2 id="tape-archive-tar">Tape Archive (TAR)</h2>
 
@@ -55,9 +54,8 @@
 
 <h3 id="basic-syntax">Basic Syntax</h3>
 
-<pre class="prettyprint"><code class=" hljs scss">tar <span class="hljs-function">option(s)</span> archive_name <span class="hljs-function">file_name(s)</span></code></pre>
-
-
+<pre><code>tar option(s) archive_name file_name(s)
+</code></pre>
 
 <h3 id="common-options">Common Options</h3>
 
@@ -88,18 +86,21 @@
   <td>r</td>
   <td>Add files to archive</td>
 </tr>
+<tr>
+  <td>d</td>
+  <td>Compare files in archive to files on disk</td>
+</tr>
 </tbody></table>
 
 
-<p>Options can be preceded by a single dash (-) but it is more common to omit the dash.</p>
+<p>Options can be preceded by a single dash (-) but it is common to omit the dash.</p>
 
 <h3 id="create-an-archive">Create an Archive</h3>
 
 <p>Create a new archive including all files named <em>foo</em>.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>tar cf foo.tar foo*</code></pre>
+<pre><code>$ tar cf foo.tar foo*
+</code></pre>
 
 
 
@@ -107,39 +108,152 @@
 
 <p>The <strong>t</strong> option will list the contents of an archive.</p>
 
+<pre><code>$ tar tf foo.tar
+foo1
+foo2
+foo3
+foo4
+foo5
+</code></pre>
 
+<p>Adding the <strong>v</strong> gives a more complete lsiting.</p>
 
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>tar tf foo.tar</code></pre>
-
-
+<pre><code>$ tar tvf foo.tar
+-rw-rw-r-- tux/tux 1048576 10:10 foo1
+-rw-rw-r-- tux/tux 1048576 10:00 foo2
+-rw-rw-r-- tux/tux 1048576 10:00 foo3
+-rw-rw-r-- tux/tux 1048576 10:00 foo4
+-rw-rw-r-- tux/tux 1048576 10:00 foo5
+</code></pre>
 
 <h3 id="extracting-files-from-an-archive">Extracting Files from an Archive</h3>
 
-<p>Delete all the <em>foo</em> files in the <code>/tmp</code> directory.</p>
+<p>Delete all the <em>foo</em> files in the <code>/tmp</code> directory</p>
 
+<pre><code>$ rm foo*
+</code></pre>
 
+<p>then restore the files from the archive.</p>
 
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>rm foo*</code></pre>
-
-
+<pre><code>$ tar xf foo.tar
+</code></pre>
 
 <h4 id="extract-a-single-file">Extract a Single File</h4>
+
+<p>Remove <em>foo2</em>.</p>
+
+<pre><code>$ rm foo2
+</code></pre>
+
+<p>Now extract just <em>foo2</em> from the archive.</p>
+
+<pre><code>$ tar xf foo.tar foo2
+$ ls foo*
+foo1
+foo2
+foo3
+foo3
+foo4
+foo5
+</code></pre>
 
 
 
 <h3 id="updating-files-in-an-archive">Updating Files in an Archive</h3>
 
+<p>You can append a newer file to the archive. First refresh the timestamp on <em>foo2</em>.</p>
 
+<pre><code>$ touch foo2
+ls -l foo*
+</code></pre>
+
+<p>Compare the files in the archive to those on disk.</p>
+
+<pre><code>$ tar df foo.tar
+foo2: Mod time differs
+</code></pre>
+
+<p>Add the newer <em>foo2</em> to the archive.</p>
+
+<pre><code>$ tar uf foo.tar foo2
+</code></pre>
+
+<p>The newer file is appended to the archive. You can update multiple files the same way.</p>
+
+<pre><code>$ tar uf foo.tar foo1 foo2 foo3
+</code></pre>
+
+<p>The list option along with the verbose option shows the nwerer files.</p>
+
+<pre><code>$ tar tvf foo.tar
+-rw-rw-r-- tux/tux 1048576 10:18 foo1
+-rw-rw-r-- tux/tux 1048576 11:05 foo2
+-rw-rw-r-- tux/tux 1048576 10:34 foo3
+-rw-rw-r-- tux/tux 1048576 10:00 foo4
+-rw-rw-r-- tux/tux 1048576 10:00 foo5
+-rw-rw-r-- tux/tux 1048576 11:24 foo1
+-rw-rw-r-- tux/tux 1048576 11:24 foo2
+-rw-rw-r-- tux/tux 1048576 11:24 foo3
+</code></pre>
 
 <h3 id="using-compression">Using Compression</h3>
 
+<table>
+<thead>
+<tr>
+  <th>Option</th>
+  <th>Compression</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>g</td>
+  <td>Gzip</td>
+</tr>
+<tr>
+  <td>j</td>
+  <td>Bzip2</td>
+</tr>
+<tr>
+  <td>J</td>
+  <td>xz</td>
+</tr>
+</tbody></table>
 
 
-<h4 id="with-tar">With Tar</h4>
+<p>Tar by itself does not compress the files. Listing the files with <code>ls -lh foo*</code> shows that the archive is slightly larger that the sum of the individual files.</p>
 
+<pre><code>$ ls -lh foo*
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:13 foo1
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo2
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo3
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo4
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 10:00 foo5
+-rw-rw-r-- 1 tux/tux 5.1M Nov 14 11:30 foo.tar
+</code></pre>
 
+<h4 id="compress-an-archive-with-gzip">Compress an Archive with Gzip</h4>
 
-<h4 id="with-gzip">With Gzip</h4>
+<p>Gzip is a common compression algorithm used with Tar.</p>
+
+<p>Create a new archive with Gzip compression.</p>
+
+<pre><code>$ tar czf foo.tar.gz foo*
+</code></pre>
+
+<p>The <code>tar.gz</code> extension shows that this is a compressed archive.</p>
+
+<pre><code>$ ls -lh foo.tar.gz
+-rw-rw-r-- 1 tux tux 5.3K Nov 14 11:37 foo.tar.gz
+</code></pre>
+
+<p>The degree of compression will bepend on the type of files being compressed. Image and sound files which are already compressed will benefit least from compression.</p>
+
+<h4 id="compress-an-archive-with-bzip2">Compress an Archive with Bzip2</h4>
+
+<pre><code>$ tar cjf foo.tar.bz2 foo*
+$ ls -lh foo.tar.bz2
+    -rw-rw-r-- 1 dennisk dennisk  715 Nov 14 11:42 foo.tar.bz2
+</code></pre>
 
 <h2 id="debug-the-assignment">Debug the Assignment</h2>
 
@@ -147,7 +261,7 @@
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-
+<p>Submit a screenshot showing the output of <code>ls -lh foo</code> showing the</p>
 
 <h2 id="resources">Resources</h2>
 
