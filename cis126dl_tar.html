@@ -1,0 +1,156 @@
+<h1 id="archiving-compressing-data">Archiving &amp; Compressing Data</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The <code>tar</code> command was originally designed for backing up data to tape. While it is still used for that it is more commonly used to create archives of file called “tarballs.”</p>
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Create a Tar archive with and without compression.</li>
+<li>Extract files from a Tar archive</li>
+<li>List files in a Tar archive</li>
+<li>Use Gzip and Bzip2 to compress files.</li>
+<li>Identify the advantages of Xz compression.</li>
+</ol>
+
+<h2 id="useful-terms">Useful Terms</h2>
+
+<ul>
+<li>TAR (Tape Archive)</li>
+<li>Gzip</li>
+<li>Bzip2</li>
+<li>Xz</li>
+<li>Zip</li>
+<li>Archive</li>
+<li>Compression</li>
+<li>Tarball</li>
+</ul>
+
+<h2 id="preparation">Preparation</h2>
+
+
+
+<h3 id="reading">Reading</h3>
+
+<p>Archiving data is covered in chapter 8 of the textbook.</p>
+
+
+
+<h3 id="create-files">Create Files</h3>
+
+<p>Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size. this for loop will create the files.</p>
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span>
+&gt; <span class="hljs-keyword">do</span> dd <span class="hljs-keyword">if</span>=<span class="hljs-regexp">/dev/zero</span> of=foo<span class="hljs-variable">$i</span> bs=<span class="hljs-number">1</span>M count=<span class="hljs-number">1</span>
+&gt; done</code></pre>
+
+<h2 id="tape-archive-tar">Tape Archive (TAR)</h2>
+
+
+
+<h3 id="basic-syntax">Basic Syntax</h3>
+
+<pre class="prettyprint"><code class=" hljs scss">tar <span class="hljs-function">option(s)</span> archive_name <span class="hljs-function">file_name(s)</span></code></pre>
+
+
+
+<h3 id="common-options">Common Options</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Option</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>c</td>
+  <td>Create archive</td>
+</tr>
+<tr>
+  <td>x</td>
+  <td>Extract archive</td>
+</tr>
+<tr>
+  <td>t</td>
+  <td>List files in archive</td>
+</tr>
+<tr>
+  <td>u</td>
+  <td>Append newer files</td>
+</tr>
+<tr>
+  <td>r</td>
+  <td>Add files to archive</td>
+</tr>
+</tbody></table>
+
+
+<p>Options can be preceded by a single dash (-) but it is more common to omit the dash.</p>
+
+<h3 id="create-an-archive">Create an Archive</h3>
+
+<p>Create a new archive including all files named <em>foo</em>.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>tar cf foo.tar foo*</code></pre>
+
+
+
+<h3 id="list-the-contents-of-an-archive">List the Contents of an Archive</h3>
+
+<p>The <strong>t</strong> option will list the contents of an archive.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>tar tf foo.tar</code></pre>
+
+
+
+<h3 id="extracting-files-from-an-archive">Extracting Files from an Archive</h3>
+
+<p>Delete all the <em>foo</em> files in the <code>/tmp</code> directory.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>rm foo*</code></pre>
+
+
+
+<h4 id="extract-a-single-file">Extract a Single File</h4>
+
+
+
+<h3 id="updating-files-in-an-archive">Updating Files in an Archive</h3>
+
+
+
+<h3 id="using-compression">Using Compression</h3>
+
+
+
+<h4 id="with-tar">With Tar</h4>
+
+
+
+<h4 id="with-gzip">With Gzip</h4>
+
+<h2 id="debug-the-assignment">Debug the Assignment</h2>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
