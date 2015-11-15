@@ -4,7 +4,7 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>The <code>tar</code> command was originally designed for backing up data to tape. While it is still used for that it is more commonly used to create archives of file called “tarballs.”</p>
+<p>The <code>tar</code> command was originally designed for backing up data to tape. While it is still used for that purpose it is more commonly used to create “tarball” archives of files.</p>
 
 <h2 id="learning-objectives">Learning Objectives</h2>
 
@@ -15,6 +15,7 @@
 <li>Extract files from a Tar archive.</li>
 <li>List files in a Tar archive.</li>
 <li>Use Gzip and Bzip2 to compress files.</li>
+<li>Use the <code>find</code> command to create an archive or specific files.</li>
 <li>Identify the advantages of Xz compression.</li>
 </ol>
 
@@ -29,6 +30,9 @@
 <li>Archive</li>
 <li>Compression</li>
 <li>Tarball</li>
+<li><code>find</code></li>
+<li><code>xargs</code></li>
+<li><code>file</code></li>
 </ul>
 
 <h2 id="preparation">Preparation</h2>
@@ -37,11 +41,11 @@
 
 <h3 id="reading">Reading</h3>
 
-<p>Archiving data is covered in chapter 8 of the textbook.</p>
+<p>Archiving data is covered in chapter 8 of the textbook. There is a manpage for Tar and an info page for Find.</p>
 
 <h3 id="create-files">Create Files</h3>
 
-<p>Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size. this for loop will create the files in one step.</p>
+<p>Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size. This <strong>for loop</strong> will create the files in one step. After typing the first line press <strong>Enter</strong> bash will open a new prompt (<strong>&gt;</strong>) for you to continue the command.</p>
 
 <pre><code>$ for i in 1 2 3 4 5
 &gt; do dd if=/dev/zero of=foo$i bs=1M count=1
@@ -56,6 +60,8 @@
 
 <pre><code>tar option(s) archive_name file_name(s)
 </code></pre>
+
+<p>Options can be preceded by a single dash (<strong>-</strong>) but it is common to omit the dash.</p>
 
 <h3 id="common-options">Common Options</h3>
 
@@ -93,8 +99,6 @@
 </tbody></table>
 
 
-<p>Options can be preceded by a single dash (-) but it is common to omit the dash.</p>
-
 <h3 id="create-an-archive">Create an Archive</h3>
 
 <p>Create a new archive including all files named <em>foo</em>.</p>
@@ -116,7 +120,7 @@ foo4
 foo5
 </code></pre>
 
-<p>Adding the <strong>v</strong> gives a more complete lsiting.</p>
+<p>Adding the <strong>v</strong> gives a more complete listing.</p>
 
 <pre><code>$ tar tvf foo.tar
 -rw-rw-r-- tux/tux 1048576 10:10 foo1
@@ -130,7 +134,7 @@ foo5
 
 <p>Delete all the <em>foo</em> files in the <code>/tmp</code> directory</p>
 
-<pre><code>$ rm foo*
+<pre><code>$ rm foo?
 </code></pre>
 
 <p>then restore the files from the archive.</p>
@@ -148,7 +152,7 @@ foo5
 <p>Now extract just <em>foo2</em> from the archive.</p>
 
 <pre><code>$ tar xf foo.tar foo2
-$ ls foo*
+$ ls foo?
 foo1
 foo2
 foo3
@@ -157,8 +161,6 @@ foo4
 foo5
 </code></pre>
 
-
-
 <h3 id="updating-files-in-an-archive">Updating Files in an Archive</h3>
 
 <p>You can append a newer file to the archive. First refresh the timestamp on <em>foo2</em>.</p>
@@ -166,6 +168,8 @@ foo5
 <pre><code>$ touch foo2
 ls -l foo*
 </code></pre>
+
+<p><em>foo2</em> is newer than the version in the archive.</p>
 
 <p>Compare the files in the archive to those on disk.</p>
 
@@ -183,7 +187,7 @@ foo2: Mod time differs
 <pre><code>$ tar uf foo.tar foo1 foo2 foo3
 </code></pre>
 
-<p>The list option along with the verbose option shows the nwerer files.</p>
+<p>The list option along with the verbose option shows the newer files.</p>
 
 <pre><code>$ tar tvf foo.tar
 -rw-rw-r-- tux/tux 1048576 10:18 foo1
@@ -231,11 +235,11 @@ foo2: Mod time differs
 -rw-rw-r-- 1 tux/tux 5.1M Nov 14 11:30 foo.tar
 </code></pre>
 
+
+
 <h4 id="compress-an-archive-with-gzip">Compress an Archive with Gzip</h4>
 
-<p>Gzip is a common compression algorithm used with Tar.</p>
-
-<p>Create a new archive with Gzip compression.</p>
+<p>Gzip is a common compression algorithm used with Tar. Create a new archive with Gzip compression.</p>
 
 <pre><code>$ tar czf foo.tar.gz foo*
 </code></pre>
@@ -246,7 +250,7 @@ foo2: Mod time differs
 -rw-rw-r-- 1 tux tux 5.3K Nov 14 11:37 foo.tar.gz
 </code></pre>
 
-<p>The degree of compression will bepend on the type of files being compressed. Image and sound files which are already compressed will benefit least from compression.</p>
+<p>The degree of compression will depend on the type of files being compressed. Image and sound files which are already compressed will benefit least from compression.</p>
 
 <h4 id="compress-an-archive-with-bzip2">Compress an Archive with Bzip2</h4>
 
@@ -255,15 +259,42 @@ $ ls -lh foo.tar.bz2
     -rw-rw-r-- 1 dennisk dennisk  715 Nov 14 11:42 foo.tar.bz2
 </code></pre>
 
+
+
+<h2 id="find-and-tar">Find and Tar</h2>
+
+<p>The <code>find</code> comamnd is useful to create an archive from a list of files. Here <code>find</code> searchs in <code>/usr/share/doc/</code> for all text files and dumps them into a tarball.</p>
+
+<pre><code>find /usr/share/doc/ -name *.txt | xargs tar cf archive.tar
+</code></pre>
+
+
+
+<h2 id="extensions-on-the-command-line">Extensions on the Command Line</h2>
+
+<p>While it is common to use extensions to make it easy to identify files types. The command line doesn’t require it. Try renaming the foo archive to something else  and then run the <code>file</code> command find its true identity.</p>
+
+<pre><code>$ mv foo.tar.gz foo.jpg
+$ file foo.jpg 
+archive.tar.gz: gzip compressed data
+</code></pre>
+
 <h2 id="debug-the-assignment">Debug the Assignment</h2>
 
 
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot showing the output of <code>ls -lh foo</code> showing the</p>
+<p>Submit a screenshot showing the output of <code>ls -file foo.jpg</code> showing that it is really an archive.</p>
 
 <h2 id="resources">Resources</h2>
+
+<ul>
+<li>man tar</li>
+<li>info find</li>
+<li>man file</li>
+<li>man xargs</li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
