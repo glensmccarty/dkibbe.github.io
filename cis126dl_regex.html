@@ -1,0 +1,94 @@
+<h2 id="scenario">Scenario</h2>
+
+<p>As a new system administrator you need to confirm that the company password policy is being correctly implemented. Settings such as when passwords need to be renewed and the umask value are contained in <code>/etc/login.defs</code>. See the man page for this file for a complete list.</p>
+
+<h2 id="read-the-file">Read the File</h2>
+
+<p><code>/etc/login.defs</code> can be read with the <code>less</code> command.</p>
+
+<h2 id="filtering-out-comments">Filtering out comments</h2>
+
+<p>Each line that starts with the hashtag character <strong>#</strong> is a comment line and is lot acted on. Lets filter out those lines to make the output easier to read.</p>
+
+<pre><code>$ grep -Ev '^#' /etc/login.defs
+</code></pre>
+
+<p>The <code>grep</code> command is widely search files to fins a matching string. This command</p>
+
+<pre><code>$ grep Debian /usr/share/doc/bash/copyright
+</code></pre>
+
+<p>will find all the instances of Debian in the copyright file and print the output to STDOUT. Note that the <code>grep</code> command is case sensitive and the output will be different using the term <em>debian.</em> Adding the <strong>-i</strong> option makes the search case-insensitive.</p>
+
+<pre><code>$ grep -E '^#' /etc/login.defs
+</code></pre>
+
+<p>Will find all the lines that start with the hashtag. The search can be inverted to find only lines that do not start with the # character with the <strong>-v</strong> option.</p>
+
+<pre><code>$ grep -Ev '^#' /etc/login.defs
+</code></pre>
+
+<h2 id="finding-blank-lines">Finding Blank Lines</h2>
+
+<p>The output of our previous command still takes up more that one screen. Let’s remove the blank lines from the output as well. This command will find blank lines; that is lines that have no characters between the beginning <strong>^</strong> and end <strong>$</strong> of the line.</p>
+
+<pre><code>$ grep -E '^$' /etc/login.defs
+</code></pre>
+
+
+
+<h2 id="combining-the-filters">Combining the Filters</h2>
+
+<p>To get the results we want we need a logical <strong>or</strong> to tell <code>greg</code> that we want to remove lines that start with <strong>#</strong> and blank lines from the output. <strong>|</strong> does that.</p>
+
+<pre><code>$ grep -Ev '^#|^$' /etc/login.defs
+</code></pre>
+
+
+
+<h2 id="putting-the-filter-in-a-script">Putting the Filter in a Script</h2>
+
+<pre><code>#!/usr/bin/env bash
+# Script to remove comments and blank lines
+grep -Ev '^#|^$' /etc/login.defs
+# END
+</code></pre>
+
+
+
+<h2 id="positional-parameters">Positional Parameters</h2>
+
+<p>To make our script more versatile we can use a positional parameter to pass a file name to the script.</p>
+
+<pre><code>#!/usr/bin/env bash
+    # Script to remove comments and blank lines. First test if a positional parameter is given and exit with an exit value of 1 if it isn't.
+if 
+[[ $# -eq 0 ]]
+then
+echo "You need to give a file name."
+exit 1
+else
+grep -Ev '^#|^$' $1
+fi
+# END
+</code></pre>
+
+
+
+<h2 id="showing-the-exit-value">Showing the Exit Value</h2>
+
+<p>Whenever a program is run it returns to the shell an exit value. an exit value of 1 equals success and any other equals failure. You can show for an exit value with the <code>echo</code> command. Try this example:</p>
+
+<pre><code>$ ls /tmp
+&lt;returns a listing of files&gt;
+$ echo $?
+0
+$ ls /temp
+File or directory does not exist.
+$ echo $?
+2
+</code></pre>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
