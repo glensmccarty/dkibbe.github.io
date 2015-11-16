@@ -26,7 +26,7 @@
 <ul>
 <li>Import the CentOS 7 minimal ova.</li>
 <li>Boot the system and rename <em>/boot/grub2/grub.cfg</em> to <em>grub.bak</em></li>
-<li>Reboot the system to a broken prompt.</li>
+<li>Reboot the system to a GRUB rescue prompt.</li>
 </ul>
 
 <h2 id="rescue">Rescue</h2>
@@ -36,7 +36,7 @@
 <h3 id="boot-the-rescue-disk">Boot the Rescue Disk</h3>
 
 <ul>
-<li>Load the <em>CentOS 7 install ISO</em> into the virual CD drive.</li>
+<li>Load the <em>CentOS 7 install ISO</em> into the virtual CD drive.</li>
 <li>Make sure the CD is set as the first boot device.</li>
 <li>Boot the system and you should see this screen.</li>
 </ul>
@@ -50,8 +50,6 @@
 <p>and then <em>Rescue a CentOS system</em> from the next screen. The rescue CD gives you a number of options. Tab to <em>Continue</em>.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/grub_rescue-3.png" alt="enter image description here" title=""></p>
-
-
 
 <h3 id="chroot-into-the-broken-system">Chroot into the Broken System</h3>
 
@@ -68,7 +66,7 @@
 <pre><code># grub2-mkconfig --output=grub.cfg
 </code></pre>
 
-<p>Type <code>halt</code> to stop the system and them remove the rescue CD.</p>
+<p>Type <code>halt</code> to stop the system and then remove the rescue CD.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/grub_rescue-0.png" alt="enter image description here" title=""></p>
 
