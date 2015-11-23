@@ -12,9 +12,9 @@
 
 <ol>
 <li>Install the CUPS printer server.</li>
-<li>Configure CUPS for remote administration.</li>
 <li>Add a printer using the CUPS web interface.</li>
 <li>Add a printer from the command line.</li>
+<li>Print a file from the command line.</li>
 </ol>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
@@ -36,52 +36,18 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>For this assignment you’ll use the web interface to CUPS to install a printer on Fedora and then use the command line to install the classroom printer on CentOS 6.5. Set both virtual machines to <em>Bridged</em> and refresh the MAC address before starting the virtual machines. Both virtual machines must be on the 192.168.201.0/24 network to reach the printer.</p>
+<p>For this assignment you’ll use the web interface to CUPS to install a network printer on Ubuntu and then use the command line to install the classroom printer on CentOS 7. Set networking in VirtualBox for both virtual machines to <em>Bridged</em> and refresh the MAC address before starting the virtual machines. Both virtual machines must be on the 192.168.201.0/24 network to reach the printer.</p>
 
 <h2 id="internet-printing-protocol">Internet Printing Protocol</h2>
 
-<p>The HO LaserJet 420 in the classroom supports direct printing over the network. You can access the printer from a web browser at this address.</p>
+<p>The HP LaserJet 4250 in the classroom supports direct printing over the network. You can access the printer from a web browser at this address.</p>
 
 <pre><code>http://192.168.201.221
 </code></pre>
 
-<h2 id="install-the-cups-print-server">Install the CUPS Print Server</h2>
-
-<p>Use <strong>grouplist</strong> option for <code>yum</code> to find the correct software groups to install.</p>
-
-<pre><code>root@vm1# yum grouplist *print*
-Print Client
-Print Server
-</code></pre>
-
-<p>Install both the <em>Print Client</em> and the <em>Print Server.</em> Be sure to quote the group names.</p>
-
-<pre><code># yum groupinstall "Print Client" "Print Server"
-</code></pre>
-
-<h2 id="open-internet-printing-protocol-ports">Open Internet Printing Protocol Ports</h2>
-
-<p>Use <code>system-config-firewall-tui</code> to open the trusted service. If needed use <code>yum</code> to install the package.</p>
-
-<p><img src="https://s3.amazonaws.com/CIS126DL/Images/firewall_ipp.png" alt="Firewall" title="Firewall"></p>
-
-<!--## Configure CUPS for Remote Administration&#10;&#10;Backup */etc/cups/cupsd.conf*.&#10;&#10;By default CUPS only listens on localhost. Place the comment character in front of the *Listen* directive and add a line to listen on a port instead.&#10;&#10;    # Listen localhost:631&#10;    Port 631&#10;&#10;To change access to server, admin pages, configuration files add this line to the appropriate sections.&#10;&#10;    Allow from all&#10;&#10;Reload `cups` and you should now be able to access the CUPS web interface remotely from the workstation.&#10;&#10;    root@vm1# service cups reload&#10;-->
-
 <h2 id="adding-a-printer-through-firefox">Adding a Printer Through Firefox</h2>
 
-<p>CUPS listens on port 631 for connections from localhost. This makes it possible to administer CUPS from a web browser.</p>
-
-<h3 id="is-the-service-running">Is the Service Running?</h3>
-
-<p>Open a terminal and as root check the status of the CUPS service.</p>
-
-<pre><code># systemctl status cups.service
-</code></pre>
-
-<p>If CUPS is <em>inactive</em> start the service.</p>
-
-<pre><code># systemctl start cups.service
-</code></pre>
+<p>CUPS listens on port 631 for connections from <em>localhost</em>. This makes it possible to administer CUPS from a web browser.</p>
 
 <h2 id="open-the-cups-administration-page">Open the CUPS Administration Page</h2>
 
@@ -90,7 +56,7 @@ Print Server
 <pre><code>localhost:631
 </code></pre>
 
-<p>Click the Administration link and enter root’s authentication.</p>
+<p>Click the Administration link and enter tux’s authentication.</p>
 
 <h2 id="add-a-printer-from-the-web-interface">Add a Printer from the Web Interface</h2>
 
@@ -114,41 +80,83 @@ Print Server
 
 <h2 id="configure-cups-from-the-command-line-centos-minimal">Configure CUPS From the Command Line (CentOS Minimal)</h2>
 
+
+
+<h3 id="install-the-cups-print-server">Install the CUPS Print Server</h3>
+
+<p>Use Yum to install the CUPS print server.</p>
+
+<pre><code># yum install cups
+</code></pre>
+
+<h3 id="is-the-service-running">Is the Service Running?</h3>
+
+<p>Open a terminal and as root check the status of the CUPS service.</p>
+
+<pre><code># systemctl status cups.service
+</code></pre>
+
+<p>If CUPS is <em>inactive</em> start the service.</p>
+
+<pre><code># systemctl start cups.service
+</code></pre>
+
+
+
+<h3 id="set-cups-to-be-enabled-on-boot">Set CUPS to be Enabled on Boot</h3>
+
+<p>Starting CUPS is not enough if you want to service active all the time. Use this command to set CUPS to start on boot.</p>
+
+<pre><code># systemctl enable cups.service
+</code></pre>
+
+
+
+<h3 id="add-a-printer">Add a Printer</h3>
+
 <p>The <code>lpadmin</code> command is used to configure CUPS from the command line. You’ll need to run <code>lpinfo</code> to find the proper <strong>ppd</strong> file for your make and model printer.</p>
 
-<h3 id="find-the-correct-ppd-file">Find the Correct ppd File</h3>
+<h4 id="find-the-correct-ppd-file">Find the Correct ppd File</h4>
 
-<pre><code>root@vm1# lpinfo -m | grep 'LaserJet 4250'
+<pre><code># lpinfo -m | grep 'LaserJet 4250'
 lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz
 </code></pre>
 
-<p>Then use <code>lpadmin</code> to add the printer. At the end of each line type the backslash characrer and then <strong>Return</strong> to Bash to accept that line and start a new line. The Bash shell will place a new prompt <strong>&gt;</strong> for you to continue. <em>Note:</em> Double check your quotes before pressing <strong>Return.</strong></p>
 
-<pre><code>root@vm1# lpadmin -p "hp_laser" -E \  
+
+<h4 id="add-the-printer">Add the Printer</h4>
+
+<p>Then use <code>lpadmin</code> to add the printer. At the end of each line type the backslash characrer and then <strong>Return</strong> for Bash to accept that line and start a new line. The Bash shell will place a new prompt <strong>&gt;</strong> for you to continue. <em>Note:</em> Double check your quotes before pressing <strong>Return.</strong></p>
+
+<pre><code># lpadmin -p "hp_laser" -E \  
 -v socket://192.168.201.221 \  
 -m "lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz" \  
 -D "This line is for information only." \  
--L "Location"
+-L "Set the location here"
 </code></pre>
 
 <p>After pressing <strong>Return</strong> after the last line it will take a minute until the prompt is returned.</p>
 
 <p>Check that the printer is ready.</p>
 
-<pre><code>root@vm1# lpstat -a
-hp_laser accepting requests since. . .
+<pre><code># lpstat -a
+hp_laser accepting requests since. 
 </code></pre>
+
+
+
+<h4 id="set-the-default-printer">Set the Default Printer</h4>
 
 <p>Set the printer as the default so you don’t need to type the printer name each time you want to print.</p>
 
-<pre><code>lpadmin -d "hp_laser"
+<pre><code># lpadmin -d "hp_laser"
 </code></pre>
 
 <p>The output should say that the printer is accepting requests.</p>
 
 <p>The <code>lpq</code> command confirms the printer is ready and set as default.</p>
 
-<pre><code>root@vm1# lpq
+<pre><code># lpq
 hp_laser is ready
 no entries
 </code></pre>
@@ -157,19 +165,19 @@ no entries
 
 
 
+<h3 id="postscript">PostScript</h3>
+
+<p>PostScript is a page description programming language. It creates a plain text file that describes how to put the characters on the page based on the properties of the ppd file used. You can test this by creating a Postscript file (on the workstation not the virtual machine) and opening the text file with <code>less</code>.</p>
+
+<pre><code># man -t pwd &gt; pwd.ps
+# less pwd.ps
+</code></pre>
+
 <h3 id="print-a-man-page">Print a Man Page</h3>
 
 <p>This command will send a PostScript file to the default printer.</p>
 
 <pre><code>man -t pwd | lp
-</code></pre>
-
-<h2 id="postscript">PostScript</h2>
-
-<p>PostScript is a page description programming language. It creates a plain text file that describes how to put the characters on the page based on the properties of the ppd file used. You can test this by creating a Postscript file (on the workstation not the virtual machine) and opening the text file with <code>less</code>.</p>
-
-<pre><code>root@vm1# man -t pwd &gt; pwd.ps
-root@vm1# less pwd.ps
 </code></pre>
 
 <!--## Convert PostScript to PDF.&#10;&#10;Portable Document Format or PDF is derived from PostScript. You can convert a PostScript file to a PDF with `ps2pdf`.&#10;&#10;    $ ps2pdf pwd.ps&#10;    $ epdfview pwd.pdf&#10;-->
@@ -181,10 +189,6 @@ root@vm1# less pwd.ps
 <li>If after running <code>lpstat -a</code> you get an error that the printer is not accepting requests you probably did not enable the printer by omitting <code>-E</code>.</li>
 <li>The classroom printer connects through a Windows box in the lab. Expect the web page to be S-L-O-W.</li>
 </ol>
-
-<!--## XKCD&#10;&#10;![XKCD cartoon][xkcd]&#10;-->
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
