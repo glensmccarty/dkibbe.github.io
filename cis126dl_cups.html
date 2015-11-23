@@ -84,9 +84,9 @@
 
 <h3 id="install-the-cups-print-server">Install the CUPS Print Server</h3>
 
-<p>Use Yum to install the CUPS print server.</p>
+<p>Use Yum to install the CUPS print server and the PPD files for HP printers..</p>
 
-<pre><code># yum install cups
+<pre><code># yum install cups hpijs
 </code></pre>
 
 <h3 id="is-the-service-running">Is the Service Running?</h3>
@@ -126,7 +126,7 @@ lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz
 
 <h4 id="add-the-printer">Add the Printer</h4>
 
-<p>Then use <code>lpadmin</code> to add the printer. At the end of each line type the backslash characrer and then <strong>Return</strong> for Bash to accept that line and start a new line. The Bash shell will place a new prompt <strong>&gt;</strong> for you to continue. <em>Note:</em> Double check your quotes before pressing <strong>Return.</strong></p>
+<p>Use <code>lpadmin</code> to add the printer. At the end of each line type the backslash character and then <strong>Return</strong> for Bash to accept that line and start a new line. The Bash shell will place a new prompt <strong>&gt;</strong> for you to continue. <em>Note:</em> Double check your quotes before pressing <strong>Return.</strong></p>
 
 <pre><code># lpadmin -p "hp_laser" -E \  
 -v socket://192.168.201.221 \  
@@ -142,8 +142,6 @@ lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz
 <pre><code># lpstat -a
 hp_laser accepting requests since. 
 </code></pre>
-
-
 
 <h4 id="set-the-default-printer">Set the Default Printer</h4>
 
@@ -187,7 +185,7 @@ no entries
 <ol>
 <li>Plenty of chances for typos in this assignment.</li>
 <li>If after running <code>lpstat -a</code> you get an error that the printer is not accepting requests you probably did not enable the printer by omitting <code>-E</code>.</li>
-<li>The classroom printer connects through a Windows box in the lab. Expect the web page to be S-L-O-W.</li>
+<li>The printer name should be one word lower case                                                 </li>
 </ol>
 
 <h2 id="what-to-submit">What to Submit</h2>
