@@ -1,8 +1,12 @@
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/grub_rescue.png" alt="enter image description here" title=""></p>
 
+
+
 <h2 id="introduction">Introduction</h2>
 
 <p>The Grand Unified Bootloader (GRUB) is used by almost all Linux distributions. In this assignment you will “break” a CentOS 7 system and then repair it.</p>
+
+
 
 <h2 id="learning-objectives">Learning Objectives</h2>
 
@@ -14,12 +18,16 @@
 <li>Use GRUB to rebuild the GRUB configuration file.</li>
 </ol>
 
+
+
 <h2 id="useful-terms">Useful Terms</h2>
 
 <ul>
 <li>GRUB</li>
 <li><code>chroot</code></li>
 </ul>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
@@ -28,6 +36,8 @@
 <li>Boot the system and rename <em>/boot/grub2/grub.cfg</em> to <em>grub.bak</em></li>
 <li>Reboot the system to a GRUB rescue prompt.</li>
 </ul>
+
+
 
 <h2 id="rescue">Rescue</h2>
 
@@ -51,6 +61,8 @@
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/grub_rescue-3.png" alt="enter image description here" title=""></p>
 
+
+
 <h3 id="chroot-into-the-broken-system">Chroot into the Broken System</h3>
 
 <p>Use the <code>chroot</code> command to access the broken system.</p>
@@ -72,9 +84,11 @@
 
 <p>Reboot the system and you should be at a login prompt.</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>TBA</p>
+<p>Submit a screenshot of the output of grub2-mkconfig showing that a new config file is being credted in the correct directory <em>not</em> in stdout.</p>
 
 <h2 id="resources">Resources</h2>
 
