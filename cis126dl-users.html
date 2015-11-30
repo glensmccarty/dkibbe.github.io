@@ -1,0 +1,129 @@
+<h1 id="managing-users-groups">Managing Users &amp; Groups</h1>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p>Managing users and groups is an important administrative skill. In this assignment you’ll add new user account from the command line but before doing that you need to make two changes.</p>
+
+<p><em>After successfully completing this assignment you will be able to:</em></p>
+
+<ol>
+<li>Create new user accounts from the command line.</li>
+<li>Add a user to supplementary groups with the <code>usermod</code> command.</li>
+<li>Create content in the <code>/etc/skel/</code> directory that will be copied over to the users’ home directory.</li>
+<li>Describe the difference between a password and a passphrase.</li>
+<li>Modify system-wide login defaults.</li>
+</ol>
+
+<h2 id="terms-and-commands-you-should-know">Terms and Commands You Should Know</h2>
+
+<ul>
+<li><strong>/etc/passwd:</strong> A text file that describes user login accounts for the system.</li>
+<li><strong>/etc/shadow:</strong> A text file which contains the password information for the system’s accounts and optional aging information.</li>
+<li><strong>/etc/group:</strong> A text file that defines the groups on the system.</li>
+<li><strong>/etc/gshadow:</strong> A text file which contains the password information for groups.</li>
+<li><strong>/etc/login.defs:</strong> A text file that defines the defaults for accounts.</li>
+<li><strong>/etc/adduser.conf:</strong> Configuration file for the <code>adduser</code> command.</li>
+<li><strong>/etc/skel:</strong> Files placed in this directory will be copied to new users home directory.</li>
+<li><strong>chage:</strong> Change user password expiry information.</li>
+<li><strong>chfn:</strong> Change real user name and information.</li>
+<li><strong>finger:</strong> Read information from a users profile (real name, phone, etc.) if they have one.</li>
+<li><strong>GECOS:</strong> A field in the <code>/etc/passwd</code> file containing the real name and contact information for a user.</li>
+<li><strong>groupadd:</strong> Create a new group.</li>
+<li><strong>groupdel:</strong> Remove a group from the system.</li>
+<li><strong>groupmod:</strong> Modify a group account.</li>
+<li><strong>passwd:</strong> Change a user’s password.</li>
+<li><strong>useradd:</strong> Add a new user to the system (red Hat). The <code>passwd</code> command must also be run.</li>
+<li><strong>adduser:</strong> Add a new user to the system (Debian).</li>
+<li><strong>userdel:</strong> Remove a user.</li>
+<li><strong>usermod:</strong> Modify a user account.</li>
+<li><strong>vipw:</strong> Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code> files.</li>
+<li><strong>who:</strong> Show who is logged into the system.</li>
+<li><strong>id:</strong> Print real and effective user and group IDs.</li>
+<li><strong>su:</strong> Switch to another user (always use with the - dash option.</li>
+</ul>
+
+<h2 id="preparations">Preparations</h2>
+
+<p>Start a CentOS 7 virtual machine. Commands will be different on a Debian-based machine.</p>
+
+<h2 id="adding-a-file-to-etcskel">Adding a File to /etc/skel</h2>
+
+<p>The <code>/etc/skel</code> directory as defined in <code>/etc/defaults/useradd</code> is the place to put any files or directories you want to be copied to a user’s home directory when a new user is created. For this assignment add a welcome.txt file (it can be an empty file) to the <code>/etc/skel</code> directory so it will copied to the home directories of the new accounts you create.</p>
+
+<pre><code># touch /etc/skel/welcome.txt
+</code></pre>
+
+
+
+<h2 id="changing-the-maximum-days-a-password-may-be-used">Changing the Maximum Days a Password May Be Used</h2>
+
+<p>The <code>/etc/login.defs</code> file sets defaults for creating user accounts such as when passwords expire. Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90. Be sure you create a backup before you edit the file.</p>
+
+<pre><code>$ cd
+$ cp /etc/login`defs login`defs.bak 
+</code></pre>
+
+<h2 id="creating-new-users">Creating New Users</h2>
+
+<p>Use the <code>useradd</code> command to create two new accounts.</p>
+
+
+
+<h3 id="first-account">First Account</h3>
+
+<p>Create a new account with the login of <code>jstudent</code> with the password <code>Pa$$w0rd</code>. Use the <strong>-c</strong> option to add <em>Jill Student</em> to the GECOS field.</p>
+
+<pre><code># useradd -c "Jill Student" jstudent
+# passwd jstudent
+</code></pre>
+
+<h3 id="second-account">Second Account</h3>
+
+<p>Create a second new account with the login <code>trillian</code> and the passphrase <code>Heart of Gold</code>. A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.</p>
+
+<pre><code># useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
+# passwd trillian
+</code></pre>
+
+<h4 id="add-a-supplemental-group">Add a supplemental Group</h4>
+
+<p>Next add <code>trillian</code> to the <code>wheel</code> supplementary group.  <em>Be sure to use the capital -G option.</em></p>
+
+<pre><code># usermod -aG wheel trillan
+</code></pre>
+
+
+
+<h4 id="modify-account-expiration">Modify Account Expiration</h4>
+
+<p>Next change the account expiration to 120 days from today.</p>
+
+<pre><code>$ sudo grep trillian /etc/shadow
+$ sudo chage -E YYYY-MM-DD trillian
+$ sudo grep trillian /etc/shadow
+</code></pre>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p><em>Submit a screenshot of the following:</em></p>
+
+<ul>
+<li>The output of <code>id jstudent</code></li>
+<li>The output of <code>id trillian</code>. <br>
+<!-- The last three lines of &lt;code&gt;/etc/passwd&lt;/code&gt;.--></li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>man 5 login.defs</li>
+<li>man adduser</li>
+<li>man usermod</li>
+<li>man userdel</li>
+<li>man 5 passwd</li>
+<li>man passwd</li>
+<li>man chage</li>
+<li>man 5 login.defs</li>
+</ul>
