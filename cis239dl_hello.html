@@ -1,0 +1,109 @@
+<h1 id="first-script">First Script</h1>
+
+<p>In this assignment you’ll create a very basic shell script. The only function of this script is to print “Hello World” to stdout. This assignment will introduce you to features that should be included in all the scripts that you write.</p>
+
+
+
+<h2 id="text-editors">Text Editors</h2>
+
+<p>Scripts can not have any formating and should not be written with a word processor. You should write your scripts on Linux using vi/vim, Nano or Emacs since you will want to test them. If you must use Windows use a program like <a href="https://notepad-plus-plus.org/">Notepad++</a> which will end the lines correctly so the script will actually work on a Linux or Unix machine.</p>
+
+
+
+<h2 id="naming-the-script">Naming the Script</h2>
+
+<p>Name the script lower case, one word with a .sh extension.</p>
+
+<pre><code># vi myscript.sh
+</code></pre>
+
+<h2 id="parts-of-a-script">Parts of a Script</h2>
+
+
+
+<h3 id="shebang-line">Shebang line</h3>
+
+<p>This first line sets the environment for the script. In our case Bash. Usually you will see this shebang line.</p>
+
+<pre><code>#!/bin/bash
+</code></pre>
+
+<p>A better choice is the following which makes the script more portable.</p>
+
+<pre><code>#!/usr/bin/env bash
+</code></pre>
+
+<p><em>Only one of the lines should be at the top of your script.</em></p>
+
+<h3 id="comments">Comments</h3>
+
+<p>Include the following comment lines (comment lines start with the <strong>#</strong> character.) in all the scripts you write for this class.</p>
+
+<ul>
+<li>Your Name</li>
+<li>Purpose of the script</li>
+<li>What assignment the script is for.</li>
+</ul>
+
+<p><em>Example:</em></p>
+
+<pre><code># Tux Penguin
+# Prints a "Hello World" message to the screen.
+# Assignment 1
+</code></pre>
+
+<h3 id="variables">Variables</h3>
+
+<p>Next place any variables used in the script. Name your variables with lower case, CamelCase or, if upper case, make sure there is not an environmental variable with the same name.</p>
+
+<pre><code># variables
+IPT=/usr/sbin/iptables
+pet=hamster
+MyVar=10
+</code></pre>
+
+<h3 id="commands">Commands</h3>
+
+<p>Finally comes the commands that actually do the work. You can annote these with a comment if you like.</p>
+
+<pre><code>clear # Clears the screen.
+echo "Hello World" # printf works here too.
+</code></pre>
+
+<h3 id="end-the-script">End the Script</h3>
+
+<p>While not necessary it is nice to end the script with the following comment line.</p>
+
+<pre><code># END
+</code></pre>
+
+<h3 id="run-the-script">Run the Script</h3>
+
+<p>There are several ways to run your first script.</p>
+
+<ul>
+<li>Make the script executable and prepend the script with <strong>./</strong>.</li>
+<li>Run the script with the <code>bash</code> command.</li>
+<li>Use <code>source</code> to run the script.</li>
+</ul>
+
+<h3 id="debug-the-assignment">Debug the Assignment</h3>
+
+<p>If your script isn’t working the way you expect try adding this option to the <code>bash</code> command. It will give you useful debugging information.</p>
+
+<pre><code>bash -xv myscript.sh
+</code></pre>
+
+
+
+<h1 id="what-to-submit">What to Submit</h1>
+
+<p>Copy and paste your script in the submission text box or upload the text file. (<em>Note</em>: must have a .sh extension to upload.)</p>
+
+<h1 id="resources">Resources</h1>
+
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/Bash_Shell_Scripting" title="Bash Scripting">Bash Shell Scripting - Wikibooks</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html" title="Bash Reference Manual">Bash Reference Manual</a></li>
+<li><a href="http://bash.cyberciti.biz/guide/Main_Page" title="Linux Shell Scripting Tutorial">Linux Shell Scripting Tutorial</a></li>
+</ul>
