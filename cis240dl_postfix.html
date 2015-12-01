@@ -1,0 +1,181 @@
+<h1 id="postfix">Postfix</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p></p>
+
+<p>Postfix is a popular Mail Transfer Agent and is the default on RHEL and CentOS.</p>
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ul>
+<li>Install and configure Postfix and Dovecot for basic operation.</li>
+<li>Describe the functions of a MTA, MDA and MUA.</li>
+<li>Install and configure a text-based mail client (Mutt).</li>
+<li>Use <code>nc</code> to test Postfix.</li>
+</ul>
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>MTA:</strong> Mail Transfer Agent (sendmail, Sendmail, Postfix, Exim)</li>
+<li><strong>MDA:</strong> Mail Delivery Agent (procmail)</li>
+<li><strong>MUA:</strong>  Mail User Agent (Thunderbird, mutt, Sylpheed)</li>
+<li><strong>IMAP:</strong> Internet Message Access Protocol Client connects to the IMAP server and the messages stay on the server.</li>
+<li>POP: Post Office Protocol Client downloads mail to host.</li>
+<li>SMTP: Simple Mail Transport Protocol</li>
+<li>Mail Submission Port 587: Alternate to port 25</li>
+<li>mbox: The mbox format stores mail in a single large file.</li>
+<li>Maildir&lt;: The Maildir format stores each email message as a separate file with a unique name. Messages are stored in a special Maildir directory structure.</li>
+<li>/var/log/maillog</li>
+<li>/etc/postfix/main.cf: The main configuration file for Postfix</li>
+<li>/etc/aliases: Email address aliases, an example would be mail to postmaster@example.com is routed to joeadmin@example.com. Run <code>newaliases</code> after making any changes to this file.</li>
+<li>newaliases: This command should be run after any changes to <strong>/etc/aliases</strong>.</li>
+<li>/etc/dovecot/covecot.conf: The main Dovecot configuration file.</li>
+<li>postsuper: The Postfix superintendent</li>
+<li>mailq: Command to print contents of mail queue to STDOUT.</li>
+<li>mutt: The Mutt Mail User Agent “All mail clients suck. This one just sucks less.”</li>
+<li>Reverse DNS lookup: Used to check if the message was sent from a MTA with a legitimate <strong>MX</strong> record.</li>
+<li>Open Relay: In the distant past when life was good any MTA would gladly forward your email to its destination for you. No authentication was required.</li>
+<li>SPAM: SPAM is defined as… Well, I think you know already.</li>
+<li>Dovecot: IMAP and POP server</li>
+<li>postconf: Postfix utility</li>
+<li>MX Record: Mail exchange record</li>
+</ul>
+
+<h2 id="preparation">Preparation</h2>
+
+<h3 id="set-networking">Set Networking</h3>
+
+<p>In VirtualBox set Networking to Bridged for both virtual machines. The Client virtual machine should be a clone of the service but have a different MAC address. Each virtual machine must have a different IP address.</p>
+
+<p>Do this assignment on a CentOS virtual machine connected to the 192.168.201.0/24 network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
+
+<ul>
+<li>nmap</li>
+<li>system-configuration-firewall-tui</li>
+<li>telnet</li>
+<li>mail</li>
+<li>man</li>
+<li>mutt</li>
+<li>nc</li>
+</ul>
+
+<p>These can be installed with a single <code>yum install</code> command.</p>
+
+<p>Run <code>makewhatis</code> so <code>apropos</code> works.</p>
+
+<h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
+
+<p>Edit <code>/etc/sysconfig/network</code> and set a hostname using your first initial and last name dot com.</p>
+
+<p><em>Example for John Doe use:</em></p>
+
+<p><em>Note:</em> Reboot after making this change.</p>
+
+<h3 id="add-user-accounts">Add User Accounts</h3>
+
+<p>Add two user accounts <em>tux</em> and an account for yourself. Be sure to set passwords for each.</p>
+
+<h3 id="hosts-file">Hosts file</h3>
+
+<p>On the client add a line to the <strong>/etc/hosts</strong> listing the IP address for the server host. <em>Example:</em> If the server is <em>jdoe.com</em> use this line.</p>
+
+<h3 id="install-on-client">Install on Client</h3>
+
+<p>Install the following packages on the CentOS client.</p>
+
+<ul>
+<li>nmap</li>
+<li>nc</li>
+</ul>
+
+<h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
+
+<p>Use <code>yum groupinstall</code> to install the <em>‘E-Mail Server’</em> package. Yum installs <code>postfix</code>, <code>Dovecot</code>, <code>spamassassin</code> and dependencies. Start <code>postfix</code> and <code>dovecot</code> and configure them to start on boot up.</p>
+
+<h2 id="configure-postfix">Configure Postfix</h2>
+
+<p>To set Postfix as an open relay on the local network here are the options that need to be changed in the <strong>main.cf</strong> file. Configuration settings starting with a <strong>$</strong> are variables that you will set. A good way to learn about Postfix’s capabilities is the read the comments in <strong>/etc/postfix/main.cf</strong>.</p>
+
+<ol>
+<li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.com.</li>
+<li>Uncomment <strong>myorigin = $mydomain</strong></li>
+<li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <strong>hostname</strong> of the server.</li>
+<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-22">myhostname, localhost.</script>mydomain</strong>.</li>
+<li>Uncomment <strong>mynetworks</strong> and replace <strong>168.100.189.0/24</strong> with <strong>192.168.201.0/24</strong>.</li>
+<li>Uncomment <strong>mynetworks<sub>style</sub> = subnet</strong></li>
+<li>Uncomment <strong>inet<sub>interfaces</sub> = all</strong>.</li>
+<li>Comment <strong>inet_ interfaces = localhost</strong>.</li>
+<li>Reload the Postfix configuration file.</li>
+<li>Check that Postfix will start on reboot.</li>
+</ol>
+
+<p>Postfix will now accept mail for outside delivery.</p>
+
+<p>Use <code>postfix reload</code> to reload the changes to the Postfix configuration file. You can use <code>postconf -n</code> to display the configuration options.</p>
+
+<h2 id="configure-dovecot">Configure Dovecot</h2>
+
+<p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
+
+<ol>
+<li>Move the default keys from <strong>/etc/pki/dovecot/certs/dovecot.pem</strong> and <strong>/etc/pki/dovecot/private/dovecot.pem</strong> to root’s home directory. Rename the private does so it does not overwrite the cert.</li>
+<li>Run this script to generate a new private key and self-signed certificate.</li>
+<li>Restart the Dovecot service to make changes effective.</li>
+</ol>
+
+<h2 id="configure-the-firewall">Configure the Firewall</h2>
+
+<p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall using <code>system-config-firewall-tui</code>.</p>
+
+<p>Use Nmap from the client to confirm a service is listening on those ports.</p>
+
+<h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
+
+<p>Edit <strong>/etc/aliases</strong> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
+
+<h2 id="sending-email-directly-to-the-server">Sending Email Directly to the Server</h2>
+
+<p>You can send an email directly to port 25 to test Postfix. Follow the Linux Journal article below – “Sending Email with Netcat.”</p>
+
+<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
+
+<ul>
+<li>Are the needed ports open on the firewall? Use <code>iptables-save</code> to check.</li>
+<li>Typos or missing configuration options? Check with <code>postconf -n</code>.</li>
+<li>Was <code>newaliases</code> run after making changes?</li>
+<li>Was Postfix and Dovecot configuration files reloaded after making changes?</li>
+<li>You may need to manually configure a network interface.</li>
+</ul>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of message queued.</p>
+
+<h2 id="xkcd">XKCD</h2>
+
+<p><a href="http://imgs.xkcd.com/comics/security_question.png">http://imgs.xkcd.com/comics/security_question.png</a></p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://www.postfix.org/BASIC_CONFIGURATION_README.html">Postfix Basic Configuration</a></li>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s1-email-mta.html">Mail Transport Agents</a></li>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/sect-Security_Guide-Server_Security-Securing_Postfix.html">Securing Postfix</a></li>
+<li><a href="http://wiki2.dovecot.org/QuickConfiguration">Quick Configuration</a></li>
+<li><a href="https://www.fastmail.fm/help/spam_virus_protection_smtp_stage.html">SMTP stage checks</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/aa995718%28v=exchg.65%29.aspx">How to Use Telnet to Test SMTP Communication</a></li>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/sect-Security_Guide-Server_Security-Verifying_Which_Ports_Are_Listening.html">Verifying Which Ports Are Listening</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol">Simple Mail Transport Protocol</a></li>
+<li><a href="http://customer.comcast.com/help-and-support/internet/email-port-25-no-longer-supported/">Why is Comcast supporting port 465?</a></li>
+<li><a href="http://www.linuxjournal.com/content/sending-email-netcat">Sending Email with Netcat</a></li>
+<li>/etc/services</li>
+<li>/usr/share/doc/postfix</li>
+<li>/usr/share/doc/dovcot</li>
+<li><a href="http://dovecot.org">Dovecot</a></li>
+</ul>
