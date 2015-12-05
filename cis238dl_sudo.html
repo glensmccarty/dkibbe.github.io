@@ -35,6 +35,8 @@
 
 <p>Create two new users <em>trillian</em> and <em>jstudent</em>.</p>
 
+
+
 <h3 id="virtual-terminals">Virtual Terminals</h3>
 
 <p>In this assignment you will be working with two virtual terminals. If you are working from a LiveCD you access virtual terminals with the key combination <strong>Crtl+Alt+Fn1</strong> through <strong>Ctrl+Alt+Fn6</strong> and return to the graphical display with <strong>Ctrl+Alt+Fn7</strong>. (* Note:*  some distributions put the GUI on <strong>Ctrl+Alt+Fn1</strong> instead of Ctrl+Alt+Fn7*.). The virtual terminals live outside of the GUI and are useful for troubleshooting when some run away program has turned the graphical display to molasses.</p>
@@ -75,6 +77,8 @@ trillian wheel
 
 <p>Uncomment the line that lets all members of the <code>wheel</code> group run commands without using a password. Use the search function in <code>vi</code> to easily find the correct line to edit.</p>
 
+
+
 <h3 id="using-sudo">Using sudo</h3>
 
 <p>Log in as <code>trillian</code> on another virtual terminal (host+Fn2) and run a command that requires root privileges.</p>
@@ -102,6 +106,8 @@ trillian wheel
 
 <p>The command will fail since <code>jstudent</code> is not in the <em>sudoers</em> file. Switch to the root terminal and notice that you have mail reporting the event.</p>
 
+
+
 <h2 id="logging">Logging</h2>
 
 <p>All activity of sudoers is logged in <strong>/var/log/secure</strong> on CentOS or <strong>/var/log/audit/audit.log</strong> on Debian. View the end of the log with the <code>tail</code> command and you’ll see the commands run by <code>trillian</code> was logged.</p>
@@ -128,6 +134,8 @@ trillian wheel
 
 <p>Go back to Trillian’s login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This “Sudo Incident” will be logged as well. In addition, root will receive an email reporting the “incident.” Use can use <code>mutt</code> to see the email.</p>
 
+
+
 <h3 id="removing-trillian-from-the-wheel-group">Removing Trillian From the Wheel Group</h3>
 
 <p>You use the <code>usermod</code> command to remove Trillian from the <em>wheel</em>  group. When you added Trillian to the <em>wheel</em>  group the <strong>-a</strong> option appended the <em>wheel</em>  group to Trillian’s supplementary groups. Omitting the <strong>-a</strong> removes Trillian from the group.</p>
@@ -140,14 +148,14 @@ trillian wheel
 
 <p><em>Here is an example:</em> </p>
 
+
+
 <h2 id="example-etcsudoers-entries">Example <code>/etc/sudoers</code> entries</h2>
 
 <p>This entry in <strong>01_jstudent</strong> the user <code>jstudent</code> will be able to run the shutdown command:</p>
 
-<pre><code>jstudent centos7=/sbin/shutdown -r 5 ALL
+<pre><code>jstudent centos7=/sbin/shutdown -r 5
 </code></pre>
-
-
 
 <h3 id="test-the-command">Test the Command</h3>
 
@@ -157,6 +165,8 @@ trillian wheel
 </code></pre>
 
 <p>It will fail since <code>jstudent</code> can only run the exact command in the <em>sudoers</em> file. Run the correct command and it will work.</p>
+
+
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
@@ -168,6 +178,8 @@ trillian wheel
 </ul>
 
 <!--## XKCD&#10;&#10;![Cartoon showing sudo incidents being reported to Santa Claus.](https://sslimgs.xkcd.com/comics/incident.png)-->
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
