@@ -1,0 +1,199 @@
+<h1 id="apache-on-centos">Apache on CentOS</h1>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>After successfully completing this assignment you will be able to:</em></p>
+
+<ol>
+<li>Install the Apache web server on CentOS 7</li>
+<li>Install Firewalld</li>
+<li>Add a service to the firewall.</li>
+<li>Open a custom port in the firewall.</li>
+<li>Configure IP-based virtual hosts on Apache.</li>
+</ol>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Use the CentOS ova for this assignment.</p>
+
+<h3 id="set-networking-to-bridged">Set Networking to Bridged</h3>
+
+<p>In VirutalBox set the network adapter to <em>Bridged Network</em> and generate a new random MAC address.</p>
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+
+
+<h2 id="assignment">Assignment</h2>
+
+<h3 id="install-apache">Install Apache</h3>
+
+<p>Use <code>yum grouplist</code> to find the <em>Basic Web Server</em> and the install it using group install.</p>
+
+<pre><code># yum groupinstall "Basic Web Server"
+</code></pre>
+
+<p>The <code>rpm</code> command will show that the Apache daemon is installed and where to find the configuration files.</p>
+
+<pre><code># rpm -qa | grep httpd
+# rpm -qc httpd
+</code></pre>
+
+<h4 id="start-apache">Start Apache</h4>
+
+<p>Apache is installed but not yet running. The <em>status</em> option to <code>systemctl</code> show that A[ache is not running and disabled on boot.</p>
+
+<pre><code># systemctl status httpd
+</code></pre>
+
+<p>Use <code>systemctl</code> to start Apache and enable it.</p>
+
+<pre><code># systemctl start httpd
+# systemctl enable httpd
+</code></pre>
+
+<h2 id="test-apache">Test Apache</h2>
+
+<p>Try opening the default web page from Firefox or Chrome on the Windows host. Use <code>ip addr show</code> to discover the correct IP address for your server.</p>
+
+<pre><code># ip a s
+</code></pre>
+
+<p>The web page can not be reached yet since the *http*service has not been added to the firewall.</p>
+
+
+
+<h2 id="adding-a-service-to-the-firewall">Adding a Service to the Firewall</h2>
+
+<p>Firewalld should already be running and enabled. Use the <code>firewall-cmd</code> command to open the default port 80 for http traffic.</p>
+
+<pre><code># firewall-cmd --add-service http
+# firewall-cmd --list-services
+</code></pre>
+
+<p>Retry the web page in Firefox and you should see the test page.</p>
+
+<h3 id="important-apache-directives">Important Apache Directives</h3>
+
+<ul>
+<li>Listen</li>
+<li>ServerName</li>
+<li>ServerRoot</li>
+<li>DocumentRoot</li>
+</ul>
+
+
+
+<h3 id="apache-virtual-hosts">Apache Virtual Hosts</h3>
+
+<p>Virtual hosts lets one Apache web server serve content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts named <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be server from two separate directories <em>/var/www/example.com</em> and <em>/var/www/staff.example.com</em>.</p>
+
+
+
+<h4 id="create-the-directories-and-content">Create the Directories and Content</h4>
+
+<pre><code># mkdir /var/www/example.com /var/www/staff.example.com
+
+# echo "This is example.com" &gt; /var/www/example.com/index.html
+
+# echo "This is staff.example.com" &gt; /var/www/staff.example.com/index.html
+</code></pre>
+
+<h4 id="the-virtual-host-config-file">The Virtual Host Config File</h4>
+
+<p>Next you will create the necessary configuration file so Apache knows where to find the correct content to server for each domain. The file will be in <em>/etc/httpd/conf.d</em> and must end in <em>.conf</em></p>
+
+<p>The configuration file will contain standard Apache directives placed between starting and ending tags. Here is a sample file.</p>
+
+<pre><code>&lt;VirtualHost&gt;
+DocumentRoot /var/www/foobar.com
+ServerName foobar.com
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<p>The Apache Docs under Resources below will explain each directive. Using the format above add directives for each domain as follows:</p>
+
+<ul>
+<li>DocumentRoot</li>
+<li>ServerName</li>
+<li>ServerAdmin</li>
+<li>ErrorLog</li>
+<li>CustomLog</li>
+</ul>
+
+<p>At the top of the <em>vhosts.conf</em> file outside the virtual host containers place a Listen directive for port 8080</p>
+
+<p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a ServerName not found. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
+
+<h3 id="test-the-domains">Test the Domains</h3>
+
+<p>Open the <em>example.com</em> IP address in Firefox or Chrome and you should see the correct web page.</p>
+
+<p>Try the same with <em>staff.example.com</em> and it will fail since port 8080 is still closed. You need to enter the address followed by a colon and the 8080 for the domain as in this example</p>
+
+<pre><code>192.168.201.123:8080
+</code></pre>
+
+<h3 id="open-port-8080">Open Port 8080</h3>
+
+<p>Our second virtual host, <em>staff.example.com</em> is served from a different port so that port needs to be opened in the firewall.</p>
+
+<pre><code># firewall-cmd --add-port=8080/tcp
+# firewall-cmd --list-ports 
+</code></pre>
+
+<p>Retry the IP address and it should now work</p>
+
+<h4 id="enable-apache">Enable Apache</h4>
+
+<h3 id="install-firewalld">Install Firewalld</h3>
+
+
+
+<h4 id="iptables">IPtables</h4>
+
+
+
+<h4 id="start-the-firewall">Start the firewall</h4>
+
+
+
+<h4 id="try-in-ff-nothing">Try in ff (nothing)</h4>
+
+<h4 id="add-service">add Service</h4>
+
+
+
+<h4 id="try-in-ff-works">Try in ff (works)</h4>
+
+<h3 id="mkdir">mkdir</h3>
+
+
+
+<h3 id="set-servername-to-ip">Set ServerName to IP</h3>
+
+
+
+<h3 id="add-content">add content</h3>
+
+<p>Chunk and chew in Canvas</p>
+
+<h2 id="debug-the-assignment">Debug the Assignment</h2>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://httpd.apache.org/docs/2.4/">Apache HTTP Server Version 2.4 Documentation</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
