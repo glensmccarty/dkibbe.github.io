@@ -24,15 +24,16 @@
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
-
-
-<h2 id="assignment">Assignment</h2>
-
 <h3 id="install-apache">Install Apache</h3>
 
 <p>Use <code>yum grouplist</code> to find the <em>Basic Web Server</em> and the install it using group install.</p>
 
 <pre><code># yum groupinstall "Basic Web Server"
+</code></pre>
+
+<p>If bandwidth is limited you can just install the httpd server.</p>
+
+<pre><code># yum install httpd
 </code></pre>
 
 <p>The <code>rpm</code> command will show that the Apache daemon is installed and where to find the configuration files.</p>
@@ -56,18 +57,16 @@
 
 <h2 id="test-apache">Test Apache</h2>
 
-<p>Try opening the default web page from Firefox or Chrome on the Windows host. Use <code>ip addr show</code> to discover the correct IP address for your server.</p>
+<p>Try opening the default web page from Firefox or Chrome on the Windows host. Use <code>ip</code> to discover the correct IP address for your server.</p>
 
-<pre><code># ip a s
+<pre><code># ip addr show
 </code></pre>
 
 <p>The web page can not be reached yet since the *http*service has not been added to the firewall.</p>
 
-
-
 <h2 id="adding-a-service-to-the-firewall">Adding a Service to the Firewall</h2>
 
-<p>Firewalld should already be running and enabled. Use the <code>firewall-cmd</code> command to open the default port 80 for http traffic.</p>
+<p>Firewalld should already be running and enabled if not install it with Yum. Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic.</p>
 
 <pre><code># firewall-cmd --add-service http
 # firewall-cmd --list-services
@@ -75,110 +74,82 @@
 
 <p>Retry the web page in Firefox and you should see the test page.</p>
 
-<h3 id="important-apache-directives">Important Apache Directives</h3>
-
-<ul>
-<li>Listen</li>
-<li>ServerName</li>
-<li>ServerRoot</li>
-<li>DocumentRoot</li>
-</ul>
-
-
+<!--### Important Apache Directives&#10;&#10; - Listen&#10; - ServerName&#10; - ServerRoot&#10; - DocumentRoot-->
 
 <h3 id="apache-virtual-hosts">Apache Virtual Hosts</h3>
 
-<p>Virtual hosts lets one Apache web server serve content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts named <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be server from two separate directories <em>/var/www/example.com</em> and <em>/var/www/staff.example.com</em>.</p>
-
-
+<p>Virtual hosts let one Apache web server serve content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be served from two separate directories <em>/var/www/example.com</em> and <em>/var/www/staff.example.com</em>.</p>
 
 <h4 id="create-the-directories-and-content">Create the Directories and Content</h4>
 
 <pre><code># mkdir /var/www/example.com /var/www/staff.example.com
 
-# echo "This is example.com" &gt; /var/www/example.com/index.html
+# echo "&lt;h1&gt;This is example.com&lt;/h1&gt;" &gt; /var/www/example.com/index.html
 
-# echo "This is staff.example.com" &gt; /var/www/staff.example.com/index.html
+# echo "&lt;h1&gt;This is staff.example.com&lt;/h1&gt;" &gt; /var/www/staff.example.com/index.html
 </code></pre>
 
-<h4 id="the-virtual-host-config-file">The Virtual Host Config File</h4>
+<h4 id="add-the-first-virtual-host">Add the First Virtual Host</h4>
 
 <p>Next you will create the necessary configuration file so Apache knows where to find the correct content to server for each domain. The file will be in <em>/etc/httpd/conf.d</em> and must end in <em>.conf</em></p>
 
-<p>The configuration file will contain standard Apache directives placed between starting and ending tags. Here is a sample file.</p>
+<p>The configuration file will contain standard Apache directives placed between starting and ending tags.  See the <a href="https://httpd.apache.org/docs/2.4/vhosts/">Apache Virtual Hosts Documentation</a> for the correct format.</p>
 
-<pre><code>&lt;VirtualHost&gt;
-DocumentRoot /var/www/foobar.com
-ServerName foobar.com
-&lt;/VirtualHost&gt;
-</code></pre>
+<p>Create the first virtual host using the information in the Apache Virtual Hosts documentation.</p>
 
-<p>The Apache Docs under Resources below will explain each directive. Using the format above add directives for each domain as follows:</p>
+<p>The Apache Docs under Resources below will explain the purpose of each directive.  Add directives for each domain as follows:</p>
 
 <ul>
+<li>ServerAdmin</li>
 <li>DocumentRoot</li>
 <li>ServerName</li>
-<li>ServerAdmin</li>
 <li>ErrorLog</li>
 <li>CustomLog</li>
 </ul>
 
-<p>At the top of the <em>vhosts.conf</em> file outside the virtual host containers place a Listen directive for port 8080</p>
+<!--At the top of the *vhosts.conf* file outside the virtual host containers place a Listen directive for port 8080-->
 
-<p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a ServerName not found. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
+<p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a ServerName not found warning. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
 
-<h3 id="test-the-domains">Test the Domains</h3>
+<p>Finally reload the confiuration file.</p>
+
+<pre><code># apachectl graceful
+</code></pre>
+
+<h3 id="test-the-examplecom-domain">Test the example.com domain</h3>
 
 <p>Open the <em>example.com</em> IP address in Firefox or Chrome and you should see the correct web page.</p>
 
-<p>Try the same with <em>staff.example.com</em> and it will fail since port 8080 is still closed. You need to enter the address followed by a colon and the 8080 for the domain as in this example</p>
+
+
+<h3 id="add-the-second-virtual-host">Add the Second Virtual Host</h3>
+
+<p>Use the <strong>yy</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created.</p>
+
+<p>Test the configuration and reload the config file.</p>
+
+<h3 id="test-staffexamplecom">Test staff.example.com</h3>
+
+<p>Try the same with <em>staff.example.com</em> You need to enter the address followed by a colon and the 8080 for the domain as in this example</p>
 
 <pre><code>192.168.201.123:8080
 </code></pre>
 
+<p>It will fail since port 8080 is still closed in the firewall. </p>
+
 <h3 id="open-port-8080">Open Port 8080</h3>
 
-<p>Our second virtual host, <em>staff.example.com</em> is served from a different port so that port needs to be opened in the firewall.</p>
+<p>Our second virtual host, <em>staff.example.com</em> is served from a different port so that port needs to be opened in the firewall. Port 8080 is not a standard port is it needs to be added this way.</p>
 
 <pre><code># firewall-cmd --add-port=8080/tcp
 # firewall-cmd --list-ports 
 </code></pre>
 
-<p>Retry the IP address and it should now work</p>
+<p>Retry the IP address and it will still fail since Apache is listening only on the default port 80.</p>
 
-<h4 id="enable-apache">Enable Apache</h4>
+<h3 id="listen-8080">Listen 8080</h3>
 
-<h3 id="install-firewalld">Install Firewalld</h3>
-
-
-
-<h4 id="iptables">IPtables</h4>
-
-
-
-<h4 id="start-the-firewall">Start the firewall</h4>
-
-
-
-<h4 id="try-in-ff-nothing">Try in ff (nothing)</h4>
-
-<h4 id="add-service">add Service</h4>
-
-
-
-<h4 id="try-in-ff-works">Try in ff (works)</h4>
-
-<h3 id="mkdir">mkdir</h3>
-
-
-
-<h3 id="set-servername-to-ip">Set ServerName to IP</h3>
-
-
-
-<h3 id="add-content">add content</h3>
-
-<p>Chunk and chew in Canvas</p>
+<p>Add a <em>Listen</em> directive to the top of the <em>vhosts.conf</em> file outside of the virtual host stanza. Reload the config file as you did above and retry <em>staff.example.com</em>. You should see the correct content.</p>
 
 <h2 id="debug-the-assignment">Debug the Assignment</h2>
 
@@ -191,7 +162,10 @@ ServerName foobar.com
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="https://httpd.apache.org/docs/2.4/">Apache HTTP Server Version 2.4 Documentation</a></li>
+<li><a>Apache HTTP Server</a></li>
+<li><a href="https://httpd.apache.org/docs/2.4/vhosts/">Apache Virtual Host documentation</a></li>
+<li><code>/etc/services</code></li>
+<li>`man apachectl</li>
 </ul>
 
 <blockquote>
