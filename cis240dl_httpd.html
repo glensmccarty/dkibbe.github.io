@@ -114,7 +114,7 @@
 
 <p>Create the first virtual host using the information in the Apache Virtual Hosts documentation.</p>
 
-<p>The Apache Docs under Resources below will explain the purpose of each directive.  Add directives for each domain as follows:</p>
+<p>The Apache Docs under <em>Resources</em> below will explain the purpose of each directive.  Add directives for each domain as follows:</p>
 
 <ul>
 <li>ServerAdmin</li>
@@ -124,14 +124,14 @@
 <li>CustomLog</li>
 </ul>
 
-<!--At the top of the *vhosts.conf* file outside the virtual host containers place a Listen directive for port 8080-->
-
-<p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a ServerName not found warning. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
+<p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a <em>ServerName not found</em> warning. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
 
 <p>Finally reload the confiuration file.</p>
 
 <pre><code># apachectl graceful
 </code></pre>
+
+
 
 <h4 id="test-the-examplecom-domain">Test the example.com domain</h4>
 
@@ -194,9 +194,12 @@
 <li><a>Apache HTTP Server</a></li>
 <li><a href="https://httpd.apache.org/docs/2.4/vhosts/">Apache Virtual Host documentation</a></li>
 <li><code>/etc/services</code></li>
-<li>`man apachectl</li>
+<li><code>man apachectl</code></li>
+<li><code>man  firewall-cmd</code></li>
 </ul>
 
 <blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+  
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
 </blockquote>
