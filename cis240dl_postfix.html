@@ -1,10 +1,14 @@
 <h1 id="postfix">Postfix</h1>
 
+
+
 <h2 id="overview">Overview</h2>
 
 <p></p>
 
 <p>Postfix is a popular Mail Transfer Agent and is the default on RHEL and CentOS.</p>
+
+
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -16,6 +20,8 @@
 <li>Install and configure a text-based mail client (Mutt).</li>
 <li>Use <code>nc</code> to test Postfix.</li>
 </ul>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -45,7 +51,11 @@
 <li>MX Record: Mail exchange record</li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
+
+
 
 <h3 id="set-networking">Set Networking</h3>
 
@@ -67,6 +77,8 @@
 
 <p>Run <code>makewhatis</code> so <code>apropos</code> works.</p>
 
+
+
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
 <p>Edit <code>/etc/sysconfig/network</code> and set a hostname using your first initial and last name dot com.</p>
@@ -75,13 +87,19 @@
 
 <p><em>Note:</em> Reboot after making this change.</p>
 
+
+
 <h3 id="add-user-accounts">Add User Accounts</h3>
 
 <p>Add two user accounts <em>tux</em> and an account for yourself. Be sure to set passwords for each.</p>
 
+
+
 <h3 id="hosts-file">Hosts file</h3>
 
 <p>On the client add a line to the <strong>/etc/hosts</strong> listing the IP address for the server host. <em>Example:</em> If the server is <em>jdoe.com</em> use this line.</p>
+
+
 
 <h3 id="install-on-client">Install on Client</h3>
 
@@ -92,9 +110,13 @@
 <li>nc</li>
 </ul>
 
+
+
 <h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
 
 <p>Use <code>yum groupinstall</code> to install the <em>‘E-Mail Server’</em> package. Yum installs <code>postfix</code>, <code>Dovecot</code>, <code>spamassassin</code> and dependencies. Start <code>postfix</code> and <code>dovecot</code> and configure them to start on boot up.</p>
+
+
 
 <h2 id="configure-postfix">Configure Postfix</h2>
 
@@ -104,7 +126,7 @@
 <li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.com.</li>
 <li>Uncomment <strong>myorigin = $mydomain</strong></li>
 <li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <strong>hostname</strong> of the server.</li>
-<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-22">myhostname, localhost.</script>mydomain</strong>.</li>
+<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-1">myhostname, localhost.</script>mydomain</strong>.</li>
 <li>Uncomment <strong>mynetworks</strong> and replace <strong>168.100.189.0/24</strong> with <strong>192.168.201.0/24</strong>.</li>
 <li>Uncomment <strong>mynetworks<sub>style</sub> = subnet</strong></li>
 <li>Uncomment <strong>inet<sub>interfaces</sub> = all</strong>.</li>
@@ -117,6 +139,8 @@
 
 <p>Use <code>postfix reload</code> to reload the changes to the Postfix configuration file. You can use <code>postconf -n</code> to display the configuration options.</p>
 
+
+
 <h2 id="configure-dovecot">Configure Dovecot</h2>
 
 <p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
@@ -127,19 +151,27 @@
 <li>Restart the Dovecot service to make changes effective.</li>
 </ol>
 
+
+
 <h2 id="configure-the-firewall">Configure the Firewall</h2>
 
 <p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall using <code>system-config-firewall-tui</code>.</p>
 
 <p>Use Nmap from the client to confirm a service is listening on those ports.</p>
 
+
+
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
 <p>Edit <strong>/etc/aliases</strong> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
 
+
+
 <h2 id="sending-email-directly-to-the-server">Sending Email Directly to the Server</h2>
 
 <p>You can send an email directly to port 25 to test Postfix. Follow the Linux Journal article below – “Sending Email with Netcat.”</p>
+
+
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
@@ -157,9 +189,13 @@
 
 <p>Submit a screenshot of message queued.</p>
 
+
+
 <h2 id="xkcd">XKCD</h2>
 
 <p><a href="http://imgs.xkcd.com/comics/security_question.png">http://imgs.xkcd.com/comics/security_question.png</a></p>
+
+
 
 <h2 id="resources">Resources</h2>
 
