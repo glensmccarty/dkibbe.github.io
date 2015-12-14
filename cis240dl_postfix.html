@@ -4,7 +4,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p></p>
+<p><img src="http://classfiles.dennisk.fastmail.net/postfix_logo.jpg" alt="http://classfiles.dennisk.fastmail.net/postfix_logo.jpg" title=""></p>
 
 <p>Postfix is a popular Mail Transfer Agent and is the default on RHEL and CentOS.</p>
 
@@ -15,7 +15,8 @@
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
 <ul>
-<li>Install and configure Postfix and Dovecot for basic operation.</li>
+<li>Install and configure Postfix</li>
+<li>Dovecot for basic operation. (optional)</li>
 <li>Describe the functions of a MTA, MDA and MUA.</li>
 <li>Install and configure a text-based mail client (Mutt).</li>
 <li>Use <code>nc</code> to test Postfix.</li>
@@ -61,29 +62,31 @@
 
 <p>In VirtualBox set Networking to Bridged for both virtual machines. The Client virtual machine should be a clone of the service but have a different MAC address. Each virtual machine must have a different IP address.</p>
 
-<p>Do this assignment on a CentOS virtual machine connected to the 192.168.201.0/24 network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
+<p>Do this assignment on a CentOS7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
+
+<p>If you are working from the BA lab the network will be 192.168.203.0/24. From homeyou will have to use the <code>ip addr show</code> command to make sure it’s on your home network. This has not be tested.</p>
 
 <ul>
 <li>nmap</li>
-<li>system-configuration-firewall-tui</li>
-<li>telnet</li>
-<li>mail</li>
-<li>man</li>
+<li>firewalld</li>
 <li>mutt</li>
 <li>nc</li>
 </ul>
 
 <p>These can be installed with a single <code>yum install</code> command.</p>
 
-<p>Run <code>makewhatis</code> so <code>apropos</code> works.</p>
+<!--Run `makewhatis` so `apropos` works.-->
 
 
 
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
-<p>Edit <code>/etc/sysconfig/network</code> and set a hostname using your first initial and last name dot com.</p>
+<p>Edit <code>/etc/hostname</code> and set a hostname using your first initial and last name. </p>
 
 <p><em>Example for John Doe use:</em></p>
+
+<pre><code>jdoe
+</code></pre>
 
 <p><em>Note:</em> Reboot after making this change.</p>
 
@@ -97,7 +100,12 @@
 
 <h3 id="hosts-file">Hosts file</h3>
 
-<p>On the client add a line to the <strong>/etc/hosts</strong> listing the IP address for the server host. <em>Example:</em> If the server is <em>jdoe.com</em> use this line.</p>
+<p>On the client add a line to <em>/etc/hosts</em> listing the IP address for the Postfix server.  <em>Use the actual IP address of your Postfix server.</em></p>
+
+<p><em>Example:</em> If the server is <em>jdoe</em> use this line.</p>
+
+<pre><code>192.168.201.123 jdoe
+</code></pre>
 
 
 
@@ -114,39 +122,45 @@
 
 <h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
 
-<p>Use <code>yum groupinstall</code> to install the <em>‘E-Mail Server’</em> package. Yum installs <code>postfix</code>, <code>Dovecot</code>, <code>spamassassin</code> and dependencies. Start <code>postfix</code> and <code>dovecot</code> and configure them to start on boot up.</p>
+<p>Use <code>systemctl to start</code>postfix<code>and</code>dovecot` and enable them to start on boot up.</p>
 
 
 
 <h2 id="configure-postfix">Configure Postfix</h2>
 
-<p>To set Postfix as an open relay on the local network here are the options that need to be changed in the <strong>main.cf</strong> file. Configuration settings starting with a <strong>$</strong> are variables that you will set. A good way to learn about Postfix’s capabilities is the read the comments in <strong>/etc/postfix/main.cf</strong>.</p>
+<p>To set Postfix as an open relay on the local network here are the options that need to be changed in the <em>main.cf</em> file. Configuration settings starting with a <strong>$</strong> are variables that you will set. A good way to learn about Postfix’s capabilities is the read the comments in <em>/etc/postfix/main.cf</em>.</p>
+
+<p>Be sure to backup the file first!</p>
 
 <ol>
-<li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.com.</li>
+<li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.</li>
 <li>Uncomment <strong>myorigin = $mydomain</strong></li>
-<li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <strong>hostname</strong> of the server.</li>
-<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-1">myhostname, localhost.</script>mydomain</strong>.</li>
-<li>Uncomment <strong>mynetworks</strong> and replace <strong>168.100.189.0/24</strong> with <strong>192.168.201.0/24</strong>.</li>
-<li>Uncomment <strong>mynetworks<sub>style</sub> = subnet</strong></li>
-<li>Uncomment <strong>inet<sub>interfaces</sub> = all</strong>.</li>
-<li>Comment <strong>inet_ interfaces = localhost</strong>.</li>
-<li>Reload the Postfix configuration file.</li>
-<li>Check that Postfix will start on reboot.</li>
+<li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <em>hostname</em> of the server.</li>
+<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-66">myhostname, localhost.</script>mydomain</strong>.</li>
+<li>Uncomment <strong>mynetworks</strong> and replace <em>168.100.189.0/24</em> with <em>192.168.201.0/24</em>.</li>
+<li>Uncomment <strong>mynetworks_style = subnet</strong></li>
+<li>Uncomment <strong>inet_interfaces = all</strong>.</li>
+<li>Comment out <strong>inet_interfaces = localhost</strong>.</li>
 </ol>
+
+<p>Check the configuration file and reload the configuration file using the <code>postfix</code> command.</p>
+
+<pre><code># postfix check
+# postfix reload
+</code></pre>
+
+<p>You can use <code>postconf -n</code> to display the configuration options.</p>
 
 <p>Postfix will now accept mail for outside delivery.</p>
 
-<p>Use <code>postfix reload</code> to reload the changes to the Postfix configuration file. You can use <code>postconf -n</code> to display the configuration options.</p>
 
 
-
-<h2 id="configure-dovecot">Configure Dovecot</h2>
+<h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
 
 <p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
 
 <ol>
-<li>Move the default keys from <strong>/etc/pki/dovecot/certs/dovecot.pem</strong> and <strong>/etc/pki/dovecot/private/dovecot.pem</strong> to root’s home directory. Rename the private does so it does not overwrite the cert.</li>
+<li>Move the default keys from <em>/etc/pki/dovecot/certs/dovecot.pem</em> and <em>/etc/pki/dovecot/private/dovecot.pem</em> to root’s home directory. Rename the private does so it does not overwrite the cert.</li>
 <li>Run this script to generate a new private key and self-signed certificate.</li>
 <li>Restart the Dovecot service to make changes effective.</li>
 </ol>
@@ -155,45 +169,42 @@
 
 <h2 id="configure-the-firewall">Configure the Firewall</h2>
 
-<p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall using <code>system-config-firewall-tui</code>.</p>
+<p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall</p>
 
-<p>Use Nmap from the client to confirm a service is listening on those ports.</p>
+<pre><code>firewall-cmd --add-service stmp
+firewall-cmd --add-service imaps
+</code></pre>
+
+<p>Use Nmap from the client to confirm a service is listening on those ports. Replace <em>jdoe</em> with the hostname of the server.</p>
+
+<pre><code>nmap jdoe
+</code></pre>
 
 
 
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
-<p>Edit <strong>/etc/aliases</strong> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
+<p>Edit <em>/etc/aliases</em> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
 
 
 
 <h2 id="sending-email-directly-to-the-server">Sending Email Directly to the Server</h2>
 
-<p>You can send an email directly to port 25 to test Postfix. Follow the Linux Journal article below – “Sending Email with Netcat.”</p>
+<p>You can send an email directly to port 25 to test Postfix. Follow the Linux Journal article below – <em>Sending Email with Netcat.</em></p>
 
-
-
-<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
-
-<ul>
-<li>Are the needed ports open on the firewall? Use <code>iptables-save</code> to check.</li>
-<li>Typos or missing configuration options? Check with <code>postconf -n</code>.</li>
-<li>Was <code>newaliases</code> run after making changes?</li>
-<li>Was Postfix and Dovecot configuration files reloaded after making changes?</li>
-<li>You may need to manually configure a network interface.</li>
-</ul>
+<!--## Troubleshoot the Assignment&#10;&#10;- Are the needed ports open on the firewall? Use `iptables-save` to check.&#10;- Typos or missing configuration options? Check with `postconf -n`.&#10;- Was `newaliases` run after making changes?&#10;- Was Postfix and Dovecot configuration files reloaded after making changes?&#10;- You may need to manually configure a network interface.-->
 
 
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of message queued.</p>
+<p>Submit a screenshot of the tail end of <em>/var/log/maillog</em> showing the message was sent..</p>
 
 
 
 <h2 id="xkcd">XKCD</h2>
 
-<p><a href="http://imgs.xkcd.com/comics/security_question.png">http://imgs.xkcd.com/comics/security_question.png</a></p>
+<p><img src="(&lt;a href=">https://imgs.xkcd.com/comics/security_question.png)” alt=”XKCD cartoon” title=”” /&gt;</p>
 
 
 
