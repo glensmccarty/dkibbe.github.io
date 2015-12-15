@@ -58,9 +58,9 @@
 
 <h3 id="set-networking">Set Networking</h3>
 
-<p>In VirtualBox set Networking to Bridged for both virtual machines. The Client virtual machine should be a clone of the service but have a different MAC address. Each virtual machine must have a different IP address.</p>
+<p>In VirtualBox set Networking to <em>Bridged Adapter</em> for both virtual machines. The client virtual machine should be a clone of the server but have a different MAC address. Each virtual machine must have a different IP address.</p>
 
-<p>Do this assignment on a CentOS7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
+<p>Do this assignment on a CentOS 7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
 
 <p>If you are working from the BA lab the network will be 192.168.203.0/24. From homeyou will have to use the <code>ip addr show</code> command to make sure it’s on your home network. This has not be tested.</p>
 
@@ -72,10 +72,6 @@
 </ul>
 
 <p>These can be installed with a single <code>yum install</code> command.</p>
-
-<!--Run `makewhatis` so `apropos` works.-->
-
-
 
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
@@ -134,7 +130,7 @@
 <li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.</li>
 <li>Uncomment <strong>myorigin = $mydomain</strong></li>
 <li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <em>hostname</em> of the server.</li>
-<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-67">myhostname, localhost.</script>mydomain</strong>.</li>
+<li>Uncomment <strong>mydestination = <span>$</span>myhostname, localhost.$mydomain</strong>.</li>
 <li>Uncomment <strong>mynetworks</strong> and replace <em>168.100.189.0/24</em> with <em>192.168.201.0/24</em>.</li>
 <li>Uncomment <strong>mynetworks_style = subnet</strong></li>
 <li>Uncomment <strong>inet_interfaces = all</strong>.</li>
@@ -150,8 +146,6 @@
 <p>You can use <code>postconf -n</code> to display the configuration options.</p>
 
 <p>Postfix will now accept mail for outside delivery.</p>
-
-
 
 <h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
 
