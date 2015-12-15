@@ -52,6 +52,8 @@
 <li><strong>MX Record:</strong> Mail exchange record</li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
 
@@ -72,6 +74,8 @@
 </ul>
 
 <p>These can be installed with a single <code>yum install</code> command.</p>
+
+
 
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
@@ -147,6 +151,8 @@
 
 <p>Postfix will now accept mail for outside delivery.</p>
 
+
+
 <h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
 
 <p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
@@ -163,7 +169,7 @@
 
 <p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall</p>
 
-<pre><code>firewall-cmd --add-service stmp
+<pre><code>firewall-cmd --add-service smtp
 firewall-cmd --add-service imaps
 </code></pre>
 
@@ -171,8 +177,6 @@ firewall-cmd --add-service imaps
 
 <pre><code>nmap jdoe
 </code></pre>
-
-
 
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
