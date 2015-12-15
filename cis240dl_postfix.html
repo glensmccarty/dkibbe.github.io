@@ -31,28 +31,26 @@
 <li><strong>MDA:</strong> Mail Delivery Agent (procmail)</li>
 <li><strong>MUA:</strong>  Mail User Agent (Thunderbird, mutt, Sylpheed)</li>
 <li><strong>IMAP:</strong> Internet Message Access Protocol Client connects to the IMAP server and the messages stay on the server.</li>
-<li>POP: Post Office Protocol Client downloads mail to host.</li>
-<li>SMTP: Simple Mail Transport Protocol</li>
-<li>Mail Submission Port 587: Alternate to port 25</li>
-<li>mbox: The mbox format stores mail in a single large file.</li>
-<li>Maildir&lt;: The Maildir format stores each email message as a separate file with a unique name. Messages are stored in a special Maildir directory structure.</li>
+<li><strong>POP:</strong> Post Office Protocol Client downloads mail to host.</li>
+<li><strong>SMTP:</strong> Simple Mail Transport Protocol</li>
+<li><strong>Mail Submission Port 587:</strong> Alternate to port 25</li>
+<li><strong>mbox:</strong> The mbox format stores mail in a single large file.</li>
+<li><strong>Maildir:</strong> The Maildir format stores each email message as a separate file with a unique name. Messages are stored in a special Maildir directory structure.</li>
 <li>/var/log/maillog</li>
-<li>/etc/postfix/main.cf: The main configuration file for Postfix</li>
-<li>/etc/aliases: Email address aliases, an example would be mail to postmaster@example.com is routed to joeadmin@example.com. Run <code>newaliases</code> after making any changes to this file.</li>
-<li>newaliases: This command should be run after any changes to <strong>/etc/aliases</strong>.</li>
-<li>/etc/dovecot/covecot.conf: The main Dovecot configuration file.</li>
-<li>postsuper: The Postfix superintendent</li>
-<li>mailq: Command to print contents of mail queue to STDOUT.</li>
-<li>mutt: The Mutt Mail User Agent “All mail clients suck. This one just sucks less.”</li>
-<li>Reverse DNS lookup: Used to check if the message was sent from a MTA with a legitimate <strong>MX</strong> record.</li>
-<li>Open Relay: In the distant past when life was good any MTA would gladly forward your email to its destination for you. No authentication was required.</li>
-<li>SPAM: SPAM is defined as… Well, I think you know already.</li>
-<li>Dovecot: IMAP and POP server</li>
-<li>postconf: Postfix utility</li>
-<li>MX Record: Mail exchange record</li>
+<li><strong>/etc/postfix/main.cf:</strong> The main configuration file for Postfix</li>
+<li><strong>/etc/aliases:</strong> Email address aliases, an example would be mail to postmaster@example.com is routed to joeadmin@example.com. Run <code>newaliases</code> after making any changes to this file.</li>
+<li><strong>newaliases:</strong> This command should be run after any changes to <strong>/etc/aliases</strong>.</li>
+<li><strong>/etc/dovecot/covecot.conf:</strong> The main Dovecot configuration file.</li>
+<li><strong>postsuper:</strong> The Postfix superintendent</li>
+<li><strong>mailq:</strong> Command to print contents of mail queue to STDOUT.</li>
+<li><strong>mutt:</strong> The Mutt Mail User Agent “All mail clients suck. This one just sucks less.”</li>
+<li><strong>Reverse DNS lookup:</strong> Used to check if the message was sent from a MTA with a legitimate <strong>MX</strong> record.</li>
+<li><strong>Open Relay:</strong> In the distant past when life was good any MTA would gladly forward your email to its destination for you. No authentication was required.</li>
+<li><strong>SPAM:</strong> SPAM is defined as… Well, I think you know already.</li>
+<li><strong>Dovecot:</strong> IMAP and POP server</li>
+<li><strong>postconf:</strong> Postfix utility</li>
+<li><strong>MX Record:</strong> Mail exchange record</li>
 </ul>
-
-
 
 <h2 id="preparation">Preparation</h2>
 
@@ -136,7 +134,7 @@
 <li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.</li>
 <li>Uncomment <strong>myorigin = $mydomain</strong></li>
 <li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <em>hostname</em> of the server.</li>
-<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-66">myhostname, localhost.</script>mydomain</strong>.</li>
+<li>Uncomment <strong>mydestination = <script type="math/tex" id="MathJax-Element-67">myhostname, localhost.</script>mydomain</strong>.</li>
 <li>Uncomment <strong>mynetworks</strong> and replace <em>168.100.189.0/24</em> with <em>192.168.201.0/24</em>.</li>
 <li>Uncomment <strong>mynetworks_style = subnet</strong></li>
 <li>Uncomment <strong>inet_interfaces = all</strong>.</li>
