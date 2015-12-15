@@ -79,7 +79,7 @@
 
 <p>SSH be default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
-<p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux.</p>
+<p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
 
 <h3 id="protocol">Protocol</h3>
 
