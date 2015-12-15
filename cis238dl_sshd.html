@@ -12,11 +12,23 @@
 <li>Add an SSH banner.</li>
 </ol>
 
+
+
 <h2 id="terms-and-concepts">Terms and Concepts</h2>
 
-<p></p><div id="text-2" class="outline-text-2"><dl><dt>Daemon</dt><dd>A background process that handles requests for services such as print spooling and is dormant when not required.</dd><dt>Well-Known Ports</dt><dd>Ports 0-1023 are reserved for common services and can only be accessed by root.</dd><dt>/etc/ssh/sshd_conf</dt><dd>Configuration file for the SSH server daemon</dd><dt>Telnet</dt><dd>Used to determine if a service is running on a port.</dd><dt>Nmap</dt><dd>Network port scanner</dd><dt><code>lsof</code></dt><dd>List open files.</dd><dt><code>/etc/services</code></dt><dd>Lists services and their default ports. This file is for information only and does no configuration itself.</dd></dl></div><div id="outline-container-3" class="outline-2"></div><p></p>
+<ul>
+<li><strong>Daemon:</strong> A background process that handles requests for services such as print spooling and is dormant when not required.</li>
+<li><strong>Well-Known Ports:</strong> Ports 0-1023 are reserved for common services and can only be accessed by root.</li>
+<li><strong>/etc/ssh/sshd_conf:</strong> Configuration file for the SSH server daemon</li>
+<li><strong>Telnet:</strong> Used to determine if a service is running on a port.</li>
+<li><strong>Nmap:</strong> Network port scanner</li>
+<li><code>lsof</code>: List open files.</li>
+<li><code>/etc/services</code>: Lists services and their default ports. This file is for information only and does no configuration itself.</li>
+</ul>
 
 <h2 id="preparation">Preparation</h2>
+
+
 
 <h3 id="networking">Networking</h3>
 
@@ -33,6 +45,8 @@
 
 <p>CentOS-minimal does not have <code>lsof</code> or <code>nmap</code> installed by default. Use <code>yum install lsof nmap -y</code> to install both packages.</p>
 
+
+
 <h2 id="connect-to-the-virtual-machine-from-the-workstation">Connect to the Virtual Machine from the Workstation</h2>
 
 <p>You should now be able to use <code>ssh</code> from the workstation to connect to the virtual machine. First use <code>telnet</code> to check that SSH is running on the default port. You should see something similar to this output:</p>
@@ -43,31 +57,47 @@
 
 <p>After you accept the connection you should be logged in as root. Type <code>exit</code> to close the connection.</p>
 
+
+
 <h2 id="securing-the-ssh-server-daemon">Securing the SSH Server Daemon</h2>
+
+
 
 <h3 id="the-ssh-server-configuration-file">The SSH Server Configuration File</h3>
 
 <p>SSH server configuration setting are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>service sshd reload</code> command or <code>/etc/init.d/sshd reload</code>.</p>
 
+
+
 <h3 id="disabling-root-logins">Disabling Root Logins</h3>
 
 <p>There is no reason for the root user to login directly. Root should also have an ordinary user account for that purpose and that use either <code>su</code> or <code>sudo</code> to perform root functions. This change alone can reduce attacks significantly. Change the line in the <code>/etc/ssh/sshd_conf</code> file from <strong>PermitRootLogin</strong> <em>yes</em> to <em>no</em>. <em>Note:</em> In <code>vi</code> use /Root to search for the line.</p>
+
+
 
 <h3 id="change-default-port">Change Default Port</h3>
 
 <p>SSH be default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
+<p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux.</p>
+
 <h3 id="protocol">Protocol</h3>
 
 <p>Assure that the more secure <strong>Protocol 2</strong> is being used. This is the default.</p>
+
+
 
 <h3 id="reducing-the-number-of-login-tries">Reducing the Number of Login Tries</h3>
 
 <p>The default is <strong>6</strong> failed attempt but you can reduce this to a smaller number by changing <strong>MaxAuthTries</strong>. Edit <strong>MaxAuthTries</strong> to allow only attempts.</p>
 
+
+
 <h3 id="disabling-password-logins">Disabling Password Logins</h3>
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -78,6 +108,8 @@
 <li>What services use these ports?</li>
 <li>Change <strong>PasswordAuthentication</strong> to <em>no</em> and commit the changes then use <code>ssh localhost</code> to try to login. (You’ll be using SSH from the CentOS-minimal terminal.) What error message do you get?</li>
 </ol>
+
+
 
 <h2 id="adding-an-ssh-banner">Adding an SSH Banner</h2>
 
@@ -90,6 +122,8 @@
 <p>Next add this line to the <em>/etc/ssh/sshd_config</em> file.</p>
 
 <p>Now reload the configuration file for the change to take effect.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
