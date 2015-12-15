@@ -26,6 +26,8 @@
 <li><code>/etc/services</code>: Lists services and their default ports. This file is for information only and does no configuration itself.</li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
 
@@ -80,6 +82,18 @@
 <p>SSH be default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
 <p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
+
+
+
+<h4 id="open-the-port-in-the-firewall">Open the Port in the Firewall</h4>
+
+<pre><code># firewall-cmd --add-port=2222/tcp
+</code></pre>
+
+<h4 id="disable-port-22">Disable Port 22</h4>
+
+<pre><code># firewall-cmd --remove-service=ssh
+</code></pre>
 
 <h3 id="protocol">Protocol</h3>
 
