@@ -1,0 +1,64 @@
+<h1 id="address-resolution-protocol-arp">Address Resolution Protocol (ARP)</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Address Resolution Protocol is one of the requests ypur computer makes when it first connects to a network. ARP works at <a href="http://dennisk.fastmail.net/gallery/osi_model-2.png">layer 2</a> of the OSI Network Model.</p>
+
+<p>The purpose of ARP is to discover the hardware address for a known IP address such as a gateway.</p>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<ol>
+<li>Start Ubuntu 14.04 LTS</li>
+<li>If Wireshark isn’t installed use <code>apt-get install wireshark</code> to install it.</li>
+<li>Use <code>ip r</code> or <code>route</code> to find the gateway address.</li>
+</ol>
+
+<h2 id="capture-arp-packets">Capture ARP Packets</h2>
+
+<p>Wireshark by itself doesn’t capture packets it only analyzes them.  For that job you will use <code>dumpcap</code> which will have been installed along with Wireshark.</p>
+
+<ol>
+<li><p>Run <code>dumpcap</code> as root using the correct interface. In this case it the wireless card.</p>
+
+<p>$ sudo dumpcap -i wlan0 -w arp.pcapng</p></li>
+<li><p>From another terminal use <code>arping</code> to send an ARP REQUEST to the IP address of the gateway. You can limit the number of pings with the <code>-c</code> option.</p></li>
+<li>Use CTRL+C to terminate <code>dumpcap</code>.</li>
+<li>Use <code>chmod</code> to give everyone read/write permissions on the pcapng file.</li>
+</ol>
+
+<h3 id="display-the-packets-in-wireshark">Display the Packets in Wireshark</h3>
+
+<p>You do not need root privileges to read a capture file in Wireshark if the permissions have been set correctly.</p>
+
+<ol>
+<li>Start Wireshark</li>
+<li>Open the pcapng file</li>
+<li>Clcik the Protocol column header to order the protocols alphabetically. ARP should be at the top.</li>
+<li>You can also limit the display by entering <strong>arp</strong> in the filter text box and clicking apply.</li>
+</ol>
+
+<h3 id="what-to-submit">What to Submit</h3>
+
+<p>Open the ARP quiz and answer the questions based on what Wireshark tells you.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>man arp</li>
+<li>man arping</li>
+<li>man dumpcap</li>
+<li><code>/proc/net/arp</code></li>
+<li><a href="https://www.youtube.com/watch?v=AeBFd7qexwk">An Overview of ARP</a></li>
+<li><a href="https://wiki.wireshark.org/AddressResolutionProtocol">Address Resolution Protocal (ARP)</a></li>
+<li><a href="https://wiki.wireshark.org/Gratuitous_ARP">enter link description here</a></li>
+<li><a href="https://en.wikipedia.org/wiki/MAC_address">enter link description here</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
