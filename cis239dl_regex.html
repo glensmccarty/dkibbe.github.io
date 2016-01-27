@@ -4,9 +4,11 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>File globing and regular expressions are powerful tools needed by every system administrator. With these tools you can quickly filter text files to find what you are looking for.</p>
+<p>File globbing and regular expressions are powerful tools needed by every system administrator. With these tools you can quickly filter text files to find what you are looking for.</p>
 
 <!--## Learning Objectives&#10;&#10;When you have successfully completed this assignment you will be able to:*&#10;&#10;- Describe the use of common wild cards.&#10;- Write a simple regular expression.&#10;- Use `tr` to replace non-printing characters.-->
+
+
 
 <h2 id="preparation">Preparation</h2>
 
@@ -17,7 +19,9 @@
 
 <!-- Create a file named *twain.txt* with Mark Twain, Huckleberry &#34;HucK&#34; Finn, Tom Sawyer, Pappy Finn each on a separate line.-->
 
-<h2 id="file-globing-wild-cards">File Globing (Wild Cards)</h2>
+
+
+<h2 id="file-globbing-wild-cards">File Globbing (Wild Cards)</h2>
 
 <p>Wild cards can be used with common commands to match file names. While similar to regular expressions there are not the same. Regular expressions do not match file or directory names but strings.</p>
 
@@ -55,7 +59,9 @@
 </tbody></table>
 
 
-<h3 id="example-1">Example 1</h3>
+
+
+<h3 id="example-1-match-all">Example 1 - Match All</h3>
 
 <p>Match all files beginning with <em>exam</em> followed by any number of characters.</p>
 
@@ -70,7 +76,7 @@ example examples example12
 
 
 
-<h3 id="example-2">Example 2</h3>
+<h3 id="example-2-match-single">Example 2 - Match Single</h3>
 
 <p>Match all files beginning with <em>example</em> followed by a single character.</p>
 
@@ -80,21 +86,43 @@ examples
 
 
 
-<h3 id="example-3">Example 3</h3>
+<h3 id="example-3-character-classes">Example 3 - Character Classes</h3>
 
-<p>Square brackets match against a single character.</p>
+<p>Square brackets match against any character enclosed in the brackets.</p>
 
 <pre><code>$ ls [eE]am*
 Exam  exam12  example  Example  examples
 </code></pre>
 
+<p>Or a range of characters</p>
+
+<pre><code>$ ls [a-z].txt
+a.txt b.txt c.txt z.txt
+</code></pre>
 
 
-<h3 id="example-4">Example 4</h3>
+
+<h3 id="posix-character-classes">POSIX Character Classes</h3>
+
+<p>POSIX character classes let you match for example a-z and 0-9.</p>
+
+<pre><code>$ ls [[:alnum:]].txt
+1.txt  2.txt  a.txt  b.txt
+</code></pre>
+
+<p>See <strong>Resources</strong> below for a complete list.</p>
+
+
+
+<h3 id="example-4-negation">Example 4 - Negation</h3>
+
+<p>Placing an exclamation mark or “bang” after the first bracket tells the shell not to match the character or characters in the bracket.</p>
 
 <pre><code>$ ls [!e]xam*
 Exam  Example
 </code></pre>
+
+
 
 <h2 id="regular-expressions-regex">Regular Expressions (regex)</h2>
 
@@ -134,6 +162,8 @@ Exam  Example
 </tbody></table>
 
 
+
+
 <h3 id="matching-a-literal-strings">Matching a Literal Strings</h3>
 
 <p>Create a file named <em>twain.txt</em></p>
@@ -152,12 +182,16 @@ Ctrl+D
 <pre><code>$ grep Mark twain.txt
 </code></pre>
 
+
+
 <h3 id="case-insensitive-match">Case-insensitive Match</h3>
 
 <p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
 
 <pre><code>$ grep -i marl twain.txt
 </code></pre>
+
+
 
 <h3 id="title"> </h3>
 
@@ -184,6 +218,8 @@ Ctrl+D
 <pre><code>$ grep -E "^[M|m]ark" twain.txt
 </code></pre>
 
+
+
 <h3 id="special-metacharacters">Special (Metacharacters)</h3>
 
 
@@ -200,6 +236,8 @@ Ctrl+D
 <pre><code>$ grep "ar." twain.txt
 </code></pre>
 
+
+
 <h3 id="the-asterisk">The Asterisk</h3>
 
 <p>An asterisk denotes zero or more characters.</p>
@@ -207,12 +245,16 @@ Ctrl+D
 <pre><code>$ grep -E "n*" twain.txt
 </code></pre>
 
+
+
 <h3 id="search-for-string-at-start-of-line">Search for String at Start of Line</h3>
 
 <p>Filter lines that start with <em>Mark *Twain</em></p>
 
 <pre><code>$ grep "^Mark Twain" twain.txt
 </code></pre>
+
+
 
 <h3 id="search-for-a-string-at-the-end-of-line">Search for a String at the End of Line</h3>
 
@@ -226,6 +268,8 @@ Ctrl+D
 <pre><code>  $ cat -E twain.txt
   Space at end of Mark Twain $
 </code></pre>
+
+
 
 <h2 id="brace-expansion">Brace Expansion</h2>
 
@@ -267,26 +311,22 @@ $ touch file-{1..5}.txt
 
 <!--## Debug the Assignment-->
 
-<!--## XKCD&#10;&#10;![XFCD Cartoon on regular expressions][xkcd]-->
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a regular expression that will remove all unnecessary lines from <em>/etc/login.defs</em>.</p>
+<p>See the Regular Expression quiz.</p>
 
 
 
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li>man regex</li>
-<li>man glob</li>
-<li><a href="http://www.ibm.com/developerworks/aix/library/au-speakingunix9/" title="Speaking UNIX, Part 9: Regular expressions">IBM DevelopersWorks</a></li>
-<li><a href="https://en.wikibooks.org/wiki/Regular_Expressions" title="Wikibooks: Regular Expressions">Wikibooks: Regular Expressions</a></li>
-<li><a href="https://en.wikibooks.org/wiki/Grep" title="Wikibooks: grep">Wikibooks: grep</a>  </li>
-<li><a href="https://en.wikibooks.org/wiki/Sed" title="Wikibooks: sed">Wikibooks: sed</a> <br>
-</li></ul>
-
-<h2 id="creative-commons-license">Creative Commons License</h2>
-
-<p><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" alt="Creative Commons License" title=""></a> <br>
-This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+<li>man 7 regex</li>
+<li>man 7 glob</li>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-speakingunix9/">IBM DevelopersWorks</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Regular_Expressions">Wikibooks: Regular Expressions</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Grep">Wikibooks: grep</a>  </li>
+<li><a href="http://www.linuxjournal.com/content/bash-extended-globbing">Bash Extended Globbing</a></li>
+<li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
+</ul>
