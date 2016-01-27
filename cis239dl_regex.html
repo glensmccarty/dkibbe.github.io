@@ -61,7 +61,7 @@
 
 
 
-<h3 id="example-1-match-all">Example 1 - Match All</h3>
+<h3 id="match-all-characters">Match All Characters</h3>
 
 <p>Match all files beginning with <em>exam</em> followed by any number of characters.</p>
 
@@ -74,9 +74,7 @@
 example examples example12
 </code></pre>
 
-
-
-<h3 id="example-2-match-single">Example 2 - Match Single</h3>
+<h3 id="match-single-character">Match Single Character</h3>
 
 <p>Match all files beginning with <em>example</em> followed by a single character.</p>
 
@@ -84,9 +82,7 @@ example examples example12
 examples
 </code></pre>
 
-
-
-<h3 id="example-3-character-classes">Example 3 - Character Classes</h3>
+<h3 id="character-classes">Character Classes</h3>
 
 <p>Square brackets match against any character enclosed in the brackets.</p>
 
@@ -99,8 +95,6 @@ Exam  exam12  example  Example  examples
 <pre><code>$ ls [a-z].txt
 a.txt b.txt c.txt z.txt
 </code></pre>
-
-
 
 <h3 id="posix-character-classes">POSIX Character Classes</h3>
 
@@ -123,6 +117,27 @@ Exam  Example
 </code></pre>
 
 
+
+<h3 id="match-special-character">Match Special Character</h3>
+
+<p>To match a special character use the black slash to escape it.</p>
+
+<p>File created with space character.</p>
+
+<pre><code>$ touch file\ 1.txt file.txt
+</code></pre>
+
+<p>Tab completion lists both files.</p>
+
+<pre><code>$ ls file
+file 1.txt  file.txt
+</code></pre>
+
+<p>Use the back slash to prevent the shell from interpreting the space as a special character.</p>
+
+<pre><code>$ ls file\ 1.txt
+file 1.txt
+</code></pre>
 
 <h2 id="regular-expressions-regex">Regular Expressions (regex)</h2>
 
