@@ -6,29 +6,16 @@
 
 <p>File globing and regular expressions are powerful tools needed by every system administrator. With these tools you can quickly filter text files to find what you are looking for.</p>
 
-
-
-<h2 id="learning-objectives">Learning Objectives</h2>
-
-<p>When you have successfully completed this assignment you will be able to:*</p>
-
-<ul>
-<li>Describe the use of common wild cards.</li>
-<li>Write a simple regular expression.</li>
-<li>Use <code>tr</code> to replace non-printing characters.</li>
-</ul>
-
-
+<!--## Learning Objectives&#10;&#10;When you have successfully completed this assignment you will be able to:*&#10;&#10;- Describe the use of common wild cards.&#10;- Write a simple regular expression.&#10;- Use `tr` to replace non-printing characters.-->
 
 <h2 id="preparation">Preparation</h2>
 
 <ul>
 <li>To make the results stand out alias <code>grep</code> to <code>grep --color=auto</code> if it is not already.</li>
 <li>Create a temporary directory to work in <code>mkdir ~/temp</code> or work in <code>/tmp</code> which is usually cleared on reboot.</li>
-<li>Create a file named <em>twain.txt</em> with Mark Twain, Huckleberry “HucK” Finn, Tom Sawyer, Pappy Finn each on a separate line.</li>
 </ul>
 
-
+<!-- Create a file named *twain.txt* with Mark Twain, Huckleberry &#34;HucK&#34; Finn, Tom Sawyer, Pappy Finn each on a separate line.-->
 
 <h2 id="file-globing-wild-cards">File Globing (Wild Cards)</h2>
 
@@ -66,8 +53,6 @@
   <td>Matches exampleA to exampleZ.</td>
 </tr>
 </tbody></table>
-
-
 
 
 <h3 id="example-1">Example 1</h3>
@@ -111,8 +96,6 @@ Exam  exam12  example  Example  examples
 Exam  Example
 </code></pre>
 
-
-
 <h2 id="regular-expressions-regex">Regular Expressions (regex)</h2>
 
 <p>Regular expressions are strings of special characters that describe a pattern for searching. The following table show some of the characters special to regular expressions.</p>
@@ -151,23 +134,55 @@ Exam  Example
 </tbody></table>
 
 
-<h3 id="literal-strings">Literal Strings</h3>
+<h3 id="matching-a-literal-strings">Matching a Literal Strings</h3>
 
-<p>The simplest regular expression is a literal string. The following matches each line with <em>Mark Twain</em> but only if on the same line.</p>
+<p>Create a file named <em>twain.txt</em></p>
+
+<pre><code>$ cat &gt; twain.txt
+Mark Twain
+Mr. Mark Twain
+Samuel Clemens
+Markus Twain
+Mark   Twain
+Ctrl+D
+</code></pre>
+
+<p>The simplest regular expression is a literal string. The following matches each line with <em>Mark</em>.</p>
+
+<pre><code>$ grep Mark twain.txt
+</code></pre>
+
+<h3 id="case-insensitive-match">Case-insensitive Match</h3>
+
+<p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
+
+<pre><code>$ grep -i marl twain.txt
+</code></pre>
+
+<h3 id="title"> </h3>
+
+<p>The <strong>-v</strong> option reverses the search. This will return all the lines that do not have <em>Mark Twain</em>.</p>
+
+<pre><code>$ grep -v Mark twain.txt
+</code></pre>
+
+
+
+<h3 id="spaces">Spaces</h3>
+
+<p>Use quotes to protect the shell from interpting the space.</p>
 
 <pre><code>$ grep "Mark Twain" twain.txt
 </code></pre>
 
-<!--or if the quotes are left out both *Mark* and *Twain* separately.&#10;&#10;    $ grep Mark Twain twain.txt-->
 
-<p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
 
-<p>The <strong>-v</strong> option reverses the search. This will return all the lines that do not have <em>Mark Twain</em>.</p>
+<h2 id="extended-regular-expressions">Extended Regular Expressions</h2>
 
-<pre><code>$ grep -v "Mark Twain" twain.txt
+<p>The <code>grep</code> command supports Extended Regular Expressions with the <strong>-E</strong> option. In this example <code>grep</code> will find <strong>Mark</strong> or <strong>mark</strong> but only at the start of a line.</p>
+
+<pre><code>$ grep -E "^[M|m]ark" twain.txt
 </code></pre>
-
-
 
 <h3 id="special-metacharacters">Special (Metacharacters)</h3>
 
@@ -175,49 +190,42 @@ Exam  Example
 
 <h4 id="the-period">The Period</h4>
 
-<p>The period returns a single character. Here <em>n</em> preceded by one character.</p>
+<p>The period matches a single character. Here <em>n</em> preceded by one character.</p>
 
 <pre><code>$ grep ".n" twain.txt
 </code></pre>
 
-<p>Or two *n*s followed by a single character.</p>
+<p>Or <em>ar</em> followed by a single character.</p>
 
-<pre><code>$ grep ".nn" twain.txt
+<pre><code>$ grep "ar." twain.txt
 </code></pre>
-
-
 
 <h3 id="the-asterisk">The Asterisk</h3>
 
 <p>An asterisk denotes zero or more characters.</p>
 
-<pre><code>$ grep "n*" twain.txt
+<pre><code>$ grep -E "n*" twain.txt
 </code></pre>
-
-
 
 <h3 id="search-for-string-at-start-of-line">Search for String at Start of Line</h3>
 
 <p>Filter lines that start with <em>Mark *Twain</em></p>
 
-<pre><code>$ grep ^"Mark Twain" twain.txt
+<pre><code>$ grep "^Mark Twain" twain.txt
 </code></pre>
-
-
 
 <h3 id="search-for-a-string-at-the-end-of-line">Search for a String at the End of Line</h3>
 
 <p>Filter lines that end with <em>Mark Twain</em>. This will fail if there is a space before the newline character.</p>
 
-<pre><code>$ grep "Mark Twain"$ twain.txt
-
-$ cat -E twain.txt
-Space at end  Mark Twain $
+<pre><code>$ grep "Mark Twain$" twain.txt
 </code></pre>
 
-<!--## Extended Regular Expressions&#10;&#10;*** p\{2}&#10;&#10;   $ grep -E p\{2} regex_sample&#10;&#10;** &#34;a+t&#34;&#10;&#10;    grep -E &#34;a+t&#34; regex_sample-->
+<p>If there is a space at the end of a line the <strong>-E</strong> option to <code>cat</code> will show that.</p>
 
-
+<pre><code>  $ cat -E twain.txt
+  Space at end of Mark Twain $
+</code></pre>
 
 <h2 id="brace-expansion">Brace Expansion</h2>
 
@@ -248,58 +256,18 @@ $ touch file-{1..5}.txt
 
 <h2 id="logical-or">Logical OR</h2>
 
-<pre><code>$ grep -E '(Mark|Huck)' twain.txt
+<pre><code>$ grep -E '(Mark|mark)' twain.txt
 </code></pre>
 
-
-
-<h2 id="character-classes">Character Classes</h2>
-
-<p>Usage: grep [[:alnum:]]</p>
-
-<p>[:alnum:]|[:alpha:]|[:blank:]|[:cntrl:] <br>
-[:digit:]|[:graph:]|[:lower:]|[:print:] <br>
-[:punct:]|[:space:]|[:upper:]|[:xdigit:]</p>
-
-<p>Modify <em>twain.txt</em> to quote ‘Mark’ “Twain”. (note: both single and double quotes. Try <code>grep -E " twain.txt</code>. Which fails as the shell tries to interpret the quote.</p>
-
-<p>It’s possible to escape the quote.</p>
-
-<pre><code>$ grep -E \" twain.txt
-</code></pre>
-
-<p>or use a character set to capure all the punctuation.</p>
-
-<pre><code>$ grep -E [[:punct:]] twain.txt
-</code></pre>
+<!--## Character Classes&#10;&#10;Usage: grep [[:alnum:]]&#10;&#10;[:alnum:]|[:alpha:]|[:blank:]|[:cntrl:]&#10;[:digit:]|[:graph:]|[:lower:]|[:print:]&#10;[:punct:]|[:space:]|[:upper:]|[:xdigit:]&#10;&#10;Modify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
 
 <!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
 
-
-
-<h2 id="tr">tr</h2>
-
-<p>The <code>tr</code> command can replace non-printing characters.</p>
-
-<p>This example will replace the new line character with a space putting all words on one line. </p>
-
-<pre><code>$ tr '\n' ' ' &lt; regex_sample
-</code></pre>
-
-<p>This example will replace all lower case letters with upper case letters.</p>
-
-<pre><code>$ tr '[:lower:]' '[:upper:]' &lt; regex_sample
-</code></pre>
+<!--## tr&#10;&#10;The `tr` command can replace non-printing characters.&#10;&#10;This example will replace the new line character with a space putting all words on one line. &#10;&#10;    $ tr '\n' ' ' &lt; regex_sample&#10;&#10;This example will replace all lower case letters with upper case letters.&#10;&#10;    $ tr '[:lower:]' '[:upper:]' &lt; regex_sample-->
 
 <!--## Debug the Assignment-->
 
-
-
-<h2 id="xkcd">XKCD</h2>
-
-<p><img src="https://sslimgs.xkcd.com/comics/regular_expressions.png" alt="XFCD Cartoon on regular expressions" title="XFCD Cartoon on regular expressions"></p>
-
-
+<!--## XKCD&#10;&#10;![XFCD Cartoon on regular expressions][xkcd]-->
 
 <h2 id="what-to-submit">What to Submit</h2>
 
