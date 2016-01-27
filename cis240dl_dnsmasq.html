@@ -1,0 +1,102 @@
+<h1 id="create-a-local-dns-caching-server">Create a Local DNS Caching Server</h1>
+
+<p><img src="http://static.ddmcdn.com/gif/dns-rev-1.gif" alt="A DNS query" title=""></p>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p>In this assignment your create a caching DNS nameserver using <strong>dnsmasq</strong>.</p>
+
+<p><em>Note:</em> Ubuntu uses <strong>dnsmasq</strong> by default.  Use a CentOS LiveCD, LiveUSB or virtual machine for this assignment.</p>
+
+<p>After completing this assignment you will be able to:</p>
+
+<ol>
+<li>Define the tern FQDN.</li>
+<li>Describe how DNS works.</li>
+<li>Configure <strong>dnsmasq</strong> for basic operation.</li>
+<li>Use <strong>dnsmasq</strong> to “blacklist” a website.</li>
+</ol>
+
+
+
+<h2 id="install-dnsmasq-on-centos">Install dnsmasq on CentOS</h2>
+
+<p>Check if <strong>dnsmasq</strong> is installed.</p>
+
+<pre>$ rpm -q dnsmasq
+</pre>
+
+<p>If <strong>dnsmasq</strong> isn’t installed on CentOS use this command to install it.</p>
+
+<pre>
+
+
+
+</pre>
+
+# yum install dnsmasq
+
+
+
+
+<h2 id="configuring-dnsmasq">Configuring dnsmasq</h2>
+
+<ol>
+<li>Backup <em>/etc/dnsmasq.conf</em> and <em>/etc/resolv.conf</em> before editing the files.</li>
+<li>Edit <em>/etc/resolv.conf</em> to add <em>127.0.0.1</em> as a nameserver before the other nameserver entries in the file.</li>
+<li>Comment out the default nameservers in <em>/etc/resolv.conf</em> and add lines for the Google’s Public DNS nameservers.</li>
+<li>In <em>dnsmasq.conf</em> uncomment <em>listen-address=</em> and add 127.0.0.1 after the equal sign.</li>
+<li>Save your changes and start <strong>dnsmasq</strong>.  You can ignore the message about not recognizing the host.  <em>Note:</em> If you make changes to the <em>dnsmasq.conf</em> restart <strong>dnsmasq</strong>.</li>
+</ol>
+
+
+
+<h2 id="testing-dnsmasq">Testing dnsmasq</h2>
+
+<ol>
+<li>You can use the <strong>dig</strong> command to test that <strong>dnsmasq</strong> is working.</li>
+<li>Use <strong>dig</strong> to query a website and note how long it took.  Dig also tells you that the DNS server used is localhost.</li>
+<li>Now query the website again and it should take a much shorter time.</li>
+<li>On CentOS <strong>dnsmasq</strong> logs to <em>/var/log/messages</em></li>
+</ol>
+
+
+
+<h2 id="blacklisting-a-website-optional">Blacklisting a website (optional)</h2>
+
+<p>Search <em>dnsmasq.conf</em> for “doubleclick” and replace the name with another site such as slashdot.org.  Try connecting to the site.  The connection should fail.</p>
+
+
+
+<h2 id="troubleshooting-the-assignment">Troubleshooting the Assignment</h2>
+
+<ul>
+<li>Typos?</li>
+<li>Was <strong>dnsmasq</strong> restarted?</li>
+</ul>
+
+
+
+<h2 id="what-to-submit">What to submit</h2>
+
+<p>Copy and paste the last lines from <em>/var/log/messages</em> that show <strong>dnsmasq</strong> reading <em>resolv.conf</em> and using the Google nameservers into the text submission box.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://wiki.debian.org/HowTo/dnsmasq">Debian Wiki</a></li>
+<li><a href="http://www.youtube.com/watch?v=72snZctFFtA">DNS Explained</a></li>
+<li><a href="http://www.vtc.com/products/DNS-tutorials.htm">DNS Tutorial</a></li>
+<li><a href="https://developers.google.com/speed/public-dns/">Google Public DNS</a></li>
+<li><a href="http://www.madboa.com/geek/dig/">dig How-To</a></li>
+<li><a href="http://www.digwebinterface.com">dig Web Interface</a></li>
+<li><a href="http://www.livinginternet.com/i/iw_dns_history.htm">Domain Name System (DNS) History</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
