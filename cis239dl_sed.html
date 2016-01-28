@@ -79,10 +79,20 @@ $ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
 <pre><code>$ sed -n '/^PASS/p' /etc/login.defs
 </code></pre>
 
+
+
+<h3 id="replace-the-default-separator">Replace the Default Separator</h3>
+
+<p>If you need to replace a string that contains the forward slash (<strong>/</strong>) multiple times you can replace the separator with another rather than escaping each instance.</p>
+
+<pre><code>$ sed 's_http://example.com/tux/_http://tux.example.com_' linux.txt
+</code></pre>
+
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="https://en.wikibooks.org/wiki/Sed">Wikibooks: sed</a></li>
+<li><a href="https://www.gnu.org/software/sed/manual/">GNU sed Users’ Manual</a></li>
+<li><a href="http://www.ibm.com/developerworks/library/l-sed1/">Sed by Example</a></li>
 <li><a href="http://www.ibm.com/developerworks/aix/tutorials/au-unixtips3/index.html">Introducing filters and regular expressions</a></li>
 <li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
 </ul>
