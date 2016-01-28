@@ -1,6 +1,83 @@
 <h1 id="sed">SED</h1>
 
+<p><code>sed</code> is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default <code>sed</code> outputs to STDOUT and does not alter the original file.</p>
 
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Create a file to work on.</p>
+
+<pre><code>$ cat &gt; twain.txt
+Mark Twain
+Mr. Mark Twain
+Samuel Clements
+mark twain
+Ctrl+D
+</code></pre>
+
+<h3 id="substitution">Substitution</h3>
+
+<pre><code>$ sed 's/Mark/Mary/' twain.txt
+</code></pre>
+
+<p>The single quotes are necessary to protect the shell from spaces.</p>
+
+<p>If you only want to see the lines changed use the <strong>-n</strong> and <strong>p</strong> options.</p>
+
+<pre><code>sed -n 's/mark twain/Tom Sawyer/p' twain.txt
+</code></pre>
+
+<h3 id="multipe">Multipe</h3>
+
+<pre><code>$ sed 's/Mark/Samuel/ ; s/Mr./Ms./' twain.txt
+</code></pre>
+
+<h3 id="deletion">Deletion</h3>
+
+<pre><code>$ sed 's/Mark/d' twain.txt
+
+$ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
+</code></pre>
+
+<h3 id="sed-scripts">Sed Scripts</h3>
+
+<p>Sed scripts can be placed in a file.</p>
+
+<pre><code>$ cat &gt; sed.txt
+</code></pre>
+
+
+
+<h3 id="edit-in-place">Edit In Place</h3>
+
+<p>Sed can edit the original file wi the <strong>-i</strong> option.</p>
+
+<pre><code>$ sed -i 's/mark twain/Tom Sawyer/' twain.txt
+</code></pre>
+
+<p>And make a backup if a suffix is given.</p>
+
+<pre><code>$ sed -i.bak 's/mark twain/Tom Sawyer/' twain.txt
+</code></pre>
+
+
+
+<h3 id="write-to-a-file">Write to a File</h3>
+
+<p>The <strong>w</strong> instruction writes changes to the named file. The <strong>-n</strong> option suppresses output to the command line.</p>
+
+<pre><code> $ sed -n 's/Mark/Tom/w twain.new' twain.txt
+</code></pre>
+
+
+
+<h3 id="display-pattern">Display Pattern</h3>
+
+<p>Here <code>sed</code> just displays the pattern “PASS” at the start of a line.</p>
+
+<pre><code>$ sed -n '/^PASS/p' /etc/login.defs
+</code></pre>
 
 <h2 id="resources">Resources</h2>
 
