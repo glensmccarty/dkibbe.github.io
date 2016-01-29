@@ -35,23 +35,29 @@ Ctrl+D
 
 <h3 id="deletion">Deletion</h3>
 
-<pre><code>$ sed 's/Mark/d' twain.txt
+<p>The <strong>d</strong> instruction tell <code>sed</code> to delete.</p>
 
-$ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
+<pre><code>$ sed '/Mark/d' twain.txt
+</code></pre>
+
+<p>You can combine substitution and deletion.</p>
+
+<pre><code>$ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
 </code></pre>
 
 <h3 id="sed-scripts">Sed Scripts</h3>
 
-<p>Sed scripts can be placed in a file.</p>
+<p>Sed scripts can be placed in a file. One script per line with no quotes.</p>
 
 <pre><code>$ cat &gt; sed.txt
+s/Mark/Samuel/
+/Mr. /d
+Ctrl+D
 </code></pre>
-
-
 
 <h3 id="edit-in-place">Edit In Place</h3>
 
-<p>Sed can edit the original file wi the <strong>-i</strong> option.</p>
+<p>Sed can edit the original file with the <strong>-i</strong> option.</p>
 
 <pre><code>$ sed -i 's/mark twain/Tom Sawyer/' twain.txt
 </code></pre>
@@ -60,8 +66,6 @@ $ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
 
 <pre><code>$ sed -i.bak 's/mark twain/Tom Sawyer/' twain.txt
 </code></pre>
-
-
 
 <h3 id="write-to-a-file">Write to a File</h3>
 
@@ -84,6 +88,13 @@ $ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
 <h3 id="replace-the-default-separator">Replace the Default Separator</h3>
 
 <p>If you need to replace a string that contains the forward slash (<strong>/</strong>) multiple times you can replace the separator with another rather than escaping each instance.</p>
+
+<p>Instead of:</p>
+
+<pre><code>$ sed 's/http:\/\/example.com\/tux\//http:\/\/tux.example.com/' linux.txt
+</code></pre>
+
+<p>You can substitute another character for the separator.</p>
 
 <pre><code>$ sed 's_http://example.com/tux/_http://tux.example.com_' linux.txt
 </code></pre>
