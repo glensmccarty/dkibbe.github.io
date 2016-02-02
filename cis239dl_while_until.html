@@ -1,0 +1,152 @@
+<h1 id="loops">Loops</h1>
+
+<p>Bash supports three types of loops.</p>
+
+<ul>
+<li>For</li>
+<li>While</li>
+<li>Until</li>
+</ul>
+
+
+
+<h2 id="for-loops">For Loops</h2>
+
+
+
+<h3 id="syntax">Syntax</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> arg <span class="hljs-keyword">in</span> [list]
+<span class="hljs-keyword">do</span>
+action
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example-lists">Example: Lists</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> fruit <span class="hljs-keyword">in</span> apple orange pear
+<span class="hljs-keyword">do</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$fruit</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example-on-one-line">Example: On One Line</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> fruit <span class="hljs-keyword">in</span> apple orange pear; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$fruit</span>; <span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example-command-expansion">Example: Command Expansion</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> file <span class="hljs-keyword">in</span> *
+<span class="hljs-keyword">do</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$file</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h2 id="while-loops">While Loops</h2>
+
+
+
+<h3 id="syntax-1">Syntax</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">while</span> [ condition ]
+statements
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example">Example</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash  </span>
+myvar=<span class="hljs-number">0</span>
+
+<span class="hljs-keyword">while</span> [ <span class="hljs-variable">$myvar</span> <span class="hljs-operator">-ne</span> <span class="hljs-number">10</span> ]
+<span class="hljs-keyword">do</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$myvar</span>
+myvar=$(( <span class="hljs-variable">$myvar</span> + <span class="hljs-number">1</span> ))
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example-2">Example 2</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash
+</span>
+NUM=<span class="hljs-number">0</span>
+MAX=<span class="hljs-number">20</span>
+
+<span class="hljs-keyword">while</span> [ <span class="hljs-string">"<span class="hljs-variable">$NUM</span>"</span> <span class="hljs-operator">-gt</span> <span class="hljs-string">"<span class="hljs-variable">$MAX</span>"</span> ]
+<span class="hljs-keyword">do</span> 
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$NUM</span>
+<span class="hljs-built_in">let</span> <span class="hljs-string">"NUM += 1"</span>
+
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h2 id="until-loops">Until Loops</h2>
+
+
+
+<h3 id="syntax-2">Syntax</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">until [ condition ]
+statements
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="example-1">Example</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash
+</span>
+myvar=<span class="hljs-number">0</span>
+
+until [ <span class="hljs-variable">$myvar</span> <span class="hljs-operator">-eq</span> <span class="hljs-number">10</span> ]
+<span class="hljs-keyword">do</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$myvar</span>
+myvar=$(( <span class="hljs-variable">$myvar</span> + <span class="hljs-number">1</span> ))
+<span class="hljs-keyword">done</span></code></pre>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<ul>
+<li>Create a while loop where MIN and MAX are the same. Explain what happens when you script and how you can stop it.</li>
+<li>Create a case statement for Rock/Paper/Scissors to give a rule for a single entry (Rock/Paper/Scissors).</li>
+</ul>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>man seq (info coreutils ‘seq invocation’)</li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/TestsAndConditionals#Conditional_Loops_.28while.2C_until_and_for.29">Greg’s Bash Guide</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html#Special-Parameters">3.4.2 Special Parameters</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
