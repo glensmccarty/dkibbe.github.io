@@ -19,9 +19,7 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Use the CentOS 7 ova for this assignment.</p>
-
-
+<p>Use the CentOS 7 ova for this assignment. CentOS uses a basic <code>vi</code> text editor by default so you might want to install <code>vim</code> or <code>nano</code>.</p>
 
 <h3 id="set-networking-to-bridged">Set Networking to Bridged</h3>
 
@@ -79,15 +77,13 @@
 
 <h2 id="adding-a-service-to-the-firewall">Adding a Service to the Firewall</h2>
 
-<p>Firewalld should already be running and enabled if not install it with Yum. Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic.</p>
+<p>If Firewalld is not already running and enabled if install it with Yum. Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic. Port 80 is the <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">well-know port</a> for http.</p>
 
 <pre><code># firewall-cmd --add-service http
 # firewall-cmd --list-services
 </code></pre>
 
-<p>Retry the web page in Firefox and you should see the testing 1, 2, 3 page.</p>
-
-
+<p>Refresh the web page in Firefox and you should still see the testing 1, 2, 3 page.</p>
 
 <h3 id="apache-virtual-hosts">Apache Virtual Hosts</h3>
 
@@ -108,9 +104,9 @@
 
 <h4 id="add-the-first-virtual-host">Add the First Virtual Host</h4>
 
-<p>Next you will create the necessary configuration file so Apache knows where to find the correct content to server for each domain. The file will be in <em>/etc/httpd/conf.d</em> and must end in <em>.conf</em></p>
+<p>Next you will create the necessary configuration file so Apache knows where to find the correct content to server for each domain. The file will be in <em>/etc/httpd/conf.d</em> and must end in <em>.conf</em>. You can put both virtual host directives in one file or put each in its own file.</p>
 
-<p>The configuration file will contain standard Apache directives placed between starting and ending tags.  See the <a href="https://httpd.apache.org/docs/2.4/vhosts/">Apache Virtual Hosts Documentation</a> for the correct format.</p>
+<p>The configuration file will contain standard Apache directives placed between starting and ending tags.  See the <a href="https://httpd.apache.org/docs/2.4/vhosts/ip-based.html">Apache Virtual Hosts Documentation</a> for the correct format.</p>
 
 <p>Create the first virtual host using the information in the Apache Virtual Hosts documentation.</p>
 
@@ -124,6 +120,8 @@
 <li>CustomLog</li>
 </ul>
 
+<p>You should add a <strong>Listen 8080</strong> directive in the configuration file but place it <em>outside</em> the <strong>VirtualHost</strong> tags. Do not add a <strong>Listen</strong> directive for port 80 since that directive already exists in the main configuration file.</p>
+
 <p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a <em>ServerName not found</em> warning. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
 
 <p>Finally reload the confiuration file.</p>
@@ -131,21 +129,15 @@
 <pre><code># apachectl graceful
 </code></pre>
 
-
-
 <h4 id="test-the-examplecom-domain">Test the example.com domain</h4>
 
-<p>Open the <em>example.com</em> IP address in Firefox or Chrome and you should see the correct web page.</p>
-
-
+<p>Open the IP address for your <em>example.com</em> in Firefox or Chrome and you should see the correct web page.</p>
 
 <h4 id="add-the-second-virtual-host">Add the Second Virtual Host</h4>
 
-<p>Use the <strong>yy</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created.</p>
+<p>Use the <strong>yy</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created or create a second file..</p>
 
-<p>Test the configuration and reload the config file.</p>
-
-
+<p>Test the configuration and reload the config file with <code>apachectl</code>.</p>
 
 <h4 id="test-staffexamplecom">Test staff.example.com</h4>
 
