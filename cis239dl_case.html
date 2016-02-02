@@ -1,4 +1,3 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="case-statements">Case Statements</h1>
 
 
@@ -20,72 +19,83 @@
 
 <h2 id="syntax">Syntax</h2>
 
+<pre><code>case $VARIABLE in
+match_1)
+commands_to_execute
+;;
+match_2)
+commands_to_execute
+;;
+match_3)
+commands_to_execute
+;;
+*)  No match was found.
+commands_to_execute_for_no_match
+;;
+esac
+</code></pre>
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">    <span class="hljs-keyword">case</span> <span class="hljs-variable">$VARIABLE</span> <span class="hljs-keyword">in</span>
-    match_1)
-    commands_to_execute
-    ;;
-    match_2)
-    commands_to_execute
-    ;;
-    match_3)
-    commands_to_execute
-    ;;
-    *)  No match was found.
-    commands_to_execute_<span class="hljs-keyword">for</span>_no_match
-    ;;
-    <span class="hljs-keyword">esac</span></code></pre>
 
 <h2 id="example-if-then-else">Example if, then, else</h2>
 
-<p>This example reads the value of the <strong>LANG</strong> environmental variable to determine the language.to use. to set a “fake” <strong>LANG</strong> type <code>bash</code> to open a sub-shell then <code>LANG=de</code> for exaple.</p>
+<p>This example reads the value of the <strong>LANG</strong> environmental variable to determine the language to use. To set a “fake” <strong>LANG</strong> open a sub-shell by typing type <code>bash</code> then <code>LANG=de</code> for example.</p>
+
+<pre><code>if [[ $LANG = en* ]]; then
+    echo 'Hello!'
+elif [[ $LANG = fr* ]]; then
+    echo 'Salut!'
+elif [[ $LANG = de* ]]; then
+    echo 'Guten Tag!'
+elif [[ $LANG = nl* ]]; then
+    echo 'Hallo!'
+elif [[ $LANG = it* ]]; then
+    echo 'Ciao!'
+elif [[ $LANG = es* ]]; then
+    echo 'Hola!'
+elif [[ $LANG = @(C|POSIX) ]]; then
+    echo 'hello world'
+else
+    echo 'I do not speak your language.'
+fi
+</code></pre>
 
 
-
-<pre class="prettyprint"><code class="language-bash hljs ">    <span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$LANG</span> = en* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = fr* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Salut!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = de* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Guten Tag!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = nl* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hallo!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = it* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Ciao!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = es* ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hola!'</span>
-    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$LANG</span> = @(C|POSIX) ]]; <span class="hljs-keyword">then</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'hello world'</span>
-    <span class="hljs-keyword">else</span>
-        <span class="hljs-built_in">echo</span> <span class="hljs-string">'I do not speak your language.'</span>
-    <span class="hljs-keyword">fi</span></code></pre>
 
 <h2 id="example-case-statement">Example Case Statement</h2>
 
 <p>Set fake <strong>LANG</strong> first.</p>
 
+<pre><code>case $LANG in
+en*) echo 'Hello!' ;;
+fr*) echo 'Salut!' ;;
+de*) echo 'Guten Tag!' ;;
+nl*) echo 'Hallo!' ;;
+it*) echo 'Ciao!' ;;
+es*) echo 'Hola!' ;;
+*)   echo 'I do not speak your language.' ;;
+esac
+</code></pre>
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">    <span class="hljs-keyword">case</span> <span class="hljs-variable">$LANG</span> <span class="hljs-keyword">in</span>
-    en*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello!'</span> ;;
-    fr*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Salut!'</span> ;;
-    de*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Guten Tag!'</span> ;;
-    nl*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hallo!'</span> ;;
-    it*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Ciao!'</span> ;;
-    es*) <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hola!'</span> ;;
-    *)   <span class="hljs-built_in">echo</span> <span class="hljs-string">'I do not speak your language.'</span> ;;
-    <span class="hljs-keyword">esac</span></code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Create a script containing a case statement that prints to stdout the appropriate statement when rock, paper or scissors is given. <em>Example:</em> If scissors is given then “Rock beats scissors” is the statement printed.</p>
 
 <ul>
-<li>For 5 points extra credit use a wildcard set to accept the first letter upper or lower case (either <strong>Rock</strong> or <strong>rock</strong>).</li>
+<li>For 2 points extra credit use a wildcard set to accept the first letter upper or lower case (either <strong>Rock</strong> or <strong>rock</strong>).</li>
 </ul>
 
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rock-paper-scissors.svg" alt="Rock, paper, scissors" title="">                                                                               </p>
+
+
+<h1 id="resources">Resources</h1>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rock-paper-scissors.svg" alt="Rock, paper, scissors" title="">   </p>
+
+<ul>
+<li><a href="https://bash.cyberciti.biz/guide/The_case_statement">The Case Statement</a></li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
