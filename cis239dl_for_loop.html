@@ -1,5 +1,4 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
-<h1 id="reiteration-using-a-for-loop">Reiteration Using a for loop</h1>
+<h1 id="for-loops">For Loops</h1>
 
 <h2 id="introduction">Introduction</h2>
 
@@ -30,15 +29,17 @@
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ touch FILE{<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>}.txt</code></pre>
 
+
+
 <h2 id="seq-command"><code>seq</code> Command</h2>
 
 <p>You can also create the files using a <code>for</code> loop and the <code>seq</code> command.</p>
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $(seq <span class="hljs-number">1</span> <span class="hljs-number">9</span>); <span class="hljs-keyword">do</span> touch FILE<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>.txt; <span class="hljs-keyword">done</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $(seq <span class="hljs-number">1</span> <span class="hljs-number">99</span>); <span class="hljs-keyword">do</span> touch FILE<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>.txt; <span class="hljs-keyword">done</span></code></pre>
 
-<p>This will create a sequence from 1 to 9. Each instance of the variable <strong>i</strong> is replaced by the output of the <code>seq</code> command.</p>
+<p>This will create a sequence from 1 to 99. Each instance of the variable <strong>i</strong> is replaced by the output of the <code>seq</code> command.</p>
 
 <h2 id="the-tr-command">The <code>tr</code> Command</h2>
 
@@ -65,6 +66,8 @@ file3
 file4
 file5</code></pre>
 
+
+
 <h2 id="for-loop"><code>for</code> Loop</h2>
 
 <p>The syntax for the <code>for</code> loop looks like this:</p>
@@ -80,11 +83,13 @@ file5</code></pre>
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> myvar <span class="hljs-keyword">in</span> <span class="hljs-string"><span class="hljs-variable">file?</span></span>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> myvar <span class="hljs-keyword">in</span> file?
 <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$myvar</span>"</span>
 <span class="hljs-keyword">done</span></code></pre>
 
 <p>Get in the habit now of quoting variables so that they will always expand correctly.</p>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
