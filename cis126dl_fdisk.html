@@ -1,5 +1,64 @@
 <h1 id="partition-a-disk">Partition a Disk</h1>
 
+
+
+<h2 id="introduction">Introduction</h2>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+
+
+<h3 id="add-a-disk">Add a Disk</h3>
+
+
+
+<h2 id="using-fdisk">Using <code>fdisk</code></h2>
+
+<p>Open a terminal  <br>
+Use fdisk to find the new disk <br>
+    $ sudo fdisk -l <br>
+/dev/sdb doesn’t have a partition table yet <br>
+m for menu <br>
+p print partition table <br>
+n for new partition <br>
+use the defaults <br>
+p again to see partition table with default Linux type (83) <br>
+t for new type <br>
+l for list <br>
+c for W95 FAT32 (LBA) <br>
+p to show change <br>
+w to write changes and sychronise the disks</p>
+
+
+
+<h2 id="format-the-disk">Format the disk</h2>
+
+<p>The disk isn’t useable until formated</p>
+
+<p>fdisk -l <br>
+note disk is /dev/sdb1 importtant! <br>
+sudo mkfs Tab Tab to see file tyoes</p>
+
+<p>sudo mkfs.vfat to format as FAT <br>
+sudo mkfs.vfat /dev/sdb1</p>
+
+<p>As soon as formatted mounted under /media/tux/ <br>
+mount command shows it</p>
+
+
+
+<h2 id="create-mount-point">Create mount point</h2>
+
+<p>umount <br>
+mkdir <br>
+mount -o rw /dev/sdb1 /mnt/data</p>
+
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
 </blockquote>
