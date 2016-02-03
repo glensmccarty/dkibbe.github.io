@@ -8,6 +8,8 @@
 <li>Until</li>
 </ul>
 
+
+
 <h2 id="for-loops">For Loops</h2>
 
 
@@ -20,6 +22,8 @@ action
 done
 </code></pre>
 
+
+
 <h3 id="example-lists">Example: Lists</h3>
 
 <pre><code>for fruit in apple orange pear
@@ -28,10 +32,14 @@ echo $fruit
 done
 </code></pre>
 
+
+
 <h3 id="example-on-one-line">Example: On One Line</h3>
 
 <pre><code>    $ for fruit in apple orange pear; do echo $fruit; done
 </code></pre>
+
+
 
 <h3 id="example-command-expansion">Example: Command Expansion</h3>
 
@@ -41,25 +49,25 @@ echo $file
 done
 </code></pre>
 
+
+
 <h2 id="while-loops">While Loops</h2>
 
 
 
 <h3 id="syntax-1">Syntax</h3>
 
-<pre><code>while [ condition ]
+<pre><code>while [[ condition ]]
 statements
 done
 </code></pre>
-
-
 
 <h3 id="example">Example</h3>
 
 <pre><code>#!/bin/bash  
 myvar=0
 
-while [ $myvar -ne 10 ]
+while [[ $myvar -ne 10 ]]
 do
 echo $myvar
 myvar=$(( $myvar + 1 ))
@@ -73,7 +81,7 @@ done
 NUM=0
 MAX=20
 
-while [ "$NUM" -gt "$MAX" ]
+while [[ "$NUM" -lt "$MAX" ]]
 do 
 echo $NUM
 let "NUM += 1"
@@ -87,12 +95,10 @@ done
 
 <h3 id="syntax-2">Syntax</h3>
 
-<pre><code>until [ condition ]
+<pre><code>until [[ condition ]]
 statements
 done
 </code></pre>
-
-
 
 <h3 id="example-1">Example</h3>
 
@@ -100,7 +106,7 @@ done
 
 myvar=0
 
-until [ $myvar -eq 10 ]
+until [[ $myvar -eq 10 ]]
 do
 echo $myvar
 myvar=$(( $myvar + 1 ))
@@ -109,12 +115,7 @@ done
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<ul>
-<li>Create a while loop where MIN and MAX are the same. Explain what happens when you script and how you can stop it.</li>
-<li>Create a case statement for Rock/Paper/Scissors to give a rule for a single entry (Rock/Paper/Scissors).</li>
-</ul>
-
-
+<p>Create a while loop where MIN and MAX are the same. Explain what happens when you run the script and how you can stop it.</p>
 
 <h2 id="resources">Resources</h2>
 
