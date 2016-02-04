@@ -1,0 +1,134 @@
+<h1 id="testing-for-a-condition">Testing for a Condition</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Often you want to test for a condition before taking an action. The <code>test</code> command is used to do that.</p>
+
+
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Use the <code>test</code> command to test for a condition.</li>
+<li>Use combine conditions.</li>
+</ol>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>test</strong></li>
+<li><strong>[ ]</strong> or <strong>[[ ]]:</strong> Either will work but [[ ]] is preferred.</li>
+<li><strong>-e</strong></li>
+<li><strong>-d</strong></li>
+<li><strong>-r</strong></li>
+</ul>
+
+
+
+<h2 id="the-test-command">The Test Command</h2>
+
+<p>The <code>test</code> command is used to test for a condition.</p>
+
+<pre><code>$ test -e Documents/
+</code></pre>
+
+<p>If the condition is true an exit status of zero is returned.</p>
+
+<pre><code>$ ls somefile.txt
+somefile.txt
+$ echo "$?"
+0
+</code></pre>
+
+<p>Any other number means that the test failed.</p>
+
+<p>In a script the <code>test</code> is often written this way.</p>
+
+<pre><code>$ cd
+$ [[ -d Documents/ ]]
+$ echo "$?"
+$ 0
+</code></pre>
+
+
+
+<h2 id="ifthenelse">if/then/else</h2>
+
+<pre><code>$ if [[ -e Documents/ ]]; then echo "Directory exists."; else echo "Directory does not exist.";fi
+</code></pre>
+
+
+
+<h3 id="combining-test-conditions">Combining Test Conditions</h3>
+
+<p>The <strong>&amp;&amp;</strong> is a logical AND. The <strong>||</strong> is a logical OR.</p>
+
+
+
+<h4 id="logical-and">Logical AND</h4>
+
+<pre><code>$ if [[ -e file.txt ]] &amp;&amp; [[ -w file.txt ]]; then echo "File exists and is writable by me."; else echo "File does not exist or is not writable.";fi
+</code></pre>
+
+
+
+<h4 id="logical-or">Logical OR</h4>
+
+<pre><code>$ if [[ -O file.txt ]] || [[ -G file.txt ]]; then echo "File exists and owned by me or my group."; else echo "File does not exist or is not owned by me or my group.";fi
+</code></pre>
+
+
+
+<h4 id="condition-not-met">Condition Not Met</h4>
+
+<p>Reverse a test with a bang <strong>!</strong> character.</p>
+
+<pre><code>$ if ! [[ -e Docs/ ]]; then echo "Directory does not exist."; else echo "Directory does exist.";fi
+</code></pre>
+
+
+
+<h4 id="integer-test">Integer Test</h4>
+
+<p>You can test if a value is true or not.</p>
+
+<pre><code>$ test 10 -gt 1
+$ echo "$?
+$ 0
+</code></pre>
+
+<p>or</p>
+
+<pre><code>$ if [[ 10 -lt 1 ]];then clear;echo "10 is greater than 1.";else clear;echo "Condition is not true.";fi 
+</code></pre>
+
+
+
+<h4 id="string-test">String Test</h4>
+
+<pre><code> $ if
+ [[ $USER = dennisk ]]
+ then echo "Hi $USER"
+ else echo "Do I know you?"
+ fi
+</code></pre>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Write a script that tests whether you can read <code>/etc/passwd</code> and <code>/etc/shadow</code> <br>
+  . Output to <em>stdout</em> the appropriate answer.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://mywiki.wooledge.org/BashGuide/TestsAndConditionals">Greg’s Bash Guide</a></li>
+<li>help test (from the terminal)</li>
+</ul>
