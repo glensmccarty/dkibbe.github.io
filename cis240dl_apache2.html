@@ -4,7 +4,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Installing Apache on Ubuntu is different than the installation on CentOS.  The package name is difference and DocumentRoot is in a different directory.  Configuration files are different as well.  However, there is no need to manually start the service since that is done for you at the time of installation.</p>
+<p>Installing Apache on Ubuntu is different than the installation on CentOS.  The package name is different.  Configuration files are different as well. </p>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -13,9 +13,8 @@
 <li><strong>tasksel:</strong> A user interface for installing tasks such as a LAMP server.</li>
 <li><strong>aptitude:</strong> High-level interface to the package manager <em>dpkg</em>.</li>
 <li><strong>/usr/share/doc/apache2:</strong> Contains sample configuration files and READMEs <em>Note:</em> This directory should be one of the first places to look for additional documentation about a package.</li>
+<li><strong>a2ensite:</strong> Created the symlink in <em>/etc/apache2/sites-enabled</em></li>
 </ul>
-
-
 
 <h2 id="preparation">Preparation</h2>
 
@@ -29,24 +28,27 @@
 
 <p><strong>tasksel</strong> is a Debian tool for installing services that require multiple packages similar to <strong>yum groupinstall.</strong>  When you first install Ubuntu Server it will offer to install a LAMP server.  You can run <strong>tasksel</strong> later to install any services such as a mail server or OpenSSH server.</p>
 
-
+<p>Since we don’t need all the features of a LAMP (Linux, Apache, MySQL, PHP) server for this assignment you will just install Apache2.</p>
 
 <h2 id="installing-apache2">Installing Apache2</h2>
 
 <p>For this assignment you’ll just install the Apache2 web server.  You can use the search option to <em>aptitude</em> to find the Apache2 metapackage.  If Aptitude isn’t installed you can use the same commands with <em>apt-get.</em></p>
 
-<pre>$ sudo apt-get install aptitude
-</pre>
+<pre><code>$ sudo apt-get install aptitude
+</code></pre>
 
-<pre>$ sudo aptitude search apache
+<p>Here we’ll pipe the search through the <code>head</code> command since it’s a very long list.</p>
+
+<pre><code>$ sudo aptitude search apache | head
 p apache2  - Apache HTTP Server metapackage
+</code></pre>
 
-$ sudo aptitude install apache2 elinks
-</pre>
+<p>This command installs both the Apache2 and Elink packages at the same time.</p>
+
+<pre><code>$ sudo aptitude install apache2 elinks
+</code></pre>
 
 <p>Did you notice that Apache was already up and running?  You still need to configure the firewall which is disabled by default.</p>
-
-
 
 <h2 id="the-ufw-firewall-tool">The ufw Firewall Tool</h2>
 
@@ -54,91 +56,99 @@ $ sudo aptitude install apache2 elinks
 
 <p>The firewall is disabled by default.  You should enable it and allow traffic to port 80 for the main site and port 8080 for the virtual host.</p>
 
-<pre>$ sudo ufw status
-Status: inactive
+<p>Current status of the firewall.</p>
 
-$ sudo ufw allow http
+<p>sudo ufw status <br>
+tatus: inactive</p>
+
+<p>Open port 80 for web traffic.</p>
+
+<pre><code>$ sudo ufw allow http
 Rule added
 Rule added (v6)
+</code></pre>
 
-$ sudo ufw allow 8080
+<p>Open port 8080</p>
+
+<pre><code>$ sudo ufw allow 8080
 Rule added
 Rule added (v6)
+</code></pre>
 
-$ sudo ufw status verbose
+<p>New status of the firewall</p>
+
+<pre><code>$ sudo ufw status verbose
 Status: active
 Logging: on (low)
 Default: deny (incoming), allow (outgoing)
 New profile: skip
+</code></pre>
 
-To    Action     From
---    ------     ----
-80    ALLOW IN   Anywhere
-80    ALLOW IN   Anywhere (v6)
-8080    ALLOW IN   Anywhere
-8080    ALLOW IN   Anywhere (v6)
-</pre>
-
+<table>
+<thead>
+<tr>
+  <th>To</th>
+  <th>Action</th>
+  <th>From</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>80</td>
+  <td>ALLOW IN</td>
+  <td>Anywhere</td>
+</tr>
+<tr>
+  <td>80</td>
+  <td>ALLOW IN</td>
+  <td>Anywhere (v6)</td>
+</tr>
+<tr>
+  <td>8080</td>
+  <td>ALLOW IN</td>
+  <td>Anywhere</td>
+</tr>
+<tr>
+  <td>8080</td>
+  <td>ALLOW IN</td>
+  <td>Anywhere (v6)</td>
+</tr>
+</tbody></table>
 
 
 <h2 id="apache-configuration-files">Apache Configuration Files</h2>
 
-<p>On Ubuntu the Apache2 configuration files are in <em>/etc/apache2</em> and are split between several files.</p>
+<p>On Ubuntu the Apache2 configuration files are in <em>/etc/apache2</em> and are split between several files. see <a href="https://help.ubuntu.com/12.04/serverguide/httpd.html#http-configuration">this page</a> for what each file does.</p>
 
-<ul>
-<li><em>apache2.conf:</em> The main configuration file which you won’t edit.</li>
-<li><em>httpd.conf:</em> Which is used to add directives to the main file.</li>
-<li><em>ports.conf:</em> Defines ports that Apache2 will listen to.</li>
-<li><em>sites-available:</em> Virtual hosts configuration files go here.</li>
-<li><em>sites-enabled:</em> Symbolic links to sites in <em>sites-available</em> go here.</li>
-</ul>
+<h2 id="creating-an-ip-based-virtual-hosts">Creating an IP-Based Virtual Hosts</h2>
 
+<p>Since we can’t use domain names in Firefox to identify our virtual host because there are no DNS records for them we will set up IP address-based hosts on ports 80 and  8080.</p>
 
+<p>On Ubuntu virtual hosts are placed in the <em>sites-available</em> directory and then sym-linked to the <em>sites-enabled</em> directory to make them active. Ubuntu (Debian) provides <code>a2ensite</code> to make this easier.</p>
 
-<h2 id="creating-an-ip-based-virtual-host">Creating an IP-Based Virtual Host</h2>
+<p>See the last lines in <em>/etc/apache2/apache2.conf</em> for more information.  Especially the <em>README.Debian</em> file in <em>/usr/share/doc/apache2.</em></p>
 
-<p>Since we can’t use domain names in Firefox to identify our virtual host we’ll set up an IP address-based host on port 8080.</p>
+<p>You can copy the default virtual host file to use as template for the new virtual host. Give the new file the name <em>001-staff.example.conf.</em></p>
 
-<p>On Ubuntu virtual hosts are placed in the <em>sites-available</em> directory and then sym-linked (See the man page for <em>ln</em> if you need a refresher on creating links) to a file in the <em>sites-enabled</em> directory to make them active.  <em>See the last lines in </em>/etc/apache2/apache2.conf* for more information.  Especially the <em>README.Debian</em> file in <em>/usr/share/doc/apache2</em></p>
+<p>The <em>Listen 8080</em> is placed in <em>ports.conf.</em></p>
 
-<p>You can copy the default virtual host file to use as template for the new virtual host.</p>
+<p>The files in <em>/etc/apache2/sites-available</em> need to be linked to <em>/etc/apache2/sites-enabled</em>. The <code>a2ensite</code> command makes that easy.</p>
 
-<p>Files you need to edit are:</p>
-
-<ul>
-<li><em>/etc/apache2/httpd.conf</em> (ServerName, Listen)</li>
-<li><em>/etc/apache2/ports.conf</em> (NameVirtualHosts <em>:8080 and Listen if not in *httpd.conf</em>)</li>
-</ul>
-
-<p>Files you need to create:</p>
-
-<ul>
-<li><em>/etc/apache2/sites-available/example.com</em></li>
-<li><em>/etc/apache2/sites-available/staff.example.com</em> (or modify the default) </li>
-</ul>
-
-<p>The files in <em>/etc/apache2/sites-available</em> need to be linked to <em>/etc/apache2/sites-enabled.</em></p>
-
-<p>As in CentOS you need to create the DocumentRoot directory and create an index.html file.  Create  <em>/var/www/example.com/</em> and place a unique <em>index.html</em> file there.</p>
+<p>As in CentOS you need to create the DocumentRoot directories and create an <em>index.html</em> file in each.  Create  <em>/var/www/example.com/</em> and <em>/var/www/staff.example.com/</em>. Place a unique <em>index.html</em> file there.</p>
 
 <p>Don’t forget to restart Apache.</p>
 
 <pre><code>$ sudo /etc/init.d/apache2 restart
 </code></pre>
 
+<p>or</p>
 
+<pre><code>$ sudo service restart apache2
+</code></pre>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
+<p>or</p>
 
-<ul>
-<li>Is there a link to the virtual host in <em>sites-available*</em> to a file in <em>sites-enabled</em>?</li>
-<li>Did you open port 8080 in the firewall?</li>
-<li>Did you add a directive to listen on port 8080?  This can either be placed in <em>htppd.conf</em> or <em>ports.conf</em> but not both.</li>
-<li>Did you restart Apache2 after making changes?</li>
-<li>Apache on Ubuntu requires a web browser installed. make sure you installed <code>elinks</code>.</li>
-</ul>
-
-
+<pre><code>$ sudo apache2crl restart
+</code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -153,6 +163,7 @@ To    Action     From
 <li><a href="https://help.ubuntu.com/12.04/serverguide/index.html" title="Ubuntu Server Guide">Ubuntu Server Guide</a></li>
 <li><a href="https://help.ubuntu.com/community/UFW" title="UFW - Uncomplicated Firewall">UFW - Uncomplicated Firewall</a></li>
 <li><a href="https://help.ubuntu.com/12.04/serverguide/firewall.html" title="Ubuntu Firewall Guide">Ubuntu Firewall Guide</a></li>
+<li><a href="http://manpages.ubuntu.com/manpages/jaunty/man8/a2ensite.8.html">a2ensite/a2dissite man page</a></li>
 </ul>
 
 <blockquote>
