@@ -1,12 +1,8 @@
-<h1 id="testing-for-a-condition">Testing for a Condition</h1>
-
-
+<h1 id="tests-and-conditionals">Tests and Conditionals</h1>
 
 <h2 id="introduction">Introduction</h2>
 
-<p>Often you want to test for a condition before taking an action. The <code>test</code> command is used to do that.</p>
-
-
+<p>Tests and conditionals let you control the flow of your script.</p>
 
 <h2 id="learning-objectives">Learning Objectives</h2>
 
@@ -16,8 +12,6 @@
 <li>Use the <code>test</code> command to test for a condition.</li>
 <li>Use combine conditions.</li>
 </ol>
-
-
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -29,34 +23,21 @@
 <li><strong>-r</strong></li>
 </ul>
 
-
-
 <h2 id="the-test-command">The Test Command</h2>
 
-<p>The <code>test</code> command is used to test for a condition.</p>
+<p>The <code>test</code> or <code>[[ ]]</code> command is used to test for a condition. If the condition is true an exit status of zero is returned.</p>
 
-<pre><code>$ test -e Documents/
-</code></pre>
-
-<p>If the condition is true an exit status of zero is returned.</p>
-
-<pre><code>$ ls somefile.txt
-somefile.txt
-$ echo "$?"
+<pre><code>$ [[ 1 -lt 2 ]]
+$ echo $?
 0
 </code></pre>
 
-<p>Any other number means that the test failed.</p>
+<p>If the condition is false an exit status of other than zero is returned.</p>
 
-<p>In a script the <code>test</code> is often written this way.</p>
-
-<pre><code>$ cd
-$ [[ -d Documents/ ]]
-$ echo "$?"
-$ 0
+<pre><code>$ [[ 2 -lt 1 ]]
+$ echo $?
+1
 </code></pre>
-
-
 
 <h2 id="ifthenelse">if/then/else</h2>
 
@@ -92,8 +73,6 @@ $ 0
 <pre><code>$ if ! [[ -e Docs/ ]]; then echo "Directory does not exist."; else echo "Directory does exist.";fi
 </code></pre>
 
-
-
 <h4 id="integer-test">Integer Test</h4>
 
 <p>You can test if a value is true or not.</p>
@@ -107,8 +86,6 @@ $ 0
 
 <pre><code>$ if [[ 10 -lt 1 ]];then clear;echo "10 is greater than 1.";else clear;echo "Condition is not true.";fi 
 </code></pre>
-
-
 
 <h4 id="string-test">String Test</h4>
 
@@ -126,9 +103,15 @@ $ 0
 <p>Write a script that tests whether you can read <code>/etc/passwd</code> and <code>/etc/shadow</code> <br>
   . Output to <em>stdout</em> the appropriate answer.</p>
 
+
+
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li><a href="http://mywiki.wooledge.org/BashGuide/TestsAndConditionals">Greg’s Bash Guide</a></li>
 <li>help test (from the terminal)</li>
 </ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
