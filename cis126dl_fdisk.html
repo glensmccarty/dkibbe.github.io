@@ -4,13 +4,11 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment ypu will create a new virtual disk in VirtualBox and then partition, format and mount it for use.</p>
-
-
+<p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment you will create a new virtual disk in VirtualBox and then partition, format and mount it for use.</p>
 
 <h3 id="drive-letters">Drive Letters</h3>
 
-<p>For every day use Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are. for the most part, consistent between distributions. The diagram below shows a single SATA hard drive with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
+<p>For every day use Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are, for the most part, consistent between distributions. The diagram below shows a single SATA hard drive with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-1.png" alt="Linux file system" title=""></p>
 
@@ -35,19 +33,22 @@
 
 <p><em>Note:</em> The virtual machine must not be running to attach a new drive.</p>
 
-<p>Add a new virtual disk to the SATA controller using the defaults except make the disk 1GB in size.</p>
+<p>Open the Storage Settings for the virtual machine and add a new virtual disk to the SATA controller using the defaults except make the disk 1GB in size.</p>
+
+<p>After the drive has been added you should see entries under the SATA controller. Once the drive is added you can boot the virtual machine.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-2.png" alt="VirtualBox Storage dialog box" title=""></p>
 
-<p>Showing new drive added.</p>
+<p><em>Note:</em> To do the <code>fdisk</code>section you will need to add  a second virtual disk or remove the one formated with <strong>Disks</strong> with [Virtual Media Manager] <br>
+(<a href="https://www.virtualbox.org/manual/ch05.html#vdis">https://www.virtualbox.org/manual/ch05.html#vdis</a>) under the File menu.</p>
 
 <h2 id="using-disks">Using Disks</h2>
 
-<p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as format the disk. </p>
+<p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as format the disk. Click the Dash which is the first icon on the launcher and type disk to find disk related utilities.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-3.png" alt="Disks" title=""></p>
 
-<p>Select the correct drive and format it.</p>
+<p>Once <strong>Disks</strong> is open select the correct drive and click the gear symbol below <strong>Volumes</strong> to format it.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-5.png" alt="enter image description here" title=""></p>
 
@@ -103,9 +104,29 @@ mount command shows it</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-mnt.png" alt="mnt mount point" title=""></p>
 
-<p>umount <br>
-mkdir <br>
-mount -o rw /dev/sdb1 /mnt/data</p>
+<p>Our new drive needs to be mounted to be available to use. <em>/dev/mnt</em> is a good place to do that. First you’ll make a directory under <em>/dev/mnt</em> than mount the filesystem.</p>
+
+<pre><code>$ sudo mkdir /mnt/data
+
+$ sudo mount /dev/sdb1 /mnt/data
+</code></pre>
+
+<p>The <code>mount</code> command now shows that <em>/dev/sdb1</em> is mounted on <em>/mnt/data</em> with read/write permissions.</p>
+
+<h2 id="unmounting-the-filesystem">Unmounting the Filesystem</h2>
+
+<p>Unmounting a filesystem removes it from use and makes the data unavailable. The <code>umount</code> command (notice that the <em>n</em> is missing.</p>
+
+<pre><code>$ umount /mnt/data
+</code></pre>
+
+
+
+<h2 id="removable-media">Removable Media</h2>
+
+<p>Removable filesystems such as CDs and Flash drive are mounted automatically by the kernel on <em>/media/<script type="math/tex" id="MathJax-Element-53">USER/device_name* or */run/media/</script>USER/device_name&gt;`. Where $USER is the user login name and *device_name</em> is the label for the device being mounted.</p>
+
+<p><img src="http://dennisk.fastmail.net/gallery/cis126dl_media.png" alt="enter image description here" title=""></p>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
