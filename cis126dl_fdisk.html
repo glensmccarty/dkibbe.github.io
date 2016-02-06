@@ -4,27 +4,78 @@
 
 <h2 id="introduction">Introduction</h2>
 
+<p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment ypu will create a new virtual disk in VirtualBox and then partition, format and mount it for use.</p>
 
+
+
+<h3 id="drive-letters">Drive Letters</h3>
+
+<p>For every day use Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are. for the most part, consistent between distributions. The diagram below shows a single SATA hard drive with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
+
+<p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-1.png" alt="Linux file system" title=""></p>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
-
+<ul>
+<li><strong>Partition</strong></li>
+<li><strong>mount</strong></li>
+<li><strong>umount</strong></li>
+<li><strong>fdisk</strong></li>
+<li><strong>IDE</strong></li>
+<li><strong>SATA</strong></li>
+</ul>
 
 <h2 id="preparation">Preparation</h2>
 
-
+<p>Import the Ubuntu 14.04 LTS appliance (ova) into VirtualBox but do not start the virtual machine.</p>
 
 <h3 id="add-a-disk">Add a Disk</h3>
 
+<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-1.png" alt="VirtualBox Storage settings" title=""></p>
 
+<p><em>Note:</em> The virtual machine must not be running to attach a new drive.</p>
+
+<p>Add a new virtual disk to the SATA controller using the defaults except make the disk 1GB in size.</p>
+
+<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-2.png" alt="VirtualBox Storage dialog box" title=""></p>
+
+<p>Showing new drive added.</p>
+
+<h2 id="using-disks">Using Disks</h2>
+
+<p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as format the disk. </p>
+
+<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-3.png" alt="Disks" title=""></p>
+
+<p>Select the correct drive and format it.</p>
+
+<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-5.png" alt="enter image description here" title=""></p>
 
 <h2 id="using-fdisk">Using <code>fdisk</code></h2>
 
-<p>Open a terminal  <br>
-Use fdisk to find the new disk <br>
-    $ sudo fdisk -l <br>
-/dev/sdb doesn’t have a partition table yet <br>
-m for menu <br>
+<p><code>fdisk</code> is the command line tool for working with disk partition tables. With <code>fdisk</code> you create and remove partitions and change a partition’s type.</p>
+
+<p>From a terminal type <code>sudo fdisk -l</code>. This will list the drives attached to the virtual machine. Notice that <em>/dev/sdb</em> doesn’t have a partition table yet.</p>
+
+<p>Type <strong>q</strong> to quit <code>fdisk</code>.</p>
+
+<p>Use the up arrow on the keyboard to recall the <code>fdisk</code> command and replace the <strong>-l</strong> with <strong>/dev/sdb</strong> so you can create a partition table on the drive.</p>
+
+<p>You can type m in side <code>fdisk</code> to view a menu of options.</p>
+
+<p>To create a new partition type <strong>n</strong> and except the defaults by pressing <strong>Enter</strong>.</p>
+
+<p>Type <strong>p</strong> to “print” the partition table.</p>
+
+<p>Next you will change the partition type from Linux (83) to W95 FAT32 (b).</p>
+
+<p>Type <strong>t</strong> to change the partition type and <strong>l</strong> to show a long list of partition types. Press <strong>b</strong> to select W95 FAT32.</p>
+
+<p>Type <strong>p</strong> again to show that the partition type has been changed to W95 FAT32.</p>
+
+<p>Type <strong>w</strong> to write changes and sychronise the disks followed by <strong>q</strong> to exit <code>fdisk</code></p>
+
+<p>m for menu <br>
 p print partition table <br>
 n for new partition <br>
 use the defaults <br>
@@ -32,10 +83,7 @@ p again to see partition table with default Linux type (83) <br>
 t for new type <br>
 l for list <br>
 c for W95 FAT32 (LBA) <br>
-p to show change <br>
-w to write changes and sychronise the disks</p>
-
-
+p to show change</p>
 
 <h2 id="format-the-disk">Format the disk</h2>
 
@@ -43,17 +91,17 @@ w to write changes and sychronise the disks</p>
 
 <p>fdisk -l <br>
 note disk is /dev/sdb1 importtant! <br>
-sudo mkfs Tab Tab to see file tyoes</p>
+sudo mkfs Tab Tab to see filesystem available</p>
 
 <p>sudo mkfs.vfat to format as FAT <br>
 sudo mkfs.vfat /dev/sdb1</p>
 
-<p>As soon as formatted mounted under /media/tux/ <br>
+<p>As soon as the partition is formatted it is detected by the kernel and mounted under <em>/media/tux/</em> <br>
 mount command shows it</p>
 
+<h2 id="create-the-mount-point">Create the Mount Point</h2>
 
-
-<h2 id="create-mount-point">Create mount point</h2>
+<p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-mnt.png" alt="mnt mount point" title=""></p>
 
 <p>umount <br>
 mkdir <br>
