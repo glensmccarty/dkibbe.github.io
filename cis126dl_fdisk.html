@@ -4,11 +4,11 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment you will create a new virtual disk in VirtualBox and then partition, format and mount it for use.</p>
+<p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment you will create a new virtual disk in VirtualBox and then partition, format and mount it for use. First using a graphical tool and then the command line.</p>
 
 <h3 id="drive-letters">Drive Letters</h3>
 
-<p>For every day use Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are, for the most part, consistent between distributions. The diagram below shows a single SATA hard drive with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
+<p>Unlike Windows Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are, for the most part, consistent between Linux distributions. The diagram below shows a single SATA hard drive (shown in blue) with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-1.png" alt="Linux file system" title=""></p>
 
@@ -21,34 +21,36 @@
 <li><strong>fdisk</strong></li>
 <li><strong>IDE</strong></li>
 <li><strong>SATA</strong></li>
+<li><strong>/etc/fstab</strong></li>
+<li><strong>gdisk</strong></li>
 </ul>
 
 <h2 id="preparation">Preparation</h2>
 
 <p>Import the Ubuntu 14.04 LTS appliance (ova) into VirtualBox but do not start the virtual machine.</p>
 
-<h3 id="add-a-disk">Add a Disk</h3>
+<h3 id="add-a-virtual-disk">Add a Virtual Disk</h3>
 
-<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-1.png" alt="VirtualBox Storage settings" title=""></p>
+<p>Open the Storage Settings for the Ubuntu virtual machine and add a new virtual disk to the SATA controller using the default settings except make the disk 1GB in size.</p>
 
 <p><em>Note:</em> The virtual machine must not be running to attach a new drive.</p>
 
-<p>Open the Storage Settings for the virtual machine and add a new virtual disk to the SATA controller using the defaults except make the disk 1GB in size.</p>
+<p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-1.png" alt="VirtualBox Storage settings" title=""></p>
 
-<p>After the drive has been added you should see entries under the SATA controller. Once the drive is added you can boot the virtual machine.</p>
+<p>After the drive has been added you should see it listed under the SATA controller. Once the drive is added you can boot the virtual machine.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-2.png" alt="VirtualBox Storage dialog box" title=""></p>
 
-<p><em>Note:</em> To do the <code>fdisk</code>section you will need to add  a second virtual disk or remove the one formated with <strong>Disks</strong> with [Virtual Media Manager] <br>
+<p><em>Note:</em> To do the <code>fdisk</code>section you will need to add  a second virtual disk with a new name or remove the one formated with <strong>Disks</strong> with [Virtual Media Manager] <br>
 (<a href="https://www.virtualbox.org/manual/ch05.html#vdis">https://www.virtualbox.org/manual/ch05.html#vdis</a>) under the File menu.</p>
 
 <h2 id="using-disks">Using Disks</h2>
 
-<p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as format the disk. Click the Dash which is the first icon on the launcher and type disk to find disk related utilities.</p>
+<p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as formatting the disk. Click the Dash which is the first icon on the launcher and type <em>disk</em> to find disk related utilities.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-3.png" alt="Disks" title=""></p>
 
-<p>Once <strong>Disks</strong> is open select the correct drive and click the gear symbol below <strong>Volumes</strong> to format it.</p>
+<p>Once <strong>Disks</strong> is open select the correct drive and click the gear symbol below <strong>Volumes</strong> to format it. Choose <strong>FAT</strong> under type and click <strong>Format…</strong> That’s it. The new drive is ready to use.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-5.png" alt="enter image description here" title=""></p>
 
@@ -56,17 +58,31 @@
 
 <p><code>fdisk</code> is the command line tool for working with disk partition tables. With <code>fdisk</code> you create and remove partitions and change a partition’s type.</p>
 
+<p>Click on the Dash and type <em>term</em> to find the GNOME terminal which is the first terminal listed. If you can press <strong>Ctrl+</strong> to increase the font size or <strong>Ctrl-</strong> to reduced the font size. You can also use the menu on the Taskbar at the top of the screen to set different font and background colors.</p>
+
+
+
+<h2 id="listing-attached-disks">Listing Attached Disks</h2>
+
 <p>From a terminal type <code>sudo fdisk -l</code>. This will list the drives attached to the virtual machine. Notice that <em>/dev/sdb</em> doesn’t have a partition table yet.</p>
 
 <p>Type <strong>q</strong> to quit <code>fdisk</code>.</p>
 
-<p>Use the up arrow on the keyboard to recall the <code>fdisk</code> command and replace the <strong>-l</strong> with <strong>/dev/sdb</strong> so you can create a partition table on the drive.</p>
 
-<p>You can type m in side <code>fdisk</code> to view a menu of options.</p>
 
-<p>To create a new partition type <strong>n</strong> and except the defaults by pressing <strong>Enter</strong>.</p>
+<h3 id="create-the-partition-table">Create the Partition Table</h3>
 
-<p>Type <strong>p</strong> to “print” the partition table.</p>
+<p>Use the up arrow on the keyboard to recall the <code>fdisk</code> command and replace the <strong>-l</strong> with <strong>/dev/sdb</strong> so you can create a partition table on the drive. Be sure to use <code>sudo</code> since you need to run the command with root privileges.</p>
+
+<p>You can type <strong>m</strong> in <code>fdisk</code> to view a menu of options.</p>
+
+<p>To create a new partition type <strong>n</strong> and accept the defaults by pressing <strong>Enter</strong> each time.</p>
+
+<p>When done type <strong>p</strong> to “print” the partition table.</p>
+
+
+
+<h3 id="change-the-partition-type">Change the Partition Type</h3>
 
 <p>Next you will change the partition type from Linux (83) to W95 FAT32 (b).</p>
 
@@ -74,37 +90,27 @@
 
 <p>Type <strong>p</strong> again to show that the partition type has been changed to W95 FAT32.</p>
 
-<p>Type <strong>w</strong> to write changes and sychronise the disks followed by <strong>q</strong> to exit <code>fdisk</code></p>
-
-<p>m for menu <br>
-p print partition table <br>
-n for new partition <br>
-use the defaults <br>
-p again to see partition table with default Linux type (83) <br>
-t for new type <br>
-l for list <br>
-c for W95 FAT32 (LBA) <br>
-p to show change</p>
+<p>Type <strong>w</strong> to write changes and sychronise the disks.</p>
 
 <h2 id="format-the-disk">Format the disk</h2>
 
-<p>The disk isn’t useable until formated</p>
+<p>The disk isn’t useable until formated with a filesystem. N ow you will use the <strong>mkfs</strong> command to create a <strong>VFAT</strong> filesystem.</p>
 
-<p>fdisk -l <br>
-note disk is /dev/sdb1 importtant! <br>
-sudo mkfs Tab Tab to see filesystem available</p>
+<p>Type <em>sudo mkfs</em> followed by pressing the Tab key twice to see a list of possible completions. Type <strong>v</strong> then Tab to complete the selection.</p>
 
-<p>sudo mkfs.vfat to format as FAT <br>
-sudo mkfs.vfat /dev/sdb1</p>
+<pre><code>$ sudo mkfs.vfat /dev/sdb1
+</code></pre>
 
-<p>As soon as the partition is formatted it is detected by the kernel and mounted under <em>/media/tux/</em> <br>
-mount command shows it</p>
+<p>As soon as the partition is formatted it is detected by the kernel and mounted temporarily under <em>/media/tux/</em>. Typing <code>mount</code> at the command line will show that <em>/dev/sdb</em> is mounted. The device will show in the <strong>Files</strong> file manager as well.</p>
 
 <h2 id="create-the-mount-point">Create the Mount Point</h2>
 
-<p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-mnt.png" alt="mnt mount point" title=""></p>
+<p>Unmount the device so you can mount it under the <em>/mnt/</em> directory.  (notice that the <em>n</em> is missing.)</p>
 
-<p>Our new drive needs to be mounted to be available to use. <em>/dev/mnt</em> is a good place to do that. First you’ll make a directory under <em>/dev/mnt</em> than mount the filesystem.</p>
+<pre><code>$ umount /dev/sdb1
+</code></pre>
+
+<p>Our new drive needs to be mounted to be available to use. <em>/dev/mnt</em> is a good place to do that. First you’ll make a directory under <em>/dev/mnt</em> than mount the filesystem on that directory.</p>
 
 <pre><code>$ sudo mkdir /mnt/data
 
@@ -113,20 +119,27 @@ $ sudo mount /dev/sdb1 /mnt/data
 
 <p>The <code>mount</code> command now shows that <em>/dev/sdb1</em> is mounted on <em>/mnt/data</em> with read/write permissions.</p>
 
+<p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-mnt.png" alt="mnt mount point" title=""></p>
+
 <h2 id="unmounting-the-filesystem">Unmounting the Filesystem</h2>
 
-<p>Unmounting a filesystem removes it from use and makes the data unavailable. The <code>umount</code> command (notice that the <em>n</em> is missing.</p>
+<p>Unmounting a filesystem removes it from use and makes the data unavailable.</p>
 
 <pre><code>$ umount /mnt/data
 </code></pre>
 
-
-
 <h2 id="removable-media">Removable Media</h2>
 
-<p>Removable filesystems such as CDs and Flash drive are mounted automatically by the kernel on <em>/media/<script type="math/tex" id="MathJax-Element-53">USER/device_name* or */run/media/</script>USER/device_name&gt;`. Where $USER is the user login name and *device_name</em> is the label for the device being mounted.</p>
+<p>Removable filesystems such as CDs and Flash drive are mounted automatically by the kernel on <em>/media/<span>$</span>USER/device_name</em> or <em>/run/media/<span>$</span>USER/device_name</em>. Where $USER is the user login name and <em>device_name</em> is the label for the device being mounted.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_media.png" alt="enter image description here" title=""></p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Type</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Master_boot_record">MBR Boot Record</a></li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
