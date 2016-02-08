@@ -17,9 +17,10 @@
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
 <ul>
-<li>Create a SSL certificate.</li>
+<li>Create a SSL self-signed certificate and private key</li>
 <li>Open a port in the firewall for <code>https</code>.</li>
 <li>Connect to the Apache web server using SSL.</li>
+<li>Create a Virtual Host file for SSL.</li>
 </ul>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
@@ -41,13 +42,13 @@
 
 <ul>
 <li>Import CentOS 7 OVA</li>
+<li>Set Networking to <strong>Bridged</strong></li>
+<li>Refresh the MAC address</li>
 <li>Install Apache</li>
 <li>Install mod_ssl</li>
 <li>Check that openssl is installed</li>
 <li>Start Apache and test that the site is reachable on port 80 (http) and port 443 (https)</li>
 </ul>
-
-<p>Use the same CentOS 7 virtual machine with Apache installed. <em>Note:</em> Some of the commands in this assignment extend over more than one line. A <strong>\</strong> character at the end of line indicates that the command continues on the next line. Type the <strong>\</strong> character and then press Enter to continue the command on the next line or do not type <strong>\</strong> or press Enter and just continue typing the command.</p>
 
 <h2 id="remove-default-cert-and-key">Remove Default Cert and Key</h2>
 
@@ -58,58 +59,49 @@
 <li>Remove the default <strong>localhost.key</strong> file from <code>/etc/pki/tls/private</code></li>
 </ol>
 
-<h2 id="generate-the-private-key">Generate the Private Key</h2>
-
-<p>This OpenSSL command will generate a 2048-bit private key. The actual key name can be anything you like just keep the <em>.key</em> extension. Create the key in root’s home directory. Later you’ll copy the key to <code>/etc/pki/tls/private/</code></p>
-
-<h2 id="generate-the-certificate-signing-request">Generate the Certificate Signing Request</h2>
-
-<p>A <em>Certificate Signing Request</em> is sent to the <em>Certificate Authority</em> when you purchase a SSL certificate. Create the CSR with this command and replace <em>Common Name</em> with your first and last name. <em>Note:</em> This <strong>must</strong> be in the screenshot you submit!</p>
-
-<p>Fill out the appropriate fields in the CSR. If you used a different name to creste the private key ypu must use that name in the command to create the CSR.</p>
-
 <h2 id="generate-self-signed-certificate-and-sign-the-private-key">Generate Self-Signed Certificate and Sign the Private Key</h2>
 
-<p>In public-key infrastructure (PKI) systems, a Certificate Signing Request (CSR) is sent to a Certificate Authority in order to apply for a digital identity certificate. In this assignment you will generate a self-signed certificate using the information in the CSR you created. A signed private key will also be created.</p>
+<p>Create the self-signed cert (.crt) and private key (.key) in root’s home directory with this command.</p>
+
+<pre><code># openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mycert.crt
+</code></pre>
+
+<p><em>Be sure to fill out the required fields!</em> See <strong>What to Submit</strong> below.</p>
 
 <h3 id="copy-the-new-certificate-to-the-pki-directory">Copy the New Certificate to the PKI Directory</h3>
 
-<p>Copy the <code>ca.crt</code> to <code>/etc/pki/tls/certs</code>.</p>
+<p>Copy the cert to <em>/etc/pki/tls/certs/</em>.</p>
 
-<h3 id="change-permissions">Change Permissions</h3>
+<h3 id="copy-the-new-private-key-to-the-pki-directory">Copy the New Private Key to the PKI Directory</h3>
 
-<h2 id="delete-the-csr">Delete the CSR</h2>
-
-<p>Once the CSR has been used to create the certificate it is no longer needed.</p>
-
-<h2 id="install-the-private-key">Install the Private Key</h2>
-
-<p>Copy the private key to <code>/etc/pki/tls/private</code>.</p>
-
-<h3 id="change-permissions-1">Change Permissions</h3>
+<p>Copy the key to <em>/etc/pki/tls/private/</em>.</p>
 
 <h2 id="enable-the-new-certificate">Enable the New Certificate</h2>
 
-<p>The last step is to enable the new certificate in <code>/etc/httpd/conf.d/ssl.conf</code>. There are two directives that must be edited.</p>
+<p>The last step is to enable the new certificate in <code>/etc/httpd/conf.d/ssl.conf</code>. There are several directives that must be edited.</p>
 
-<p>Comment out these lines and add a new entry below each with your key and certificate paths. Make sure the crt and key names match the ones you used.</p>
+<ul>
+<li>DocumentRoot</li>
+<li>ServerName (Keep the default and create a DocumentRoot to match.)</li>
+<li>SSLCertificateFile</li>
+<li>SSLCertificateKeyFile</li>
+</ul>
+
+<p>Comment out these lines and add a new entry below each with your key and certificate paths. Make sure the crt and key names match the ones you used. Oh, and you did make a backup of  <em>ssl.conf</em> in roots home directory, yes?</p>
+
+<p>Use <code>apachectl -S</code> to test the syntax of your virtual host.</p>
 
 <h3 id="reload-the-apache-configuration">Reload the Apache configuration</h3>
 
+<pre><code># apachectl restart
+</code></pre>
+
 <h2 id="open-port-443-in-the-firewall">Open Port 443 in the Firewall</h2>
+
+<p>Add the <em>https</em> service</p>
 
 <pre><code># firewall.cmd --add-service-https
 </code></pre>
-
-<h2 id="add-a-secure-virtual-host-name-based-virtual-hosts">Add a Secure Virtual Host (Name-Based Virtual Hosts)</h2>
-
-<p>There is already a secure VirtualHost stanza in <code>ssl.conf</code> so <a href="https://example.com">https://example.com</a> will work without any additional editing.</p>
-
-<p>You can add a secure virtual host for any other website you have created to <code>/etc/httpd/conf.d/vhosts.conf</code>. Each site can have its own certificate and private key. See <a href="#sec-16">Resources</a> below for a link to the template on my web site. Make sure that directories exist and the port 443 is open in the firewall. Also, use the IP address of your virtual host. The entry will look something like this:</p>
-
-<h3 id="default-443-virtualhost-stanza">Default 443 VirtualHost Stanza</h3>
-
-<p>The <code>ssl.conf</code> file contains a default VirtualHost stanza. You should either place your changes in that file or comment it out.</p>
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
@@ -118,8 +110,9 @@
 <li>Did you copy the files to the correct directories?</li>
 <li>Make sure to remove the old <code>Localhost.crt</code> and <code>localhost.key</code> files.</li>
 <li>Make sure to edit the <code>/etc/httpd/conf.d/ssl.conf</code> file with the correct file names.</li>
-<li>Is port 443 open in the firewall?</li>
-<li>If you get an error when restarting Apache about overlapping VirtualHosts on port 443 do not create a stanza in <code>vhosts.conf</code> with <strong></strong></li></ul>
+<li>In Firefox you can view the certificate details again under the <em>Tools, Page Info</em> menu.</li>
+<li>Do you restart Apache?</li>
+</ul>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -130,7 +123,7 @@
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="http://wiki.centos.org/HowTos/Https">Setting UP a SSL Secured Web server with CentOS</a></li>
+<li><a href="https://httpd.apache.org/docs/current/mod/mod_ssl.html">Apache Module mod_ssl</a></li>
 <li>https Everywhere</li>
 </ul>
 
