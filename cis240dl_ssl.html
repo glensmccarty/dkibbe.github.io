@@ -35,9 +35,19 @@
 <li><strong>Port 443:</strong> Secure https</li>
 </ul>
 
-<h2 id="preparation">Preparation</h2>
+<h2 id="preflight-checklist">Preflight Checklist</h2>
 
-<p>Use the same CentOS virtual machine with Apache installed. <em>Note:</em> Some of the commands in this assignment extend over more than one line. A <strong>** character at the end of line indicates that the command continues on the next line. Type the </strong>** character and then press Enter to continue the command on the next line or do not type <em>**</em> or press Enter and just continue typing the command.</p>
+<p><img src="http://blacksheepwarrior.com/store/wp-content/uploads/2014/05/Remove-Before-Flight-Keychain-Apache.jpg" alt="Remove before flight" title=""></p>
+
+<ul>
+<li>Import CentOS 7 OVA</li>
+<li>Install Apache</li>
+<li>Install mod_ssl</li>
+<li>Check that openssl is installed</li>
+<li>Start Apache and test that the site is reachable on port 80 (http) and port 443 (https)</li>
+</ul>
+
+<p>Use the same CentOS 7 virtual machine with Apache installed. <em>Note:</em> Some of the commands in this assignment extend over more than one line. A <strong>\</strong> character at the end of line indicates that the command continues on the next line. Type the <strong>\</strong> character and then press Enter to continue the command on the next line or do not type <strong>\</strong> or press Enter and just continue typing the command.</p>
 
 <h2 id="remove-default-cert-and-key">Remove Default Cert and Key</h2>
 
