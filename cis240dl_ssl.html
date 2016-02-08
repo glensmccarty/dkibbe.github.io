@@ -1,0 +1,286 @@
+<h1 id="self-signed-ssl-cert">Self-Signed SSL Cert</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p></p><div id="text-1" class="outline-text-2"></div><p></p>
+
+<p><img src="https://www.secure-travel.co.uk/images/ssl_padlock.jpg" alt="https://www.secure-travel.co.uk/images/ssl_padlock.jpg" title=""></p>
+
+<p>SSL is the encryption technology used to protect your confidentiality on the web. It is similar to using SSH keys in that there is a public and private key involved. In addition the public key (in the certificate sent to Firefox) is signed by Certificate Authority (CA) that vouches for the authenticity of the web site. It is somewhat like using a Notary Public to verify your signature.</p>
+
+<p>In this assignment you will create and install a self-signed certificate for the Apache web server.</p>
+
+<p></p><div id="outline-container-2" class="outline-2"></div><p></p>
+
+<h2 id="2-assignment-objectives"><span class="section-number-2">2</span> Assignment Objectives</h2>
+
+<div id="text-2" class="outline-text-2">
+
+_When you have successfully completed this assignment you will be able to:_
+
+*   Create a SSL certificate.
+*   Open a port in the firewall for `https`.
+*   Connect to the Apache web server using SSL.
+
+</div><div id="outline-container-3" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="3-terms-you-should-know"><span class="section-number-2">3</span> Terms You Should Know</h2>
+
+<div id="text-3" class="outline-text-2"><dl><dt>SSL</dt><dd>Secure Socket Layer – The encryption technology that protects sites on the web.</dd><dt>PKI</dt><dd>Public Key Infrastructure</dd><dt>CA</dt><dd>Certificate Authority, a recognized agency that issues SSL certificates such as Verisign.</dd><dt>.key</dt><dd>The extension for the private key</dd><dt>.csr</dt><dd>The extension for the signing request sent to the registrar. (Not used here.)</dd><dt>.crt</dt><dd>The extension for the self-signed key</dd><dt>x509</dt><dd>X.509 is an ITU-T standard for a public key infrastructure (PKI).</dd><dt>Port 443</dt><dd>Secure https</dd></dl></div><div id="outline-container-4" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="4-preparation"><span class="section-number-2">4</span> Preparation</h2>
+
+<div id="text-4" class="outline-text-2">
+
+Use the same CentOS virtual machine with Apache installed. _Note:_ Some of the commands in this assignment extend over more than one line. A **\** character at the end of line indicates that the command continues on the next line. Type the **\** character and then press Enter to continue the command on the next line or do not type **\** or press Enter and just continue typing the command.
+
+</div><div id="outline-container-5" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="5-remove-default-cert-and-key"><span class="section-number-2">5</span> Remove Default Cert and Key</h2>
+
+<div id="text-5" class="outline-text-2">
+
+Apache may not recognize your new certification and key files if the default ones are still in place.
+
+1.  Remove the default **localhost.crt** file from `/etc/pki/tls/certs`
+2.  Remove the default **localhost.key** file from `/etc/pki/tls/private`
+
+</div><div id="outline-container-6" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="6-generate-the-private-key"><span class="section-number-2">6</span> Generate the Private Key</h2>
+
+<div id="text-6" class="outline-text-2">
+
+This OpenSSL command will generate a 2048-bit private key. The actual key name can be anything you like just keep the _.key_ extension. Create the key in root’s home directory. Later you’ll copy the key to `/etc/pki/tls/private/`
+
+</div><div id="outline-container-7" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="7-generate-the-certificate-signing-request"><span class="section-number-2">7</span> Generate the Certificate Signing Request</h2>
+
+<div id="text-7" class="outline-text-2">
+
+A _Certificate Signing Request_ is sent to the _Certificate Authority_ when you purchase a SSL certificate. Create the CSR with this command and replace _Common Name_ with your first and last name. _Note:_ This **must** be in the screenshot you submit!
+
+Fill out the appropriate fields in the CSR. If you used a different name to creste the private key ypu must use that name in the command to create the CSR.
+
+</div><div id="outline-container-8" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="8-generate-self-signed-certificate-and-sign-the-private-key"><span class="section-number-2">8</span> Generate Self-Signed Certificate and Sign the Private Key</h2>
+
+<div id="text-8" class="outline-text-2">
+
+In public-key infrastructure (PKI) systems, a Certificate Signing Request (CSR) is sent to a Certificate Authority in order to apply for a digital identity certificate. In this assignment you will generate a self-signed certificate using the information in the CSR you created. A signed private key will also be created.
+
+</div><div id="outline-container-8-1" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="81-copy-the-new-certificate-to-the-pki-directory"><span class="section-number-3">8.1</span> Copy the New Certificate to the PKI Directory</h3>
+
+<div id="text-8-1" class="outline-text-3">
+
+Copy the `ca.crt` to `/etc/pki/tls/certs`.
+
+</div><div id="outline-container-8-2" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="82-change-permissions"><span class="section-number-3">8.2</span> Change Permissions</h3>
+
+<div id="text-8-2" class="outline-text-3"></div><div id="outline-container-9" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="9-delete-the-csr"><span class="section-number-2">9</span> Delete the CSR</h2>
+
+<div id="text-9" class="outline-text-2">
+
+Once the CSR has been used to create the certificate it is no longer needed.
+
+</div><div id="outline-container-10" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="10-install-the-private-key"><span class="section-number-2">10</span> Install the Private Key</h2>
+
+<div id="text-10" class="outline-text-2">
+
+Copy the private key to `/etc/pki/tls/private`.
+
+</div><div id="outline-container-10-1" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="101-change-permissions"><span class="section-number-3">10.1</span> Change Permissions</h3>
+
+<div id="text-10-1" class="outline-text-3"></div><div id="outline-container-11" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="11-enable-the-new-certificate"><span class="section-number-2">11</span> Enable the New Certificate</h2>
+
+<div id="text-11" class="outline-text-2">
+
+The last step is to enable the new certificate in `/etc/httpd/conf.d/ssl.conf`. There are two directives that must be edited.
+
+Comment out these lines and add a new entry below each with your key and certificate paths. Make sure the crt and key names match the ones you used.
+
+</div><div id="outline-container-11-1" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="111-reload-the-apache-configuration"><span class="section-number-3">11.1</span> Reload the Apache configuration</h3>
+
+<div id="text-11-1" class="outline-text-3"></div><div id="outline-container-12" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="12-open-port-443-in-the-firewall"><span class="section-number-2">12</span> Open Port 443 in the Firewall</h2>
+
+<div id="text-12" class="outline-text-2">
+
+While you can use `system-config-firewall-tui` to manage the firewall adding rules by hand are not hard. You can use one of these commands to list the current rule set.
+
+or
+
+The `iptables-save` command’s output is easier to read and is in the same format used to enter new rules. Also it’s easy to count the rule numbers.
+
+This command will insert a rule as the given rule number. _Remember rules are read from the top down so watch where you put this rule._
+
+</div><div id="outline-container-13" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="13-add-a-secure-virtual-host-name-based-virtual-hosts"><span class="section-number-2">13</span> Add a Secure Virtual Host (Name-Based Virtual Hosts)</h2>
+
+<div id="text-13" class="outline-text-2">
+
+There is already a secure VirtualHost stanza in `ssl.conf` so [https://example.com](https://example.com) will work without any additional editing.
+
+You can add a secure virtual host for any other website you have created to `/etc/httpd/conf.d/vhosts.conf`. Each site can have its own certificate and private key. See [Resources](#sec-16) below for a link to the template on my web site. Make sure that directories exist and the port 443 is open in the firewall. Also, use the IP address of your virtual host. The entry will look something like this:
+
+</div><div id="outline-container-13-1" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="131-default-443-virtualhost-stanza"><span class="section-number-3">13.1</span> Default 443 VirtualHost Stanza</h3>
+
+<div id="text-13-1" class="outline-text-3">
+
+The `ssl.conf` file contains a default VirtualHost stanza. You should either place your changes in that file or comment it out.
+
+</div><div id="outline-container-14" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="14-troubleshoot-the-assignment"><span class="section-number-2">14</span> Troubleshoot the Assignment</h2>
+
+<div id="text-14" class="outline-text-2">*   Make sure your name appears in the certificate screenshot.
+*   Did you copy the files to the correct directories?
+*   Make sure to remove the old `Localhost.crt` and `localhost.key` files.
+*   Make sure to edit the `/etc/httpd/conf.d/ssl.conf` file with the correct file names.
+*   Is port 443 open in the firewall?
+*   If you get an error when restarting Apache about overlapping VirtualHosts on port 443 do not create a stanza in `vhosts.conf` with **</div>
+
+<h2 id="15-what-to-submit"><span class="section-number-2">15</span> What to Submit</h2>
+
+<div id="text-15" class="outline-text-2">
+
+Submit a screenshot of the certificate details from the warming dialog in Firefox. Make sure that your first and last name show in the **Common Name** field.
+
+![https://wm.sdf.org/gallery/albums/userpics/10081/ssl_cert~0.png](https://wm.sdf.org/gallery/albums/userpics/10081/ssl_cert~0.png)
+
+</div><div id="outline-container-16" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="16-resources"><span class="section-number-2">16</span> Resources</h2>
+
+<div id="text-16" class="outline-text-2">*   [Setting UP a SSL Secured Web server with CentOS](http://wiki.centos.org/HowTos/Https)
+*   https Everywhere
+
+</div>
