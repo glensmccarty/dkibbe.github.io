@@ -1,4 +1,4 @@
-<h1 id="partition-a-disk">Partition a Disk</h1>
+<h1 id="partitioning-a-disk">Partitioning a Disk</h1>
 
 
 
@@ -6,11 +6,15 @@
 
 <p>Before a new hard disk can be used it must be partitioned and formatted. In this assignment you will create a new virtual disk in VirtualBox and then partition, format and mount it for use. First using a graphical tool and then the command line.</p>
 
+
+
 <h3 id="drive-letters">Drive Letters</h3>
 
 <p>Unlike Windows Linux hides the drive letters of storage devices. Hard drives and removable drives are always mounted under directories that are, for the most part, consistent between Linux distributions. The diagram below shows a single SATA hard drive (shown in blue) with two partitions mounted under the device or <em>/dev</em> directory.  The device name is <em>/dev/sda</em> and the partitions are <em>/dev/sda1</em> and <em>/dev/sda2</em>.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-1.png" alt="Linux file system" title=""></p>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -25,9 +29,13 @@
 <li><strong>gdisk</strong></li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
 <p>Import the Ubuntu 14.04 LTS appliance (ova) into VirtualBox but do not start the virtual machine.</p>
+
+
 
 <h3 id="add-a-virtual-disk">Add a Virtual Disk</h3>
 
@@ -44,6 +52,8 @@
 <p><em>Note:</em> To do the <code>fdisk</code>section you will need to add  a second virtual disk with a new name or remove the one formated with <strong>Disks</strong> with [Virtual Media Manager] <br>
 (<a href="https://www.virtualbox.org/manual/ch05.html#vdis">https://www.virtualbox.org/manual/ch05.html#vdis</a>) under the File menu.</p>
 
+
+
 <h2 id="using-disks">Using Disks</h2>
 
 <p><strong>Disks</strong> is the graphical program for adding and removing partitions on disks, as well as formatting the disk. Click the Dash which is the first icon on the launcher and type <em>disk</em> to find disk related utilities.</p>
@@ -53,6 +63,8 @@
 <p>Once <strong>Disks</strong> is open select the correct drive and click the gear symbol below <strong>Volumes</strong> to format it. Choose <strong>FAT</strong> under type and click <strong>Format…</strong> That’s it. The new drive is ready to use.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/vbox_fdisk-5.png" alt="enter image description here" title=""></p>
+
+
 
 <h2 id="using-fdisk">Using <code>fdisk</code></h2>
 
@@ -92,6 +104,8 @@
 
 <p>Type <strong>w</strong> to write changes and sychronise the disks.</p>
 
+
+
 <h2 id="format-the-disk">Format the disk</h2>
 
 <p>The disk isn’t useable until formated with a filesystem. N ow you will use the <strong>mkfs</strong> command to create a <strong>VFAT</strong> filesystem.</p>
@@ -102,6 +116,8 @@
 </code></pre>
 
 <p>As soon as the partition is formatted it is detected by the kernel and mounted temporarily under <em>/media/tux/</em>. Typing <code>mount</code> at the command line will show that <em>/dev/sdb</em> is mounted. The device will show in the <strong>Files</strong> file manager as well.</p>
+
+
 
 <h2 id="create-the-mount-point">Create the Mount Point</h2>
 
@@ -121,6 +137,8 @@ $ sudo mount /dev/sdb1 /mnt/data
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_fsh-mnt.png" alt="mnt mount point" title=""></p>
 
+
+
 <h2 id="unmounting-the-filesystem">Unmounting the Filesystem</h2>
 
 <p>Unmounting a filesystem removes it from use and makes the data unavailable.</p>
@@ -128,11 +146,15 @@ $ sudo mount /dev/sdb1 /mnt/data
 <pre><code>$ umount /mnt/data
 </code></pre>
 
+
+
 <h2 id="removable-media">Removable Media</h2>
 
 <p>Removable filesystems such as CDs and Flash drive are mounted automatically by the kernel on <em>/media/<span>$</span>USER/device_name</em> or <em>/run/media/<span>$</span>USER/device_name</em>. Where $USER is the user login name and <em>device_name</em> is the label for the device being mounted.</p>
 
 <p><img src="http://dennisk.fastmail.net/gallery/cis126dl_media.png" alt="enter image description here" title=""></p>
+
+
 
 <h2 id="resources">Resources</h2>
 
