@@ -98,13 +98,11 @@ $ files="$(ls *.txt)"; cp $files backup/
 Bob Carol Ted Alice
 </code></pre>
 
-<p>Or a single element by its position in the array.</p>
+<p>Or a single element by its position in the array. Note that the first element is <strong>0</strong>.</p>
 
 <pre><code>$ echo "${names[0]}"
 Bob
 </code></pre>
-
-
 
 <h4 id="adding-to-an-array">Adding to an Array</h4>
 
@@ -139,25 +137,21 @@ Alice
 Big Bopper
 </code></pre>
 
-<p>Since index 4 was not assigned it is not printed.</p>
-
-
+<p>Since index <strong>4</strong> was not assigned it is not printed.</p>
 
 <h4 id="find-the-length-of-an-element">Find the Length of an Element</h4>
 
-<p>The length of element 0 (Bob):</p>
+<p>The length of element <strong>0</strong> (Bob):</p>
 
 <pre><code>$ echo "${#names[0]}"
 3
 </code></pre>
 
-<p>The length of element 5 (Big Bopper):</p>
+<p>The length of element <strong>5</strong> (Big Bopper):</p>
 
 <pre><code>$ echo "${#names[5]}"
 10
 </code></pre>
-
-
 
 <h2 id="unset-an-array-or-array-element">Unset an Array or Array Element</h2>
 
@@ -181,7 +175,7 @@ $ for i in ${names[*]}; do echo $i; done
 <h2 id="word-splitting">Word Splitting</h2>
 
 <blockquote>
-  <p>“Use more quotes!” Protect your strings and parameter expansions from [WordSplitting][ws]. Word splitting will eat your babies if you don’t quote things properly. – Bash Guide</p>
+  <p>“Use more quotes!” Protect your strings and parameter expansions from <a href="http://mywiki.wooledge.org/WordSplitting">WordSplitting</a>. Word splitting will eat your babies if you don’t quote things properly. – Bash Guide</p>
 </blockquote>
 
 <p>Let’s demo that using a small script.</p>
@@ -203,12 +197,10 @@ echo
 <p>This time without the quotes.</p>
 
 <pre><code>$ ./args.sh hello world how are you?
-3 args: &lt;hello&gt; &lt;world&gt; &lt;how&gt; &lt;are&gt; &lt;you?&gt;
+5 args: &lt;hello&gt; &lt;world&gt; &lt;how&gt; &lt;are&gt; &lt;you?&gt;
 </code></pre>
 
 <p>The expansion is very different.</p>
-
-
 
 <h3 id="word-splitting-examples-with-an-arrays">Word Splitting Examples with an Arrays</h3>
 
@@ -219,14 +211,12 @@ $ ./args.sh ${array[@]}
 5 args: &lt;testing,&gt; &lt;testing,&gt; &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
 
-<p>Quoted Properly</p>
+<p>Array quoted properly.</p>
 
 <pre><code>$ array=(testing, testing, "1 2 3")
 $ ./args.sh "${array[@]}"
 3 args: &lt;testing,&gt; &lt;testing,&gt; &lt;1 2 3&gt;
 </code></pre>
-
-
 
 <h2 id="associative-array">Associative Array</h2>
 
@@ -241,15 +231,15 @@ $ echo "${FullNames[MT]}"
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a simple script that takes two positional parameters. The first parameter is the initials of a player on the 1939 New York Yankees and the second is the index of an array containing first base, second base, third base and home plate. The script simple echoes to <strong>stdout</strong> ” <em>player</em> is on <em>base</em>.” Use an associative array named <em>player</em> to print the full name of the player and a regular array named <em>bases</em> to print which base the player is on. Make sure everything is properly quoted.</p>
+<p>Create a simple script that takes two positional parameters. The first parameter is the initials of a player on the 1939 New York Yankees and the second is the index of an array containing <em>home plate</em>, <em>first base</em>, <em>second base</em>, and <em>third base</em>. </p>
+
+<p>The script simply echoes to <strong>stdout</strong> ” <em>player</em> is on <em>base</em>.” Use an associative array named <em>player</em> to print the full name of the player and a regular array named <em>bases</em> to print which base the player is on. Make sure everything is properly quoted.</p>
 
 <p>Submit your script at <a href="https://paste.fedoraproject.org/">Fedora Pastebin</a>.</p>
 
 <p><img src="http://classfiles.dennisk.fastmail.net/fedora_pastebin-1.png" alt="Fedora Pastebin" title=""></p>
 
 <p><img src="http://classfiles.dennisk.fastmail.net/fedora_pastebin-2.png" alt="Fedora Pastebin" title=""></p>
-
-
 
 <h2 id="resources">Resources</h2>
 
