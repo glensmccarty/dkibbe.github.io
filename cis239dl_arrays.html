@@ -1,5 +1,5 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="arrays">Arrays</h1>
+
 
 
 <h2 id="learning-objectives">Learning Objectives</h2>
@@ -20,10 +20,9 @@
 
 <p>Make a new directory to work in.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ mkdir -p ~/temp/backup
-$ <span class="hljs-built_in">cd</span> temp</code></pre>
+<pre><code>$ mkdir -p ~/temp/backup
+$ cd temp
+</code></pre>
 
 
 
@@ -33,16 +32,14 @@ $ <span class="hljs-built_in">cd</span> temp</code></pre>
 
 <p>Try this:</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {<span class="hljs-number">1</span>..<span class="hljs-number">9</span>}; <span class="hljs-keyword">do</span> touch file<span class="hljs-string">"<span class="hljs-variable">${i}</span>"</span>.txt; <span class="hljs-keyword">done</span>
-$ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span>"</span>; cp <span class="hljs-variable">$files</span> backup/</code></pre>
+<pre><code>$ for i in {1..9}; do touch file"${i}".txt; done
+$ files="$(ls *.txt)"; cp $files backup/
+</code></pre>
 
 <p>The backup fails because *.txt isn’t expanded correctly.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ files=(*.txt); cp <span class="hljs-string">"<span class="hljs-variable">${files[@]}</span>"</span> backup/</code></pre>
+<pre><code>$ files=(*.txt); cp "${files[@]}" backup/
+</code></pre>
 
 
 
@@ -66,17 +63,13 @@ $ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span
 
 <p>The term string refers to a sequence of characters which is treated as a single unit. The following command contains two strings, the command itself and an option. While not practical you could say that the entire command is a string.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ ls <span class="hljs-operator">-l</span></code></pre>
+<pre><code>$ ls -l
+</code></pre>
 
 <p>Strings are limited to holding one element Take this alias for example.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ alias lls=<span class="hljs-string">'ls -l'</span></code></pre>
-
-
+<pre><code>$ alias lls='ls -l'
+</code></pre>
 
 <h2 id="functions">Functions</h2>
 
@@ -94,66 +87,53 @@ $ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span
 
 <p>Arrays can be created several ways. Here is the easiest. It creates an array <em>names</em> with 4 elements.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ names=(Bob Carol Ted Alice)</code></pre>
-
-
+<pre><code>$ names=(Bob Carol Ted Alice)
+</code></pre>
 
 <h3 id="whats-in-the-array">What’s in the Array?</h3>
 
 <p>You can display all the elements of an array this way.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${names[@]}</span>"</span>
-Bob Carol Ted Alice</code></pre>
+<pre><code>$ echo "${names[@]}"
+Bob Carol Ted Alice
+</code></pre>
 
 <p>Or a single element by its position in the array.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${names[0]}</span>"</span>
-Bob</code></pre>
-
-
+<pre><code>$ echo "${names[0]}"
+Bob
+</code></pre>
 
 <h4 id="adding-to-an-array">Adding to an Array</h4>
 
 <p>Fist let’s see what positions are already taken in the array.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${!names[@]}</span>"</span>
-<span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span></code></pre>
+<pre><code>$ echo "${!names[@]}"
+0 1 2 3
+</code></pre>
 
 <p>Elements are assigned an index number starting with zero.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ names[<span class="hljs-number">5</span>]=<span class="hljs-string">"Big Bopper"</span>
-Big Bopper</code></pre>
+<pre><code>$ names[5]="Big Bopper"
+Big Bopper
+</code></pre>
 
 <p>It’s OK to skip index numbers as we did here.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${!names[@]}</span>"</span>
-<span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">5</span>
-Bob Carol Ted Alice Big Bopper</code></pre>
-
-
+<pre><code>$ echo "${!names[@]}"
+0 1 2 3 5
+Bob Carol Ted Alice Big Bopper
+</code></pre>
 
 <h4 id="using-an-array-in-a-for-loop">Using an Array in a for Loop</h4>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${names[@]}</span>"</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>; <span class="hljs-keyword">done</span>
+<pre><code>for i in "${names[@]}"; do echo $i; done
 Bob
 Carol
 Ted
 Alice
-Big Bopper</code></pre>
+Big Bopper
+</code></pre>
 
 <p>Since index 4 was not assigned it is not printed.</p>
 
@@ -163,17 +143,15 @@ Big Bopper</code></pre>
 
 <p>The length of element 0 (Bob):</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${#names[0]}</span>"</span>
-<span class="hljs-number">3</span></code></pre>
+<pre><code>$ echo "${#names[0]}"
+3
+</code></pre>
 
 <p>The length of element 5 (Big Bopper):</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${#names[5]}</span>"</span>
-<span class="hljs-number">10</span></code></pre>
+<pre><code>$ echo "${#names[5]}"
+10
+</code></pre>
 
 
 
@@ -181,46 +159,48 @@ Big Bopper</code></pre>
 
 <p>You can remove an element from the array with  the<code>unset</code> command.</p>
 
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">unset</span> names[<span class="hljs-number">5</span>]
+<pre><code>$ unset names[5]
 
-$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-variable">${names[*]}</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>; <span class="hljs-keyword">done</span>
+$ for i in ${names[*]}; do echo $i; done
 bob
 carol
 ted
 alice
 
-$ <span class="hljs-built_in">unset</span> names <span class="hljs-comment"># or unset names[@]</span>
-$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-variable">${names[*]}</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>; <span class="hljs-keyword">done</span>
-(No output)</code></pre>
+$ unset names # or unset names[@]
+$ for i in ${names[*]}; do echo $i; done
+(No output)
+</code></pre>
+
+
 
 <h2 id="word-splitting">Word Splitting</h2>
 
 <blockquote>
-  <p>“Use more quotes!” Protect your strings and parameter expansions from <a href="http://mywiki.wooledge.org/WordSplitting" title="How Bash splits words.">WordSplitting</a>. Word splitting will eat your babies if you don’t quote things properly. – Bash Guide</p>
+  <p>“Use more quotes!” Protect your strings and parameter expansions from [WordSplitting][ws]. Word splitting will eat your babies if you don’t quote things properly. – Bash Guide</p>
 </blockquote>
 
 <p>Let’s demo that using a small script.</p>
 
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/sh</span>
-<span class="hljs-comment"># args.sh</span>
-<span class="hljs-comment"># Purpose: count the number of arguments given to the script.</span>
-<span class="hljs-built_in">printf</span> <span class="hljs-string">"%d args:"</span> <span class="hljs-variable">$#</span>
-<span class="hljs-built_in">printf</span> <span class="hljs-string">" &lt;%s&gt;"</span> <span class="hljs-string">"<span class="hljs-variable">$@</span>"</span>
-<span class="hljs-built_in">echo</span></code></pre>
+<pre><code>#!/bin/sh
+# args.sh
+# Purpose: count the number of arguments given to the script.
+printf "%d args:" $#
+printf " &lt;%s&gt;" "$@"
+echo
+</code></pre>
 
 <p>Make the script executable and run it with this example.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ ./args.sh hello world <span class="hljs-string">"how are you?"</span>
-<span class="hljs-number">3</span> args: &lt;hello&gt; &lt;world&gt; &lt;how are you?&gt;</code></pre>
+<pre><code>$ ./args.sh hello world "how are you?"
+3 args: &lt;hello&gt; &lt;world&gt; &lt;how are you?&gt;
+</code></pre>
 
 <p>This time without the quotes.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ ./args.sh hello world how are you?
-<span class="hljs-number">3</span> args: &lt;hello&gt; &lt;world&gt; &lt;how&gt; &lt;are&gt; &lt;you?&gt;</code></pre>
+<pre><code>$ ./args.sh hello world how are you?
+3 args: &lt;hello&gt; &lt;world&gt; &lt;how&gt; &lt;are&gt; &lt;you?&gt;
+</code></pre>
 
 <p>The expansion is very different.</p>
 
@@ -230,19 +210,17 @@ $ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <
 
 <p>Array not quoted.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ array=(testing, testing, <span class="hljs-string">"1 2 3"</span>)
-$ ./args.sh <span class="hljs-variable">${array[@]}</span>
-<span class="hljs-number">5</span> args: &lt;testing,&gt; &lt;testing,&gt; &lt;<span class="hljs-number">1</span>&gt; &lt;<span class="hljs-number">2</span>&gt; &lt;<span class="hljs-number">3</span>&gt;</code></pre>
+<pre><code>$ array=(testing, testing, "1 2 3")
+$ ./args.sh ${array[@]}
+5 args: &lt;testing,&gt; &lt;testing,&gt; &lt;1&gt; &lt;2&gt; &lt;3&gt;
+</code></pre>
 
 <p>Quoted Properly</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ array=(testing, testing, <span class="hljs-string">"1 2 3"</span>)
-$ ./args.sh <span class="hljs-string">"<span class="hljs-variable">${array[@]}</span>"</span>
-<span class="hljs-number">3</span> args: &lt;testing,&gt; &lt;testing,&gt; &lt;<span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>&gt;</code></pre>
+<pre><code>$ array=(testing, testing, "1 2 3")
+$ ./args.sh "${array[@]}"
+3 args: &lt;testing,&gt; &lt;testing,&gt; &lt;1 2 3&gt;
+</code></pre>
 
 
 
@@ -250,11 +228,10 @@ $ ./args.sh <span class="hljs-string">"<span class="hljs-variable">${array[@]}</
 
 <p>Associative Arrays are friendlier to work with since you replace the index with something more meaningful.</p>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">declare</span> -A FullNames
-$ FullNames=( [<span class="hljs-string">"MT"</span>]=<span class="hljs-string">"Mark Twain"</span> [<span class="hljs-string">"TS"</span>]=<span class="hljs-string">"Tom Sawyer"</span> [<span class="hljs-string">"HF"</span>]=<span class="hljs-string">"Huckleberry Finn"</span> )
-$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${FullNames[MT]}</span>"</span></code></pre>
+<pre><code>$ declare -A FullNames
+$ FullNames=( ["MT"]="Mark Twain" ["TS"]="Tom Sawyer" ["HF"]="Huckleberry Finn" )
+$ echo "${FullNames[MT]}"
+</code></pre>
 
 
 
@@ -267,19 +244,10 @@ $ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="http://mywiki.wooledge.org/WordSplitting" title="How Bash splits words.">Bash word splitting</a></li>
-<li><a href="http://mywiki.wooledge.org/BashGuide/Arrays" title="Arrays">Arrays</a></li>
-<li><a href="http://youtube.com/watch?v=kTcRRaXV-fg" title="Who's on First?">Who’s on First - Abbott &amp; Costello</a></li>
+<li><a href="http://mywiki.wooledge.org/WordSplitting">Bash word splitting</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/Arrays">Arrays</a></li>
+<li><a href="http://youtube.com/watch?v=kTcRRaXV-fg%5d">Who’s on First - Abbott &amp; Costello</a></li>
 </ul>
-
-<!-- Links&#10;This is [an example](http://example.com/ &#34;Title&#34;) inline link.&#10;This is [an example][id] reference-style link.&#10;![alt text](/path/img.jpg &#34;Title&#34;)&#10;![alt text][id]&#10;-->
-
-
-
-<h2 id="creative-commons-license">Creative Commons License</h2>
-
-<p><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" alt="Creative Commons License" title=""></a> <br>
-This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
