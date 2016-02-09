@@ -32,16 +32,14 @@ $ cd temp
 
 <p>Try this:</p>
 
-<pre><code>$ for i in {1..9}; do touch file"${i}".txt; done
+<pre><code>$ for i in {1..9}; do touch file\ -\ "${i}".txt; done
 $ files="$(ls *.txt)"; cp $files backup/
 </code></pre>
 
-<p>The backup fails because *.txt isn’t expanded correctly.</p>
+<p>The backup fails because <em>*.txt</em> isn’t expanded correctly due to the spaces in the file names.. Using an array solves the problem. This command create an array named <em>files</em> which contains all the <em>.txt</em> files in the directory</p>
 
 <pre><code>$ files=(*.txt); cp "${files[@]}" backup/
 </code></pre>
-
-
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -66,7 +64,7 @@ $ files="$(ls *.txt)"; cp $files backup/
 <pre><code>$ ls -l
 </code></pre>
 
-<p>Strings are limited to holding one element Take this alias for example.</p>
+<p>Strings are limited to holding one element Take this alias for example. <code>ls -l</code> is treated as a single unit.</p>
 
 <pre><code>$ alias lls='ls -l'
 </code></pre>
@@ -90,6 +88,8 @@ $ files="$(ls *.txt)"; cp $files backup/
 <pre><code>$ names=(Bob Carol Ted Alice)
 </code></pre>
 
+
+
 <h3 id="whats-in-the-array">What’s in the Array?</h3>
 
 <p>You can display all the elements of an array this way.</p>
@@ -103,6 +103,8 @@ Bob Carol Ted Alice
 <pre><code>$ echo "${names[0]}"
 Bob
 </code></pre>
+
+
 
 <h4 id="adding-to-an-array">Adding to an Array</h4>
 
@@ -124,6 +126,8 @@ Big Bopper
 0 1 2 3 5
 Bob Carol Ted Alice Big Bopper
 </code></pre>
+
+
 
 <h4 id="using-an-array-in-a-for-loop">Using an Array in a for Loop</h4>
 
@@ -244,6 +248,8 @@ $ echo "${FullNames[MT]}"
 <p><img src="http://classfiles.dennisk.fastmail.net/fedora_pastebin-1.png" alt="Fedora Pastebin" title=""></p>
 
 <p><img src="http://classfiles.dennisk.fastmail.net/fedora_pastebin-2.png" alt="Fedora Pastebin" title=""></p>
+
+
 
 <h2 id="resources">Resources</h2>
 
