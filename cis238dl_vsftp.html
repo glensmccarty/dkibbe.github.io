@@ -1,5 +1,7 @@
 <h1 id="vsftp-the-very-secure-ftp-server">vsFTP - The Very Secure FTP Server</h1>
 
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>FTP or File Transfer Protocol is one of the oldest protocols used on the Net. Before there was Dropbox or Google Drive files were shared using the File Transfer Protocol</p>
@@ -23,6 +25,8 @@
 
 <p>You should also watch Thomas Cameron’s <a href="https://www.youtube.com/watch?v=MxjenQ31b70">SELinux For Mere Mortals</a>.</p>
 
+
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <ul>
@@ -40,11 +44,15 @@
 <li><strong>SELinux</strong> - Security Enhanced Linux</li>
 </ul>
 
+
+
 <h2 id="how-ftp-works">How FTP works</h2>
 
 
 
 <h3 id="active-vs-passive-mode">Active vs. Passive mode</h3>
+
+
 
 <h4 id="active-mode">Active Mode</h4>
 
@@ -63,6 +71,21 @@
 
 
 
+<h2 id="using-ftp">Using FTP</h2>
+
+<p>Open a terminal and type <code>ftp</code> to start an FTP session.</p>
+
+<pre><code>$ ftp&gt; open ftp.freebsd.org
+Connected to ftp.geo.freebsd.org.
+220 This is ftp0.nyi.freebsd.org - hosted at NYI.net.
+</code></pre>
+
+<p>You will be asked to login as <em>anonymous</em>. (No not that anonymous) There is no password but as a courtesy you could enter your email address.</p>
+
+<p>Once logged in you can type <code>help</code> for a list of commands. Many shell commands like <code>ls</code> and <code>cd</code> work as you expect.</p>
+
+<p>Change to the <em>pub</em> directory then the <em>FreeBSD</em> directory. Use <em>get</em> to fetch the <em>README.TXT</em> file to your local current directory. Type <em>exit</em> to close the connection.</p>
+
 <h2 id="install-the-very-secure-ftp-server-and-ftp-client">Install the Very Secure FTP server and FTP client</h2>
 
 <p>vsFTPd is in the CentOS official repository and can be installed using <code>yum</code>. The FTP client is not installed by default and can be installed at the same time as the server.</p>
@@ -77,11 +100,13 @@
 
 <p>The service must be started before it can be used.  CentOS 7 uses <em>systemd</em> so the commands are different that CentOS 6.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl start vsftpd.service</span></code></pre>
 
 <p>You can check if the server is running with this command.</p>
 
-<pre class="prettyprint"><code class=" hljs avrasm">systemctl status vsftpd<span class="hljs-preprocessor">.service</span></code></pre>
+<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl status vsftpd.service</span></code></pre>
 
 <p>To make sure the service starts on reboot.</p>
 
@@ -92,6 +117,8 @@
 <h2 id="configure-the-firewall">Configure the Firewall</h2>
 
 <p>For this assignment you will not make a change to the firewall. Unlike CentOS 6 CentOS does not have an active firewall by default. The <code>iptables</code> command will show that no firewall rules are set.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># iptables -L</span></code></pre>
 
@@ -109,6 +136,8 @@
 
 <p>Create a new FTP banner warning users that all activity on the server is logged. If your banner has more than a single line you can point to a file containing the banner with this directive.</p>
 
+
+
 <h2 id="adding-a-file-to-the-ftp-directory">Adding a File to the FTP Directory</h2>
 
 <p>Change to `/var/ftp’ and create a new file.</p>
@@ -118,16 +147,15 @@
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># cd /var/ftp</span>
 <span class="hljs-preprocessor"># touch hello.txt</span></code></pre>
 
-
-
 <h2 id="use-ftp-to-access-the-file">Use FTP to access the file</h2>
 
 <p>Open a new virtual terminal by pressing the <em>host</em> key (right Ctrl plus F2)  and log in as user Tux. </p>
 
 <p>Start the FTP client and open a connection to <em>localhost</em>.</p>
 
-<pre class="prettyprint"><code class=" hljs livecodeserver">$ <span class="hljs-keyword">ftp</span>
-<span class="hljs-keyword">ftp</span>&gt; <span class="hljs-built_in">open</span> localhost</code></pre>
+<pre><code>$ ftp
+ftp&gt; open localhost
+</code></pre>
 
 <p>Login as user <em>anonymous</em> with no password. You can than type <code>help</code> to get a list of commands. Refer to the FTP beginner’s guide under <em>Resources</em> below.</p>
 
@@ -156,6 +184,8 @@
 <li>The login should fail.</li>
 </ol>
 
+
+
 <h2 id="root-login">Root login</h2>
 
 <p>The <code>ftpusers</code> file lists accounts that are not permitted to use FTP.  The root user is included in this list.</p>
@@ -170,6 +200,8 @@
 <h2 id="disable-ftp-for-a-user">Disable FTP for a User</h2>
 
 <p>Even if local users are allowed to use FTP you can blacklist a user by adding them to <code>ftpusers</code> or <code>userlist</code>. See the comments in these files to see which takes priority.</p>
+
+
 
 <h2 id="selinux">SELinux</h2>
 
@@ -200,6 +232,8 @@ anaconda-ks.cfg
 
 <p>All three files have the same security context - <em>admin_home_t</em>.</p>
 
+
+
 <h3 id="copy-and-move-the-files">Copy and Move the files</h3>
 
 <p>Use the <code>cp</code> command to <em>copy</em> <code>anaconda-ks.cfg.copy to</code>/var/ftp/pub`</p>
@@ -229,12 +263,18 @@ anaconda-ks.cfg
 <p>SELinux has stepped in to block vsFTP from serving the file because the security context is wrong. Use the following command to show that  <br>
 <code>anaconda-ks.cfg.move</code> has the wrong security context.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs bash"><span class="hljs-comment"># cd /var/ftp/pub</span>
 ls <span class="hljs-operator">-l</span>Z</code></pre>
+
+
 
 <h3 id="restoring-the-correct-security-context">Restoring the correct security context</h3>
 
 <p>Use <code>restorecon</code> restores the correct security context to all files based on the security context of the directory they are in.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -ldZ /var/ftp/pub</span></code></pre>
 
@@ -252,9 +292,13 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 <p>Run <code>getenforce</code> to show that SELinux is in <em>enforcing</em> mode. Next put SELinux in <em>permissive</em> mode.</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># setenforce 0</span></code></pre>
 
 <p>Refresh the listing and <code>anaconda-ks.cfg.move</code> now shows up.</p>
+
+
 
 <h2 id="correcting-a-mis-configured-file">Correcting a Mis-configured File</h2>
 
@@ -274,9 +318,13 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 <p>Another tool <code>chcon</code> can be used to manually configure the security contexts of a file.  You can use the <strong>–reference=</strong> option to copy the security contexts from another file.</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of <code>ls -lZ /var/ftp/pub/*</code> showing that each file has the correct security context.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
