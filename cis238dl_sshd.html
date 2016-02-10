@@ -90,10 +90,14 @@
 <pre><code># firewall-cmd --add-port=2222/tcp
 </code></pre>
 
+
+
 <h4 id="disable-port-22">Disable Port 22</h4>
 
 <pre><code># firewall-cmd --remove-service=ssh
 </code></pre>
+
+
 
 <h3 id="protocol">Protocol</h3>
 
@@ -111,20 +115,6 @@
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
 
-
-
-<h2 id="what-to-submit">What to Submit</h2>
-
-<p>Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.</p>
-
-<ol>
-<li>Using <code>nmap</code> what ports did you find open on CentOS-minimal?</li>
-<li>What services use these ports?</li>
-<li>Change <strong>PasswordAuthentication</strong> to <em>no</em> and commit the changes then use <code>ssh localhost</code> to try to login. (You’ll be using SSH from the CentOS-minimal terminal.) What error message do you get?</li>
-</ol>
-
-
-
 <h2 id="adding-an-ssh-banner">Adding an SSH Banner</h2>
 
 <p>Adding a welcome banner that warns that all activity on the server is a good idea. Creating a banner text file and adding a line to the <em>sshd_config</em> file is all that is needed.</p>
@@ -138,6 +128,16 @@
 <p>Now reload the configuration file for the change to take effect.</p>
 
 
+
+<h2 id="what-to-submit-1">What to Submit</h2>
+
+<p>Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.</p>
+
+<ol>
+<li>Using <code>nmap</code> what ports did you find open on CentOS-minimal?</li>
+<li>What services use these ports?</li>
+<li>Change <strong>PasswordAuthentication</strong> to <em>no</em> and commit the changes then use <code>ssh localhost</code> to try to login. (You’ll be using SSH from the CentOS-minimal terminal.) What error message do you get?</li>
+</ol>
 
 <h2 id="resources">Resources</h2>
 
