@@ -1,0 +1,366 @@
+<p><img src="http://openssh.com/images/openssh.gif" alt="OpenSSH" title=""></p>
+
+
+
+<h2 id="using-ssh-for-remote-connections">Using SSH for remote connections</h2>
+
+<p>The suite of tools that make up the OpenSSH package replace <code>telnet</code>, <code>ftp</code> and rtools for connecting over insecure networks.</p>
+
+<p>In this assignment you’ll use <code>ssh</code>, <code>scp</code> and <code>sftp</code> to connect to another workstation and transfer files. </p>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>On later versions of CentOS and Ubuntu OpenSSH server is installed and running so you may not need to install the service.</p>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ul>
+<li>Install and configure the OpenSSH Server.</li>
+<li>Use a command line tool to open the appropriate port in the firewall.</li>
+<li>Use Secure Shell to log onto a remote computer.</li>
+<li>Create a public/private key pair with the appropriate security permissions.</li>
+<li>Transfer the public key to the remote host using <code>scp</code>.</li>
+<li>Use Secure FTP to transfer files.</li>
+<li>Explain the difference between symmetric and public key encryption.</li>
+<li>Configure SSH-Agent to cache the SSH key passphrase.</li>
+<li>Create a SSH configuration file for personal settings.</li>
+</ul>
+
+
+
+<h2 id="terms-and-concepts">Terms and Concepts</h2>
+
+<ul>
+<li><strong>ssh:</strong> Secure Shell</li>
+<li><strong>scp:</strong> Secure Copy</li>
+<li><strong>sftp:</strong> Secure FTP</li>
+<li><strong>ssh-copy-id:</strong> A utility to copy your public key to a remote host.</li>
+<li><strong>ssh-keygen:</strong> Utility to generate a public/private key pair.</li>
+<li><strong>ssh-agent:</strong> A caching utility for keys so you only need to enter the passphrase once.</li>
+<li><strong>openssh-server:</strong> The SSH server daemon</li>
+<li><strong>authorized_keys:</strong> Contains the public keys used to connect to this host.</li>
+<li><strong>known_hosts:</strong> Once a connection is established with ssh the fingerprint is stored here.</li>
+<li><strong>fingerprint:</strong> A public key fingerprint is a short sequence of bytes used to authenticate or look up a longer public key.</li>
+<li><strong>/etc/ssh/ssh.config:</strong> The system-wide configuration file for the ssh client</li>
+<li><strong>/etc/ssh/sshd_config:</strong> Configuration file for the ssh server</li>
+<li><strong>~/.ssh:</strong> Personal private keys, configuration settings and a known hosts file is kept in this hidden configuration directory.</li>
+<li><strong>~/.ssh/config:</strong> Personal configurations go in this file.</li>
+<li><strong>Public key encryption:</strong> A separate public key and private key are used. Messages are encrypted using the public key and decrypted using the private key.</li>
+<li><strong>Symmetric key encryption:</strong> A single key is used to encrypt and decrypt a file.</li>
+<li><strong>/etc/services:</strong> Lists common services and their default ports.</li>
+<li><strong>PGP:</strong> Phil Zimmermann’s Pretty Good Privacy public key encryption</li>
+<li><strong>GPG:</strong> GNU Privacy Guard, an open implementation of PGP</li>
+<li><strong>Passphrase:</strong> A passphrase is stronger that a password since it can contain multiple words separated by spaces.</li>
+<li><strong>Host:</strong> A host is just another name for a computer on a network.</li>
+</ul>
+
+
+
+<h2 id="preparation-1">Preparation</h2>
+
+<p>In this assignment you will be working with two computer – the workstation you are sitting at and a virtual machine that will be the SSH server. To make it clear what commands are run on each I’ll use this prompt for the workstation:</p>
+
+<pre><code>    tux@instr $
+</code></pre>
+
+<p>And this prompt for the virtual machine:</p>
+
+<pre><code>    jstudent@vm1 $
+</code></pre>
+
+<p>or if root access is required on the virtual machine:</p>
+
+<pre><code>    root@vm1 #
+</code></pre>
+
+
+
+<h3 id="bridging-the-network">Bridging the Network</h3>
+
+<p>Both hosts need top be on the same network and have different IP addresses. Before starting the CentOS minimum virtual machine set networking in VirtualBox to bridging:</p>
+
+<p><img src="https://s3.amazonaws.com/CIS126DL/Images/vbox_bridged.png" alt="Network bridge settings in VirtualBox" title="Network bridge setting in VirtualBox"></p>
+
+
+
+<h3 id="check-that-the-host-is-reachable">Check that the Host is Reachable</h3>
+
+<p>Make note of the IP address of the virtual machine. You’ll use the IP address to connect to the virtual machine.</p>
+
+<pre><code>    jstudent@vm1 $ ip addr show
+</code></pre>
+
+<p>Check that you can reach the virtual machine on the network. The virtual machine must have an IP address on the 192.168.201.0 network. For example:</p>
+
+<pre><code>    tux@instr $ ping 192.168.201.106 -c4
+</code></pre>
+
+
+
+<h3 id="create-an-account-on-the-host">Create an Account on the Host</h3>
+
+<p>To complete this lab you’ll need to work with another student.</p>
+
+<p>Set up accounts on each virtual machine so that you can each log in remotely. Use a login name appropriate for the student logging in. Login names should be short, lower case and not contain spaces. Be sure to assign a password to the accounts.</p>
+
+<pre><code>    root@vm1 # adduser -m -c "Jack Student" jstudent # -m is the default on CentOS
+    root@vm1 # passwd jstudent
+</code></pre>
+
+
+
+<h3 id="openssh-server">OpenSSH Server</h3>
+
+<p>Both the OpenSSH client and server should already be installed but the server may need to be started. The service command is used to start and stop services. The <code>chkconfig</code> command configures services to start on boot.</p>
+
+<p>The OpenSSH client is installed on most Linux systems but you may need to install the server to complete this assignment.</p>
+
+
+
+<h3 id="is-the-service-installed">Is the Service Installed?</h3>
+
+<pre><code># systemctl status sshd
+</code></pre>
+
+<p>The SSH server listens on port 22. You can use <code>netstat</code> from the virtual machine to confirm that the SSH server is listening on port 22.</p>
+
+<pre><code># netstat -luntp
+</code></pre>
+
+<p>Use the <code>service</code> command to see check the status of the service. If the <strong>openssh-server</strong> is installed it may just need to be started.</p>
+
+<pre><code># service sshd status
+</code></pre>
+
+
+
+<h4 id="install-openssh-server-if-needed">Install OpenSSH Server (if needed)</h4>
+
+<p>On CentOS</p>
+
+<pre><code># yum install sshd
+</code></pre>
+
+<p>On Ubuntu</p>
+
+<pre><code>$ sudo apt-get install openssh-server
+</code></pre>
+
+<p>The configuration file for the ssh server (sshd) is:</p>
+
+<pre><code>/etc/ssh/sshd_config
+</code></pre>
+
+<p>Start the server using the <code>service</code> command:</p>
+
+<pre><code>    # service sshd start
+</code></pre>
+
+<p>You can check that sshd is running with:</p>
+
+<pre><code># service sshd status
+</code></pre>
+
+
+
+<h3 id="firewall">Firewall</h3>
+
+<p>Starting the SSH server is not enough you also need to open port 22 in the firewall. The easiest way to do this is with a firewall configuration tool. If <code>system-config-firewall-tui</code> is not install you can install it with <code>yum</code>.</p>
+
+<p>Check that the firewall allows traffic over <strong>port 22</strong> on the remote or bring down the firewall for this assignment:</p>
+
+<pre><code># iptables-save
+</code></pre>
+
+<p>If not install and use <code>system-config-firewall-tui</code> to open port 22.</p>
+
+<p><img src="https://s3.amazonaws.com/CIS126DL/Images/firewall-tui_trusted.png" alt="system-config-firewall-tui" title="system-config-firewall-tui"></p>
+
+<p>This command line tool makes it easy to configure the firewall. Select <em>customize</em> and use the Tab or arrow keys to move between options and the space bar to select and deselect an option.</p>
+
+
+
+<h2 id="use-ssh-to-login">Use SSH to Login</h2>
+
+<p>Once the SSH server is started and port 22 is open in the firewall you can log into the remote host from a shell on your local machine using the login name and password on the remote host. To log into the remote computer use this command and substitute your user name and the IP address of the virtual machine you wish to log into.</p>
+
+<p>Use <code>ssh</code> to login:</p>
+
+<pre><code>$ ssh user@remote
+</code></pre>
+
+<p>You can omit the user name if it’s the same as the local user.</p>
+
+<pre><code>$ ssh remote
+</code></pre>
+
+<p>The first time you connect you will be presented with the fingerprint of the server to confirm you are connecting to the correct host. After giving the password for the remote account you will be logged into the remote machine. To close the connection type <code>exit</code> and you will be returned to your own virtual machine.</p>
+
+
+
+<h2 id="secure-ftp">Secure FTP</h2>
+
+<p>The secure FTP command is used to transfer files to and from the remote host.</p>
+
+<p>Create a file on your workstation to practice with.</p>
+
+<pre><code>S touch example.txt
+</code></pre>
+
+<p>Now connect using secure FTP.</p>
+
+<pre><code>$ sftp -i .ssh/id_rsa jstudent@192.168.201.106
+</code></pre>
+
+<p>You are now at a Secure FTP prompt and can use commands to list files, get files from and put files on the remote host. Type <strong>help</strong> for a list of commands.</p>
+
+<p>The <strong>put</strong> command will upload example.txt on your local machine to the remote host.</p>
+
+<pre><code>sftp&gt; put example.txt
+Uploading example.txt to 192.168.201.106/home/jstudent/example.txt
+example.txt                                   100%    0     0.0KB/s   00:00
+sftp&gt; ls
+example.txt 
+</code></pre>
+
+<p>Use the <strong>bye</strong> command to close the connection.</p>
+
+<pre><code>sftp&gt; bye
+tux@instr $
+</code></pre>
+
+
+
+<h2 id="secure-copy">Secure Copy</h2>
+
+<p>Secure Copy can be used to copy a single file to the remote host.</p>
+
+<pre><code>$ scp exaample.txt jstudent@192.168.201.106:
+</code></pre>
+
+<p>Notice the colon at the end of the command. Without the colon <code>scp</code> just creates a new file named <code>jstudent@192.168.201.106</code> in the current directory. If you want the file to have a different name on the remote system place the new name after the colon.</p>
+
+
+
+<h2 id="using-ssh-with-public-key-authorization">Using SSH with Public Key Authorization</h2>
+
+<p>Public key authorization is more secure that using a password and more convenient. To use public key authorization you create a key pair on your local machine and then upload the <em>public key</em> to the remote host. The <em>private key</em> stays on the local machine and is protected by a passphrase.</p>
+
+<p>First generate a public/private key pair on the localhost. The password protects the private key from unauthorized use. Later in this assignment you will configure ssh-agent so you do not have to enter the password each time. The ssh-keygen command suggests a default key pair name but you can use a more descriptive name if you like. Be sure to enter the complete path to your .ssh directory.</p>
+
+<p>You should not create the keys as root!</p>
+
+<pre><code>    tux@vm1 $ ssh-keygen
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/home/jstudent/.ssh/id_rsa):
+    Enter passphrase (empty for no passphrase): 
+    Enter same passphrase again: 
+    Your identification has been saved in /home/jstudent/.ssh/id_rsa.
+    Your public key has been saved in /home/jstudent/.ssh/id_rsa.pub.
+    The key fingerprint is:
+    51:75:0f:56:08:7f:78:d4:dd:87:0d:de:1e:d4:f9:dd
+    The key's randomart image is:
+    +--[ RSA 2048]----+
+    |        E        |
+    |         +       |
+    |  . o   o o      |
+    |   = o o +       |
+    |    o + S o      |
+    |     . o O o     |
+    |        + =..    |
+    |         ....    |
+    |         .o...   |
+    +-----------------+
+    [jstudent@d630 ~]$
+</code></pre>
+
+<p>The randomart image serves the same purpose as the artwork you may have selected when you set up online access to your bank account. It helps assure you are connected to the correct host.</p>
+
+
+
+<h2 id="placing-the-public-key-on-the-remote-host">Placing the Public Key on the Remote Host</h2>
+
+<p>Before you can use the keys the public key must be appended to <em>~.ssh/authorized_keys</em> on the remote host. You will use <code>ssh-copy-id</code> to copy the <em>public key</em> to the remote host.</p>
+
+
+
+<h2 id="ssh-copy-id">ssh-copy-id</h2>
+
+<p>The <code>ssh-copy-id</code> command makes the task of uploading the public key easy.</p>
+
+<pre><code>    tux@instr $ ssh-copy-id -i .ssh/id_rsa.pub jstudent@192.168.201.106
+</code></pre>
+
+
+
+<h2 id="connecting-using-publicprivate-keys">Connecting Using Public/Private Keys</h2>
+
+<p>Now that you have the public key added to <em>authorized_keys</em> on the virtual machine you can connect using the private key.</p>
+
+<pre><code>    tux@instr $ ssh -i .ssh/id_rsa jstudent@192.168.201.106
+</code></pre>
+
+<p>If you used a passphrase to protect the private you will need to enter it. If not after a short wait you should see the shell prompt on the virtual machine.</p>
+
+
+
+<h2 id="ssh-agent-and-key-chain">SSH Agent and Key Chain</h2>
+
+<p>The <code>ssh-agent</code> command caches the private key passphrase so you only need to enter it once per session. Refer to this <a href="http://www.ibm.com/developerworks/library/l-keyc/index.html" title="Setting up SSH Agent">IBM developerworks</a> tutorial on setting up SSH-Agent and key chain.</p>
+
+
+
+<h2 id="the-ssh-client-configuration">The SSH Client Configuration</h2>
+
+<p>The global SSH client file is <em>/etc/ssh/ssh_config</em> and each user can have a local configuration file named <em>config</em> in that user’s `~/.ssh* directory. The customizations make it easy to log in to multiple hosts. Here is an example from my <em>config</em>:</p>
+
+<pre><code>    Host ironman
+        HostName 72.208.176.109
+        Port 4444
+        User profx
+        PubkeyAuthentication yes
+        IdentityFile ~/.ssh/srv.rsa
+</code></pre>
+
+<p>With this entry you just need to type <code>ssh ironman</code> to connect to the host.</p>
+
+
+
+<h2 id="troubleshot-the-assignment">Troubleshot the Assignment</h2>
+
+<ul>
+<li>Make sure you are logged into the correct computer before you run a command.</li>
+<li>For a successful SSH connection several things are needed.</li>
+<li>The virtual machine must have a IP address on the same network as the workstation.</li>
+<li>There must be an opening on the firewall of the virtual machine for port 22.</li>
+<li>The SSH daemon must be running on the virtual machine.</li>
+<li>The correct permissions on the different files are important. If after creating the public/private keys you are still asked for a password to log in or Secure Shell refuses to connect that a either the private key or <em>authorized_keys</em> has the wrong permissions.</li>
+</ul>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of the ~/.ssh/config file you created to automate login to the virtual machine. For full credit include the two lines that shoe public key encription is being used to login.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ol>
+<li>man 5 sshd_config</li>
+<li>man ssh_config</li>
+<li><a href="http://linux.die.net/man/5/ssh_config" title="ssh_config(5) - Linux man page">ssh_config(5) - Linux man page</a></li>
+<li><a href="http://linux.die.net/man/5/sshd_config" title="sshd_config(5) - Linux man page">sshd_config(5) - Linux man page</a></li>
+<li><a href="http://openssh.com">OpenSSH.com</a></li>
+</ol>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
