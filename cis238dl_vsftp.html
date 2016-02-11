@@ -166,15 +166,14 @@ You should see <span class="hljs-operator">the</span> service enable <span class
 
 <p>Open a new virtual terminal by pressing the <em>host</em> key (right Ctrl plus F2)  and log in as user Tux. </p>
 
-<p>Start the FTP client and open a connection to <em>localhost</em>.</p>
+<p>Start the FTP client and try to open a connection to <em>localhost</em> as root</p>
 
-<pre><code>$ ftp
-ftp&gt; open localhost
-</code></pre>
+<pre class="prettyprint"><code class=" hljs livecodeserver">    <span class="hljs-comment"># ftp</span>
+    <span class="hljs-keyword">ftp</span>&gt; <span class="hljs-built_in">open</span> localhost</code></pre>
+
+<p>You’ll see that root logins are denied by default.</p>
 
 <p>Login as user <em>anonymous</em> with no password. You can than type <code>help</code> to get a list of commands. Refer to the FTP beginner’s guide under <em>Resources</em> below.</p>
-
-
 
 <h2 id="setting-a-different-root-directory-for-anonymous-logins">Setting a Different Root Directory For anonymous Logins</h2>
 
