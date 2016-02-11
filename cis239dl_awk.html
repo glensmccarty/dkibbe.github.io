@@ -58,9 +58,11 @@
 
 <p>AWk programs start with <code>awk</code> followed by <em>options</em>, followed by a <em>pattern</em>, followed by one or more <em>actions</em> in curly brackets. Note that the action is surrounded by single quotes to prevent the shell from receiving special characters. An AWK program must have at least a pattern <em>or</em> an action and may have both.</p>
 
-<p>AWK works with <em>records</em> and <em>fields</em> in text files.</p>
+<p>AWK works with <em>records</em> and <em>fields</em> in text files. By default <code>awk</code> treats spaces and tabs as separators. If fields are separated by a different character <code>awk</code> can handle that to.</p>
 
 <p>Both these examples will print the file twain.txt:</p>
+
+
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print}'</span> twain.txt</code></pre>
 
@@ -200,18 +202,17 @@ $ awk /Finn/<span class="hljs-string">'{print $0} /berry/{print $0}'</span> twai
 
 <h3 id="change-field-separator-f">Change Field Separator (-F)</h3>
 
-<p>Copy <em>twain.txt</em> to <em>twain-tabs.txt</em> and replace the spaces between fields with tabs. Use <code>cat</code> to display the tabs as <strong>^I</strong>. Your output should look something like this:</p>
+<p>Copy <em>twain.txt</em> to <em>twain-commas.txt</em> and replace the spaces between fields with commas. </p>
 
-<pre class="prettyprint"><code class="language-bash hljs ">$ cat -T twain-tabs.txt
-Huckleberry^I<span class="hljs-string">"Huck"</span>^IFinn
-
+<pre class="prettyprint"><code class=" hljs livecodeserver">$ awk <span class="hljs-string">'{print $2}'</span> twain-commas.txt
 
 
 
-&lt;div class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/div&gt;
+
+&lt;<span class="hljs-operator">div</span> class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-operator">div</span>&gt;
 </code></pre>
 
-<p>The AWK program will fail (but Gawk will succeed) because AWK is assuming space separators:</p>
+<p>The AWK program will fail because AWK is assuming space separators:</p>
 
 <pre class="prettyprint"><code class="language-awk hljs livecodeserver">$ awk <span class="hljs-string">'{print}'</span> twain-tabs.txt
 
@@ -297,15 +298,37 @@ dennisk - Dennis Kibbe</code></pre>
 
 
 
-<h2 id="resources">Resources</h2>
+<pre class="prettyprint"><code class=" hljs applescript">
+<span class="hljs-keyword">and</span> <span class="hljs-command">run</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">the</span> **-f** flag.
 
-<ul>
-<li><a href="https://en.wikibooks.org/wiki/Awk">Wikibooks: awk</a></li>
-<li><a href="http://www.ibm.com/developerworks/library/l-awk1/index.html">Awk by example</a></li>
-<li><a href="http://www.ibm.com/developerworks/aix/tutorials/au-unixtips3/index.html">Introducing filters and regular expressions</a></li>
-<li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
-</ul>
+``` awk
+$ awk -f finn.awk twain.txt
 
-<blockquote>
-  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
-</blockquote>
+
+
+
+&lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
+</code></pre>
+
+<p>Notice that the curly brackets do not need to be enclosed in single quotes when placed in a file.</p>
+
+<h3 id="change-field-separator-f-1">Change Field Separator (-F)</h3>
+
+<p>Copy <em>twain.txt</em> to <em>twain-commas.txt</em> and replace the spaces between fields with commas. </p>
+
+<p>“` <br>
+<script type="math/tex" id="MathJax-Element-2"> awk '{print </script>2}’ twain-commas.txt</p>
+
+<p>“`</p>
+
+<p>The AWK program will fail because AWK is assuming space separators:</p>
+
+<p>“` awk <br>
+$ awk ‘{print}’ twain-commas.txt</p>
+
+<p>“`</p>
+
+<p>This will succeed:</p>
+
+<p>“` awk <br>
+$ awk -F, ‘{print}’ twain-commas.txt</p>
