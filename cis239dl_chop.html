@@ -1,4 +1,3 @@
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 <h1 id="chopping-strings">Chopping Strings</h1>
 
 <p>Sometimes you need to remove part of a string. For example a phone number.</p>
@@ -27,7 +26,7 @@ $ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone##*-}</span>
 <span class="hljs-number">7890</span></code></pre>
 
-<p>You can remember that <strong>#</strong> and <strong>##</strong> chop from the start of the string since <strong># </strong> is <em>before</em> the <strong>$</strong> which denotes variables.</p>
+<p>You can remember that <strong>#</strong> and <strong>##<em>*chop from the start of the string since </em></strong>#* is <em>before</em> the <strong>$</strong> which denotes variables.</p>
 
 
 
@@ -47,7 +46,7 @@ $ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone%%-*}</span>
 <span class="hljs-number">123</span></code></pre>
 
-<p>A way to remember which character to use is to note that <strong>$</strong> represents the expression itself and to chop from the start of the string you use <strong>#</strong> and <strong>##</strong> and to chop from the end of the string <strong>%</strong> and <strong>%%</strong>.</p>
+<p>An way to remember which character to use is to note that <strong>$</strong> represents the expression itself and to chop from the start of the string you use <strong>#</strong> and <strong>##</strong> and to chop from the end of the string <strong>%</strong> and <strong>%%</strong>.</p>
 
 
 
@@ -112,9 +111,10 @@ copyright</code></pre>
 
 <h3 id="dirname-1">dirname</h3>
 
-<pre><code>$ mydir=$(dirname /usr/share/doc/bash/copyright)
-/usr/share/doc/bash
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ mydir=$(dirname /usr/share/doc/bash/copyright)
+/usr/share/doc/bash</code></pre>
 
 
 
@@ -122,9 +122,9 @@ copyright</code></pre>
 
 <p>123-456-7890 x123</p>
 
-<p>Write a script that will return only the 10 digit phone number stripping the extension. Write a second script that strips both "123" and "x123"  returning 456-7890.</p>
+<p>Write a script that will return only the 10 digit phone number stripping the extension. Write a second script that strips both the Area Code and extension  returning 456-7890. The script should accept two positional parameters. The first being a phone number formatted as above and the second being either <strong>e</strong> or <strong>ae</strong> to strip the Area Code or Area Code and extension.</p>
 
-
+<!--For extra credit please each part in a function and call it with ??-->
 
 <h1 id="resources">Resources</h1>
 
