@@ -6,6 +6,8 @@
 
 <p>So, why the name? AWK is named after its inventors <em>Al Aho</em>, <em>Peter Weinberger</em> and <em>Brian Kernighan</em>, who first developed it at Bell Labs in the late 1970s. AWK is designed to perform simple data filtering and manipulation tasks in text files.</p>
 
+
+
 <h2 id="learning-objectives">Learning Objectives</h2>
 
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
@@ -15,6 +17,8 @@
 <li>Sort records using the <code>sort</code> command.</li>
 </ol>
 
+
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <ul>
@@ -22,6 +26,8 @@
 <li><strong>nawk (new AWK)</strong></li>
 <li><strong>gawk (GNU AWK)</strong></li>
 </ul>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
@@ -42,7 +48,9 @@
     Joe Harper</p>
 </blockquote>
 
-<h2 id="awk-1">AWK</h2>
+
+
+<h2 id="awk">AWK</h2>
 
 
 
@@ -50,15 +58,21 @@
 
 <p>AWk programs start with <code>awk</code> followed by <em>options</em>, followed by a <em>pattern</em>, followed by one or more <em>actions</em> in curly brackets. Note that the action is surrounded by single quotes to prevent the shell from receiving special characters. An AWK program must have at least a pattern <em>or</em> an action and may have both.</p>
 
+<p>AWK works with <em>records</em> and <em>fields</em> in text files.</p>
+
 <p>Both these examples will print the file twain.txt:</p>
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print}'</span> twain.txt</code></pre>
 
 <p>or</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print $0}'</span> twain.txt</code></pre>
 
 <p>Here a regular expression pattern is added to print only lines with <em>Finn</em>:</p>
+
+
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk /<span class="hljs-constant">Finn</span>/<span class="hljs-string">'{print $0}'</span> twain.txt</code></pre>
 
@@ -122,6 +136,8 @@
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print "Number of Fields:", NF, $0}'</span> twain.txt</code></pre>
 
+
+
 <h4 id="records">Records</h4>
 
 <p>Each line in a file is a record. Records are separated by the new line character <strong>\n</strong>.</p>
@@ -146,17 +162,13 @@ $ awk /Finn/<span class="hljs-string">'{print $0} /berry/{print $0}'</span> twai
 
 <p>And you can add a comment or anything else to the output. <em>Huckleberry “Huck” Finn</em> is printed twice since it matches both patterns.</p>
 
-<p>“` awk <br>
-<script type="math/tex" id="MathJax-Element-464"> awk /Finn/'{print "Search pattern is Finn:" </script>0} /berry/{print "Search patter is berry:" $0}’ twain.txt</p>
+<pre class="prettyprint"><code class="language-awk hljs applescript">$ awk /Finn/'{print <span class="hljs-string">"Search pattern is Finn:"</span>, $<span class="hljs-number">0</span>} /berry/{print <span class="hljs-string">"Search patter is berry:"</span>, $<span class="hljs-number">0</span>}' twain.txt
 
-<p>“`</p>
 
-<p>And you can add a comment or anything else to the output. <em>Huckleberry “Huck” Finn</em> is printed twice since it matches both patterns.</p>
 
-<p>“` awk <br>
-<script type="math/tex" id="MathJax-Element-486"> awk /Finn/'{print "Search pattern is Finn:", </script>0} /berry/{print "Search patter is berry:", $0}’ twain.txt</p>
 
-<p>“`</p>
+&lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
+</code></pre>
 
 <h2 id="flags-options">Flags (Options)</h2>
 
@@ -166,49 +178,7 @@ $ awk /Finn/<span class="hljs-string">'{print $0} /berry/{print $0}'</span> twai
 
 <p>AWK programs can be place in a text file. Open nano and type the following:</p>
 
-<p>“` awk <br>
-/Finn/{print “Search pattern is Finn:”,  $0}</p>
-
-<p>“`</p>
-
-<p>and run with the <strong>-f</strong> flag.</p>
-
-<p>“` awk <br>
-$ awk -f finn.awk twain.txt</p>
-
-<p>“`</p>
-
-<p>Notice that the curly brackets do not need to be enclosed in single quotes when placed in a file.</p>
-
-<h3 id="change-field-separator-f">Change Field Separator (-F)</h3>
-
-<p>Copy <em>twain.txt</em> to <em>twain-tabs.txt</em> and replace the spaces between fields with tabs. Use <code>cat</code> to display the tabs as <strong>^I</strong>. Your output should look something like this:</p>
-
-<p>“` bash <br>
-$ cat -T twain-tabs.txt <br>
-Huckleberry^I”Huck”^IFinn</p>
-
-<p>“`</p>
-
-<p>The AWK program will fail (but Gawk will succeed) because AWK is assuming space separators:</p>
-
-<p>“` awk <br>
-$ awk ‘{print}’ twain-tabs.txt</p>
-
-<p>“`</p>
-
-<p>This will succeed:</p>
-
-<p>“` awk <br>
-$ awk -F\t ‘{print}’ twain-tabs.txt</p>
-
-<pre class="prettyprint"><code class=" hljs applescript">
-<span class="hljs-comment">### Use a Variable (-v)</span>
-
- You can use variables wit AWK. Here we'll create a Variable <span class="hljs-keyword">that</span> will print <span class="hljs-keyword">some</span> <span class="hljs-type">text</span>.
-
-``` awk
-$ awk -v adv=<span class="hljs-string">"Characters created by Samuel Clements."</span> '{print $<span class="hljs-number">0</span>} {print adv}' twain.txt
+<pre class="prettyprint"><code class="language-awk hljs applescript">/Finn/{print <span class="hljs-string">"Search pattern is Finn:"</span>,  $<span class="hljs-number">0</span>}
 
 
 
@@ -216,33 +186,94 @@ $ awk -v adv=<span class="hljs-string">"Characters created by Samuel Clements."<
 &lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
 </code></pre>
 
+<p>and run with the <strong>-f</strong> flag.</p>
+
+<pre class="prettyprint"><code class="language-awk hljs applescript">$ awk -f finn.awk twain.txt
+
+
+
+
+&lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
+</code></pre>
+
+<p>Notice that the curly brackets do not need to be enclosed in single quotes when placed in a file.</p>
+
+<h3 id="change-field-separator-f">Change Field Separator (-F)</h3>
+
+<p>Copy <em>twain.txt</em> to <em>twain-tabs.txt</em> and replace the spaces between fields with tabs. Use <code>cat</code> to display the tabs as <strong>^I</strong>. Your output should look something like this:</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ cat -T twain-tabs.txt
+Huckleberry^I<span class="hljs-string">"Huck"</span>^IFinn
+
+
+
+
+&lt;div class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/div&gt;
+</code></pre>
+
+<p>The AWK program will fail (but Gawk will succeed) because AWK is assuming space separators:</p>
+
+<pre class="prettyprint"><code class="language-awk hljs livecodeserver">$ awk <span class="hljs-string">'{print}'</span> twain-tabs.txt
+
+
+
+
+&lt;<span class="hljs-operator">div</span> class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-operator">div</span>&gt;
+</code></pre>
+
+<p>This will succeed:</p>
+
+<pre class="prettyprint"><code class="language-awk hljs livecodeserver">$ awk -F\t <span class="hljs-string">'{print}'</span> twain-tabs.txt
+
+
+
+
+&lt;<span class="hljs-operator">div</span> class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-operator">div</span>&gt;
+</code></pre>
+
+<h3 id="use-a-variable-v">Use a Variable (-v)</h3>
+
+<p>You can use variables wit AWK. Here we’ll create a Variable that will print some text.</p>
+
+<pre class="prettyprint"><code class="language-awk hljs livecodeserver">$ awk -v adv=<span class="hljs-string">"Characters created by Samuel Clements."</span> <span class="hljs-string">'{print $0} {print adv}'</span> twain.txt
+
+
+
+
+&lt;<span class="hljs-operator">div</span> class=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-operator">div</span>&gt;
+</code></pre>
+
 <p>You can use the output of a command as a variable.</p>
 
-<p>“` <br>
-<script type="math/tex" id="MathJax-Element-475"> awk -v DATE="</script>(date +%D)” ‘{print} {print “Current as of ” DATE}’ csv.txt</p>
+<pre class="prettyprint"><code class="language-awk hljs applescript">$ awk -v DATE=<span class="hljs-string">"$(date +%D)"</span> '{print} {print <span class="hljs-string">"Current as of "</span> DATE}' twain.txt
 
-<p>“`</p>
 
-<p>You can use the output of a command as a variable.</p>
 
-<p>“` awk <br>
-<script type="math/tex" id="MathJax-Element-500"> awk -v DATE="</script>(date +%D)” ‘{print} {print “Current as of ” DATE}’ twain.txt</p>
 
-<p>“`</p>
+&lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
+</code></pre>
 
-<h2 id="begin-end-1">BEGIN &amp; END</h2>
+<h2 id="begin-end">BEGIN &amp; END</h2>
 
 <p>In the previous examples AWK printed text after every line. Let’s change that with BEGIN and END.</p>
 
 <p>At the beginning of the file:</p>
 
-<p><code>awk <br>
- $ awk -v adv="Characters created by Samuel Clements." '{print $0} BEGIN{print adv}' twain.txt <br>
-</code></p>
+<pre class="prettyprint"><code class="language-awk hljs applescript"> $ awk -v adv=<span class="hljs-string">"Characters created by Samuel Clements."</span> '{print $<span class="hljs-number">0</span>} BEGIN{print adv}' twain.txt
+ ```
 
-<p>At the end of the file:</p>
+At <span class="hljs-keyword">the</span> <span class="hljs-keyword">end</span> <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> <span class="hljs-type">file</span>:
 
-<pre class="prettyprint"><code class="language-awk hljs lasso">$ awk <span class="hljs-attribute">-v</span> <span class="hljs-built_in">DATE</span><span class="hljs-subst">=</span><span class="hljs-string">"$(date +%D)"</span> <span class="hljs-string">'{print} END{print "Current as of " DATE}'</span> twain<span class="hljs-built_in">.</span>txt</code></pre>
+
+
+
+
+&lt;<span class="hljs-keyword">div</span> <span class="hljs-type">class</span>=<span class="hljs-string">"se-preview-section-delimiter"</span>&gt;&lt;/<span class="hljs-keyword">div</span>&gt;
+
+``` awk
+$ awk -v DATE=<span class="hljs-string">"$(date +%D)"</span> '{print} END{print <span class="hljs-string">"Current as of "</span> DATE}' twain.txt</code></pre>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -254,6 +285,8 @@ $ awk -v adv=<span class="hljs-string">"Characters created by Samuel Clements."<
 
 <p>Sample output :</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs livecodeserver">Accounts <span class="hljs-command"><span class="hljs-keyword">on</span> <span class="hljs-title">xps13</span></span>
 avahi - Avahi mDNS daemon
 backup - backup
@@ -261,6 +294,8 @@ bin - bin
 colord - colord colour management 
 daemon - daemon
 dennisk - Dennis Kibbe</code></pre>
+
+
 
 <h2 id="resources">Resources</h2>
 
