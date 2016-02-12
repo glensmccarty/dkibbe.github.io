@@ -4,32 +4,46 @@
 
 <p>Sometimes you need to remove part of a string. For example a phone number:</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ myphone=<span class="hljs-string">"123-456-7890"</span>
 $ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</span>
 <span class="hljs-number">123</span>-<span class="hljs-number">456</span>-<span class="hljs-number">7890</span></code></pre>
 
+
+
 <h2 id="chop-from-the-start-of-a-string">Chop from the Start of a String</h2>
 
 <p>This chops all characters <em>before</em> the first dash. Note the curly braces not parenthesis. This example matches the <em>shortest</em> string starting from the beginning of the string.</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone#*-}</span>
 <span class="hljs-number">456</span>-<span class="hljs-number">7890</span></code></pre>
 
 <p>To chop all the characters before the second dash use this. This matches the <em>longest</em> string from the beginning.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone##*-}</span>
 <span class="hljs-number">7890</span></code></pre>
 
 <p>You can remember that <strong>#</strong> and <strong>##<em>*chop from the start of the string since </em></strong>#* is <em>before</em> the <strong>$</strong> which denotes variables.</p>
 
+
+
 <h2 id="chop-from-the-end-of-a-string">Chop from the End of a String</h2>
 
 <p>The percent character is used to chop from the end of a string matching the first dash. </p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone%-*}</span>
 <span class="hljs-number">123</span>-<span class="hljs-number">456</span></code></pre>
 
 <p>To match the second dash from the end.</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">${myphone%%-*}</span>
 <span class="hljs-number">123</span></code></pre>
@@ -42,6 +56,8 @@ $ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</
 
 <p>Both <strong>##</strong> and <strong>%%</strong> are known as <em>greedy</em> matches since they match the longest string. While <em>#</em> and <em>%</em> are <em>non-greedy</em>.</p>
 
+
+
 <h2 id="chopping-directories">Chopping Directories</h2>
 
 <p>Linux provides two commands for parsing a directory string.</p>
@@ -50,25 +66,37 @@ $ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$myphone</
 
 <h3 id="basename">basename</h3>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ basename /usr/share/doc/bash/changelog.Debian.gz 
 changelog.Debian.gz</code></pre>
 
 <p>You can specify the suffix to remove as well.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ basename /usr/share/doc/bash/changelog.Debian.gz .Debian.gz
 changelog</code></pre>
+
+
 
 <h3 id="dirname">dirname</h3>
 
 <p><code>dirname</code> returns the last directory in the string</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ dirname /usr/share/doc/bash/changelog.Debian.gz
 /usr/share/doc/bash</code></pre>
 
 <p>and</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ dirname /usr/share/doc/
 /usr/share</code></pre>
+
+
 
 <h2 id="command-substitution">Command Substitution</h2>
 
@@ -76,8 +104,12 @@ changelog</code></pre>
 
 <h3 id="basename-1">basename</h3>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ mybase=$(basename /usr/share/doc/bash/copyright)
 copyright</code></pre>
+
+
 
 <h3 id="dirname-1">dirname</h3>
 
@@ -93,6 +125,8 @@ copyright</code></pre>
 <p>123-456-7890 x123</p>
 
 <p>Write a script that will return only the <strong>10</strong> digit phone number stripping the extension or strip both the Area Code and extension returning a <strong>7</strong> digit number. The script should accept two positional parameters. The first being a phone number formatted as above and the second being either <strong>e</strong> to strip the Area Code or <strong>ae</strong> to strip the Area Code and extension.</p>
+
+<p>Submit the assignment on <a href="http://fpastebin.net">Fedora pastebin</a>.</p>
 
 <!--For extra credit please each part in a function and call it with ??-->
 
