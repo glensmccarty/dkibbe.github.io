@@ -1,7 +1,5 @@
 <h1 id="awk-awk-awk">AWK, AWK ,AWK!</h1>
 
-
-
 <h2 id="introduction">Introduction</h2>
 
 <p>So, why the name? AWK is named after its inventors <em>Al Aho</em>, <em>Peter Weinberger</em> and <em>Brian Kernighan</em>, who first developed it at Bell Labs in the late 1970s. AWK is designed to perform simple data filtering and manipulation tasks in text files.</p>
@@ -26,8 +24,6 @@
 <li><strong>nawk (new AWK)</strong></li>
 <li><strong>gawk (GNU AWK)</strong></li>
 </ul>
-
-
 
 <h2 id="preparation">Preparation</h2>
 
@@ -66,17 +62,25 @@
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print}'</span> twain.txt</code></pre>
 
+<p>// $ awk '{print}' twain.txt</p>
+
 <p>or</p>
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print $0}'</span> twain.txt</code></pre>
 
 <p>Here a regular expression pattern is added to print only lines with <em>Finn</em>:</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk /<span class="hljs-constant">Finn</span>/<span class="hljs-string">'{print $0}'</span> twain.txt</code></pre>
 
 <p>If the action is ommitted AWK filters on the entire file.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk /<span class="hljs-constant">Finn</span>/ twain.txt</code></pre>
+
+
 
 <h3 id="fields-and-records">Fields and Records</h3>
 
@@ -96,27 +100,41 @@
 
 <p>To print both the first and second fields</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print $1 $2}'</span> twain.txt</code></pre>
 
 <p>AWK concatenated the two files together. Separating the fields with a comma will tell AWK to place a space between them in the output.</p>
+
+
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print $1, $2}'</span> twain.txt</code></pre>
 
 <p>You can change the order of fields in the output.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print $2, $1}'</span> twain.txt</code></pre>
 
 <p>An AWK program consists of a <em>pattern</em> followed by an <em>action</em>. The action is inside the curly braces. You can leave out one or the other but not both. This example prints all the records with 3 fields.</p>
+
+
 
 <pre class="prettyprint"><code class="language-awk hljs fix"><span class="hljs-attribute">$ awk NF=</span>=<span class="hljs-string">3 twain.txt</span></code></pre>
 
 <p>This example will print the number of fields in each record.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print NF $0}'</span> twain.txt</code></pre>
 
 <p>You can add comments and format the output like this:</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print "Number of Fields:", NF, $0}'</span> twain.txt</code></pre>
+
+
 
 <h4 id="records">Records</h4>
 
@@ -136,7 +154,11 @@
 
 <p>And you can add a comment or anything else to the output. <em>Huckleberry "Huck" Finn</em> is printed twice since it matches both patterns.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs erlang">$ awk /<span class="hljs-variable">Finn</span>/'<span class="hljs-tuple">{print <span class="hljs-string">"Search pattern is Finn:"</span>, $<span class="hljs-number">0</span>}</span> /berry/<span class="hljs-tuple">{print <span class="hljs-string">"Search patter is berry:"</span>, $<span class="hljs-number">0</span>}</span>' twain.txt</code></pre>
+
+
 
 <h2 id="flags-options">Flags (Options)</h2>
 
@@ -154,9 +176,13 @@
 
 <p>and run with the <strong>-f</strong> flag.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs avrasm">$ awk -f finn<span class="hljs-preprocessor">.awk</span> twain<span class="hljs-preprocessor">.txt</span></code></pre>
 
 <p>Notice that the curly brackets do not need to be enclosed in single quotes when placed in a file.</p>
+
+
 
 <h3 id="change-field-separator-f">Change Field Separator (-F)</h3>
 
@@ -168,11 +194,17 @@
 
 <p>The AWK program will fail because AWK is assuming space separators:</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print}'</span> twain-commas.txt</code></pre>
 
 <p>This will succeed:</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs lasso">$ awk <span class="hljs-attribute">-F</span>, <span class="hljs-string">'{print}'</span> twain<span class="hljs-attribute">-commas</span><span class="hljs-built_in">.</span>txt</code></pre>
+
+
 
 <h3 id="use-a-variable-v">Use a Variable (-v)</h3>
 
@@ -184,7 +216,11 @@
 
 <p>You can use the output of a command as a variable.</p>
 
+
+
 <pre class="prettyprint"><code class="language-awk hljs lasso">$ awk <span class="hljs-attribute">-v</span> <span class="hljs-built_in">DATE</span><span class="hljs-subst">=</span><span class="hljs-string">"$(date +%D)"</span> <span class="hljs-string">'{print} {print "Current as of " DATE}'</span> twain<span class="hljs-built_in">.</span>txt</code></pre>
+
+
 
 <h2 id="begin-end">BEGIN &amp; END</h2>
 
@@ -202,6 +238,8 @@
 
 <pre class="prettyprint"><code class="language-awk hljs lasso">$ awk <span class="hljs-attribute">-v</span> <span class="hljs-built_in">DATE</span><span class="hljs-subst">=</span><span class="hljs-string">"$(date +%D)"</span> <span class="hljs-string">'{print} END{print "Current as of " DATE}'</span> twain<span class="hljs-built_in">.</span>txt</code></pre>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a one line AWK program (not in a text/script file) that will output the <em>login</em> and <em>GECOS</em> fields in <em>/etc/passwd</em> for each account to STDOUT. Separate the fields with a <em>space</em> followed by a <em>dash</em> followed by a <em>space</em>. Remove any trailing commas from the GECOS field. The first line in the output should read "Accounts on xps13". Replace <strong>xps13</strong> with the actual hostname of the system you ran the script on. Sort the output by the login field.</p>
@@ -212,6 +250,8 @@
 
 <p>Sample output :</p>
 
+
+
 <pre class="prettyprint"><code class=" hljs livecodeserver">Accounts <span class="hljs-command"><span class="hljs-keyword">on</span> <span class="hljs-title">xps13</span></span>
 avahi - Avahi mDNS daemon
 backup - backup
@@ -219,3 +259,18 @@ bin - bin
 colord - colord colour management 
 daemon - daemon
 dennisk - Dennis Kibbe</code></pre>
+
+<p>For 2 points extra arrange the commands so that the <em>Accounts on xps13</em> stays at the top of the output.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/Awk">Wikibooks: awk</a></li>
+<li><a href="http://www.ibm.com/developerworks/library/l-awk1/index.html">Awk by example</a></li>
+<li><a href="http://www.ibm.com/developerworks/aix/tutorials/au-unixtips3/index.html">Introducing filters and regular expressions</a></li>
+<li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
