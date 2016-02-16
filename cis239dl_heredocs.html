@@ -1,56 +1,54 @@
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
-<h1 id="here-docs">Here Docs</h1>
+<h1 id="here-documents">Here Documents</h1>
 
-<p>Sometimes you need to output some text to the command line to inform the user of a script. a <em>here doc</em> lets you do that easily.</p>
+<p>A here document contained in a script can be used to deliver information when the script is run similar to the <code>echo</code> command. Here is an example from Greg's Bash Guide:</p>
 
-
-
-<h2 id="a-basic-here-doc">A Basic here doc</h2>
-
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ cat &lt;&lt; EOF
-&gt; This is a basic here doc.
-&gt; EOF
-This is a basic here doc.</code></pre>
-
-<p>The <strong>EOF</strong> delimiter can be anything that is not likely to appear in the script. EOF (End Of File) is a good choice. You should keep your here docs short.</p>
-
-
-
-<h2 id="here-docs-and-functions">Here Docs and Functions</h2>
-
-<p>You can easily wrap a here doc in a function and call the function whenever needed.</p>
-
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash
-</span>
-<span class="hljs-function"><span class="hljs-title">usage</span></span> ()
-{
-cat &lt;&lt; EOF
-No postional parameter given.
-EOF
+<pre><code>usage() {
+    cat &lt;&lt;EOF
+    usage: foobar [-x] [-v] [-z] [file ...]
+    A short explanation of the operation goes here.
+    It might be a few lines long, but shouldn't be  excessive.
+    EOF
 }
+</code></pre>
 
-<span class="hljs-function"><span class="hljs-title">right</span></span> ()
-{
-cat &lt;&lt; EOF
-You did it right.
+<p>The actual here document starts with <code>cat</code> and ends with <strong>EOF</strong>. The text between the End Of File markers is the text that is printed out. To make the here document easier to call in thwe script it has been wrapped in a function.</p>
+
+<p>If the text of the here Doc is indented with Tabs. use the dash (<strong>-</strong>) option to remove them before printing.</p>
+
+<pre><code>cat &lt;&lt;-EOF
+</code></pre>
+
+<h2 id="feeding-data-to-a-command">Feeding Data to a Command</h2>
+
+<p>Just as text is feed to the screen using <code>cat</code> data can be input to a command the same way.</p>
+
+<pre><code>ftp -n &lt;&lt; EOF
+open mirrors.xmission.com
+user anonymous nothinghere
+ascii
+cd gutenberg
+get GUTINDEX.01
+bye
 EOF
-}
+</code></pre>
 
-<span class="hljs-keyword">if</span>
-[[ <span class="hljs-variable">$#</span> <span class="hljs-operator">-lt</span> <span class="hljs-number">1</span> ]]
-<span class="hljs-keyword">then</span>
-usage
-<span class="hljs-keyword">else</span>
-right
-<span class="hljs-keyword">fi</span></code></pre>
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Create a script containing a here document that prints the following information. </p>
+
+<pre><code>Today is Tuesday
+You are logged into a Linux system named xps13.
+Here is some info about the root partition:
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda4        99G   26G   68G  28% /
+</code></pre>
+
+<p>In your script <strong>Tuesday</strong>, <strong>Linux</strong>, <strong>xps13</strong> and the last line (<strong>/dev/sda4...</strong>) should be replaced with the appropriate values from the system the script will be run on.</p>
 
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="http://mywiki.wooledge.org/BashGuide/InputAndOutput#Heredocs_And_Herestrings">Greg’s Bash Guide</a></li>
-<li><a href="http://www.ibm.com/developerworks/aix/library/au-unixtext/">Introduction to text manipulation on UNIX-based systems</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/InputAndOutput#Heredocs_And_Herestrings">Heredocs and Herestrings</a></li>
 </ul>
 
 <blockquote>
