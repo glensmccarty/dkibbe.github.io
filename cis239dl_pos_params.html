@@ -1,0 +1,146 @@
+<h1 id="positional-parameters">Positional Parameters</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Scripts can accept user input from the command line. This input is known as a <strong>positional parameter.</strong></p>
+
+
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Explain the purpose of positional parameters.</li>
+<li>Use positional parameters in a script.</li>
+<li>Test for the absence of a positional parameter.</li>
+</ol>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>#:</strong> Variable that holds the number of positional variables</li>
+<li><strong>@:</strong> Variable that holds all the words of the positional parameters.</li>
+<li><strong>0:</strong> Variable that holds the name of the file.</li>
+<li><strong>seq:</strong></li>
+</ul>
+
+
+
+<h2 id="positional-parameters-variables">Positional Parameters (Variables)</h2>
+
+
+
+<h3 id="examples">Examples</h3>
+
+<p><strong>myscript.sh 1</strong> has one positional parameter. The variable name is <strong>1</strong>.</p>
+
+<p><strong>myscript2.sh 1 2</strong> has two positional parameters. Positional parameters are separated by spaces. The variable names are <strong>1</strong> and <strong>2</strong>.</p>
+
+<p><strong>myscript3.sh tux linux</strong> also has 2 positional parameters. Positional parameters can be any length. The names are <strong>tux</strong> and <strong>linux</strong>.</p>
+
+<p>Positional parameters are given the variable names 1, 2, 3, 4, 5, 6, 7, 8, 9 in that order. You can have more that nine positional parameters but that is rare and they need to be handled differently.</p>
+
+
+
+<h2 id="the-variable">The # Variable</h2>
+
+<p>The number of positional variables is stores in a variable - #. This script will display the number of positional variables given to a script.</p>
+
+<pre><code>#!/usr/bin/env bash
+
+# Author: Tux
+# Purpose: To show number of positional parameters
+# Assignment: Positional Parameters.
+
+# Clear the screen before starting.
+clear
+
+if [[ "$#" -lt 1 ]]
+    then
+    echo "No parameters given to $0."
+    else
+    echo "$# parameters were given to $0."
+fi
+
+# END
+</code></pre>
+
+<p>Make the script executable and run with any number of positional variables</p>
+
+
+
+<h2 id="using-positional-parameters-in-a-script">Using Positional Parameters in a Script</h2>
+
+<pre><code>#!/usr/bin/env bash
+
+# Author: Tux
+# Purpose: to show the use of positional parameters
+# Assignment: Positional Parameters.
+
+# Run a sequence using two values given.
+seq $1 $2
+
+# END
+</code></pre>
+
+<p>This script takes two positional parameters and passes them to the <code>seq</code> command.</p>
+
+<pre><code>$ ./posiparam2.sh 1 5
+1
+2
+3
+4
+5
+</code></pre>
+
+<p>If no numbers are given the <code>seq</code> command will output an error message to stderr.</p>
+
+
+
+<h3 id="testing-for-positional-parameters">Testing for Positional Parameters</h3>
+
+<p>This script adds an if statement to test for user input.</p>
+
+<pre><code>#!/urs/bin/env bash
+
+# Author: Tux
+# Purpose: Test for proper user input.
+# Assignment: Positional Parameters.
+
+# Define variables
+  BADPARAM=165
+
+# Check for input
+
+  if [ $# != 2 ]
+  then
+echo "Please enter two numbers"
+exit  $BADPARAM
+  fi
+
+# Print the sequence
+
+  seq $1 $2
+
+# END
+</code></pre>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Create a script that uses an if statement to print the first ten lines of a file to STDOUT. The file name is entered as a positional parameter. Script should test if the file exists and also test if no file is entered.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://linux.die.net/man/1/seq">seq manpage</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/Parameters">Greg's Bash Manual</a></li>
+</ul>
+
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
