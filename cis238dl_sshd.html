@@ -1,3 +1,7 @@
+<h2 id="secure-shell-server">Secure Shell Server</h2>
+
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>SSH is widely used to administer remote hosts and as such is a prime target for exploitation attempts. In this assignment you will configure the SSH server for added security.</p>
@@ -16,17 +20,28 @@
 
 <h2 id="terms-and-concepts">Terms and Concepts</h2>
 
-<ul>
-<li><strong>Daemon:</strong> A background process that handles requests for services such as print spooling and is dormant when not required.</li>
-<li><strong>Well-Known Ports:</strong> Ports 0-1023 are reserved for common services and can only be accessed by root.</li>
-<li><strong>/etc/ssh/sshd_conf:</strong> Configuration file for the SSH server daemon</li>
-<li><strong>Telnet:</strong> Used to determine if a service is running on a port.</li>
-<li><strong>Nmap:</strong> Network port scanner</li>
-<li><code>lsof</code>: List open files.</li>
-<li><code>/etc/services</code>: Lists services and their default ports. This file is for information only and does no configuration itself.</li>
-</ul>
+<dl>
+<dt>Daemon</dt>
+<dd>A background process that handles requests for services such as print spooling and is dormant when not required.</dd>
 
+<dt>Well-Known Ports</dt>
+<dd>Ports 0-1023 are reserved for common services and can only be accessed by root.</dd>
 
+<dt><code>/etc/ssh/sshd_conf</code></dt>
+<dd>Configuration file for the SSH server daemon</dd>
+
+<dt>Telnet</dt>
+<dd>Used to determine if a service is running on a port.</dd>
+
+<dt>Nmap</dt>
+<dd>Network port scanner</dd>
+
+<dt><code>lsof</code></dt>
+<dd>List open files.</dd>
+
+<dt><code>/etc/services</code></dt>
+<dd>Lists services and their default ports. This file is for information only and does no configuration itself.</dd>
+</dl>
 
 <h2 id="preparation">Preparation</h2>
 
@@ -115,6 +130,8 @@
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
 
+
+
 <h2 id="adding-an-ssh-banner">Adding an SSH Banner</h2>
 
 <p>Adding a welcome banner that warns that all activity on the server is a good idea. Creating a banner text file and adding a line to the <em>sshd_config</em> file is all that is needed.</p>
@@ -129,21 +146,23 @@
 
 
 
-<h2 id="what-to-submit-1">What to Submit</h2>
+<h2 id="what-to-submit">What to Submit</h2>
 
 <p>Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.</p>
 
 <ol>
 <li>Using <code>nmap</code> what ports did you find open on CentOS-minimal?</li>
 <li>What services use these ports?</li>
-<li>Change <strong>PasswordAuthentication</strong> to <em>no</em> and commit the changes then use <code>ssh localhost</code> to try to login. (You’ll be using SSH from the CentOS-minimal terminal.) What error message do you get?</li>
+<li>Change <strong>PasswordAuthentication</strong> to <em>no</em> and commit the changes then use <code>ssh localhost</code> to try to login. (You'll be using SSH from the CentOS-minimal terminal.) What error message do you get?</li>
 </ol>
+
+
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></li>
 <li><a href="http://wiki.centos.org/HowTos/Network/SecuringSSH">Securing OpenSSH</a></li>
-<li><a href="http://debian-handbook.info">The Debian Administrator’s Handbook</a></li>
+<li><a href="http://debian-handbook.info">The Debian Administrator's Handbook</a></li>
 <li><a href="http://dennisk.freeshell.org/cis238dl_sshd.html">Permanent link to assignment</a></li>
 </ul>
