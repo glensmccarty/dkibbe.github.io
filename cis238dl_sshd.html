@@ -135,7 +135,7 @@
 
 <p>Use the instructions in the configuration file to configure SELinux to recognise the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
 
-<p>Run a<code>nmap</code> scan on a port range that includes the oprt you opened for SSH.</p>
+<p>Run a<code>nmap</code> scan on a port range that includes the port you opened for SSH.</p>
 
 <pre><code>$ nmap -p 2200-2250 192.168.201.nnn
 </code></pre>
@@ -170,9 +170,12 @@
 
 
 
-<h3 id="finally">Finally</h3>
+<h2 id="ssh-to-the-new-port">SSH to the New Port</h2>
 
-<p>Since you can not log in as <em>root</em> create a user on the SSH server that you can log in as.</p>
+<p>Since port 22 is no longer used the ssh command much be modified. For example:</p>
+
+<pre><code>$ ssh -p 222 tux@192.168.201.123
+</code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
