@@ -16,6 +16,8 @@
 <li>Add a SSH banner.</li>
 </ol>
 
+
+
 <h2 id="terms-and-concepts">Terms and Concepts</h2>
 
 <dl>
@@ -32,7 +34,7 @@
 <dd>"...a cryptographic hash function to a public key. Since fingerprints are shorter than the keys they refer to, they can be used to simplify certain key management tasks." <a href="https://en.wikipedia.org/wiki/Public_key_fingerprint">Wikipedia</a></dd>
 
 <dt>Netcat</dt>
-<dd>Used to determine if a service is running on a port.</dd>
+<dd>"...is a feature-rich network debugging and investigation tool" <a href="https://en.wikipedia.org/wiki/Netcat">Wikipedia</a></dd>
 
 <dt>Nmap</dt>
 <dd>Network port scanner</dd>
@@ -47,9 +49,13 @@
 <dd>Lists services and their default ports. This file is for information only and does no configuration itself.</dd>
 </dl>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
 <p>Start both a CentOS 7 and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine.</p>
+
+
 
 <h3 id="networking">Networking</h3>
 
@@ -66,9 +72,13 @@
 
 <p>Use <code>yum</code> or <code>apt-get</code> as appropriate to install <code>nmap</code> and possibly <code>zenmap</code>.</p>
 
+
+
 <h3 id="scanning-ports">Scanning Ports</h3>
 
 <p>Use <code>nmap</code> to do a simple scan of the SSH server and you should see that port 22 is open for ssh traffic.</p>
+
+
 
 <h2 id="connect-to-the-ssh-server">Connect to the SSH Server</h2>
 
@@ -80,6 +90,8 @@
 
 <p>After you accept the connection you will be logged in as root. Type <code>exit</code> to close the connection.</p>
 
+
+
 <h2 id="securing-the-ssh-server-daemon">Securing the SSH Server Daemon</h2>
 
 
@@ -87,6 +99,8 @@
 <h3 id="the-ssh-server-configuration-file">The SSH Server Configuration File</h3>
 
 <p>Use the <code>rpm -qc openssh-server</code> command to show that the SSH server configuration settings are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>systemctl restart sshd.service</code> command.</p>
+
+
 
 <h3 id="disabling-root-logins">Disabling Root Logins</h3>
 
@@ -99,11 +113,15 @@
 <pre><code>$ ssh tux@192.168.201.123
 </code></pre>
 
+
+
 <h3 id="change-default-port">Change Default Port</h3>
 
 <p>SSH by default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
 <p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
+
+
 
 <h4 id="open-the-port-in-the-firewall">Open the Port in the Firewall</h4>
 
@@ -113,6 +131,8 @@
 </code></pre>
 
 <p>Use <code>firewall-cmd --list-ports</code> to see that the change was made.</p>
+
+
 
 <h4 id="disable-port-22">Disable Port 22</h4>
 
@@ -131,14 +151,24 @@
 
 <p>None of these changes will survive a reboot unless the <strong>--permanent</strong> option is added to the above commands.</p>
 
+
+
 <h3 id="selinux">SELinux</h3>
 
 <p>Use the instructions in the configuration file to configure SELinux to recognise the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
+
+
+
+<h2 id="mapping-the-new-port">Mapping the New Port</h2>
 
 <p>Run a<code>nmap</code> scan on a port range that includes the port you opened for SSH.</p>
 
 <pre><code>$ nmap -p 2200-2250 192.168.201.nnn
 </code></pre>
+
+<p>The Netcat command can useful as well. It has different package names on different Linux distros so use <code>yum search</code> or <code>apt-cache search</code>.</p>
+
+
 
 <h3 id="protocol">Protocol</h3>
 
@@ -155,6 +185,8 @@
 <h3 id="disabling-password-logins-optional">Disabling Password Logins (Optional)</h3>
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
+
+
 
 <h2 id="adding-an-ssh-banner">Adding an SSH Banner</h2>
 
@@ -177,11 +209,13 @@
 <pre><code>$ ssh -p 222 tux@192.168.201.123
 </code></pre>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.</p>
+<p>Submit a screenshot of the Netcat command showing that SSH on port 2222 (or another no standard port) is listening.</p>
 
-<p>Copy and paste a screenshot of the output of <code>nmap</code> or <code>netcat</code> showing ssh listening on a higher port.</p>
+
 
 <h2 id="resources">Resources</h2>
 
@@ -190,5 +224,6 @@
 <li><a href="http://wiki.centos.org/HowTos/Network/SecuringSSH">Securing OpenSSH</a></li>
 <li><a href="http://debian-handbook.info">The Debian Administrator's Handbook</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Public_key_fingerprint">Public key fingerprint</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Netcat">Netcat</a></li>
 <li><a href="http://dennisk.freeshell.org/cis238dl_sshd.html">Permanent link to assignment</a></li>
 </ul>
