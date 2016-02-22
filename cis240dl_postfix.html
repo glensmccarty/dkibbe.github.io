@@ -22,6 +22,8 @@
 <li>Use Netcat to test Postfix.</li>
 </ul>
 
+
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <ul>
@@ -58,63 +60,35 @@
 
 <h3 id="set-networking">Set Networking</h3>
 
-<p>In VirtualBox set Networking to <em>Bridged Adapter</em> for both virtual machines. The client virtual machine should be a clone of the server but have a different MAC address. Each virtual machine must have a different IP address.</p>
+<p>In VirtualBox set Networking to <em>Bridged Adapter</em> for the SMTP virtual machines. </p>
 
-<p>Do this assignment on a CentOS 7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
-
-<p>If you are working from the BA lab the network will be 192.168.203.0/24. From homeyou will have to use the <code>ip addr show</code> command to make sure it's on your home network. This has not be tested.</p>
+<p>Do this assignment on a CentOS 7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed.</p>
 
 <ul>
 <li>nmap</li>
 <li>firewalld</li>
 <li>mutt</li>
-<li>nc</li>
+<li>nmap-ncat</li>
 </ul>
 
 <p>These can be installed with a single <code>yum install</code> command.</p>
 
-
+<p>If you are working from the BA lab the network will be 192.168.203.0/24. From home you will have to use the <code>ip addr show</code> command to make sure it's on your home network. This has not be tested.</p>
 
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
-<p>Edit <code>/etc/hostname</code> and set a hostname using your first initial and last name. </p>
+<p>CentOS 7 uses a Systemd utility to set a hostname using your first initial and last name. </p>
 
 <p><em>Example for John Doe use:</em></p>
 
-<pre><code>jdoe
+<pre><code># hostnamectl -set-hostname jdoe.centos7
 </code></pre>
 
-<p><em>Note:</em> Reboot after making this change.</p>
-
-
+<p>Reboot after making this change.</p>
 
 <h3 id="add-user-accounts">Add User Accounts</h3>
 
-<p>Add two user accounts <em>tux</em> and an account for yourself. Be sure to set passwords for each.</p>
-
-
-
-<h3 id="hosts-file">Hosts file</h3>
-
-<p>On the client add a line to <em>/etc/hosts</em> listing the IP address for the Postfix server.  <em>Use the actual IP address of your Postfix server.</em></p>
-
-<p><em>Example:</em> If the server is <em>jdoe</em> use this line.</p>
-
-<pre><code>192.168.201.123 jdoe
-</code></pre>
-
-
-
-<h3 id="install-on-client">Install on Client</h3>
-
-<p>Install the following packages on the CentOS client.</p>
-
-<ul>
-<li>nmap</li>
-<li>nc</li>
-</ul>
-
-
+<p>Add an account for yourself.</p>
 
 <h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
 
@@ -128,18 +102,63 @@
 
 <p>Be sure to backup the file first!</p>
 
-<ol>
-<li>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. <em>Example:</em> jdoe.</li>
-<li>Uncomment <strong>myorigin = $mydomain</strong></li>
-<li>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <em>hostname</em> of the server.</li>
-<li>Uncomment <strong>mydestination = <span>$</span>myhostname, localhost.$mydomain</strong>.</li>
-<li>Uncomment <strong>mynetworks</strong> and replace <em>168.100.189.0/24</em> with <em>192.168.201.0/24</em>.</li>
-<li>Uncomment <strong>mynetworks_style = subnet</strong></li>
-<li>Uncomment <strong>inet_interfaces = all</strong>.</li>
-<li>Comment out <strong>inet_interfaces = localhost</strong>.</li>
-</ol>
 
-<p>Check the configuration file and reload the configuration file using the <code>postfix</code> command.</p>
+
+<h3 id="internet-host-and-domain-names">INTERNET HOST AND DOMAIN NAMES</h3>
+
+
+
+<h4 id="myhostname">myhostname</h4>
+
+<p>Uncomment <strong>myhostname</strong> and replace <em>host.domain.tld</em> with the <em>hostname</em> of the server.</p>
+
+<p><em>Example:</em> jdoe.centos7.</p>
+
+
+
+<h4 id="mydomain">mydomain</h4>
+
+<p>Uncomment <strong>mydomain</strong> and replace <em>domain.tld</em> with the domain of the mail server. </p>
+
+
+
+<h3 id="sending-mail">SENDING MAIL</h3>
+
+
+
+<h4 id="myorigin">myorigin</h4>
+
+<p>Uncomment <strong>myorigin = $mydomain</strong></p>
+
+<h3 id="receiving-mail">RECEIVING MAIL</h3>
+
+
+
+<h4 id="interfaces">Interfaces</h4>
+
+<p>Uncomment <strong>inet_interfaces = all</strong>. <br>
+Comment out <strong>inet_interfaces = localhost</strong></p>
+
+
+
+<h4 id="destination">Destination</h4>
+
+<p>This line should already be uncommented.</p>
+
+<pre><code>mydestination  =  $myhostname, localhost.$mydomain, localhost
+</code></pre>
+
+<h3 id="trust-and-relay-control">TRUST AND RELAY CONTROL</h3>
+
+
+
+<h4 id="mynetworks">mynetworks</h4>
+
+<p>Uncomment <strong>mynetworks_style = subnet</strong></p>
+
+<p>Uncomment <strong>mynetworks</strong> and replace <em>168.100.189.0/24</em> with <em>192.168.201.0/24</em>.</p>
+
+<p>Save changes to the file, check the configuration file and reload the configuration file using the <code>postfix</code> command.</p>
 
 <pre><code># postfix check
 # postfix reload
@@ -148,8 +167,6 @@
 <p>You can use <code>postconf -n</code> to display the configuration options.</p>
 
 <p>Postfix will now accept mail for outside delivery.</p>
-
-
 
 <h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
 
@@ -171,12 +188,10 @@
 firewall-cmd --add-service imaps
 </code></pre>
 
-<p>Use Nmap from the client to confirm a service is listening on those ports. Replace <em>jdoe</em> with the hostname of the server.</p>
+<p>Use Nmap to confirm a service is listening on those ports.</p>
 
-<pre><code>nmap jdoe
+<pre><code>nmap localhost
 </code></pre>
-
-
 
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
@@ -192,15 +207,15 @@ firewall-cmd --add-service imaps
 
 
 
+<h2 id="no-mail-spool-for-root">No Mail Spool for Root</h2>
+
+<pre><code># touch /var/spool/mail/root
+# chmod 0660 /var/spool/mail/root
+</code></pre>
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of the tail end of <em>/var/log/maillog</em> showing the message was sent..</p>
-
-
-
-<h2 id="xkcd">XKCD</h2>
-
-<p><img src="(&lt;a href=">https://imgs.xkcd.com/comics/security_question.png)" alt="XKCD cartoon" title="" /&gt;</p>
 
 
 
@@ -221,4 +236,5 @@ firewall-cmd --add-service imaps
 <li>/usr/share/doc/postfix</li>
 <li>/usr/share/doc/dovcot</li>
 <li><a href="http://dovecot.org">Dovecot</a></li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/sec_Configuring_Host_Names_Using_hostnamectl.html">Setting the Hostname with hostnamectl</a></li>
 </ul>
