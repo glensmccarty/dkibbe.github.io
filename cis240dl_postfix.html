@@ -19,10 +19,8 @@
 <li>Dovecot for basic operation. (optional)</li>
 <li>Describe the functions of a MTA, MDA and MUA.</li>
 <li>Install and configure a text-based mail client (Mutt).</li>
-<li>Use <code>nc</code> to test Postfix.</li>
+<li>Use Netcat to test Postfix.</li>
 </ul>
-
-
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -43,7 +41,7 @@
 <li><strong>/etc/dovecot/covecot.conf:</strong> The main Dovecot configuration file.</li>
 <li><strong>postsuper:</strong> The Postfix superintendent</li>
 <li><strong>mailq:</strong> Command to print contents of mail queue to STDOUT.</li>
-<li><strong>mutt:</strong> The Mutt Mail User Agent “All mail clients suck. This one just sucks less.”</li>
+<li><strong>mutt:</strong> The Mutt Mail User Agent "All mail clients suck. This one just sucks less."</li>
 <li><strong>Reverse DNS lookup:</strong> Used to check if the message was sent from a MTA with a legitimate <strong>MX</strong> record.</li>
 <li><strong>Open Relay:</strong> In the distant past when life was good any MTA would gladly forward your email to its destination for you. No authentication was required.</li>
 <li><strong>SPAM:</strong> SPAM is defined as… Well, I think you know already.</li>
@@ -64,7 +62,7 @@
 
 <p>Do this assignment on a CentOS 7 virtual machine connected to the 192.168.201.0/24 classroom network with the following software installed. Clone this first virtual machine and set a new MAC address so both machines have different IP addresses.</p>
 
-<p>If you are working from the BA lab the network will be 192.168.203.0/24. From homeyou will have to use the <code>ip addr show</code> command to make sure it’s on your home network. This has not be tested.</p>
+<p>If you are working from the BA lab the network will be 192.168.203.0/24. From homeyou will have to use the <code>ip addr show</code> command to make sure it's on your home network. This has not be tested.</p>
 
 <ul>
 <li>nmap</li>
@@ -126,7 +124,7 @@
 
 <h2 id="configure-postfix">Configure Postfix</h2>
 
-<p>To set Postfix as an open relay on the local network here are the options that need to be changed in the <em>main.cf</em> file. Configuration settings starting with a <strong>$</strong> are variables that you will set. A good way to learn about Postfix’s capabilities is the read the comments in <em>/etc/postfix/main.cf</em>.</p>
+<p>To set Postfix as an open relay on the local network here are the options that need to be changed in the <em>main.cf</em> file. Configuration settings starting with a <strong>$</strong> are variables that you will set. A good way to learn about Postfix's capabilities is the read the comments in <em>/etc/postfix/main.cf</em>.</p>
 
 <p>Be sure to backup the file first!</p>
 
@@ -158,7 +156,7 @@
 <p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
 
 <ol>
-<li>Move the default keys from <em>/etc/pki/dovecot/certs/dovecot.pem</em> and <em>/etc/pki/dovecot/private/dovecot.pem</em> to root’s home directory. Rename the private does so it does not overwrite the cert.</li>
+<li>Move the default keys from <em>/etc/pki/dovecot/certs/dovecot.pem</em> and <em>/etc/pki/dovecot/private/dovecot.pem</em> to root's home directory. Rename the private does so it does not overwrite the cert.</li>
 <li>Run this script to generate a new private key and self-signed certificate.</li>
 <li>Restart the Dovecot service to make changes effective.</li>
 </ol>
@@ -177,6 +175,8 @@ firewall-cmd --add-service imaps
 
 <pre><code>nmap jdoe
 </code></pre>
+
+
 
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
@@ -200,7 +200,7 @@ firewall-cmd --add-service imaps
 
 <h2 id="xkcd">XKCD</h2>
 
-<p><img src="(&lt;a href=">https://imgs.xkcd.com/comics/security_question.png)” alt=”XKCD cartoon” title=”” /&gt;</p>
+<p><img src="(&lt;a href=">https://imgs.xkcd.com/comics/security_question.png)" alt="XKCD cartoon" title="" /&gt;</p>
 
 
 
