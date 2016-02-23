@@ -96,11 +96,12 @@
 
 
 
-<h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
+<h2 id="install-postfix">Install Postfix</h2>
 
-<p>Use <code>systemctl to start</code>postfix<code>and</code>dovecot` and enable them to start on boot up.</p>
+<p>Postfix will already be installed and running.</p>
 
-
+<pre><code># systemctl status postfix.service
+</code></pre>
 
 <h2 id="configure-postfix">Configure Postfix</h2>
 
@@ -178,40 +179,23 @@ Comment out <strong>inet_interfaces = localhost</strong></p>
 
 <p>Postfix will now accept mail for outside delivery.</p>
 
-
-
-<h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
-
-<p>Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.</p>
-
-<ol>
-<li>Move the default keys from <em>/etc/pki/dovecot/certs/dovecot.pem</em> and <em>/etc/pki/dovecot/private/dovecot.pem</em> to root's home directory. Rename the private does so it does not overwrite the cert.</li>
-<li>Run this script to generate a new private key and self-signed certificate.</li>
-<li>Restart the Dovecot service to make changes effective.</li>
-</ol>
-
-
+<!--## Configure Dovecot (optional)&#10;&#10;Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.&#10;&#10;1.  Move the default keys from */etc/pki/dovecot/certs/dovecot.pem* and */etc/pki/dovecot/private/dovecot.pem* to root's home directory. Rename the private does so it does not overwrite the cert.&#10;2.  Run this script to generate a new private key and self-signed certificate.&#10;3.  Restart the Dovecot service to make changes effective.-->
 
 <h2 id="configure-the-firewall">Configure the Firewall</h2>
 
-<p>Open ports <strong>25</strong> (SMTP) and <strong>993</strong> (Secure IMAP) on the firewall</p>
+<p>Open ports <strong>25</strong> (SMTP) on the firewall</p>
 
 <pre><code>firewall-cmd --add-service smtp
-firewall-cmd --add-service imaps
 </code></pre>
 
-<p>Use Nmap to confirm a service is listening on those ports.</p>
+<p>Use Nmap to confirm a service is listening on that port.</p>
 
 <pre><code>nmap localhost
 </code></pre>
 
-
-
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
-<p>Edit <em>/etc/aliases</em> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
-
-
+<p>Edit <em>/etc/aliases</em> and redirect root mail to the user you created. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
 
 <h2 id="sending-email-directly-to-the-server">Sending Email Directly to the Server</h2>
 
@@ -223,11 +207,11 @@ firewall-cmd --add-service imaps
 
 <h2 id="no-mail-spool-for-root">No Mail Spool for Root</h2>
 
+<p>If when you run <code>mutt</code> you get and error that the spool file for root doesn't exist you can create it with these commands.</p>
+
 <pre><code># touch /var/spool/mail/root
 # chmod 0660 /var/spool/mail/root
 </code></pre>
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
