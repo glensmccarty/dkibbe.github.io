@@ -18,7 +18,7 @@
 <li>Install and configure Postfix</li>
 <li>Dovecot for basic operation. (optional)</li>
 <li>Describe the functions of a MTA, MDA and MUA.</li>
-<li>Install and configure a text-based mail client (Mutt).</li>
+<li>Use a text-based mail client.</li>
 <li>Use Netcat to test Postfix.</li>
 </ul>
 
@@ -75,6 +75,8 @@
 
 <p>If you are working from the BA lab the network will be 192.168.203.0/24. From home you will have to use the <code>ip addr show</code> command to make sure it's on your home network. This has not be tested.</p>
 
+
+
 <h3 id="set-hostname-on-server">Set HOSTNAME on Server</h3>
 
 <p>CentOS 7 uses a Systemd utility to set a hostname using your first initial and last name. </p>
@@ -86,9 +88,13 @@
 
 <p>Reboot after making this change.</p>
 
+
+
 <h3 id="add-user-accounts">Add User Accounts</h3>
 
 <p>Add an account for yourself.</p>
+
+
 
 <h2 id="install-postfix-and-dovecot">Install Postfix and Dovecot</h2>
 
@@ -130,6 +136,8 @@
 
 <p>Uncomment <strong>myorigin = $mydomain</strong></p>
 
+
+
 <h3 id="receiving-mail">RECEIVING MAIL</h3>
 
 
@@ -147,6 +155,8 @@ Comment out <strong>inet_interfaces = localhost</strong></p>
 
 <pre><code>mydestination  =  $myhostname, localhost.$mydomain, localhost
 </code></pre>
+
+
 
 <h3 id="trust-and-relay-control">TRUST AND RELAY CONTROL</h3>
 
@@ -167,6 +177,8 @@ Comment out <strong>inet_interfaces = localhost</strong></p>
 <p>You can use <code>postconf -n</code> to display the configuration options.</p>
 
 <p>Postfix will now accept mail for outside delivery.</p>
+
+
 
 <h2 id="configure-dovecot-optional">Configure Dovecot (optional)</h2>
 
@@ -193,6 +205,8 @@ firewall-cmd --add-service imaps
 <pre><code>nmap localhost
 </code></pre>
 
+
+
 <h2 id="add-an-alias-for-root-mail">Add an Alias for Root Mail</h2>
 
 <p>Edit <em>/etc/aliases</em> and redirect root mail to <strong>tux</strong>. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
@@ -213,6 +227,8 @@ firewall-cmd --add-service imaps
 # chmod 0660 /var/spool/mail/root
 </code></pre>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>This submission is in two parts.</p>
@@ -221,6 +237,8 @@ firewall-cmd --add-service imaps
 <li>Send an email from your SMTP server to dennis.kibbe@mesacc.edu</li>
 <li>Submit a screenshot of the tail end of <em>/var/log/maillog</em> showing the message was sent.</li>
 </ol>
+
+
 
 <h2 id="resources">Resources</h2>
 
@@ -240,4 +258,6 @@ firewall-cmd --add-service imaps
 <li>/usr/share/doc/dovcot</li>
 <li><a href="http://dovecot.org">Dovecot</a></li>
 <li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/sec_Configuring_Host_Names_Using_hostnamectl.html">Setting the Hostname with hostnamectl</a></li>
+<li><a href="https://www.youtube.com/watch?v=MlvksPMunQ0">What is the Difference Between POP and IMAP?</a></li>
+<li><a href="https://www.youtube.com/watch?v=tmE9OqjdK7s">What is SMTP</a></li>
 </ul>
