@@ -195,13 +195,11 @@ Comment out <strong>inet_interfaces = localhost</strong></p>
 
 <p>Edit <em>/etc/aliases</em> and redirect root mail to the user you created. Be sure to run the <code>newaliases</code> command for your change to take effect.</p>
 
-<h2 id="sending-email-directly-to-the-server">Sending Email Directly to the Server</h2>
+<h2 id="sending-email-directly-to-the-server-optional">Sending Email Directly to the Server (optional)</h2>
 
 <p>You can send an email directly to port 25 to test Postfix. Follow the Linux Journal article below – <em>Sending Email with Netcat.</em></p>
 
 <!--## Troubleshoot the Assignment&#10;&#10;- Are the needed ports open on the firewall? Use `iptables-save` to check.&#10;- Typos or missing configuration options? Check with `postconf -n`.&#10;- Was `newaliases` run after making changes?&#10;- Was Postfix and Dovecot configuration files reloaded after making changes?&#10;- You may need to manually configure a network interface.-->
-
-
 
 <h2 id="no-mail-spool-for-root">No Mail Spool for Root</h2>
 
