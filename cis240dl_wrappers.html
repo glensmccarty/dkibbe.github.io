@@ -1,0 +1,203 @@
+Getting Down with TCP Wrappers
+
+![http://www.centos.org/docs/5/html/Deployment_Guide-en-US/images/tcp-wrappers/tcp_wrap_diagram.png](http://www.centos.org/docs/5/html/Deployment_Guide-en-US/images/tcp-wrappers/tcp_wrap_diagram.png)
+
+<div id="outline-container-1" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">1</span> Overview
+
+<div id="text-1" class="outline-text-2">
+
+TCP Wrappers provides an extra layer of security for network services by allowing fine-grained control on what hosts can connect to a server. In this assignment you will use TCP Wrappers to allow or deny access to the SSH server.
+
+</div>
+<div id="outline-container-2" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">2</span> Assignment Objectives
+
+<div id="text-2" class="outline-text-2">
+
+_When you have successfully completed this assignment you will be able to:_
+
+*   Selectively deny access based on IP address.
+*   Selectively allow access based on IP address
+*   Explain the function of the xinetd server.
+*   Use `ldd` to determine if a service is protected by TCP Wrappers.
+
+</div>
+<div id="outline-container-3" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">3</span> Terms You Should Know
+
+<div id="text-3" class="outline-text-2"><dl><dt>/etc/hosts.allow</dt><dd>Allow rules go here.</dd><dt>/etc/hosts.deny</dt><dd>Deny rules go here.</dd><dt>ldd</dt><dd>Print shared library dependencies</dd><dt>xinetd</dt><dd>Extended Internet services daemon</dd></dl></div>
+<div id="outline-container-4" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">4</span> Preparation
+
+<div id="text-4" class="outline-text-2">
+
+Do this assignment on a CentOS virtual machine with the SSH daemon installed and running.
+
+CentOS protects most network services with TCP Wrapper. You can use the `ldd` command to determine if OpenSSH is linked to TCP Wrappers:
+
+</div>
+<div id="outline-container-5" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">5</span> /etc/hosts.allow
+
+<div id="text-5" class="outline-text-2">
+
+The **/etc/hosts.allow** file is read before the **/etc/hosts.deny** file and rules are applied from the top down. If no rules for the service are found in either file, or if neither file exists, access to the service is granted. _Remember for the last rule to effective there must be a blank line below it._
+
+1.  Place this line in **/etc/hosts.allow** Use the IP address of the host you will be using to connect to the server.
+2.  _Place a blank line below the rule._
+3.  Try logging in from another virtual machine or from the Windows host using PuTTY. The login should succeed.
+
+</div>
+<div id="outline-container-6" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">6</span> /etc/hosts.deny
+
+<div id="text-6" class="outline-text-2">1.  Add a line to **/etc/hosts.deny** that will deny all connections to the SSH server.
+2.  _Place a blank line below the rule._
+3.  Try to log in again. The login should still succeed since the rule in **/etc/hosts.allow** is applied first.
+4.  Comment out the rule in **/etc/hosts.allow** and try again to log in. This time the log in should fail.
+
+</div>
+<div id="outline-container-7" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">7</span> One File Rules Them All
+
+<div id="text-7" class="outline-text-2">
+
+Both allow and deny rules can be put in a single files either **/etc/hosts.allow** or **/etc/hosts.deny** by using the proper format.
+
+</div>
+<div id="outline-container-8" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">8</span> Setting a Trap with Twist
+
+<div id="text-8" class="outline-text-2">
+
+Set a trap for the bad guys!
+
+</div>
+<div id="outline-container-9" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">9</span> Troubleshoot the Assignment
+
+<div id="text-9" class="outline-text-2">*   The most common problem is not putting a new blank line after the last rule.
+*   Check rule order and if you have conflicting rules in **/etc/hosts.allow** and **/etc/hosts.deny**
+
+</div>
+<div id="outline-container-10" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">10</span> What to Submit
+
+<div id="text-10" class="outline-text-2">
+
+_Copy and paste these questions in the text submission box._
+
+1.  What is the most common mistake made with TCP Wrappers?
+2.  In what order are the rules in the **/etc/hosts.allow** and **/etc/hosts.deny** files processed?
+3.  If you have **sshd: ALL** in both **/etc/hosts.allow** and **/etc/hosts.deny** will SSH connections be allowed? Why?
+4.  What will this rule in **/etc/hosts.allow** do?
+5.  In **/etc/hosts.deny**?
+
+</div>
+<div id="outline-container-11" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">11</span> Resources
+
+<div id="text-11" class="outline-text-2">*   [CentOS Documentation](http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-tcpwrappers.html)
+*   [xinetd man page](http://www.linuxcommand.org/man_pages/xinetd8.html)
+*   [Getting started with SSH security and configuration](https://www.ibm.com/developerworks/aix/library/au-sshsecurity/)
+
+</div>
+<div id="outline-container-12" class="outline-2">
+
+
+
+
+
+</div>
+
+## <span class="section-number-2">12</span> License
+
+<div id="text-12" class="outline-text-2">[![Creative Commons License](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/)
+ This work is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/)</div>
+<div id="postamble">
+
+Author: Dennis Kibbe [<a href="mailto:dennis.kibbe@mesacc.edu">dennis.kibbe@mesacc.edu</a>](mailto:dennis.kibbe@mesacc.edu)
+
+Date: 2014-03-02 12:12:12 MST
+
+HTML generated by org-mode 6.33x in emacs 23
+
+</div>
