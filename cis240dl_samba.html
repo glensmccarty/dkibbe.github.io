@@ -1,17 +1,17 @@
 <h1 id="samba">Samba</h1>
 
-
-
 <h2 id="overview">Overview</h2>
 
 <p>Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.</p>
+
+
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p><em>When you have successfully completed this assignment you will be able to:</em> </p>
 
 <ul>
-<li>Configure a Samba server on CentOS</li>
+<li>Configure a Samba server on CentOS &amp;</li>
 <li>Configure SELinux to work with Samba</li>
 <li>Connect to the Samba server from a Windows workstation.</li>
 </ul>
@@ -29,11 +29,69 @@
 <dd>NetBIOS Message Block daemon</dd>
 </dl>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
-<p>Use a CentOS virtual Machine on the 192.168.201.0/24 network.</p>
+<p>Use a CentOS7 virtual Machine on the 192.168.201.0/24 network.</p>
+
+
+
+<h2 id="install-samba">Install Samba</h2>
+
+<pre><code># yum install samba samba-commons samba-client cups-libs cifs-utils policycoreutils-python
+</code></pre>
+
+
+
+<h2 id="create-directory-to-share">Create directory to share</h2>
+
+<pre><code># mkdir /srv/smb/data
+</code></pre>
+
+<p>Add a file SUCCESS to the directory.</p>
+
+<h3 id="add-samba-group">Add Samba Group</h3>
+
+<pre><code># groupadd staff
+</code></pre>
+
+
+
+<h3 id="set-permissions-and-owership">Set Permissions and Owership</h3>
+
+<pre><code># hgrp -R staff /srv/smb/data
+# chmod 0777 /srv/smb/data
+</code></pre>
+
+<h3 id="set-security">Set Security</h3>
+
+<pre><code># chcon -R -t samba_share_t /srv/smb/data
+# semanage fcontext -a -t samba_share_t /srv/smb/data
+# setsebool -P samba_enable _home_dirs on
+</code></pre>
+
+
+
+<h2 id="add-user">Add User</h2>
+
+<p>If you haven't done so already add a user.</p>
+
+<pre><code># useradd tux
+# passwd tux
+</code></pre>
+
+
+
+<h3 id="add-to-samba-group">Add to Samba Group</h3>
+
+<pre><code># usermod -aG staff tux
+# smbpasswd -a tux
+</code></pre>
 
 <h2 id="configure-samba">Configure Samba</h2>
+
+
 
 <h3 id="the-comment-characters">The Comment Characters</h3>
 
@@ -49,68 +107,99 @@
 
 <p><em>Be sure to uncomment options that you change.</em></p>
 
-<h3 id="netbios">NetBIOS</h3>
 
-<ol>
-<li>Set <strong>netbios name</strong> to a unique name.</li>
-<li>Set <strong>interfaces</strong></li>
-<li>Set <strong>hosts</strong></li>
-<li>Set <strong>security</strong></li>
-</ol>
+
+<h3 id="interfaces-and-hosts-global">Interfaces and Hosts [global]</h3>
+
+<pre><code>interfaces = lo eth0 192.168.201.0.24
+hosts allow = 127. 192.168.201.
+</code></pre>
 
 <p><em>Make sure the interface you enter is your active interface!</em></p>
 
+<h3 id="public-share-public">Public Share [public]</h3>
+
+<p>At the bottom of <code>/etc/samba/smb.conf</code>edit and uncomment the appropriete lines in [public]</p>
+
 <h2 id="testing-the-configuration">Testing the Configuration</h2>
 
-<p>Use <code>testparm</code> to check the configuration. If any of you changes don't show up make sure you uncommented (removed the semi-colon) the line.</p>
+<p>Use <code>testparm</code> to check the configuration. </p>
 
-<ol>
-<li>Global settings</li>
-<li>Network-related</li>
-<li>Logging</li>
-<li>Standalone</li>
-<li>Domain Controller</li>
-<li>Browse Control</li>
-<li>Name Resolution</li>
-<li>Printer options</li>
-<li>Filesystem options</li>
-</ol>
 
-<p>Restart smb after making changes.</p>
 
-<h2 id="add-a-samba-user">Add a Samba User</h2>
+<h2 id="start-samba">Start Samba</h2>
 
-<ol>
-<li>Add a Samba user. The account must already exist. The Samba password can be different.</li>
-</ol>
+<pre><code># systemctl start smb.service
+# systemctl start nmb.service
+</code></pre>
 
-<h2 id="selinux">SELinux</h2>
 
-<p>SELinux needs to be configured for Samba. Follow the instructions in the <strong>smb.conf</strong> to configure SELinux. The <code>setsebool</code> command will take a while.</p>
+
+<h2 id="enable-samba-on-boot">Enable Samba On Boot</h2>
+
+<pre><code># systemctl start smb.service
+# systemctl start nmb.service
+</code></pre>
+
+
+
+<h2 id="netbios-ports">NetBIOS Ports</h2>
+
+<p>Should already be there.</p>
+
+<pre><code># grep netbios /etc/services
+</code></pre>
 
 <h2 id="firewall">Firewall</h2>
 
-<p>Use <code>system-config-firewall-tui</code> to open ports for Samba.</p>
+<pre><code># firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.56.0/24" service name="samba" log prefix="samba" level="info" limit value="1/m" accept'
 
-<p></p>
+# firewall-cmd --reload
+</code></pre>
 
-<h2 id="on-your-own">On Your Own</h2>
-
-<p>SWAT is the browser-based configuration tool for Samba. See if you can set it up.</p>
-
-<h2 id="connect">Connect</h2>
+<h2 id="connect-from-windoze">Connect from Windoze</h2>
 
 <p>From the Windows Run Dialog box connect to the Samba server.</p>
 
-<p></p>
+<pre><code>\\192.168.201.123\srv\smb\data
+</code></pre>
+
+
+
+<h2 id="connect-from-linux">Connect from Linux</h2>
+
+<pre><code>$ smbclient -L \\192.168.201.123 -U tux
+
+$ smbclient \\192.168.201.123 -U tux
+</code></pre>
+
+
+
+<h2 id="mount-samba-directory">Mount Samba Directory</h2>
+
+<pre><code># mount -cifs //192.168.201.123/srv/smb/data -o username=tux /mnt/
+</code></pre>
+
+
+
+<h2 id="from-ubuntu">From Ubuntu</h2>
+
+<p>Click Dash and type <code>smb://192.168.201.123/</code></p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of the Windows Explorer accessing the Samba server.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-File_and_Print_Servers.html#s1-Samba">Red Hat Deployment Guide</a></li>
 <li>Samba Documentation</li>
+<li>man (5) smb.conf</li>
 </ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
