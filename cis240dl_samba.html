@@ -1,0 +1,227 @@
+<div id="content"><div id="outline-container-1" class="outline-2">
+
+
+
+
+
+</div></div>
+
+<h2 id="1-overview"><span class="section-number-2">1</span> Overview</h2>
+
+<div id="text-1" class="outline-text-2">
+
+Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
+
+</div><div id="outline-container-2" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="2-assignment-objectives"><span class="section-number-2">2</span> Assignment Objectives</h2>
+
+<div id="text-2" class="outline-text-2">
+
+_When you have successfully completed this assignment you will be able to:_
+
+*   Configure a Samba server on CentOS
+*   Configure SELinux to work with Samba
+*   Connect to the Samba server from a Windows workstation.
+
+</div><div id="outline-container-3" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="3-terms-you-should-know"><span class="section-number-2">3</span> Terms You Should Know</h2>
+
+<div id="text-3" class="outline-text-2"><dl><dt>/etc/samba/smb.conf</dt><dd>The Samba configuration file.</dd><dt>smb</dt><dd>Server Message Block daemon</dd><dt>nmb</dt><dd>NetBIOS Message Block daemon</dd></dl></div><div id="outline-container-4" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="4-preparation"><span class="section-number-2">4</span> Preparation</h2>
+
+<div id="text-4" class="outline-text-2">
+
+Use a CentOS virtual Machine on the 192.168.201.0/24 network.
+
+</div><div id="outline-container-5" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="5-configure-samba"><span class="section-number-2">5</span> Configure Samba</h2>
+
+<div id="text-5" class="outline-text-2"></div><div id="outline-container-5.1" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="51-the-comment-characters"><span class="section-number-3">5.1</span> The Comment Characters</h3>
+
+<div id="text-5.1" class="outline-text-3">
+
+_Samba configuration file uses two types of comments._
+
+<dl><dt># (hash)</dt><dd>Comments and text</dd><dt>; (semicolon)</dt><dd>Options</dd></dl>
+
+_Be sure to uncomment options that you change._
+
+</div><div id="outline-container-5.2" class="outline-3">
+
+
+
+
+
+</div>
+
+<h3 id="52-netbios"><span class="section-number-3">5.2</span> NetBIOS</h3>
+
+<div id="text-5.2" class="outline-text-3">1.  Set **netbios name** to a unique name.
+2.  Set **interfaces**
+3.  Set **hosts**
+4.  Set **security**
+
+_Make sure the interface you enter is your active interface!_
+
+</div><div id="outline-container-6" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="6-testing-the-configuration"><span class="section-number-2">6</span> Testing the Configuration</h2>
+
+<div id="text-6" class="outline-text-2">
+
+Use `testparm` to check the configuration. If any of you changes don't show up make sure you uncommented (removed the semi-colon) the line.
+
+1.  Global settings
+2.  Network-related
+3.  Logging
+4.  Standalone
+5.  Domain Controller
+6.  Browse Control
+7.  Name Resolution
+8.  Printer options
+9.  Filesystem options
+
+Restart smb after making changes.
+
+</div><div id="outline-container-7" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="7-add-a-samba-user"><span class="section-number-2">7</span> Add a Samba User</h2>
+
+<div id="text-7" class="outline-text-2">1.  Add a Samba user. The account must already exist. The Samba password can be different.
+
+</div><div id="outline-container-8" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="8-selinux"><span class="section-number-2">8</span> SELinux</h2>
+
+<div id="text-8" class="outline-text-2">
+
+SELinux needs to be configured for Samba. Follow the instructions in the **smb.conf** to configure SELinux. The `setsebool` command will take a while.
+
+</div><div id="outline-container-9" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="9-firewall"><span class="section-number-2">9</span> Firewall</h2>
+
+<div id="text-9" class="outline-text-2">
+
+Use `system-config-firewall-tui` to open ports for Samba.
+
+![https://wm.sdf.org/gallery/albums/userpics/10081/firewall_samba.png](https://wm.sdf.org/gallery/albums/userpics/10081/firewall_samba.png)
+
+</div><div id="outline-container-10" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="10-on-your-own"><span class="section-number-2">10</span> On Your Own</h2>
+
+<div id="text-10" class="outline-text-2">
+
+SWAT is the browser-based configuration tool for Samba. See if you can set it up.
+
+</div><div id="outline-container-11" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="11-connect"><span class="section-number-2">11</span> Connect</h2>
+
+<div id="text-11" class="outline-text-2">
+
+From the Windows Run Dialog box connect to the Samba server.
+
+![https://wm.sdf.org/gallery/albums/userpics/10081/run.png](https://wm.sdf.org/gallery/albums/userpics/10081/run.png)
+
+</div><div id="outline-container-12" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="12-what-to-submit"><span class="section-number-2">12</span> What to Submit</h2>
+
+<div id="text-12" class="outline-text-2">
+
+Submit a screenshot of the Windows Explorer accessing the Samba server.
+
+</div><div id="outline-container-13" class="outline-2">
+
+
+
+
+
+</div>
+
+<h2 id="13-resources"><span class="section-number-2">13</span> Resources</h2>
+
+<div id="text-13" class="outline-text-2">*   [Red Hat Deployment Guide](https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-File_and_Print_Servers.html#s1-Samba)
+*   Samba Documentation
+
+</div>
