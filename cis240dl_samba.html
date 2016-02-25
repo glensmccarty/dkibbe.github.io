@@ -46,7 +46,7 @@
 
 <h2 id="create-directory-to-share">Create directory to share</h2>
 
-<pre><code># mkdir /srv/smb/data
+<pre><code># mkdir -p /srv/smb/data
 </code></pre>
 
 <p>Add a file SUCCESS to the directory.</p>
@@ -68,10 +68,8 @@
 
 <pre><code># chcon -R -t samba_share_t /srv/smb/data
 # semanage fcontext -a -t samba_share_t /srv/smb/data
-# setsebool -P samba_enable _home_dirs on
+# setsebool -P samba_enable_home_dirs on
 </code></pre>
-
-
 
 <h2 id="add-user">Add User</h2>
 
