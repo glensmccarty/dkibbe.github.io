@@ -60,7 +60,7 @@
 
 <h3 id="set-permissions-and-owership">Set Permissions and Owership</h3>
 
-<pre><code># hgrp -R staff /srv/smb/data
+<pre><code># chgrp -R staff /srv/smb/data
 # chmod 0777 /srv/smb/data
 </code></pre>
 
@@ -111,7 +111,7 @@
 
 <h3 id="interfaces-and-hosts-global">Interfaces and Hosts [global]</h3>
 
-<pre><code>interfaces = lo eth0 192.168.201.0.24
+<pre><code>interfaces = lo eth0 192.168.201.0/24
 hosts allow = 127. 192.168.201.
 </code></pre>
 
@@ -137,11 +137,9 @@ hosts allow = 127. 192.168.201.
 
 <h2 id="enable-samba-on-boot">Enable Samba On Boot</h2>
 
-<pre><code># systemctl start smb.service
-# systemctl start nmb.service
+<pre><code># systemctl enable smb.service
+# systemctl enable nmb.service
 </code></pre>
-
-
 
 <h2 id="netbios-ports">NetBIOS Ports</h2>
 
@@ -152,7 +150,7 @@ hosts allow = 127. 192.168.201.
 
 <h2 id="firewall">Firewall</h2>
 
-<pre><code># firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.56.0/24" service name="samba" log prefix="samba" level="info" limit value="1/m" accept'
+<pre><code># firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.201.0/24" service name="samba" log prefix="samba" level="info" limit value="1/m" accept'
 
 # firewall-cmd --reload
 </code></pre>
