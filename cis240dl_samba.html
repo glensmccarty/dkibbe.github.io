@@ -61,7 +61,7 @@
 <h3 id="set-permissions-and-owership">Set Permissions and Owership</h3>
 
 <pre><code># chgrp -R staff /srv/smb/data
-# chmod 0777 /srv/smb/data
+# chmod 0770 /srv/smb/data
 </code></pre>
 
 <h3 id="set-security">Set Security</h3>
@@ -149,6 +149,8 @@ hosts allow = 127. 192.168.201.
 <h2 id="firewall">Firewall</h2>
 
 <pre><code># firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.201.0/24" service name="samba" log prefix="samba" level="info" limit value="1/m" accept'
+
+# firewall-cmd --add-service=samba
 
 # firewall-cmd --reload
 </code></pre>
