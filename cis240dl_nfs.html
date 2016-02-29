@@ -1,0 +1,157 @@
+<h1 id="network-file-system">Network File System</h1>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p>NFS has been around since the 1980s as a convenient why to share files over the network. In this exercise you will set up an NFS server and access files from a network client.</p>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Install and configure the Network File System Server.</li>
+<li>Configure the NFS client</li>
+<li>Mount a remote share on a local directory.</li>
+</ol>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<dl>
+<dt>/etc/exports</dt>
+<dd>Show exported directories on localhost or a remote host.</dd>
+
+<dt>showmount -e</dt>
+<dd>Show exported directories on localhost or a remote host.</dd>
+
+<dt>exportfs -rv</dt>
+<dd>Assures that the export table is updated.</dd>
+
+<dt>/etc/sysconfig/nfs</dt>
+<dd>The NFS configuration file</dd>
+
+<dt>rpc</dt>
+<dd>Routines that allow C programs to make procedure calls on other machines across the network.</dd>
+
+<dt>NFS</dt>
+<dd>Network File System</dd>
+</dl>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>You will be working with two virtual machines in this assignment – a server and a client. In the instructions I've labeled the server vm1 and the client vm2.</p>
+
+<p>Make sure both virtual machines are on the same network and can ping each other.</p>
+
+<p>The Ubuntu (Debian) virtual machine can be the client. In that case no additional software needs to be installed to mount the NFS share.</p>
+
+
+
+<h2 id="configure-the-server">Configure the Server</h2>
+
+<h3 id="install-the-nfs-file-server">Install the NFS file server</h3>
+
+<p>Install the NFS server group.</p>
+
+<p>root@vm1 # yum groupinstall "NFS Server" <br>
+The service can be started with the service command. Start rpcbind first.</p>
+
+<p>root@vm1 # service rpcbind start <br>
+root@vm1 # service nfs start <br>
+nfslock needs to be started as well.</p>
+
+<p>root@vm1 # service nfslock start <br>
+Make sure all start on reboot.</p>
+
+<p>root@vm1 # chkconfig rpcbind on <br>
+root @vm1 # chkconfig nfs on <br>
+root@vm1 # chkconfig nfslock on</p>
+
+
+
+<h3 id="export-a-directory">Export a Directory</h3>
+
+<p>First create a directory to share. /srv/nfs would be a good choice then add the directory to /etc/exports.</p>
+
+<p>/srv/nfs/ 192.168.201.0/24(sync) <br>
+The sync option makes sure that file writes are successfully completed before they are acknowledged to the client. Another option, ro makes the export read-only.</p>
+
+<p>Run exportfs to update the export table.</p>
+
+<p>exportfs -rv <br>
+exporting 192.168.201.0/24:/srv/nfs <br>
+showmount -e localhost <br>
+Export list for localhost.localdomain: <br>
+/srv/nfs 192.168.201.0/24 <br>
+Place an empty file in the directory to share.</p>
+
+<p>touch /srv/nfs/success!</p>
+
+
+
+<h3 id="iptables">Iptables</h3>
+
+<p>Open port 2049 for the Trusted Service NFSv4 using system-config-firewall-tui.</p>
+
+
+
+<h3 id="selinux">SELinux</h3>
+
+<p>For this assignment place SELinux in permissive mode only if needed.</p>
+
+<p>root@vm1 # setenforce 0 <br>
+The getenforce command will show the current state of SELinux.</p>
+
+
+
+<h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
+
+<p>Check that the NFS Utilities package is installed.</p>
+
+<p>root@vm2 # rpm -q nfs-utils <br>
+ntf-utils-1.2.3-36.el6.x86_64 <br>
+Make a directory to mount the NFS share on.</p>
+
+<p>mkdir -p /mnt/nfs_share</p>
+
+<h3 id="mount-the-directory">Mount the Directory</h3>
+
+<p>From the client mount the directory.</p>
+
+<p>root@vm2 # mount 192.168.201.73:/srv/nfs /mnt/nfs_share <br>
+root@vm2 # ls /mnt/nfs_share <br>
+success!</p>
+
+
+
+<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
+
+<p>Make sure both virtual machines are on the same network and can ping each other. <br>
+Did you create the directory you want to share? <br>
+Be sure to create a file so you can see that the directory is mounted properly. <br>
+Use nmap from the client to map open ports on the NFS server. If port 2049 doesn't show on the list use system-config-firewall-tui to open the trusted NFS ports on the server. <br>
+Don't blindly copy the IP addresses in this assignment. Make sure you are using the correct IP addresses for your NFS server and the subnet you are on.</p>
+
+<h2 id="on-your-own">On Your Own</h2>
+
+<p>Follow the instructions in the Linux Journal artical under Resources and install SSHFS.</p>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screen shot of the output of mount | grep nfs on the client showing the IP address of the NFS share.</p>
+
+<h2 id="resources">Resources</h2>
+
+<p>RHEL Storage Administration Guide <br>
+man exports <br>
+man nfs <br>
+SSHFS: Super Easy File Access over SSH</p>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
