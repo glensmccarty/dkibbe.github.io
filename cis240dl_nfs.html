@@ -1,6 +1,4 @@
-<h1 id="network-file-system">Network File System</h1>
-
-
+<h1 id="network-file-system-nfs">Network File System (NFS)</h1>
 
 <h2 id="overview">Overview</h2>
 
@@ -50,7 +48,9 @@
 
 <p>The Ubuntu (Debian) virtual machine can be the client. In that case no additional software needs to be installed to mount the NFS share.</p>
 
+<p>Take a snapshot of the virtual machine before starting this assignment.</p>
 
+<p>Networking to bridged.</p>
 
 <h2 id="configure-the-server">Configure the Server</h2>
 
@@ -58,41 +58,46 @@
 
 <p>Install the NFS server group.</p>
 
-<p>root@vm1 # yum groupinstall "NFS Server" <br>
-The service can be started with the service command. Start rpcbind first.</p>
+<pre><code>root@vm1 # yum install nfs-utils rpcbind
+</code></pre>
 
-<p>root@vm1 # service rpcbind start <br>
-root@vm1 # service nfs start <br>
-nfslock needs to be started as well.</p>
+<p>The service can be started with the service command. Start rpcbind first.</p>
 
-<p>root@vm1 # service nfslock start <br>
-Make sure all start on reboot.</p>
+<pre><code>root@vm1 # systemctl start rpcbind
+root@vm1 # systemctl start nfs
 
-<p>root@vm1 # chkconfig rpcbind on <br>
-root @vm1 # chkconfig nfs on <br>
-root@vm1 # chkconfig nfslock on</p>
+systemctl enable nfs
 
+root@vm1 # service nfslock start
+</code></pre>
 
+<p>Make sure all start on reboot.</p>
+
+<pre><code>root@vm1 # chkconfig rpcbind on
+root @vm1 # chkconfig nfs on
+root@vm1 # chkconfig nfslock on
+</code></pre>
 
 <h3 id="export-a-directory">Export a Directory</h3>
 
 <p>First create a directory to share. /srv/nfs would be a good choice then add the directory to /etc/exports.</p>
 
-<p>/srv/nfs/ 192.168.201.0/24(sync) <br>
-The sync option makes sure that file writes are successfully completed before they are acknowledged to the client. Another option, ro makes the export read-only.</p>
+<pre><code>/srv/nfs/ 192.168.201.0/24(sync)
+</code></pre>
+
+<p>The sync option makes sure that file writes are successfully completed before they are acknowledged to the client. Another option, ro makes the export read-only.</p>
 
 <p>Run exportfs to update the export table.</p>
 
-<p>exportfs -rv <br>
-exporting 192.168.201.0/24:/srv/nfs <br>
-showmount -e localhost <br>
-Export list for localhost.localdomain: <br>
-/srv/nfs 192.168.201.0/24 <br>
-Place an empty file in the directory to share.</p>
+<pre><code>exportfs -rv
+exporting 192.168.201.0/24:/srv/nfs
+showmount -e localhost
+Export list for localhost.localdomain:
+/srv/nfs 192.168.201.0/24
+Place an empty file in the directory to share.
 
-<p>touch /srv/nfs/success!</p>
-
-
+touch /srv/nfs/success!
+</code></pre>
 
 <h3 id="iptables">Iptables</h3>
 
@@ -104,30 +109,36 @@ Place an empty file in the directory to share.</p>
 
 <p>For this assignment place SELinux in permissive mode only if needed.</p>
 
-<p>root@vm1 # setenforce 0 <br>
-The getenforce command will show the current state of SELinux.</p>
+<pre><code>root@vm1 # setenforce 0
+</code></pre>
 
-
+<p>The <code>getenforce</code> command will show the current state of SELinux.</p>
 
 <h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
 
 <p>Check that the NFS Utilities package is installed.</p>
 
-<p>root@vm2 # rpm -q nfs-utils <br>
-ntf-utils-1.2.3-36.el6.x86_64 <br>
-Make a directory to mount the NFS share on.</p>
+<pre><code>root@vm2 # sudo apt-get install rpcbind nfs-common
+</code></pre>
 
-<p>mkdir -p /mnt/nfs_share</p>
+<p>Make a directory to mount the NFS share on.</p>
+
+<pre><code>mkdir -p /mnt/nfs_share
+</code></pre>
 
 <h3 id="mount-the-directory">Mount the Directory</h3>
 
 <p>From the client mount the directory.</p>
 
-<p>root@vm2 # mount 192.168.201.73:/srv/nfs /mnt/nfs_share <br>
-root@vm2 # ls /mnt/nfs_share <br>
-success!</p>
+<pre><code>root@vm2 # mount 192.168.201.123:/srv/nfs /mnt/nfs_share
+root@vm2 # ls /mnt/nfs_share
+success!
+</code></pre>
 
+<h3 id="add-to-etcfst">Add to /etc/fst</h3>
 
+<pre><code>192.168.201.123:/srv/nfs /mnt/nfs_share nfs defaults 0,0
+</code></pre>
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
