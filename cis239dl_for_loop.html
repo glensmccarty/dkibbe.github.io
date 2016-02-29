@@ -11,7 +11,6 @@
 <h2 id="term-you-should-know">Term You Should Know</h2>
 
 <ul>
-<li><code>tr</code></li>
 <li><code>for</code></li>
 <li><code>seq</code></li>
 <li><code>{ }</code></li>
@@ -50,36 +49,26 @@ done
 
 <p>This will create a sequence from 1 (start) to 9 (end). Each instance of the variable <strong>i</strong> is replaced by the output of the <code>{ }</code> command. You specify a increment after the end number <code>{1..10..2}</code>. When typed on one line the semi-colon (<strong>;</strong>) replaces enter.</p>
 
-<h2 id="the-tr-command">The <code>tr</code> Command</h2>
 
-<p>The <code>tr</code> command can translate a string of characters. Here you will use <code>tr</code> to convert file names from upper to lower case. try the command by its self before you use it in a script.</p>
 
-<pre><code>$ touch FILE{1,2,3,4,5}
-$ ls FILE?
-FILE1
-FILE2
-FILE3
-FILE4
-FILE5
+<h2 id="using-echo-to-test">Using echo to Test</h2>
+
+<p>This for loop will rename file1, file2, file3, etc. to FOO1, FOO2, FOO3, etc.</p>
+
+<pre><code>$ for i in {1..9}; do mv file"$i" FOO"$i"; done
 </code></pre>
 
-<p>The syntax for <code>tr</code> is <em>command</em>, <em>options</em>, <em>set1</em>, <em>set2</em></p>
+<p>Placing the <code>echo</code> command in front of the <code>mv</code> command lets you test the command first.</p>
 
-<pre><code>$ ls FILE* | tr [:upper:] [:lower:]
-file1
-file2
-file3
-file4
-file5
+<pre><code>$ for i in {1..9}; do echo mv file"$i" FOO"$i"; done
+mv file1 FOO1
+mv file2 FOO2
+mv file3 FOO3
 </code></pre>
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Write a script that uses a <code>for</code> loop to remove the files you created. For 5 extra points use a <code>for</code> to remove only the odd numbered files leaving the even numbered files untouched.</p>
-
-
+<p>Write a script that uses a <code>for</code> loop to remove (<strong>rm</strong>) the files you created. For 2 extra points use a <code>for</code> to remove only the odd numbered files leaving the even numbered files untouched. Submit the assignemnt using <a href="https://paste.fedoraproject.org/">Fedora pastebin</a>.</p>
 
 <h2 id="resources">Resources</h2>
 
