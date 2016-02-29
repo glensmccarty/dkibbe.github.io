@@ -1,8 +1,12 @@
 <h1 id="writing-your-first-bash-shell-script">Writing Your First Bash Shell Script</h1>
 
+
+
 <h2 id="introduction">Introduction</h2>
 
 <p>In this assignment you’ll create a very basic shell script. The only function of this script is to print “Hello World” to stdout. This assignment will introduce you to features that should be included in all the scripts that you write.</p>
+
+
 
 <h2 id="text-editors">Text Editors</h2>
 
@@ -16,6 +20,8 @@
 
 <pre><code># vi myscript.sh
 </code></pre>
+
+
 
 <h2 id="parts-of-a-script">Parts of a Script</h2>
 
@@ -35,20 +41,22 @@
 
 <p><em>Only one of the lines should be at the top of your script.</em></p>
 
+
+
 <h3 id="comments">Comments</h3>
 
 <p>Include the following comment lines (comment lines start with the <strong>#</strong> character.) in all the scripts you write for this class.</p>
 
 <ul>
-<li>Your Name</li>
 <li>Purpose of the script</li>
+<li>Your Name</li>
 <li>What assignment the script is for.</li>
 </ul>
 
 <p><em>Example:</em></p>
 
-<pre><code># Tux Penguin
-# Prints a "Hello World" message to the screen.
+<pre><code># Prints a "Hello World" message to the screen.
+# Tux Penguin
 # Assignment 1
 </code></pre>
 
@@ -56,7 +64,7 @@
 
 <h3 id="variables">Variables</h3>
 
-<p>Next place any variables used in the script. Name your variables with lower case, CamelCase or, if upper case, make sure there is not an environmental variable with the same name.</p>
+<p>Next place any variables used in the script. Name your variables with lower case, CamelCase or, if upper case, make sure there is not an environmental variable with the same name. If variables are not used in the script you can skip this section</p>
 
 <pre><code># variables
 IPT=/usr/sbin/iptables
@@ -66,9 +74,36 @@ MyVar=10
 
 
 
+<h3 id="functions">Functions</h3>
+
+<p>If functions are used in the script put them next. Defining variables and functions at the top of the script help make the script more readable.</p>
+
+<p><em>Here is a simple example:</em></p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash 
+</span>
+<span class="hljs-comment"># Functions</span>
+<span class="hljs-function"><span class="hljs-title">usage</span></span>() {
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Usage: Please enter two
+    parameters"</span>
+}
+
+<span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$#</span> <span class="hljs-operator">-ne</span> <span class="hljs-number">2</span> ]]
+    <span class="hljs-keyword">then</span>
+        usage
+        <span class="hljs-keyword">exit</span> <span class="hljs-number">1</span>
+<span class="hljs-keyword">fi</span>
+<span class="hljs-built_in">echo</span> OK</code></pre>
+
+<p>Indentation can be used to make scripts more readable.</p>
+
+
+
 <h3 id="commands">Commands</h3>
 
-<p>Finally comes the commands that actually do the work. You can annote these with a comment if you like.</p>
+<p>Finally comes the commands that actually do the work. You can annotate these with a comment if you like.</p>
 
 <pre><code>clear # Clears the screen.
 echo "Hello World" # printf works here too.
@@ -84,6 +119,10 @@ echo "Hello World" # printf works here too.
 </code></pre>
 
 
+
+<h3 id="a-sample-script-in-nano">A Sample Script in Nano</h3>
+
+<p><img src="http://classfiles.dennisk.fastmail.net/hello_script.png" alt="A sample first script" title=""></p>
 
 <h3 id="run-the-script">Run the Script</h3>
 
