@@ -1,8 +1,8 @@
-<h1 id="first-script">First Script</h1>
+<h1 id="writing-your-first-bash-shell-script">Writing Your First Bash Shell Script</h1>
+
+<h2 id="introduction">Introduction</h2>
 
 <p>In this assignment you’ll create a very basic shell script. The only function of this script is to print “Hello World” to stdout. This assignment will introduce you to features that should be included in all the scripts that you write.</p>
-
-
 
 <h2 id="text-editors">Text Editors</h2>
 
@@ -12,7 +12,7 @@
 
 <h2 id="naming-the-script">Naming the Script</h2>
 
-<p>Name the script lower case, one word with a .sh extension.</p>
+<p>Name the script lower case, one word with a .sh extension. While not essential the .sh extension shows that this is a script and some text editors will use syntax highlighting to make the script easier to edit.</p>
 
 <pre><code># vi myscript.sh
 </code></pre>
@@ -23,12 +23,12 @@
 
 <h3 id="shebang-line">Shebang line</h3>
 
-<p>This first line sets the environment for the script. In our case Bash. Usually you will see this shebang line.</p>
+<p>This first line sets the environment for the script. In our case Bash. Usually you will see this shebang line in scripts you find on the Web..</p>
 
 <pre><code>#!/bin/bash
 </code></pre>
 
-<p>A better choice is the following which makes the script more portable.</p>
+<p>A better choice is the following which makes the script more portable. Any POSIX compliant shell should run the script properly.</p>
 
 <pre><code>#!/usr/bin/env bash
 </code></pre>
@@ -52,6 +52,8 @@
 # Assignment 1
 </code></pre>
 
+
+
 <h3 id="variables">Variables</h3>
 
 <p>Next place any variables used in the script. Name your variables with lower case, CamelCase or, if upper case, make sure there is not an environmental variable with the same name.</p>
@@ -62,6 +64,8 @@ pet=hamster
 MyVar=10
 </code></pre>
 
+
+
 <h3 id="commands">Commands</h3>
 
 <p>Finally comes the commands that actually do the work. You can annote these with a comment if you like.</p>
@@ -70,12 +74,16 @@ MyVar=10
 echo "Hello World" # printf works here too.
 </code></pre>
 
+
+
 <h3 id="end-the-script">End the Script</h3>
 
 <p>While not necessary it is nice to end the script with the following comment line.</p>
 
 <pre><code># END
 </code></pre>
+
+
 
 <h3 id="run-the-script">Run the Script</h3>
 
@@ -86,6 +94,8 @@ echo "Hello World" # printf works here too.
 <li>Run the script with the <code>bash</code> command.</li>
 <li>Use <code>source</code> to run the script.</li>
 </ul>
+
+
 
 <h3 id="debug-the-assignment">Debug the Assignment</h3>
 
@@ -98,7 +108,9 @@ echo "Hello World" # printf works here too.
 
 <h1 id="what-to-submit">What to Submit</h1>
 
-<p>Copy and paste your script in the submission text box or upload the text file. (<em>Note</em>: must have a .sh extension to upload.)</p>
+<p>Copy and paste your script in the submission text box or upload screenshot of the text file.</p>
+
+
 
 <h1 id="resources">Resources</h1>
 
@@ -106,4 +118,6 @@ echo "Hello World" # printf works here too.
 <li><a href="https://en.wikibooks.org/wiki/Bash_Shell_Scripting" title="Bash Scripting">Bash Shell Scripting - Wikibooks</a></li>
 <li><a href="https://www.gnu.org/software/bash/manual/bashref.html" title="Bash Reference Manual">Bash Reference Manual</a></li>
 <li><a href="http://bash.cyberciti.biz/guide/Main_Page" title="Linux Shell Scripting Tutorial">Linux Shell Scripting Tutorial</a></li>
+<li><a href="https://google.github.io/styleguide/shell.xml">Google Shell Script Style Guide</a></li>
+<li><a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a></li>
 </ul>
