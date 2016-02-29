@@ -99,43 +99,39 @@ Place an empty file in the directory to share.
 touch /srv/nfs/success!
 </code></pre>
 
-<h3 id="iptables">Iptables</h3>
+<h3 id="firewall">Firewall</h3>
 
-<p>Open port 2049 for the Trusted Service NFSv4 using system-config-firewall-tui.</p>
+<p>Add the NFS service to the firewall.</p>
 
-
-
-<h3 id="selinux">SELinux</h3>
-
-<p>For this assignment place SELinux in permissive mode only if needed.</p>
-
-<pre><code>root@vm1 # setenforce 0
+<pre><code># firewall-cmd --permanent --add-service nfs
 </code></pre>
 
-<p>The <code>getenforce</code> command will show the current state of SELinux.</p>
+<!--### SELinux&#10;&#10;For this assignment place SELinux in permissive mode only if needed.&#10;&#10;    root@vm1 # setenforce 0&#10;&#10;The `getenforce` command will show the current state of SELinux.-->
 
 <h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
 
-<p>Check that the NFS Utilities package is installed.</p>
+<p>There are two packages that need to be installed on the client.</p>
 
-<pre><code>root@vm2 # sudo apt-get install rpcbind nfs-common
+<pre><code>tux@vm2 $ sudo apt-get install rpcbind nfs-common
 </code></pre>
 
 <p>Make a directory to mount the NFS share on.</p>
 
-<pre><code>mkdir -p /mnt/nfs_share
+<pre><code>tux@vm2 $ sudo mkdir -p /mnt/nfs_share
 </code></pre>
 
 <h3 id="mount-the-directory">Mount the Directory</h3>
 
 <p>From the client mount the directory.</p>
 
-<pre><code>root@vm2 # mount 192.168.201.123:/srv/nfs /mnt/nfs_share
-root@vm2 # ls /mnt/nfs_share
+<pre><code>tux@vm2 $ sudo mount 192.168.201.123:/srv/nfs /mnt/nfs_share
+tux@vm2 $ ls /mnt/nfs_share
 success!
 </code></pre>
 
-<h3 id="add-to-etcfst">Add to /etc/fst</h3>
+<h3 id="add-to-etcfstab">Add to /etc/fstab</h3>
+
+<p>Adding a line to the <code>/etc/fstab</code> file will automatically mount the share on boot.</p>
 
 <pre><code>192.168.201.123:/srv/nfs /mnt/nfs_share nfs defaults 0,0
 </code></pre>
