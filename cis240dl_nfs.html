@@ -55,7 +55,7 @@
 
 <p>NFS does not need to be installed but does need a few packages</p>
 
-<pre><code>root@vm1 # yum install nfs-utils rpcbind
+<pre><code>root@vm1 # yum install nfs-utils rpcbind firewalld policycoreutils-python
 </code></pre>
 
 <p>The service can be started with the service command. Start rpcbind first.</p>
@@ -64,8 +64,6 @@
 root@vm1 # systemctl start nfs
 root@vm1 # systemctl start nfslock
 </code></pre>
-
-
 
 <h3 id="enable-on-boot">Enable on Boot</h3>
 
@@ -83,7 +81,7 @@ systemctl enable nfslock
 
 <p>The sync option makes sure that file writes are successfully completed before they are acknowledged to the client. Another option, ro makes the export read-only.</p>
 
-<p>Run exportfs to update the export table.</p>
+<p>Run <code>exportfs</code> to update the export table.</p>
 
 <pre><code>exportfs -rv
 exporting 192.168.201.0/24:/srv/nfs
@@ -94,8 +92,6 @@ Place an empty file in the directory to share.
 
 touch /srv/nfs/success!
 </code></pre>
-
-
 
 <h3 id="firewall">Firewall</h3>
 
