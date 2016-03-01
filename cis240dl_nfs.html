@@ -1,5 +1,7 @@
 <h1 id="network-file-system-nfs">Network File System (NFS)</h1>
 
+
+
 <h2 id="overview">Overview</h2>
 
 <p>NFS has been around since the 1980s as a convenient why to share files over the network. In this exercise you will set up an NFS server and access files from a network client.</p>
@@ -11,12 +13,11 @@
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
 <ol>
-<li>Install and configure the Network File System Server.</li>
-<li>Configure the NFS client</li>
+<li>Configure the Network File System server on CentOS 7.</li>
+<li>Configure the NFS client.</li>
 <li>Mount a remote share on a local directory.</li>
+<li>Edit <code>/etc/fstab</code> to make the mount permanent.</li>
 </ol>
-
-
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -40,19 +41,19 @@
 <dd>Network File System</dd>
 </dl>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
-<p>You will be working with two virtual machines in this assignment – a server and a client. In the instructions I've labeled the server vm1 and the client vm2.</p>
+<p>You will be working with two virtual machines in this assignment – a server and a client. In the instructions I've labeled the CentoS 7 server vm1 and the Ubuntu client vm2.</p>
 
-<p>Make sure both virtual machines are on the same network and can ping each other.</p>
-
-<p>The Ubuntu (Debian) virtual machine can be the client. In that case no additional software needs to be installed to mount the NFS share.</p>
+<p>Make sure both virtual machines are on the same network and can ping each other. Set networking in VirtualBox to <em>Bridged Adapter</em>.</p>
 
 <p>Take a snapshot of the virtual machine before starting this assignment.</p>
 
-<p>Networking to bridged.</p>
-
 <h2 id="configure-the-server">Configure the Server</h2>
+
+
 
 <h3 id="install-the-nfs-file-server">Install the NFS file server</h3>
 
@@ -78,6 +79,8 @@ root @vm1 # chkconfig nfs on
 root@vm1 # chkconfig nfslock on
 </code></pre>
 
+
+
 <h3 id="export-a-directory">Export a Directory</h3>
 
 <p>First create a directory to share. /srv/nfs would be a good choice then add the directory to /etc/exports.</p>
@@ -99,6 +102,8 @@ Place an empty file in the directory to share.
 touch /srv/nfs/success!
 </code></pre>
 
+
+
 <h3 id="firewall">Firewall</h3>
 
 <p>Add the NFS service to the firewall.</p>
@@ -106,7 +111,11 @@ touch /srv/nfs/success!
 <pre><code># firewall-cmd --permanent --add-service nfs
 </code></pre>
 
-<!--### SELinux&#10;&#10;For this assignment place SELinux in permissive mode only if needed.&#10;&#10;    root@vm1 # setenforce 0&#10;&#10;The `getenforce` command will show the current state of SELinux.-->
+<!--### SELinux&#10;&#10;*Not tested*&#10;&#10;    root@vm1 # chcon -R -t nfs_t /srv/nfs&#10;    # semanage fcontext -a -t nfs_t /srv/nfs/&#10;    # setsebool -P samba_enable_home_dirs on&#10;&#10;nfs_export_all_ro &#8212; allows file systems to be exported read-only&#10;nfs_export_all_rw &#8212; allows file systems to be exported read-write&#10;use_nfs_home_dirs &#8212; allows home directories to be exported over NFS&#10;To set a boolean you can use the setsebool utility:&#10;$ setsebool -P nfs_export_all_rw 1&#10;&#10;semanage boolean -l&#10;&#10;The `getenforce` command will show the current state of SELinux.-->
+
+<p><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/SELinux_Users_and_Administrators_Guide/sect-Managing_Confined_Services-The_Apache_HTTP_Server-Configuration_examples.html#sect-Managing_Confined_Services-Configuration_examples-Sharing_NFS_and_CIFS_file_systems">onfig examples</a></p>
+
+
 
 <h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
 
@@ -120,6 +129,8 @@ touch /srv/nfs/success!
 <pre><code>tux@vm2 $ sudo mkdir -p /mnt/nfs_share
 </code></pre>
 
+
+
 <h3 id="mount-the-directory">Mount the Directory</h3>
 
 <p>From the client mount the directory.</p>
@@ -129,12 +140,16 @@ tux@vm2 $ ls /mnt/nfs_share
 success!
 </code></pre>
 
+
+
 <h3 id="add-to-etcfstab">Add to /etc/fstab</h3>
 
 <p>Adding a line to the <code>/etc/fstab</code> file will automatically mount the share on boot.</p>
 
 <pre><code>192.168.201.123:/srv/nfs /mnt/nfs_share nfs defaults 0,0
 </code></pre>
+
+
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
@@ -146,9 +161,13 @@ Don't blindly copy the IP addresses in this assignment. Make sure you are using 
 
 <!--## On Your Own&#10;&#10;Follow the instructions in the Linux Journal artical under Resources and install SSHFS.-->
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screen shot of the output of mount | grep nfs on the client showing the IP address of the NFS share.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
