@@ -53,11 +53,7 @@
 
 <h2 id="configure-the-server">Configure the Server</h2>
 
-
-
-<h3 id="install-the-nfs-file-server">Install the NFS file server</h3>
-
-<p>Install the NFS server group.</p>
+<p>NFS does not need to be installed but does need a few packages</p>
 
 <pre><code>root@vm1 # yum install nfs-utils rpcbind
 </code></pre>
@@ -66,20 +62,17 @@
 
 <pre><code>root@vm1 # systemctl start rpcbind
 root@vm1 # systemctl start nfs
-
-systemctl enable nfs
-
-root@vm1 # service nfslock start
-</code></pre>
-
-<p>Make sure all start on reboot.</p>
-
-<pre><code>root@vm1 # chkconfig rpcbind on
-root @vm1 # chkconfig nfs on
-root@vm1 # chkconfig nfslock on
+root@vm1 # systemctl start nfslock
 </code></pre>
 
 
+
+<h3 id="enable-on-boot">Enable on Boot</h3>
+
+<pre><code>systemctl enable nfs
+systemctl enable rpcbind
+systemctl enable nfslock
+</code></pre>
 
 <h3 id="export-a-directory">Export a Directory</h3>
 
