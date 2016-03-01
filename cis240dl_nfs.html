@@ -109,30 +109,15 @@ touch /srv/nfs/success!
 dhclientv6-client nfs ssh
 </code></pre>
 
-
-
 <h3 id="selinnux">SELinnux</h3>
 
-<p>You m</p>
+<p>While not needed for access from Ubuntu these SELinux commands will set the security context correctly for the <code>/srv/nfs</code> directory.</p>
 
-<p><em>Not tested</em></p>
-
-<pre><code>root@vm1 # chcon -R -t nfs_t /srv/nfs
-# semanage fcontext -a -t nfs_t /srv/nfs/
-# setsebool -P samba_enable_home_dirs on
+<pre><code>root@vm1 # semanage fcontext -a -t nfs_t /srv/nfs/
+root@vm1 # chcon -R -t nfs_t /srv/nfs
 </code></pre>
 
-<p>nfs_export_all_ro — allows file systems to be exported read-only <br>
-nfs_export_all_rw — allows file systems to be exported read-write <br>
-use_nfs_home_dirs — allows home directories to be exported over NFS <br>
-To set a boolean you can use the setsebool utility: <br>
-$ setsebool -P nfs_export_all_rw 1</p>
-
-<p>semanage boolean -l</p>
-
-<p>The <code>getenforce</code> command will show the current state of SELinux.--&gt;</p>
-
-<p><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/SELinux_Users_and_Administrators_Guide/sect-Managing_Confined_Services-The_Apache_HTTP_Server-Configuration_examples.html#sect-Managing_Confined_Services-Configuration_examples-Sharing_NFS_and_CIFS_file_systems">onfig examples</a></p>
+<!--To set a boolean you can use the setsebool utility:&#10;$ setsebool -P nfs_export_all_rw 1&#10;&#10;semanage boolean -l&#10;&#10;The `getenforce` command will show the current state of SELinux.-->
 
 <h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
 
