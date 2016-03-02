@@ -14,7 +14,7 @@
 <li>List the advantages of using <code>sudo</code> over <code>su</code>.</li>
 <li>Modify the <code>/etc/sudoers</code> file using <code>visudo</code>.</li>
 <li>Give a user <code>sudo</code> permissions by adding a file to the <code>/etc/sudoers.d</code> directory.</li>
-<li>Describe where Sudo “incidents” are reported.</li>
+<li>Describe where Sudo "incidents" are reported.</li>
 </ol>
 
 
@@ -27,15 +27,17 @@
 
 <h3 id="install-mutt">Install Mutt</h3>
 
-<p>Mutt is a command line mail client. Install it using <code>yum</code>. You can use Mutt to read email messages that Sudo sends to root.</p>
+<p>Mutt is a command line mail client. Install it using Yum. You can use Mutt to read email messages that Sudo sends to root.</p>
 
+<pre><code># yum install mutt
+</code></pre>
 
-
-<h3 id="create-users">Create users</h3>
+<h3 id="create-users">Create Users</h3>
 
 <p>Create two new users <em>trillian</em> and <em>jstudent</em>.</p>
 
-
+<pre><code># 
+</code></pre>
 
 <h3 id="virtual-terminals">Virtual Terminals</h3>
 
@@ -53,7 +55,7 @@
 
 <h2 id="the-sudo-command">The <code>sudo</code> Command</h2>
 
-<p>A disadvantage to using <code>su</code> to allow users to run commands as root is that you must give them the root password and you can’t easily limit what they can do. Also, you don’t know who (as root) actually ran the command. The <code>sudo</code> command lets you give users in the <em>sudoers</em> file specific root privileges without the need to give them the root password. Their actions are logged as well so you have a record of what each user did.</p>
+<p>A disadvantage to using <code>su</code> to allow users to run commands as root is that you must give them the root password and you can't easily limit what they can do. Also, you don't know who (as root) actually ran the command. The <code>sudo</code> command lets you give users in the <em>sudoers</em> file specific root privileges without the need to give them the root password. Their actions are logged as well so you have a record of what each user did.</p>
 
 <p>The <code>/etc/sudoers</code> file is edited with the special program <code>visudo</code>. The <code>visudo</code> command creates a temporary copy of the sudoers file for editing and verifies that any changes have the correct syntax before saving changes to <code>/etc/sudoers</code>. As you may have guessed by the name <code>visudo</code> uses the <code>vi</code> text editor or the default editor.</p>
 
@@ -72,6 +74,8 @@ trillian wheel
 
 
 <h3 id="enabling-the-wheel-group-in-the-sudoers-file">Enabling the wheel group in the sudoers file</h3>
+
+<p><em>Note:</em> In CentOS 7 the <em>wheel</em> group is already uncommented.</p>
 
 <p>Use <code>visudo</code> to edit <strong>/etc/sudoers</strong>. <code>visudo</code> will automatically open the correct file and lock it so no other user can edit it.</p>
 
@@ -93,7 +97,7 @@ trillian wheel
 <pre><code>$ sudo shutdown -r 5
 </code></pre>
 
-<p>You’ll be asked for Trillian’s password and the command will work. Use the time remaining to consult the man page for <code>shutdown</code> for the correct option to cancel the shutdown.</p>
+<p>You'll be asked for Trillian's password and the command will work. Use the time remaining to consult the man page for <code>shutdown</code> for the correct option to cancel the shutdown.</p>
 
 
 
@@ -110,7 +114,7 @@ trillian wheel
 
 <h2 id="logging">Logging</h2>
 
-<p>All activity of sudoers is logged in <strong>/var/log/secure</strong> on CentOS or <strong>/var/log/audit/audit.log</strong> on Debian. View the end of the log with the <code>tail</code> command and you’ll see the commands run by <code>trillian</code> was logged.</p>
+<p>All activity of sudoers is logged in <strong>/var/log/secure</strong> on CentOS or <strong>/var/log/audit/audit.log</strong> on Debian. View the end of the log with the <code>tail</code> command and you'll see the commands run by <code>trillian</code> was logged.</p>
 
 <p><em>Sudo logs the following information:</em> </p>
 
@@ -132,13 +136,13 @@ trillian wheel
 
 <p>Root will still be logged in on virtual terminal 1 (TTY1) so type the <em>host</em> key plus F1 to return there and use <code>visudo</code> to add the comment character back to disable the <em>wheel</em>  group having root privileges.</p>
 
-<p>Go back to Trillian’s login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This “Sudo Incident” will be logged as well. In addition, root will receive an email reporting the “incident.” Use can use <code>mutt</code> to see the email.</p>
+<p>Go back to Trillian's login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This "Sudo Incident" will be logged as well. In addition, root will receive an email reporting the "incident." Use can use <code>mutt</code> to see the email.</p>
 
 
 
 <h3 id="removing-trillian-from-the-wheel-group">Removing Trillian From the Wheel Group</h3>
 
-<p>You use the <code>usermod</code> command to remove Trillian from the <em>wheel</em>  group. When you added Trillian to the <em>wheel</em>  group the <strong>-a</strong> option appended the <em>wheel</em>  group to Trillian’s supplementary groups. Omitting the <strong>-a</strong> removes Trillian from the group.</p>
+<p>You use the <code>usermod</code> command to remove Trillian from the <em>wheel</em>  group. When you added Trillian to the <em>wheel</em>  group the <strong>-a</strong> option appended the <em>wheel</em>  group to Trillian's supplementary groups. Omitting the <strong>-a</strong> removes Trillian from the group.</p>
 
 
 
@@ -157,6 +161,8 @@ trillian wheel
 <pre><code>jstudent centos7=/sbin/shutdown -r 5
 </code></pre>
 
+
+
 <h3 id="test-the-command">Test the Command</h3>
 
 <p>As jstudent run the wrong command</p>
@@ -172,7 +178,7 @@ trillian wheel
 
 <ul>
 <li>Make sure that user <code>trillian</code> is a member of the <em>wheel</em>  group.</li>
-<li>If the <code>groups</code> command doesn’t show the wheel group. Log Trillian out than back in.</li>
+<li>If the <code>groups</code> command doesn't show the wheel group. Log Trillian out than back in.</li>
 <li>Sudoers use their own password and not the root password.</li>
 <li>If Mutt complains that <code>/var/spool/mail/root</code> does not exist create it using the <code>touch</code> command.</li>
 </ul>
