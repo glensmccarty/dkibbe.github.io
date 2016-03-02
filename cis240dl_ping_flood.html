@@ -1,0 +1,143 @@
+<h1 id="using-iptables-to-protect-against-a-ping-flood-attack">Using Iptables to Protect Against a Ping Flood Attack</h1>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p>In this assignment you'll create firewall rules that will limit a ping flood attack. <em>Important: Do not attempt this attack on any host outside of the 192.168.201.0/24 network!</em></p>
+
+<p><em>After completing this assignment you will be able to:</em></p>
+
+<ul>
+<li>Create a set of firewall rules and install them to /etc/sysconfig/iptables.</li>
+<li>View <code>/var/log/messages</code> using <code>tail -f</code> to see that the firewall rules are working.</li>
+<li>Backup and restore firewall rules using <code>iptables-save</code> and <code>iptables-restore</code>.</li>
+<li>Use a CLI tool to monitor network traffic.</li>
+</ul>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<ul>
+<li><strong>ICMP:</strong> Internet Control Message Protocol</li>
+<li><strong>ICMP Echo Request:</strong> The ping packet sent out</li>
+<li><strong>ICMP Echo Reply:</strong> Packet returned in reply ti the echo reqiest.</li>
+<li><strong>SYN packet:</strong> The SYN packet is sent to request a new connection. </li>
+</ul>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Before doing this assignment you should read Chapter 1 of <em>The Linux Firewall</em> by Michael Rausch and view <em>Mastering Iptables</em> on YouTube. Links are provided on this week's module. Do this assignment with another student and use one CentOS virtual machine as the victim and another as the attacker. Both machines need to be on the 192.168.201.0 network.</p>
+
+
+
+<h2 id="the-ping-command">The ping Command</h2>
+
+<p>The <code>ping</code> command is a useful tool for troubleshooting network problems. <code>ping</code> is used to determine if a host is reachable by sending an ICMP` echo request packet and waiting for a reply.</p>
+
+<pre><code>$ ping -c4 hostname or IP address
+</code></pre>
+
+<p>The <strong>-c</strong> option takes a count as its value. If you omit the option the ping will continue until the command is terminated with <strong>CTRL+C</strong>.</p>
+
+<p>A ping flood attack sends ICMP Echo Request packets as fast as possible without waiting for a reply in an attempt to overload the server.</p>
+
+
+
+<h2 id="iptraf">Iptraf</h2>
+
+<p><img src="https://s3.amazonaws.com/CIS240DL/iptraf.png" alt="enter image description here" title=""></p>
+
+<p><code>iptraf</code> is a command line tool for monitoring network traffic. Install <code>iptraf</code> on the victim virtual machine and start <code>iptraf</code>to monitor incoming network traffic.</p>
+
+
+
+<h2 id="attack">Attack!</h2>
+
+<p>From the second virtual machine run <code>ping -f</code> as root. This will send hundreds of ICMP packet a second to the victim host. Stop the attack after 5 seconds. Make a note of how many packets were sent and how many were lost.</p>
+
+
+
+<h2 id="defend">Defend!</h2>
+
+<p>Use <code>curl</code> to download and save the <code>pingflood.sh</code> script listed under Resources to the victim virtual machine.</p>
+
+<pre><code># curl &lt;url of script&gt; -o pingflood.sh
+</code></pre>
+
+<p>Make the script executable.</p>
+
+<pre><code># chmod +x pingflood.sh
+</code></pre>
+
+<p>Use the <code>iptables-save</code> command to save the current rule set.</p>
+
+<pre><code># iptables-save &gt; iptables.old
+</code></pre>
+
+<p>Run <code>pingflood.sh</code> as root and it will replace the current firewall. <br>
+You can print the current rule set to stdout with <code>iptables -nvL</code>.</p>
+
+<p>Run the ping flood attack a second time monitoring traffic with <code>iptraf</code>. After 5 seconds stop the attack and note the number packets lost. You should see that almost all the packets were dropped by the firewall rules.</p>
+
+
+
+<h3 id="ping-flood-script">Ping Flood Script</h3>
+
+<pre><code># Flush current rules
+iptables -F
+iptables -X
+
+# Create a custom chain
+iptables -N syn_flood
+
+# Send SYN packets to new chain
+iptables -A INPUT -p tcp --syn -j syn_flood
+iptables -A syn_flood -m limit --limit 1/s --limit-burst 3 -j RETURN
+iptables -A syn_flood -j DROP
+
+# Limit the incoming ICMP ping requests and log
+iptables -A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT
+iptables -A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:
+iptables -A INPUT -p icmp -j DROP
+iptables -A OUTPUT -p icmp -j ACCEPT
+</code></pre>
+
+
+
+<h2 id="debug-the-assignment">Debug the Assignment</h2>
+
+<ul>
+<li>Make sure both virtual machines are on the same network.</li>
+<li>The <code>ping -f</code> command must be run as root.</li>
+<li>Install <code>iptraf</code> on the victim.</li>
+</ul>
+
+
+
+<h2 id="on-your-own">On Your Own</h2>
+
+<p>Use <code>tcpdump</code> on the victim to create a <em>pcap</em> file you can open in Wireshark. Take a before and after screenshot showing the the firewall is effective in limiting the attack.</p>
+
+
+
+<h2 id="what-to-submit">What To Submit</h2>
+
+<p>Use the <strong>Snipping Tool</strong> to create a cropped screenshot of <code>iptraf</code> showing that the packets received are far less than the packets sent.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://iptraf.seul.org/">Iptraf web page</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Ping_flood">Ping flood</a> (Wikipedia)</li>
+<li><a href="http://dennisk.freeshell.org/other/pingflood.sh">pingflood.sh</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
