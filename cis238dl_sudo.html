@@ -21,9 +21,11 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Do this assignment on the CentOS 7 virtual machine after creating accounts for <code>trillian</code> and <code>jstudent</code>.</p>
+<p>Do this assignment on the CentOS 7 virtual machine.</p>
 
+<h3 id="take-snapshot">Take Snapshot</h3>
 
+<p>See the instructions in the VirtualBox Users Manual.</p>
 
 <h3 id="install-mutt">Install Mutt</h3>
 
@@ -32,11 +34,27 @@
 <pre><code># yum install mutt
 </code></pre>
 
+<h3 id="etcskel">/etc/skel</h3>
+
+<p>The <em>/etc/skel</em> directory contains files that will be copied to the home directory of any new users created.</p>
+
+<pre><code># cat &gt;/etc/skel/welcome.txt &lt;&lt; EOF
+Welcome aboard!
+EOF
+</code></pre>
+
 <h3 id="create-users">Create Users</h3>
 
 <p>Create two new users <em>trillian</em> and <em>jstudent</em>.</p>
 
-<pre><code># 
+<pre><code># useradd trillian
+# passwd trillian
+</code></pre>
+
+<p>And <em>jstudent</em>:</p>
+
+<pre><code># useradd jstudent
+# passwd jstudent
 </code></pre>
 
 <h3 id="virtual-terminals">Virtual Terminals</h3>
@@ -49,9 +67,32 @@
 
 <h2 id="the-su-command">The <code>su</code> Command</h2>
 
-<p>The <code>su</code> command lets you become the root user or another user if you have the password for that account. Using the <strong>-</strong> (dash) option gives the full environment including the correct PATH environmental variable so commands work correctly. Always use the dash or you may have problems doing some things as root.</p>
+<p>The <code>su</code> command lets you become the root user or another user if you have the password for that account. Using the <strong>-l</strong> (dash el) option gives the full environment including the correct PATH environmental variable so commands work correctly. Always use the dash or you may have problems doing some things as root.</p>
 
 
+
+<h3 id="without-the-l">Without the -l</h3>
+
+<pre><code># cd /root
+# su trillian
+</code></pre>
+
+<p>Run <code>ls</code> to list files in the current directory. The command will fial. Run <code>pwd</code> to show you are still in root's home directory,</p>
+
+<p>Type <code>exit</code> to return to the root user.</p>
+
+
+
+<h2 id="with-l">With -l</h2>
+
+<p>Login as jstudent</p>
+
+<pre><code># su -l jstudent
+</code></pre>
+
+<p>The <code>pwd</code> command shows you are in jstudents's home directory. Try the ls command and you will see <em>welcome.txt</em> file.</p>
+
+<p>Type <code>exit</code> to return to the root user.</p>
 
 <h2 id="the-sudo-command">The <code>sudo</code> Command</h2>
 
@@ -63,15 +104,16 @@
 
 <h3 id="add-a-user-to-the-wheel-group">Add a User to the wheel Group</h3>
 
-<p>Add <code>trillian</code> as a member a member of the <em>wheel</em>  group as you did in a previous assignment.  Log Trillian out and then back in for the changed to become active if she is logged in. </p>
+<p>Add <code>trillian</code> as a member of the <em>wheel</em>  group. Make sure you type a capital <strong>G</strong>.</p>
 
-<p>Use the <code>groups command to show that</code>trillian<code>is now a member of the</code>wheel` group.</p>
-
-<pre><code>$ groups
-trillian wheel
+<pre><code># usermod -aG wheel trillian
 </code></pre>
 
+<p>Use the <code>groups or</code>id<code>command to show that</code>trillian<code>is now a member of the</code>wheel` group.</p>
 
+<pre><code># groups trillian
+trillian wheel
+</code></pre>
 
 <h3 id="enabling-the-wheel-group-in-the-sudoers-file">Enabling the wheel group in the sudoers file</h3>
 
@@ -103,14 +145,15 @@ trillian wheel
 
 <h3 id="members-not-in-the-sudoers-file">Members not in the sudoers File</h3>
 
-<p>Log in as <code>jstudent</code> on another virtual terminal and attempt to run the <code>shutdown</code> command.</p>
+<p>Log in as <code>jstudent</code> and attempt to run the <code>shutdown</code> command.</p>
 
-<pre><code>$ sudo shutdown -r 5
+<pre><code># su -l jstudent 
+$ sudo shutdown -r 5
 </code></pre>
 
 <p>The command will fail since <code>jstudent</code> is not in the <em>sudoers</em> file. Switch to the root terminal and notice that you have mail reporting the event.</p>
 
-
+<p>Log out as <em>jstudent</em> and you will see that root has an email reporting the incident.</p>
 
 <h2 id="logging">Logging</h2>
 
@@ -183,9 +226,11 @@ trillian wheel
 <li>If Mutt complains that <code>/var/spool/mail/root</code> does not exist create it using the <code>touch</code> command.</li>
 </ul>
 
-<!--## XKCD&#10;&#10;![Cartoon showing sudo incidents being reported to Santa Claus.](https://sslimgs.xkcd.com/comics/incident.png)-->
 
 
+<h2 id="xkcd">XKCD</h2>
+
+<p><img src="https://imgs.xkcd.com/comics/incident.png" alt="Cartoon showing sudo incidents being reported to Santa Claus." title=""></p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
