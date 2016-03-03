@@ -1,10 +1,16 @@
 <h1 id="fail2ban-logwatch">Fail2ban &amp; Logwatch</h1>
 
+<p>Fail2ban and Logwatch are easy to configure utilities that increase security on services.</p>
+
+<p>Fail2ban will block the IP address of failed login attempt and Logwatch will email you with a log summary.</p>
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
+<p><em>After successfully completing this assignment you will be able to:</em></p>
+
 <ul>
-<li>Fail2ban</li>
-<li>Logwatch</li>
+<li>Install and configure fail2ban.</li>
+<li>Install and configure logwatch.</li>
 </ul>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
@@ -13,9 +19,9 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Set networking to bridged.</p>
-
-<p>CentOS 7</p>
+<p>Set networking for the CentOS 7 virtual machine to bridged. <br>
+Take a snapshot of the virtual machine before starting. <br>
+Test IP address.</p>
 
 <p>snapshot <br>
 test ip a s <br>
@@ -28,16 +34,10 @@ install mutt</p>
 
 <h2 id="install-fail2ban">Install Fail2ban</h2>
 
-<pre><code>% yum install fail2ban
+<pre><code># yum install fail2ban
 </code></pre>
 
-
-
-<h2 id="enable-fail2ban">Enable fail2ban</h2>
-
-<pre><code># systemctl start fail2ban
-# systemctl enable fail2ban
-</code></pre>
+<p>After installation <code>rpm -qi fail2ban</code> will give you a description of the program.</p>
 
 <h2 id="firewalld">Firewalld</h2>
 
@@ -96,21 +96,25 @@ maxretry = 3
 
 <h3 id="logging">Logging</h3>
 
-<pre><code>logtarget = /var/log/fail2ban
+<pre><code>Fail2ban writes to /var/log/fail2ban
 </code></pre>
 
+<h2 id="start-and-enable-fail2ban">Start and Enable fail2ban</h2>
 
-
-<h3 id="restart-service">Restart Service</h3>
-
-<pre><code># systemctl restart fail2ban
+<pre><code># systemctl start fail2ban
+# systemctl enable fail2ban
 </code></pre>
-
-
 
 <h2 id="fail2ban-client">fail2ban-client</h2>
 
 <pre><code># fail2ban-client status sshd
+</code></pre>
+
+
+
+<h2 id="logwatch">Logwatch</h2>
+
+<pre><code># logwatch --service sshd --range=Today
 </code></pre>
 
 <h2 id="resources">Resources</h2>
@@ -119,6 +123,7 @@ maxretry = 3
 <li><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a></li>
 <li><a href="https://www.youtube.com/watch?v=xcXheAWy7cU#t=190">Fail2ban at pycon 2014</a></li>
 <li>man 5 jail.conf</li>
+<li><a href="http://www.linux-mag.com/id/7800/">Linux Magazine: Logwatch</a></li>
 </ul>
 
 <blockquote>
