@@ -2,7 +2,7 @@
 
 <p>Fail2ban and Logwatch are easy to configure utilities that increase security on services.</p>
 
-<p>Fail2ban will block the IP address of failed login attempt and Logwatch will email you with a log summary.</p>
+<p>Fail2ban will block the IP address of failed login attempt and Logwatch will email you with a log summary of suspicious activity.</p>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -13,19 +13,13 @@
 <li>Install and configure logwatch.</li>
 </ul>
 
-<h2 id="terms-you-should-know">Terms You Should Know</h2>
-
-
-
 <h2 id="preparation">Preparation</h2>
 
-<p>Set networking for the CentOS 7 virtual machine to bridged. <br>
-Take a snapshot of the virtual machine before starting. <br>
-Test IP address.</p>
-
-<p>snapshot <br>
-test ip a s <br>
-install mutt</p>
+<ul>
+<li>Set networking for the CentOS 7 virtual machine to bridged.</li>
+<li>Take a snapshot of the virtual machine before starting.</li>
+<li>Test IP address.</li>
+</ul>
 
 <h3 id="install-epel">Install EPEL</h3>
 
@@ -45,13 +39,13 @@ install mutt</p>
 
 <h2 id="configuration">Configuration</h2>
 
+<!--### Filters and Actions&#10;&#10;Fail2ban definds a number of filters..&#10;&#10;    # ls /etc/fail2ban/filter.d/ | sed -e 's,\.config'-->
 
-
-<h3 id="filters-and-actions">Filters and Actions</h3>
-
-<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/customisation.local</em></p>
+<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/customisation.local</em> and edit this file rather than the main config file.</p>
 
 <h3 id="ip-addresses-to-ignore">IP Addresses to Ignore</h3>
+
+<p>You can set IP addresses that will never be blocked by fail2ban.</p>
 
 <pre><code>[DEFAULT]
 # "ignoreip" can be an IP address, a CIDR mask or a DNS host
@@ -59,8 +53,6 @@ ignoreip = 127.0.0.1
 bantime  = 3600
 maxretry = 3
 </code></pre>
-
-
 
 <h3 id="email">Email</h3>
 
@@ -83,7 +75,7 @@ maxretry = 3
 
 <h3 id="jails">Jails</h3>
 
-<p>Jails are the rules which fail2ban apply to a given application/log:</p>
+<p>Jails are the rules which fail2ban apply to a given application/log. Here is an example for the SSH server.</p>
 
 <pre><code>[ssh]
 
@@ -96,7 +88,7 @@ maxretry = 3
 
 <h3 id="logging">Logging</h3>
 
-<pre><code>Fail2ban writes to /var/log/fail2ban
+<pre><code>Fail2ban writes to /var/log/fail2ban.
 </code></pre>
 
 <h2 id="start-and-enable-fail2ban">Start and Enable fail2ban</h2>
@@ -107,12 +99,14 @@ maxretry = 3
 
 <h2 id="fail2ban-client">fail2ban-client</h2>
 
+<p>You can use the <code>fail2ban-client</code> utility to monitor bans.</p>
+
 <pre><code># fail2ban-client status sshd
 </code></pre>
 
-
-
 <h2 id="logwatch">Logwatch</h2>
+
+<p>Logwatch monitors logs for "interesting" activity. Logwatch can be configured to email you each day or you can access it directly.</p>
 
 <pre><code># logwatch --service sshd --range=Today
 </code></pre>
