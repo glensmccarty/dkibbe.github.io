@@ -1,10 +1,11 @@
-<h1 id="fail2ban">Fail2ban</h1>
-
-
+<h1 id="fail2ban-logwatch">Fail2ban &amp; Logwatch</h1>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
-
+<ul>
+<li>Fail2ban</li>
+<li>Logwatch</li>
+</ul>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -12,23 +13,99 @@
 
 <h2 id="preparation">Preparation</h2>
 
-
+<p>Set networking to bridged.</p>
 
 <h3 id="install-epel">Install EPEL</h3>
 
-
+<pre><code># yum install epel-release
+</code></pre>
 
 <h2 id="install-fail2ban">Install Fail2ban</h2>
 
-<pre><code># systemctl start fial2ban
+<pre><code>% yum install fail2ban
+</code></pre>
+
+
+
+<h2 id="enable-fail2ban">Enable fail2ban</h2>
+
+<pre><code># systemctl start fail2ban
 # systemctl enable fail2ban
 </code></pre>
 
 <h2 id="firewalld">Firewalld</h2>
 
+<p>Install and enable firewalld if needed.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+
+
+<h3 id="filters-and-actions">Filters and Actions</h3>
+
+<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/fail2ban.local</em></p>
+
+
+
+<h3 id="ip-addresses-to-ignore">IP Addresses to Ignore</h3>
+
+<pre><code>[DEFAULT]
+# "ignoreip" can be an IP address, a CIDR mask or a DNS host
+ignoreip = 127.0.0.1
+bantime  = 3600
+maxretry = 3
+</code></pre>
+
+
+
+<h3 id="email">Email</h3>
+
+<p>If you wish to be notified of bans by email, modify this line with your email address:</p>
+
+<pre><code>destemail = your_email@domain.com
+</code></pre>
+
+<p>Then find the line:</p>
+
+<pre><code>action = %(action_)s 
+</code></pre>
+
+<p>and change it to</p>
+
+<pre><code>action = %(action_mw)s
+</code></pre>
+
+
+
+<h3 id="jails">Jails</h3>
+
+<p>Jails are the rules which fail2ban apply to a given application/log:</p>
+
+<pre><code>[ssh]
+
+enabled = true
+port    = ssh
+filter  = sshd
+logpath  = /var/log/auth.log
+maxretry = 3
+</code></pre>
+
+<h3 id="logging">Logging</h3>
+
+<pre><code>logtarget = /var/log/fail2ban
+</code></pre>
+
+
+
+<h3 id="restart-service">Restart Service</h3>
+
+<pre><code># systemctl restart fail2ban
+</code></pre>
+
 <h2 id="resources">Resources</h2>
 
-<p><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a></p>
+<p><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a> <br>
+<a href="https://www.youtube.com/watch?v=xcXheAWy7cU#t=190">Fail2ban at pycon 2014</a></p>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
