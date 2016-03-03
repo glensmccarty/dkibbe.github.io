@@ -15,6 +15,12 @@
 
 <p>Set networking to bridged.</p>
 
+<p>CentOS 7</p>
+
+<p>snapshot <br>
+test ip a s <br>
+install mutt</p>
+
 <h3 id="install-epel">Install EPEL</h3>
 
 <pre><code># yum install epel-release
@@ -43,9 +49,7 @@
 
 <h3 id="filters-and-actions">Filters and Actions</h3>
 
-<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/fail2ban.local</em></p>
-
-
+<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/customisation.local</em></p>
 
 <h3 id="ip-addresses-to-ignore">IP Addresses to Ignore</h3>
 
@@ -102,10 +106,20 @@ maxretry = 3
 <pre><code># systemctl restart fail2ban
 </code></pre>
 
+
+
+<h2 id="fail2ban-client">fail2ban-client</h2>
+
+<pre><code># fail2ban-client status sshd
+</code></pre>
+
 <h2 id="resources">Resources</h2>
 
-<p><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a> <br>
-<a href="https://www.youtube.com/watch?v=xcXheAWy7cU#t=190">Fail2ban at pycon 2014</a></p>
+<ul>
+<li><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a></li>
+<li><a href="https://www.youtube.com/watch?v=xcXheAWy7cU#t=190">Fail2ban at pycon 2014</a></li>
+<li>man 5 jail.conf</li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
