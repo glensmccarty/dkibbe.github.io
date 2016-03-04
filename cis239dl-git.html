@@ -1,0 +1,189 @@
+<h1 id="git">git</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Git is a very popular version control system created by Linus Torvalds. It is the system used by the Linux kernel developers and powers the popular social coding site, GitHub.</p>
+
+<h2 id="installation">Installation</h2>
+
+<pre><code># yum install git
+</code></pre>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>Git requires a minimum of configuration.</p>
+
+<pre><code>$ git config --global user.name "dennisk"
+$ git config --global user.email "dennisk@whatever.com"
+</code></pre>
+
+<h2 id="initializing-a-git-repo">Initializing a Git Repo</h2>
+
+<pre><code>$ git init Project1
+Initialized empty Git repository
+$ cd Project1
+</code></pre>
+
+
+
+<h3 id="git-directory">.git Directory</h3>
+
+<pre><code>Git specific files are keep here.
+
+$ tree .git
+</code></pre>
+
+<h2 id="add-a-file-to-git">Add a File to git</h2>
+
+<p>Before you can manage a file git must know about it.</p>
+
+<pre><code>$ touch README.md
+$ git status
+nothing added to commit but untracked files present (use "git add" to track)
+
+$ git add README.md
+</code></pre>
+
+<h2 id="commits">Commits</h2>
+
+<p>After modifying a file the changes can be committed.</p>
+
+<pre><code>$ echo "Add text." &gt; README.md
+
+$ git commit -m"First commit"
+[master (root-commit) a98ad5f] First commit
+</code></pre>
+
+<p>1 file changed, 0 insertions(+), 0 deletions(-) <br>
+ create mode 100644 - - README.md</p>
+
+<h3 id="change-a-commit">Change a Commit</h3>
+
+<pre><code>$ git commit --amend -m"Added some text to the file."
+</code></pre>
+
+
+
+<h4 id="undo-last-commit">Undo Last Commit</h4>
+
+<pre><code>$ git cehckout -- README.md
+</code></pre>
+
+<h4 id="revert-an-earlier-commit">Revert an earlier Commit</h4>
+
+<pre><code>$ git log --oneline    
+</code></pre>
+
+<p>b62a6c9 Revert "Removed Section 2." <br>
+f820500 Removed Section 2. <br>
+09775dc Added Section 1 to README. <br>
+6ac8f2b Added README.</p>
+
+<pre><code>$git revert f820500
+
+$ git log    
+commit b62a6c987cbc08bd8103289ab0adb118514a2772
+Author: dennisk &lt;dennisk@whatever.com&gt;
+Date:   Thu Mar 3 16:55:10 2016 -0700
+
+Revert "Removed Section 2."
+
+This reverts commit f8205009dbe93c743d9ef201d99da90bcf310ea7.
+</code></pre>
+
+<h2 id="git-ignore">Git ignore</h2>
+
+<p>git can ignore files you don't wish to track.</p>
+
+<pre><code>$ cat .gitignore
+*.[oa]
+*~
+</code></pre>
+
+<p>The rules for the patterns you can put in the <em>.gitignore</em> file are as follows:</p>
+
+<ul>
+<li>Blank lines or lines starting with # are ignored.</li>
+<li>Standard glob patterns work.</li>
+<li>You can start patterns with a forward slash (/) to avoid recursivity. <br>
+You can negate a pattern by starting it with an exclamation point</li>
+</ul>
+
+<!--## Git diff&#10;&#10;![Git diff](http://classfiles.dennisk.fastmail.net/git_diff.png)&#10;&#10;![Git status](http://classfiles.dennisk.fastmail.net/git_status.png)-->
+
+<h2 id="git-log">Git log</h2>
+
+<p>$ git log -p</p>
+
+<p><img src="http://classfiles.dennisk.fastmail.net/git_log_pretty.png" alt="Git log pretty" title=""></p>
+
+<h2 id="remove">Remove</h2>
+
+<p><span class="MathJax_SVG" id="MathJax-Element-42-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>g</mi><mi>i</mi><mi>t</mi><mi>r</mi><mi>m</mi><mi>f</mi><mi>i</mi><mi>l</mi><mi>e</mi><mn>1</mn></math>" role="presentation" style="font-size: 100%; display: inline-block; position: relative;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="10.867ex" height="2.558ex" viewBox="0 -799.9 4679 1101.2" role="img" focusable="false" style="vertical-align: -0.7ex;" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-67" x="0" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-69" x="480" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-74" x="826" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-72" x="1187" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-6D" x="1639" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-66" x="2517" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-69" x="3068" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-6C" x="3413" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMATHI-65" x="3712" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#MJMAIN-31" x="4178" y="0"></use></g></svg><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>g</mi><mi>i</mi><mi>t</mi><mi>r</mi><mi>m</mi><mi>f</mi><mi>i</mi><mi>l</mi><mi>e</mi><mn>1</mn></math></span></span><script type="math/tex" id="MathJax-Element-42"> git rm file1  
+</script> git rm --cached file1</p>
+
+
+
+<h2 id="move">Move</h2>
+
+<p>4 git mv file1 file2</p>
+
+
+
+<h2 id="branches">Branches</h2>
+
+<p>Git creates a default master branch.</p>
+
+<p>You can create a new branch with this command.</p>
+
+<pre><code>$ git branch testing
+</code></pre>
+
+<p>Then switch to that branch.</p>
+
+<pre><code>$ git checkout testing
+</code></pre>
+
+<p>or do both at once.</p>
+
+<pre><code>$ git checkout -b new_branch
+</code></pre>
+
+
+
+<h3 id="delete-a-branch">Delete a Branch</h3>
+
+<p>When you no longer need a branch you can delete it.</p>
+
+<pre><code>$ git branch -d new_branch
+</code></pre>
+
+
+
+<h3 id="merge-branches">Merge Branches</h3>
+
+<p>Change to the branch you want to merge into then:</p>
+
+<pre><code>$ git checkout master
+$ git merge new_branch
+</code></pre>
+
+<h2 id="getting-help">Getting Help</h2>
+
+<pre><code>$ git --help
+</code></pre>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=U8GBXvdmHT4">The Basics of Git and GutHub</a></li>
+<li><a href="http://help.github.com">Help on GitHub</a></li>
+<li><a href="https://progit.org/">Pro Git (Free book)</a></li>
+<li><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
