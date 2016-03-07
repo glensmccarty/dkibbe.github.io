@@ -1,0 +1,227 @@
+<h1 id="10-useful-network-tools">10 Useful Network Tools</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<dl>
+<dt>ARP</dt>
+<dd>Address Resolution Protocol</dd>
+
+<dt>DCHP</dt>
+<dd>Dynamic Host Configuration Protocol</dd>
+
+<dt>DNS</dt>
+<dd>Domain Name System</dd>
+
+<dt>Host</dt>
+<dd>Any device on a network.</dd>
+
+<dt>ICMP</dt>
+<dd>Internet Control Message Protocol</dd>
+
+<dt>Interface</dt>
+<dd>A device such as a network card for connecting to a network.</dd>
+
+<dt>IPv4</dt>
+<dd>
+<p>Internet Protocol version 4</p>
+</dd>
+
+<dt>IPv6</dt>
+<dd>Internet Protocol version 8</dd>
+
+<dt>RJ45</dt>
+<dd>
+<p>Ethernet cable jack/plug</p>
+</dd>
+</dl>
+
+<h2 id="network-tools">Network Tools</h2>
+
+
+
+<h3 id="host-dig">host (dig)</h3>
+
+
+
+<h4 id="dig">dig</h4>
+
+<p><code>host</code> and <code>dig</code> are used  find the IP address of a host.</p>
+
+<pre class="prettyprint"><code class=" hljs scss">$ dig sdf<span class="hljs-class">.org</span>
+
+; &lt;&lt;&gt;&gt; DiG 9<span class="hljs-class">.9</span><span class="hljs-class">.5-3ubuntu0</span><span class="hljs-class">.7-Ubuntu</span> &lt;&lt;&gt;&gt; sdf<span class="hljs-class">.org</span>
+;; global options<span class="hljs-value">: +cmd
+;</span>; Got answer<span class="hljs-value">:
+;</span>; -&gt;&gt;<span class="hljs-tag">HEADER</span>&lt;&lt;- opcode<span class="hljs-value">: QUERY, status: NOERROR, id: <span class="hljs-number">53188</span>
+;</span>; flags<span class="hljs-value">: qr rd ra;</span> QUERY<span class="hljs-value">: <span class="hljs-number">1</span>, ANSWER: <span class="hljs-number">1</span>, AUTHORITY: <span class="hljs-number">0</span>, ADDITIONAL: <span class="hljs-number">1</span>
+
+;</span>; OPT PSEUDOSECTION<span class="hljs-value">:
+;</span> EDNS<span class="hljs-value">: version: <span class="hljs-number">0</span>, flags:;</span> udp<span class="hljs-value">: <span class="hljs-number">4000</span>
+;</span>; QUESTION <span class="hljs-tag">SECTION</span><span class="hljs-value">:
+;</span>sdf<span class="hljs-class">.org</span>.           IN  <span class="hljs-tag">A</span>
+
+;; ANSWER <span class="hljs-tag">SECTION</span><span class="hljs-value">:
+sdf.org.        <span class="hljs-number">31304</span>   IN  A   <span class="hljs-number">192.94</span>.<span class="hljs-number">73.15</span>
+
+;</span>; Query <span class="hljs-tag">time</span><span class="hljs-value">: <span class="hljs-number">3</span> msec
+;</span>; SERVER<span class="hljs-value">: <span class="hljs-number">127.0</span>.<span class="hljs-number">1.1</span><span class="hljs-hexcolor">#53</span>(<span class="hljs-number">127.0</span>.<span class="hljs-number">1.1</span>)
+;</span>; WHEN<span class="hljs-value">: Mon Mar <span class="hljs-number">07</span> <span class="hljs-number">11</span>:<span class="hljs-number">11</span>:<span class="hljs-number">54</span> MST <span class="hljs-number">2016</span>
+;</span>; MSG SIZE  rcvd<span class="hljs-value">: <span class="hljs-number">52</span>
+</span></code></pre>
+
+
+
+<h4 id="host">host</h4>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">$ host mesacc<span class="hljs-preprocessor">.edu</span>
+mesacc<span class="hljs-preprocessor">.edu</span> has address <span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>
+mesacc<span class="hljs-preprocessor">.edu</span> mail is handled by <span class="hljs-number">5</span> alt1<span class="hljs-preprocessor">.aspmx</span><span class="hljs-preprocessor">.l</span><span class="hljs-preprocessor">.google</span><span class="hljs-preprocessor">.com</span>.
+mesacc<span class="hljs-preprocessor">.edu</span> mail is handled by <span class="hljs-number">5</span> alt2<span class="hljs-preprocessor">.aspmx</span><span class="hljs-preprocessor">.l</span><span class="hljs-preprocessor">.google</span><span class="hljs-preprocessor">.com</span>.
+mesacc<span class="hljs-preprocessor">.edu</span> mail is handled by <span class="hljs-number">10</span> alt3<span class="hljs-preprocessor">.aspmx</span><span class="hljs-preprocessor">.l</span><span class="hljs-preprocessor">.google</span><span class="hljs-preprocessor">.com</span>.
+mesacc<span class="hljs-preprocessor">.edu</span> mail is handled by <span class="hljs-number">10</span> alt4<span class="hljs-preprocessor">.aspmx</span><span class="hljs-preprocessor">.l</span><span class="hljs-preprocessor">.google</span><span class="hljs-preprocessor">.com</span>.
+mesacc<span class="hljs-preprocessor">.edu</span> mail is handled by <span class="hljs-number">1</span> aspmx<span class="hljs-preprocessor">.l</span><span class="hljs-preprocessor">.google</span><span class="hljs-preprocessor">.com</span>.</code></pre>
+
+<h3 id="ip-ifconfig">ip (ifconfig)</h3>
+
+<p>Used  to display and configure interface information. <code>ifconfig</code> is replaced by <code>ip</code>.</p>
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">$ ip addr show
+<span class="hljs-number">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="hljs-number">65536</span> qdisc noqueue state UNKNOWN group default 
+    link/loopback <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> brd <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span>
+    inet <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>/<span class="hljs-number">8</span> scope host lo
+       valid_lft <span class="hljs-keyword">forever</span> preferred_lft <span class="hljs-keyword">forever</span>
+    inet6 ::<span class="hljs-number">1</span>/<span class="hljs-number">128</span> scope host 
+       valid_lft <span class="hljs-keyword">forever</span> preferred_lft <span class="hljs-keyword">forever</span>
+<span class="hljs-number">2</span>: wlan0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="hljs-number">1500</span> qdisc pfifo_fast state UP group default qlen <span class="hljs-number">1000</span>
+    link/ether c4:<span class="hljs-number">8</span>e:<span class="hljs-number">8</span>f:f4:d9:<span class="hljs-number">8</span>d brd ff:ff:ff:ff:ff:ff
+    inet <span class="hljs-number">10.12</span><span class="hljs-number">.56</span><span class="hljs-number">.117</span>/<span class="hljs-number">23</span> brd <span class="hljs-number">10.12</span><span class="hljs-number">.57</span><span class="hljs-number">.255</span> scope <span class="hljs-built_in">global</span> wlan0
+       valid_lft <span class="hljs-keyword">forever</span> preferred_lft <span class="hljs-keyword">forever</span>
+    inet6 fe80::c68e:<span class="hljs-number">8</span>fff:fef4:d98d/<span class="hljs-number">64</span> scope link 
+       valid_lft <span class="hljs-keyword">forever</span> preferred_lft <span class="hljs-keyword">forever</span>
+</code></pre>
+
+
+
+<h3 id="netstat">netstat</h3>
+
+<p>Useful for displaying network connections.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vhdl">$ netstat -ptln
+(<span class="hljs-keyword">Not</span> <span class="hljs-keyword">all</span> processes could be identified, non-owned <span class="hljs-keyword">process</span> info
+ will <span class="hljs-keyword">not</span> be shown, you would have <span class="hljs-keyword">to</span> be root <span class="hljs-keyword">to</span> see it <span class="hljs-keyword">all</span>.)
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">56368</span>         <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:*               LISTEN      <span class="hljs-number">9565</span>/cli        
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">127.0</span><span class="hljs-number">.1</span><span class="hljs-number">.1</span>:<span class="hljs-number">53</span>            <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:*               LISTEN      -               
+tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">631</span>           <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:*               LISTEN      -               
+tcp6       <span class="hljs-number">0</span>      <span class="hljs-number">0</span> ::<span class="hljs-number">1</span>:<span class="hljs-number">631</span>                 :::*                    LISTEN      </code></pre>
+
+
+
+<h3 id="nmap">nmap</h3>
+
+<p>Used to map a network. <strong><em>Warning:</em></strong> Not to be used on a network you don't control.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs vhdl">$ nmap localhost
+
+Starting Nmap <span class="hljs-number">6.40</span> ( http://nmap.org ) at <span class="hljs-number">2016</span>-<span class="hljs-number">03</span>-<span class="hljs-number">07</span> <span class="hljs-number">11</span>:<span class="hljs-number">24</span> MST
+Nmap scan <span class="hljs-keyword">report</span> <span class="hljs-keyword">for</span> localhost (<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>)
+Host <span class="hljs-keyword">is</span> up (<span class="hljs-number">0.00014</span>s latency).
+<span class="hljs-keyword">Not</span> shown: <span class="hljs-number">999</span> closed ports
+<span class="hljs-keyword">PORT</span>    STATE SERVICE
+<span class="hljs-number">631</span>/tcp <span class="hljs-keyword">open</span>  ipp
+
+Nmap done: <span class="hljs-number">1</span> IP address (<span class="hljs-number">1</span> host up) scanned <span class="hljs-keyword">in</span> <span class="hljs-number">0.04</span> seconds</code></pre>
+
+
+
+<h3 id="ping">ping</h3>
+
+<p>Used to test connectivity.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">$ ping -c4 mesacc.edu 
+PING mesacc.edu (<span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>) <span class="hljs-number">56</span>(<span class="hljs-number">84</span>) <span class="hljs-keyword">bytes</span> <span class="hljs-operator">of</span> data.
+<span class="hljs-number">64</span> <span class="hljs-keyword">bytes</span> <span class="hljs-built_in">from</span> <span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>: icmp_seq=<span class="hljs-number">1</span> ttl=<span class="hljs-number">63</span> <span class="hljs-built_in">time</span>=<span class="hljs-number">2.65</span> ms
+<span class="hljs-number">64</span> <span class="hljs-keyword">bytes</span> <span class="hljs-built_in">from</span> <span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>: icmp_seq=<span class="hljs-number">2</span> ttl=<span class="hljs-number">63</span> <span class="hljs-built_in">time</span>=<span class="hljs-number">5.50</span> ms
+<span class="hljs-number">64</span> <span class="hljs-keyword">bytes</span> <span class="hljs-built_in">from</span> <span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>: icmp_seq=<span class="hljs-number">3</span> ttl=<span class="hljs-number">63</span> <span class="hljs-built_in">time</span>=<span class="hljs-number">2.27</span> ms
+<span class="hljs-number">64</span> <span class="hljs-keyword">bytes</span> <span class="hljs-built_in">from</span> <span class="hljs-number">140.198</span><span class="hljs-number">.64</span><span class="hljs-number">.99</span>: icmp_seq=<span class="hljs-number">4</span> ttl=<span class="hljs-number">63</span> <span class="hljs-built_in">time</span>=<span class="hljs-number">5.14</span> ms
+
+<span class="hljs-comment">--- mesacc.edu ping statistics ---</span>
+<span class="hljs-number">4</span> packets transmitted, <span class="hljs-number">4</span> received, <span class="hljs-number">0</span>% packet loss, <span class="hljs-built_in">time</span> <span class="hljs-number">3004</span>ms
+rtt <span class="hljs-built_in">min</span>/<span class="hljs-built_in">avg</span>/<span class="hljs-built_in">max</span>/mdev = <span class="hljs-number">2.275</span>/<span class="hljs-number">3.893</span>/<span class="hljs-number">5.503</span>/<span class="hljs-number">1.443</span> ms
+</code></pre>
+
+
+
+<h3 id="route">route</h3>
+
+<p>Display routing information.</p>
+
+
+
+<p>``` <br>
+$ route <br>
+Kernel IP routing table <br>
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface <br>
+default         10.12.56.1      0.0.0.0         UG    0      0        0 wlan0 <br>
+10.12.56.0      *               255.255.254.0   U     9      0        0 wlan0</p>
+
+<p>````</p>
+
+<h3 id="tracepath">tracepath</h3>
+
+<p>Trace the path to a host.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">$ tracepath dw<span class="hljs-preprocessor">.de</span>
+ <span class="hljs-number">1</span>?: [LOCALHOST]                                         pmtu <span class="hljs-number">1500</span>
+ <span class="hljs-number">1</span>:  <span class="hljs-number">10.12</span><span class="hljs-number">.56</span><span class="hljs-number">.1</span>                                            <span class="hljs-number">2.989</span>ms 
+ <span class="hljs-number">1</span>:  <span class="hljs-number">10.12</span><span class="hljs-number">.56</span><span class="hljs-number">.1</span>                                            <span class="hljs-number">2.049</span>ms 
+ <span class="hljs-number">2</span>:  <span class="hljs-number">172.16</span><span class="hljs-number">.30</span><span class="hljs-number">.1</span>                                          <span class="hljs-number">11.094</span>ms 
+ <span class="hljs-number">3</span>:  <span class="hljs-number">172.16</span><span class="hljs-number">.50</span><span class="hljs-number">.22</span>                                         <span class="hljs-number">50.516</span>ms 
+ <span class="hljs-number">4</span>:  <span class="hljs-number">172.16</span><span class="hljs-number">.50</span><span class="hljs-number">.116</span>                                        <span class="hljs-number">20.470</span>ms 
+ <span class="hljs-number">5</span>:  <span class="hljs-number">172.16</span><span class="hljs-number">.70</span><span class="hljs-number">.35</span>                                         <span class="hljs-number">27.540</span>ms 
+ <span class="hljs-number">6</span>:  wsip-<span class="hljs-number">66</span>-<span class="hljs-number">210</span>-<span class="hljs-number">249</span>-<span class="hljs-number">73.</span>ph<span class="hljs-preprocessor">.ph</span><span class="hljs-preprocessor">.cox</span><span class="hljs-preprocessor">.net</span>                     <span class="hljs-number">35.239</span>ms 
+ <span class="hljs-number">7</span>:  wsip-<span class="hljs-number">184</span>-<span class="hljs-number">178</span>-<span class="hljs-number">203</span>-<span class="hljs-number">181.</span>ph<span class="hljs-preprocessor">.ph</span><span class="hljs-preprocessor">.cox</span><span class="hljs-preprocessor">.net</span>                   <span class="hljs-number">16.482</span>ms asymm <span class="hljs-number">10</span> 
+ <span class="hljs-number">8</span>:  chndcorc03-te-<span class="hljs-number">0</span>-<span class="hljs-number">0</span>-<span class="hljs-number">0</span>-<span class="hljs-number">2.</span>ph<span class="hljs-preprocessor">.ph</span><span class="hljs-preprocessor">.cox</span><span class="hljs-preprocessor">.net</span>                  <span class="hljs-number">15.686</span>ms 
+ <span class="hljs-number">9</span>:  ae57<span class="hljs-preprocessor">.bar</span>2<span class="hljs-preprocessor">.phoenix</span>1<span class="hljs-preprocessor">.level</span>3<span class="hljs-preprocessor">.net</span>                        <span class="hljs-number">41.555</span>ms asymm <span class="hljs-number">12</span> 
+<span class="hljs-number">10</span>:  ae-<span class="hljs-number">1</span>-<span class="hljs-number">60.</span>edge5<span class="hljs-preprocessor">.frankfurt</span>1<span class="hljs-preprocessor">.level</span>3<span class="hljs-preprocessor">.net</span>                 <span class="hljs-number">168.544</span>ms asymm <span class="hljs-number">20</span> 
+<span class="hljs-number">11</span>:  ae-<span class="hljs-number">1</span>-<span class="hljs-number">60.</span>edge5<span class="hljs-preprocessor">.frankfurt</span>1<span class="hljs-preprocessor">.level</span>3<span class="hljs-preprocessor">.net</span>                 <span class="hljs-number">167.341</span>ms asymm <span class="hljs-number">21</span> 
+<span class="hljs-number">12</span>:  <span class="hljs-number">195.16</span><span class="hljs-number">.161</span><span class="hljs-number">.46</span>                                       <span class="hljs-number">162.389</span>ms asymm <span class="hljs-number">16</span> 
+<span class="hljs-number">13</span>:  core-sto2-po9<span class="hljs-preprocessor">.netcologne</span><span class="hljs-preprocessor">.de</span>                         <span class="hljs-number">169.944</span>ms asymm <span class="hljs-number">14</span> 
+<span class="hljs-number">14</span>:  rtkds-sto-po2<span class="hljs-preprocessor">.netcologne</span><span class="hljs-preprocessor">.de</span>                         <span class="hljs-number">162.342</span>ms asymm <span class="hljs-number">16</span> 
+<span class="hljs-number">15</span>:  <span class="hljs-number">78.35</span><span class="hljs-number">.29</span><span class="hljs-number">.134</span>                                        <span class="hljs-number">168.384</span>ms asymm <span class="hljs-number">16</span> 
+<span class="hljs-number">16</span>:  <span class="hljs-number">194.55</span><span class="hljs-number">.30</span><span class="hljs-number">.1</span>                                         <span class="hljs-number">173.287</span>ms asymm <span class="hljs-number">18</span> 
+<span class="hljs-number">17</span>:  no reply
+<span class="hljs-number">18</span>:  no reply</code></pre>
+
+<h3 id="wireshark">Wireshark</h3>
+
+<p>GUI tool for examining network packets.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=-55X-koiBFg">Network Troubleshooting at the Command Line</a></li>
+</ul>
+
+<p><a href="http://wireshark.org">Wireshark</a></p>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
