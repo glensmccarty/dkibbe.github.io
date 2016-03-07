@@ -4,8 +4,6 @@
 
 <h2 id="introduction">Introduction</h2>
 
-
-
 <h2 id="installation">Installation</h2>
 
 <pre><code># yum install sysstat
@@ -30,19 +28,33 @@
 <pre><code># /usr/lib64/sa/sa1
 # /usr/lib64/sa/sa2 -A
 # LANG=C sar -q
+
+# sar -P o
+
+# sar 1 10
+
+# sar -b
+# sar -n DEV
 </code></pre>
-
-
 
 <h2 id="configure">Configure</h2>
 
-
+<pre><code># alias sar='LANG=C sar'
+</code></pre>
 
 <h3 id="history">History</h3>
 
 <p>The default is to create data for 28 days.</p>
 
-<h2 id="resources-c">Resources                                        c</h2>
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="https://www.ibm.com/developerworks/aix/library/au-unix-perfmonsar.html">Easy system monitoring with SAR</a></li>
+<li><p><a href="http://www.slideshare.net/brendangregg/linux-performance-analysis-and-tools/34-sar_System_Activity_Reporter_Eg">lide Share Presentation</a></p>
+
+<pre><code>                    c
+</code></pre></li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
