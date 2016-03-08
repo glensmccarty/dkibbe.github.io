@@ -4,6 +4,8 @@
 
 <h2 id="introduction">Introduction</h2>
 
+<p>"Learn how to correlate user complaints with the system activity reporter (SAR) and build a performance baseline for trending purposes using SAR logs. SAR is the perfect tool for systems administrators. It captures important system performance metrics at periodic intervals." -- IBM developerWorks</p>
+
 <h2 id="installation">Installation</h2>
 
 <pre><code># yum install sysstat
@@ -25,15 +27,39 @@
 
 <h2 id="displaying-sar-stats">Displaying SAR stats</h2>
 
+
+
+<h3 id="collecting-data-in-log">Collecting data in log</h3>
+
 <pre><code># /usr/lib64/sa/sa1
-# /usr/lib64/sa/sa2 -A
-# LANG=C sar -q
+</code></pre>
+
+
+
+<h3 id="print-out-todays-data">Print out today's data</h3>
+
+<pre><code># /usr/lib64/sa/sa2 -A
+</code></pre>
+
+
+
+<h3 id="display-basic-data">Display basic data</h3>
+
+<pre><code># LANG=C sar -q
+</code></pre>
+
+
+
+<h3 id="disk-activity">Disk Activity</h3>
+
+<pre><code># sar 1 3
 
 # sar -P o
 
 # sar 1 10
 
 # sar -b
+
 # sar -n DEV
 </code></pre>
 
@@ -50,7 +76,8 @@
 
 <ul>
 <li><a href="https://www.ibm.com/developerworks/aix/library/au-unix-perfmonsar.html">Easy system monitoring with SAR</a></li>
-<li><p><a href="http://www.slideshare.net/brendangregg/linux-performance-analysis-and-tools/34-sar_System_Activity_Reporter_Eg">lide Share Presentation</a></p>
+<li><a href="http://www.slideshare.net/brendangregg/linux-performance-analysis-and-tools/34-sar_System_Activity_Reporter_Eg">lide Share Presentation</a></li>
+<li><p><a href="http://www.thegeekstuff.com/2011/03/sar-examples/">SAR Examples</a></p>
 
 <pre><code>                    c
 </code></pre></li>
