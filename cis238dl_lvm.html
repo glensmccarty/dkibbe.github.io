@@ -113,6 +113,8 @@
 
 <p>Add a new primary partition set to type <em>Linux LVM (8e)</em>.</p>
 
+
+
 <h2 id="create-the-physical-volume-pv">Create the Physical Volume (PV)</h2>
 
 <p>Before you can attach additional storage to the volume group <em>/dev/sdb</em> must be formatted as an physical volume using <code>pvcreate</code>.</p>
@@ -138,7 +140,7 @@
 
 <h2 id="extend-the-logical-volume">Extend the logical Volume</h2>
 
-<p>Use the <code>lvextend</code> command to extent the <em>home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we’ll add half the available extents.</p>
+<p>Use the <code>lvextend</code> command to extent the <em>home</em> logical volume.  You can extend using size (MiB, GiB) or extents.  See the <code>lvextend</code> man page for examples.  Here we'll add half the available extents.</p>
 
 
 
@@ -150,7 +152,7 @@
 
 <h2 id="extend-the-home-filesystem">Extend the /home filesystem</h2>
 
-<p>Extending the logical volume isn’t enough you also need to extend the filesystem as well.  The <code>df</code> command shows that <em>/home</em> is still 1 GiB. in size.</p>
+<p>Extending the logical volume isn't enough you also need to extend the filesystem as well.  The <code>df</code> command shows that <em>/home</em> is still 1 GiB. in size.</p>
 
 
 
@@ -161,6 +163,8 @@
 
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># xfs_growfs /dev/centos/home</span></code></pre>
+
+
 
 <h2 id="extend-the-file-system">Extend the / file system</h2>
 
@@ -180,7 +184,7 @@
 <li>man lvm</li>
 <li><a href="https://www.youtube.com/watch?v=BysRGDgqtwY">Managing Storage with the Linux Logical Volume Manager (LVM)</a></li>
 <li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6-Beta/html/Logical_Volume_Manager_Administration/index.html">Logical Volume Manager Administration</a></li>
-<li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html#section.lvm">The Debian Administrator’s Handbook</a></li>
+<li><a href="http://debian-handbook.info/browse/stable/advanced-administration.html#section.lvm">The Debian Administrator's Handbook</a></li>
 <li><a href="#dennisk.freeshell.org/cis238dl_lvm.html">Extending a LVM Logical Volume</a></li>
 </ul>
 
