@@ -4,40 +4,35 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>The Grand Unified Bootloader (GRUB) is used by almost all Linux distributions. In this assignment you will “break” a CentOS 7 system and then repair it.</p>
-
-
+<p>The Grand Unified Bootloader (GRUB) is used by almost all Linux distributions. In this assignment you will "break" a CentOS 7 system and then repair it using a rescue CD.</p>
 
 <h2 id="learning-objectives">Learning Objectives</h2>
 
 <p><em>After successfully completing this assignment you will be able to:</em></p>
 
 <ol>
+<li>Boot into single user mode.</li>
 <li>Boot from a rescue CD.</li>
 <li>Use <code>chroot</code> to access the broken system.</li>
-<li>Use GRUB to rebuild the GRUB configuration file.</li>
+<li>Use <code>grub2-mkconfig</code> to rebuild the GRUB configuration file.</li>
 </ol>
-
-
 
 <h2 id="useful-terms">Useful Terms</h2>
 
 <ul>
 <li>GRUB</li>
 <li><code>chroot</code></li>
+<li>`grub2-mkconfig</li>
 </ul>
-
-
 
 <h2 id="preparation">Preparation</h2>
 
 <ul>
 <li>Import the CentOS 7 minimal ova.</li>
-<li>Boot the system and rename <em>/boot/grub2/grub.cfg</em> to <em>grub.bak</em></li>
-<li>Reboot the system to a GRUB rescue prompt.</li>
+<li>Boot the system and move <em>/boot/grub2/grub.cfg</em> to <em>/root/grub.cfg</em></li>
+<li>Reboot the system to see that it fails to boot.</li>
+<li>From the GRUB prompt type <code>halt</code> and close the virtual machine window.</li>
 </ul>
-
-
 
 <h2 id="rescue">Rescue</h2>
 
@@ -65,11 +60,9 @@
 
 <h3 id="chroot-into-the-broken-system">Chroot into the Broken System</h3>
 
-<p>Use the <code>chroot</code> command to access the broken system.</p>
+<p>Use the <code>chroot</code> command to access the broken system. </p>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/img/grub_rescue-4.png" alt="enter image description here" title=""></p>
-
-
 
 <h3 id="make-a-new-grub-configuration">Make a New GRUB Configuration</h3>
 
@@ -86,9 +79,21 @@
 
 
 
+<h2 id="single-user-or-rescue-mode">Single User or Rescue Mode</h2>
+
+<p>You can modify the GRUB boot string to change the target boot mode or boot into rescue mode from a working system. See the instructions here.</p>
+
+<p><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sec-Terminal_Menu_Editing_During_Boot.html">24.9.1. Booting to Rescue Mode</a></p>
+
+<h2 id="248-grub-2-over-a-serial-console">24.8. GRUB 2 OVER A SERIAL CONSOLE</h2>
+
+<p><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sec-GRUB_2_over_a_Serial_Console.html">24.8. GRUB 2 OVER A SERIAL CONSOLE</a></p>
+
+<p>It appears that VirtualBox supports this. Anyone want to test it?</p>
+
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of the output of grub2-mkconfig showing that a new config file is being credted in the correct directory <em>not</em> in stdout.</p>
+<p>Submit a screenshot of the output of <code>grub2-mkconfig</code> showing that a new config file is being created in the correct directory <em>not</em> in stdout.</p>
 
 <h2 id="resources">Resources</h2>
 
