@@ -16,9 +16,135 @@
 
 <h3 id="creating-a-builder">Creating a Builder</h3>
 
-<p>While it is neccessary to have root privileges to install a package, packages should <em>not</em> be built asa root.</p>
+<p>While it is necessary to have root privileges to install a package, packages should <em>not</em> be built as root.</p>
+
+<p>Create a new user to build packages.</p>
+
+<pre><code># useradd rpmbuilder
+# passwd rpmbuilder
+</code></pre>
+
+
+
+<h3 id="installing-rpm-packages">Installing RPM Packages</h3>
+
+<p>As you might guess there are packages to build packages. Install the following:</p>
+
+<pre><code># yum install rpmbuild rpmdev-tools rpmlint gcc make
+</code></pre>
+
+<p>You might also want to install <code>tree</code> and <code>nano</code>.</p>
+
+<h2 id="preparing-the-build-environment">Preparing the Build Environment</h2>
+
+
+
+<h3 id="create-the-build-directories">Create the Build Directories</h3>
+
+<p>Log in as <code>rpmbuilder</code> and setup the build tree</p>
+
+<pre><code>$ rpmdev-setuptree
+</code></pre>
+
+<p>This command will create the build directories.</p>
+
+
+
+<h3 id="download-the-source">Download the Source</h3>
+
+<p>Next download the <code>hello</code> source package from a mirror and place it in the <code>~/rpmbuild/SOURCES/</code> directory.</p>
+
+<pre><code>$ curl -O http://gnu.askapache.com/hello/hello-2.10.tar.gz
+</code></pre>
+
+
+
+<h3 id="create-a-spec-file">Create a Spec File</h3>
+
+<p>The <code>spec</code> file contains the specifications for building the package. The file contains macros with options. Here are the macros that need to be edited. You can use <code>rpmlint</code> to test the finished <code>spec</code> file. The <code>spec</code> file is placed in the ~/rpmbuild/SPEC/` directory.</p>
+
+
+
+<h4 id="name">Name</h4>
+
+
+
+<h4 id="version">Version</h4>
+
+
+
+<h4 id="summary">Summary</h4>
+
+<p>The summary must start with a capital letter.</p>
+
+
+
+<h4 id="license">License</h4>
+
+<p>This should be the GPLv3.0</p>
+
+
+
+<h4 id="url">URL</h4>
+
+<p>The web site for the Hello package.</p>
+
+
+
+<h4 id="source0">Source0</h4>
+
+<p>The source package you downloaded.</p>
+
+
+
+<h4 id="buildrequires">BuildRequires</h4>
+
+<p>What additional packages requred. Use <code>gettext</code> here.</p>
+
+
+
+<h4 id="description">%description</h4>
+
+<p>Place a description here.</p>
+
+
+
+<h4 id="install">%install</h4>
+
+<p>For now comment this section out.</p>
+
+
+
+<h2 id="build-the-package">Build the Package</h2>
+
+<p>You can use the <code>--onbuld</code> option to test for errors.</p>
+
+<pre><code>$ rpmbuild --nobuild ~/rpmbuild/SPEC/hello.spec
+</code></pre>
+
+<p>Then build with:</p>
+
+<pre><code>$ rpmbuild -v -bb ~/rpmbuild/SPEC/hello.spec
+</code></pre>
+
+<p>The process should end with and exit code of 0.</p>
+
+
+
+<h2 id="install-the-package">Install the Package</h2>
+
+<p>You will need to be root toinstall the pacakage.</p>
+
+<pre><code>$ su -
+# cd ~/home/rpmbuilder/rpmbuild/RPM/
+# rpm -ivh hello.rpm
+</code></pre>
+
+<p>Use the actual package name.</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of the output of <code>rpm -q hello</code></p>
 
 <h2 id="resources">Resources</h2>
 
