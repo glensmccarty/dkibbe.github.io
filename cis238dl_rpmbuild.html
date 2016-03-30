@@ -49,116 +49,82 @@ $ rpmdev-setuptree
 
 <h3 id="download-the-source">Download the Source</h3>
 
-<p>Next download the <code>hello</code> source package from a mirror and place it in the <code>~/rpmbuild/SOURCES/</code> directory.</p>
+<p>Next download the <code>hello</code> source package from a the GNU site and place it in the <code>~/rpmbuild/SOURCES/</code> directory.</p>
 
 <pre><code>$ cd rpmbuild/SOURCES
-$ curl -O http://gnu.askapache.com/hello/hello-2.10.tar.gz
+$ curl -O http://gnu.org/gnu/hello/hello/hello-2.10.tar.gz
 </code></pre>
 
-<h3 id="create-a-spec-file">Create a Spec File</h3>
+<h3 id="download-the-spec-file">Download the spec File</h3>
 
 <pre><code>$ cd ~/rpmbuild/SPECS
-$ rpmdev-newspec hello
+$ curl -O dennisk.freeshell.org/other/hello.spec
 </code></pre>
 
 <p>The <code>spec</code> file contains the specifications for building the package. The file contains macros with options. Here are the macros that need to be edited. You can use <code>rpmlint</code> to test the finished <code>spec</code> file. The <code>spec</code> file is placed in the ~/rpmbuild/SPEC/` directory.</p>
 
+
+
+<h4 id="edit-the-spec-file">Edit the spec File</h4>
+
+<p>To receive credit for the assignment you need to edit the summary section of the spec file and replace Tux Penguin with your name.</p>
+
 <dl>
-<dt>Name</dt>
-<dd>
-<p>Enter <strong>Hello</strong> as the name.</p>
-</dd>
-
-<dt>Version</dt>
-<dd>
-<p>This should match the  version of the hello archive downloaded. In this example 2.10.</p>
-</dd>
-
 <dt>Summary</dt>
 <dd>
-<p>The "Hello World" program from GNU</p>
+<p>The "Hello World" program from GNU built by Tux Penguin</p>
 </dd>
-
-<dt>License</dt>
-<dd>
-<p>This should be <strong>GPLv3+</strong></p>
-</dd>
-
-<dt>URL</dt>
-<dd>
-<p>The web site for the Hello package <a href="http://ftp.gnu.org/gnu/hello">http://ftp.gnu.org/gnu/hello</a></p>
-</dd>
-
-<dt>Source0</dt>
-<dd>
-<p><a href="http://ftp.gnu.org/gnu/hello/hello-2.8.tar.gz">http://ftp.gnu.org/gnu/hello/hello-2.8.tar.gz</a></p>
-</dd>
-
-<dt>BuildRequires</dt>
-<dd>
-<p>What additional packages requred. Use <code>gettext</code> here.</p>
-</dd>
-
-<dt>Requires:</dt>
-<dd>
-<p>Comment out?</p>
-</dd>
-
-<dt>%description</dt>
-<dd>
-<p>The "Hello World" program, done with all bells and whistles of a proper FOSS  <br>
-project, including configuration, build, internationalization, help files, etc.</p>
-</dd>
-
-<dt>%prep</dt>
-<dd>Do not edit.</dd>
-
-<dt>%build</dt>
-<dd>Do not edit.</dd>
-
-<dt>%configure</dt>
-<dd>Do not edit.</dd>
 </dl>
 
-<p>%install</p>
-
-<p>:For now comment this section out upto the next blank line but not the sections below it.</p>
 
 
+<h3 id="test-the-spec-file">Test the spec File</h3>
 
-<h3 id="prepared-spec-file">Prepared spec file</h3>
+<p>Use <code>rpmlint</code> to test the spec file. Ther should be no errors or warnings.</p>
 
-<pre><code>$ curl -O http://dennisk.freeshell.org/other/hello.spec
+<pre><code>$ rpmlint hello.spec
 </code></pre>
 
 <h2 id="build-the-package">Build the Package</h2>
 
-<p>You can use the <code>--nobuld</code> option to test for errors.</p>
+<p>Build the package with the <code>rpmbuild</code> command.</p>
 
-<pre><code>$ rpmbuild --nobuild ~/rpmbuild/SPEC/hello.spec
-</code></pre>
-
-<p>Then build with:</p>
-
-<pre><code>$ rpmbuild -v -bb ~/rpmbuild/SPEC/hello.spec
+<pre><code>$ rpmbuild -v -ba hello.spec
 </code></pre>
 
 <p>The process should end with and exit code of 0.</p>
 
 <h2 id="install-the-package">Install the Package</h2>
 
-<p>You will need to be root toinstall the pacakage.</p>
+<p>You will need to be root to install the package.</p>
 
 <pre><code>$ su -
 # cd ~/home/rpmbuilder/rpmbuild/RPM/
-# rpm -ivh hello.rpm
+# yum install &lt;the name of the hello-2.10 package&gt;
 </code></pre>
 
 <p>Use the actual package name.</p>
 
+
+
+<h2 id="run-the-program">Run the Program</h2>
+
+<pre><code>$ hello
+Hello World!
+</code></pre>
+
+
+
+<h2 id="uninstall-the-program">Uninstall the Program</h2>
+
+<p><em>Note:</em> Submit the assignment first!</p>
+
+<pre><code># yum remove hello
+</code></pre>
+
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of the output of <code>rpm -q hello</code></p>
+<p>Submit a screenshot of the output of <code>rpm -qi hello</code> showing that the package was built by you.</p>
 
 <h2 id="resources">Resources</h2>
 
