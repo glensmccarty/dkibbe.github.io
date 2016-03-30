@@ -63,49 +63,73 @@ $ rpmdev-newspec hello
 
 <p>The <code>spec</code> file contains the specifications for building the package. The file contains macros with options. Here are the macros that need to be edited. You can use <code>rpmlint</code> to test the finished <code>spec</code> file. The <code>spec</code> file is placed in the ~/rpmbuild/SPEC/` directory.</p>
 
-<h4 id="name">Name</h4>
+<dl>
+<dt>Name</dt>
+<dd>
+<p>Enter <strong>Hello</strong> as the name.</p>
+</dd>
 
-<p>Enter Hello as the name.</p>
+<dt>Version</dt>
+<dd>
+<p>This should match the  version of the hello archive downloaded. In this example 2.10.</p>
+</dd>
 
-<h4 id="version">Version</h4>
+<dt>Summary</dt>
+<dd>
+<p>The "Hello World" program from GNU</p>
+</dd>
 
-<p>Put a 1 here. The version number will be added to the name.</p>
+<dt>License</dt>
+<dd>
+<p>This should be <strong>GPLv3+</strong></p>
+</dd>
 
-<h4 id="summary">Summary</h4>
+<dt>URL</dt>
+<dd>
+<p>The web site for the Hello package <a href="http://ftp.gnu.org/gnu/hello">http://ftp.gnu.org/gnu/hello</a></p>
+</dd>
 
-<p>The summary must start with a capital letter. Make it su</p>
+<dt>Source0</dt>
+<dd>
+<p><a href="http://ftp.gnu.org/gnu/hello/hello-2.8.tar.gz">http://ftp.gnu.org/gnu/hello/hello-2.8.tar.gz</a></p>
+</dd>
 
-<h4 id="license">License</h4>
-
-<p>This should be the GPLv3.0</p>
-
-
-
-<h4 id="url">URL</h4>
-
-<p>The web site for the Hello package. http://</p>
-
-<h4 id="source0">Source0</h4>
-
-<p>The source package you downloaded.</p>
-
-
-
-<h4 id="buildrequires">BuildRequires</h4>
-
+<dt>BuildRequires</dt>
+<dd>
 <p>What additional packages requred. Use <code>gettext</code> here.</p>
+</dd>
+
+<dt>Requires:</dt>
+<dd>
+<p>Comment out?</p>
+</dd>
+
+<dt>%description</dt>
+<dd>
+<p>The "Hello World" program, done with all bells and whistles of a proper FOSS  <br>
+project, including configuration, build, internationalization, help files, etc.</p>
+</dd>
+
+<dt>%prep</dt>
+<dd>Do not edit.</dd>
+
+<dt>%build</dt>
+<dd>Do not edit.</dd>
+
+<dt>%configure</dt>
+<dd>Do not edit.</dd>
+</dl>
+
+<p>%install</p>
+
+<p>:For now comment this section out upto the next blank line but not the sections below it.</p>
 
 
 
-<h4 id="description">%description</h4>
+<h3 id="prepared-spec-file">Prepared spec file</h3>
 
-<p>Place a description here.</p>
-
-
-
-<h4 id="install">%install</h4>
-
-<p>For now comment this section out upto the next blank line but not the sections below it.</p>
+<pre><code>$ curl -O http://dennisk.freeshell.org/other/hello.spec
+</code></pre>
 
 <h2 id="build-the-package">Build the Package</h2>
 
