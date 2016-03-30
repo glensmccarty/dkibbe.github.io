@@ -111,13 +111,11 @@ $ rpmdev-newspec hello
 
 <h4 id="install">%install</h4>
 
-<p>For now comment this section out.</p>
-
-
+<p>For now comment this section out upto the next blank line but not the sections below it.</p>
 
 <h2 id="build-the-package">Build the Package</h2>
 
-<p>You can use the <code>--onbuld</code> option to test for errors.</p>
+<p>You can use the <code>--nobuld</code> option to test for errors.</p>
 
 <pre><code>$ rpmbuild --nobuild ~/rpmbuild/SPEC/hello.spec
 </code></pre>
@@ -128,8 +126,6 @@ $ rpmdev-newspec hello
 </code></pre>
 
 <p>The process should end with and exit code of 0.</p>
-
-
 
 <h2 id="install-the-package">Install the Package</h2>
 
