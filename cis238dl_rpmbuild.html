@@ -39,27 +39,25 @@
 
 <h3 id="create-the-build-directories">Create the Build Directories</h3>
 
-<p>Log in as <code>rpmbuilder</code> and setup the build tree</p>
+<p>Log in as <code>rpmbuilder</code> and setup the build tree. The <code>-l</code> option to <code>su</code> assures that you create a login shell.</p>
 
-<pre><code>$ rpmdev-setuptree
+<pre><code># su -l rpmbuilder
+$ rpmdev-setuptree
 </code></pre>
 
-<p>This command will create the build directories.</p>
-
-
+<p>The second command will create the build directories.</p>
 
 <h3 id="download-the-source">Download the Source</h3>
 
 <p>Next download the <code>hello</code> source package from a mirror and place it in the <code>~/rpmbuild/SOURCES/</code> directory.</p>
 
-<pre><code>$ curl -O http://gnu.askapache.com/hello/hello-2.10.tar.gz
+<pre><code>$ cd rpmbuild/SOURCES
+$ curl -O http://gnu.askapache.com/hello/hello-2.10.tar.gz
 </code></pre>
-
-
 
 <h3 id="create-a-spec-file">Create a Spec File</h3>
 
-<pre><code>$ cd ~/rpmbuild/SPEC
+<pre><code>$ cd ~/rpmbuild/SPECS
 $ rpmdev-newspec hello
 </code></pre>
 
@@ -67,17 +65,15 @@ $ rpmdev-newspec hello
 
 <h4 id="name">Name</h4>
 
-
+<p>Enter Hello as the name.</p>
 
 <h4 id="version">Version</h4>
 
-
+<p>Put a 1 here. The version number will be added to the name.</p>
 
 <h4 id="summary">Summary</h4>
 
-<p>The summary must start with a capital letter.</p>
-
-
+<p>The summary must start with a capital letter. Make it su</p>
 
 <h4 id="license">License</h4>
 
@@ -87,9 +83,7 @@ $ rpmdev-newspec hello
 
 <h4 id="url">URL</h4>
 
-<p>The web site for the Hello package.</p>
-
-
+<p>The web site for the Hello package. http://</p>
 
 <h4 id="source0">Source0</h4>
 
