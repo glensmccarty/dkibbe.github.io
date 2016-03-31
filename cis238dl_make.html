@@ -6,11 +6,23 @@
 
 <p>In This assignment you will build GNU Hello from the source code.</p>
 
+<p><em>After successfully completing this assignment You will be able to:</em></p>
+
+<ul>
+<li>Configure a build environment for <code>make</code>.</li>
+<li>Compile a program with GNU GCC.</li>
+<li>Build and install a program with <code>make</code>.</li>
+<li>Describe the advantages of putting sources code in <code>/usr/local/src</code>.</li>
+<li>Uninstall a program using <code>make</code>.  </li>
+</ul>
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <p>Tarball <br>
-gcc <br>
+GCC <br>
+configure <br>
 make <br>
+Makefile <br>
 Dependacy Hell</p>
 
 <h2 id="preparation">Preparation</h2>
@@ -27,7 +39,7 @@ Dependacy Hell</p>
 
 <h3 id="extract-the-tarball">Extract the Tarball</h3>
 
-<p>Extracting the tarball will create a new directory named hello-2.10 containing the file from the archive..</p>
+<p>Extracting the tarball will create a new directory named <strong>hello-2.10</strong> containing the file from the archive.</p>
 
 <pre><code># tar xvzf hello-2.10.tar.gz
 # cd hello-210/
@@ -37,7 +49,7 @@ Dependacy Hell</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-4.png" alt="Screenshot of hello-2.10 directory" title=""></p>
 
-<p>The <code>hello-2.10</code> directory contains two files that you should read first. Failing to read these files may result in an installation that doesn't have the features you want.</p>
+<p>The <code>hello-2.10</code> directory contains two files that you should read first. Failing to read these files may result in failure to compile or an installation that doesn't have the features you want.</p>
 
 <dl>
 <dt>README</dt>
@@ -47,24 +59,24 @@ Dependacy Hell</p>
 
 <dt>INSTALL</dt>
 <dd>
-<p>The INSTALL file lists the commands that should run to install the program.</p>
+<p>The INSTALL file lists the commands that should be run to install the program.</p>
 </dd>
 </dl>
 
 <h3 id="configure">Configure</h3>
 
-<p>Running the <code>configure</code> script will test that everything exists on the system to compile the program.</p>
+<p>Running the <code>configure</code> script will test that everything exists on the system needed to compile the program.</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-1.png" alt="Configure screenshot" title=""></p>
 
 <h3 id="install-the-compiler">Install the Compiler</h3>
 
-<p>Our first run of <code>configure</code> shows that a GCC compiler is not installed so that <code>configure</code> exists.</p>
+<p>Our first run of <code>configure</code> shows that a GCC compiler is not installed so  <code>configure</code> exists without further checking.</p>
 
 <pre><code># yum install gcc
 </code></pre>
 
-<p>Rerun <code>./configure</code> and it should complete with an exit code of 0.</p>
+<p>Rerun <code>./configure</code> and it should complete with an exit code of <strong>0</strong> indicating that everything needed to compile the program is on the system.</p>
 
 <h2 id="build-the-software">Build the Software</h2>
 
@@ -73,23 +85,26 @@ Dependacy Hell</p>
 <pre><code># make
 </code></pre>
 
-<p>If m<code>make</code> is successful you will have the new <code>hello</code> program.</p>
+<p>If <code>make</code> is successful you will have the new <code>hello</code> program in the current directory.</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-2.png" alt="Screenshot of directory showing hello executable." title=""></p>
 
 <h3 id="test-the-executable">Test the Executable</h3>
 
-<pre><code># make check
+<p>The <code>make check</code> command runs some basic checks on the new program. </p>
 
-$ ./hello
+<pre><code># make check
 </code></pre>
 
-<h3 id="install-the-software">Install the Software</h3>
+<p>The program can be run in the current directory to try it out before installing.</p>
+
+<pre><code>$ ./hello
+</code></pre>
+
+<h3 id="install-the-program-and-related-files">Install the Program and Related Files</h3>
 
 <pre><code># make install
 </code></pre>
-
-
 
 <h3 id="run-the-program">Run the Program</h3>
 
