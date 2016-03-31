@@ -1,34 +1,38 @@
-<h1 id="install-software-from-source">Install Software from Source</h1>
+<h1 id="building-software-with-make">Building Software with Make</h1>
+
+<p>Sometimes the program you need is only available as source code. Building programs from source is a useful skill and will give you a better appreciation for the package management system.</p>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
-
+<p>In This assignment you will build GNU Hello from the source code.</p>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
-
+<p>Tarball <br>
+gcc <br>
+make</p>
 
 <h2 id="preparation">Preparation</h2>
 
-
+<p>USe the CentOS 7 ova for this assignment.</p>
 
 <h3 id="download-the-tarball">Download the Tarball</h3>
+
+<p>After booting the virtual machine change to the <code>/usr/local/src</code> directory. This is a good place to build software since <code>/usr/local/</code> won't be touched by the package management system and can be easily backed up.</p>
 
 <pre><code># cd /usr/local/src
 # curl -O http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
 </code></pre>
 
-<h3 id="extract">Extract</h3>
+<h3 id="extract-the-tarball">Extract the Tarball</h3>
+
+<p>Extracting the tarball will create a new directory named hello-2.10 containing the file from the archive..</p>
 
 <pre><code># tar xvzf hello-2.10.tar.gz
 # cd hello-210/
 </code></pre>
 
-
-
 <h3 id="readme-and-install">README and INSTALL</h3>
-
-
 
 <h3 id="configure">Configure</h3>
 
@@ -63,6 +67,8 @@
 $ ./hello
 </code></pre>
 
+
+
 <h3 id="install-the-software">Install the Software</h3>
 
 <pre><code># make install
@@ -82,11 +88,15 @@ $ man hello
 
 <p>You can remove the program by running <code>make uninstall</code> from the same directory.</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a Screenshot of the output of <code>man hello</code>.</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-3.png" alt="Sample submission" title=""></p>
+
+
 
 <h2 id="resources">Resources</h2>
 
