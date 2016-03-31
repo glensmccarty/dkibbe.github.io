@@ -1,0 +1,95 @@
+<h1 id="install-software-from-source">Install Software from Source</h1>
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+
+
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+
+
+<h3 id="download-the-tarball">Download the Tarball</h3>
+
+<pre><code># cd /usr/local/src
+# curl -O http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
+</code></pre>
+
+<h3 id="extract">Extract</h3>
+
+<pre><code># tar xvzf hello-2.10.tar.gz
+# cd hello-210/
+</code></pre>
+
+
+
+<h3 id="readme-and-install">README and INSTALL</h3>
+
+
+
+<h3 id="configure">Configure</h3>
+
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-1.png" alt="Configure screenshot" title=""></p>
+
+
+
+<h3 id="install-the-compiler">Install the Compiler</h3>
+
+<pre><code># yum install gcc
+</code></pre>
+
+<p>Rerun <code>./configure</code> and it should complete with an exit code of 0.</p>
+
+
+
+<h2 id="build-the-software">Build the Software</h2>
+
+<p>The <code>make</code> command will build the software package once all the dependencies are met. Be sure to run the command from the same directory as <code>configure</code>.</p>
+
+<pre><code># make
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-2.png" alt="Screenshot of directory showing hello executable." title=""></p>
+
+
+
+<h3 id="test-the-executable">Test the Executable</h3>
+
+<pre><code># make check
+
+$ ./hello
+</code></pre>
+
+<h3 id="install-the-software">Install the Software</h3>
+
+<pre><code># make install
+</code></pre>
+
+
+
+<h3 id="run-the-program">Run the Program</h3>
+
+<pre><code>$ hello
+$ man hello
+</code></pre>
+
+
+
+<h3 id="remove-the-software">Remove the Software</h3>
+
+<p>You can remove the program by running <code>make uninstall</code> from the same directory.</p>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a Screenshot of the output of <code>man hello</code>.</p>
+
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-3.png" alt="Sample submission" title=""></p>
+
+<h2 id="resources">Resources</h2>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
