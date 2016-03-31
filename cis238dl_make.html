@@ -10,7 +10,8 @@
 
 <p>Tarball <br>
 gcc <br>
-make</p>
+make <br>
+Dependacy Hell</p>
 
 <h2 id="preparation">Preparation</h2>
 
@@ -34,20 +35,36 @@ make</p>
 
 <h3 id="readme-and-install">README and INSTALL</h3>
 
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-4.png" alt="Screenshot of hello-2.10 directory" title=""></p>
+
+<p>The <code>hello-2.10</code> directory contains two files that you should read first. Failing to read these files may result in an installation that doesn't have the features you want.</p>
+
+<dl>
+<dt>README</dt>
+<dd>
+<p>Contains information about the program and may include install instructions if no INSTALL file exists.</p>
+</dd>
+
+<dt>INSTALL</dt>
+<dd>
+<p>The INSTALL file lists the commands that should run to install the program.</p>
+</dd>
+</dl>
+
 <h3 id="configure">Configure</h3>
+
+<p>Running the <code>configure</code> script will test that everything exists on the system to compile the program.</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-1.png" alt="Configure screenshot" title=""></p>
 
-
-
 <h3 id="install-the-compiler">Install the Compiler</h3>
+
+<p>Our first run of <code>configure</code> shows that a GCC compiler is not installed so that <code>configure</code> exists.</p>
 
 <pre><code># yum install gcc
 </code></pre>
 
 <p>Rerun <code>./configure</code> and it should complete with an exit code of 0.</p>
-
-
 
 <h2 id="build-the-software">Build the Software</h2>
 
@@ -56,9 +73,9 @@ make</p>
 <pre><code># make
 </code></pre>
 
+<p>If m<code>make</code> is successful you will have the new <code>hello</code> program.</p>
+
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/cis238dl_make-2.png" alt="Screenshot of directory showing hello executable." title=""></p>
-
-
 
 <h3 id="test-the-executable">Test the Executable</h3>
 
@@ -66,8 +83,6 @@ make</p>
 
 $ ./hello
 </code></pre>
-
-
 
 <h3 id="install-the-software">Install the Software</h3>
 
@@ -78,11 +93,11 @@ $ ./hello
 
 <h3 id="run-the-program">Run the Program</h3>
 
+<p>The program is now installed and can be run by any user.</p>
+
 <pre><code>$ hello
 $ man hello
 </code></pre>
-
-
 
 <h3 id="remove-the-software">Remove the Software</h3>
 
