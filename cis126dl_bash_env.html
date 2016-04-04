@@ -19,7 +19,7 @@
 <li><code>~/.bash_login</code></li>
 <li><code>~/.bash_logout</code></li>
 <li><code>~/.bash_history</code></li>
-<li>`Hidden “dot” files</li>
+<li>`Hidden "dot" files</li>
 <li>bash`</li>
 <li><code>history</code></li>
 <li><code>env</code></li>
@@ -33,39 +33,36 @@
 
 <p>Do this assignment on the Ubuntu LiveCD or from a guest session. Click the gear icon in the upper right corner of the desktop and select Guest Session, a new Guest Session will open.</p>
 
-<p>If you do this assignment in your home directory make backup copies of ~/.profile and ~/.bashrc before continuing. Clear the Bash history with <code>history -c</code> before starting.</p>
+<p>If you do this assignment in your home directory make backup copies of <code>~/.profile</code> , <code>~/.bashrc</code> and <code>.bash_logout</code> before continuing. </p>
 
+<pre><code>$ cp .profile profile.bak
+cp .bashrc. bashrc.bak
+$ cp .bash_logout bash_logout.bak
+</code></pre>
 
+<p>Clear the Bash history with <code>history -c</code> before starting.</p>
 
 <h3 id="edit-bashrc">Edit ~/.bashrc</h3>
 
-<ol>
-<li>Click on the Dash search icon in the upper left corner of the desktop and type Gedit to bring up the Gedit text editor.  </li>
-<li>Open ~/.bashrc. The file is a hidden “dot file” so right click in the Open dialog box and select Show Hidden Files. You can also use the keyboard shortcut <strong>CTRL h*</strong>.</li>
-<li>Scroll to the bottom of the file and after the last line press Enter and type <code>echo "This line from .bashrc."</code></li>
-<li>Save the changes to the file.</li>
-</ol>
+<p>Click on the Dash search icon in the upper left corner of the desktop and type <em>terminal</em> to bring up the bash shell.  Open <code>~/.bashrc</code> with the Nano text editor.</p>
+
+<pre><code>$ nano .bashrc
+</code></pre>
+
+<p>Scroll to the bottom of the file and after the last line press Enter and type <code>echo "This line from .bashrc. The time is $(date +%R) and you are logged into $(hostname)."</code></p>
+
+<p>The <code>$(date +%R)</code> will be replaced by the current time.</p>
+
+<p>Press <strong>Ctrl+O</strong> to save the changes and <strong>Ctrl+X</strong> to exit Nano.</p>
 
 <h3 id="edit-profile">Edit ~/.profile</h3>
 
-<ol>
-<li>Open ~/.profile and scroll to the bottom of the file.</li>
-<li>After the last line press Enter and type <code>echo "This line is from .profile"</code></li>
-<li>Save the changes to the file.</li>
-</ol>
-
-
+<p>Open <code>~/.profile</code> in Nano and scroll to the bottom of the file. <br>
+After the last line press <strong>Enter</strong> and type <code>echo "This line is from .profile."</code></p>
 
 <h3 id="edit-bashlogout">Edit ~/.bash_logout</h3>
 
-<ol>
-<li>Open ~/.bash_logout`/</li>
-<li>After the last line press Enter and type ~echo “Say good night Gracie.”`</li>
-<li>Save the changes to the file.</li>
-<li>Close Gedit.</li>
-</ol>
-
-
+<p>Open <code>~/.bash_logout</code> scroll to the last; press <strong>Enter</strong> and type <code>echo "The time is now $(date +%R), goodbye."</code> Save the changes to the file. Exit Nano.</p>
 
 <h2 id="start-assignment">Start Assignment</h2>
 
@@ -74,60 +71,42 @@
 <h3 id="bashrc">~/.bashrc</h3>
 
 <ol>
-<li>Click on Dash and type terminal. Select the Terminal icon to open GNOME Terminal.</li>
-<li>Observe that “This line from .bashrc.” shows above the prompt.</li>
+<li>Click on Dash and type <em>terminal</em>. Select the Terminal icon to open the GNOME Terminal.</li>
+<li>Observe that the line from <code>.bashrc.</code> shows above the prompt. Only the <code>.bashrc</code> file is sourced when an interactive shell is opened.</li>
 <li>Leave the Terminal open for the next step.</li>
 </ol>
-
-
 
 <h3 id="profile">~/.profile</h3>
 
 <ol>
 <li>At the terminal prompt type <code>bash -l</code> to open a new login session.</li>
-<li>Observe that both the line from .bashrc and .profile appear above the prompt.</li>
+<li>Observe that both the line from <code>.bashrc</code> and <code>.profile</code> appear above the prompt. The <code>.bashrc</code> file is sourced from  <code>.profile</code>.</li>
 <li>Leave the Terminal open for the next step.</li>
 </ol>
-
-
 
 <h3 id="bashlogout">~/.bash_logout</h3>
 
 <ol>
-<li>Type <code>exit</code> to return to the previous shell.</li>
-<li>Observer that “Say good night Gracie.” displays on the screen.</li>
-<li>Type exit or <strong>CTRL d</strong> to logout of the terminal.</li>
+<li>Type <code>exit</code> to close the login shell and return to the previous shell.</li>
+<li>Observer that the line from <code>.bash_logout</code> displays on the screen.</li>
+<li>Type <code>exit</code> or <strong>CTRL+D</strong> as many times as needed to logout of the terminal.</li>
 </ol>
 
-
-
 <h2 id="quick-nano-tutorial">Quick nano Tutorial</h2>
-
-<p>This assignment can also be done with the cammad line using the <code>nano</code> text editor.</p>
 
 <p><img src="http://classfiles.dennisk.fastmail.net/nano_tutorial.png" alt="nano tutorial" title=""></p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Copy and paste these question along with your answers in the submission text box.</p>
-
-<ol>
-<li>When GNOME Terminal was first opened why did only “This line from .bashrc” appear?</li>
-<li>After typing <code>bash -l</code> why did both lines appear?</li>
-<li>From which file is .bashrc sourced?</li>
-<li>Open GNOME Terminal and type <code>bash</code> then <code>exit</code>. Why do you not see “Say good night Gracie.”?</li>
-<li>What shortcut can you type to search for applications instead of clicking on the Dash?</li>
-</ol>
-
-
+<p>Submit a screenshot of the Terminal showing the line from the <code>.bashrc_logout</code> file.</p>
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li>man bash</li>
 <li><a href="http://theurbanpenguin.com/wp/?p=3011">The Urban Penguin</a></li>
-<li><a href="http://www.howtogeek.com/113330/how-to-master-ubuntus-unity-desktop-8-things-you-need-to-know/">How to master Ubuntu’s Unity Desktop</a></li>
-<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">Bash Reference Manual</a></li>
+<li><a href="http://www.howtogeek.com/113330/how-to-master-ubuntus-unity-desktop-8-things-you-need-to-know/">How to master Ubuntu's Unity Desktop</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">Bash Reference Manual - Start uUp Files</a></li>
 </ul>
 
 <blockquote>
