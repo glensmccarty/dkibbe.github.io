@@ -1,0 +1,51 @@
+<h1 id="using-script-to-record-a-bash-session">Using script to Record a Bash Session</h1>
+
+<p>The <code>script</code> command records the commands you type in the shell. You play the session back with the <code>scriptreplay</code> command.</p>
+
+<h2 id="recording-the-session">Recording the Session</h2>
+
+<pre><code>$ script --timing=&lt;name_of_timing_file&gt;
+Script started, file is typescript
+</code></pre>
+
+<p>This will record all commands in the <code>typescript</code> file.</p>
+
+<p>Type <code>exit</code> to stop and end the recording session.</p>
+
+<pre><code>$ exit
+Script done, file is typescript
+</code></pre>
+
+<p>The default record file is <code>typescript</code> but you use a different file name to keep a collection of scripts.</p>
+
+<pre><code>$ script --timing=myscript.timing myscript
+Script started, file is myscript
+</code></pre>
+
+<h2 id="playback">Playback</h2>
+
+<p>The <code>scriptreplay</code> command will replay the commands in real time if a timing file was used.</p>
+
+<pre><code>$ scriptreplay -t &lt;name_of_timing_file&gt;
+</code></pre>
+
+<p>If you used a custom name be sure to include it:</p>
+
+<pre><code>$ scriptreplay myscript.timing myscript
+</code></pre>
+
+<p>You can use <code>less</code>to view the typescript file.</p>
+
+<pre><code>$ less -r typescript
+</code></pre>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>script manpage</li>
+<li>scriptreplay manpage</li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
