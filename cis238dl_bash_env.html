@@ -1,6 +1,4 @@
-<h1 id="bash-configuration-files">Bash configuration files</h1>
-
-
+<h1 id="bash-configuration-files">Bash Configuration Files</h1>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -10,31 +8,61 @@
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
+<ul>
+<li><code>~/.profile</code></li>
+<li><code>~/.bash_profile</code></li>
+<li><code>~/.bashrc</code></li>
+<li><code>~/.bash_login</code></li>
+<li><code>~/.bash_logout</code></li>
+<li>`~/.bash_history</li>
+</ul>
+
 
 
 <h2 id="preparation">Preparation</h2>
 
 
 
-<h3 id="bashprofile">~/bash_profile</h3>
+<h3 id="create-a-user">Create a User</h3>
 
-<p>Add this line to the bottom of the file.</p>
+<p>Create a new user named <em>tux.</em></p>
+
+<pre><code># useradd tux
+# passwd tux
+</code></pre>
+
+<p>Login as user <em>tux</em></p>
+
+<pre><code># su -l tux
+</code></pre>
+
+
+
+<h3 id="bashprofile">~/.bash_profile</h3>
+
+<p>Add this line to the bottom of the <code>~/.bash_profile</code> file in the home directory of user <em>tux</em>.</p>
 
 <pre><code>echo "This line is from ~/.bashrc. The time is $(date +%R)"
 </code></pre>
 
+
+
 <h3 id="bashrc">~/.bashrc</h3>
 
-<p>Add this line to the bottom of the file.</p>
+<p>Add this line to the bottom of the <code>~/.bashrc</code> file in the home directory of user <em>tux</em>.</p>
 
 <p>echo "This line is from ~/.bashrc."</p>
 
+
+
 <h3 id="bashlogout">~/.bash_logout</h3>
 
-<p>Add this line to the bottom of the file.</p>
+<p>Add this line to the bottom of the <code>~/.bash_logout</code> file in the home directory of user <em>tux</em>.</p>
 
 <pre><code>echo "Logging out as user $USER."
 </code></pre>
+
+
 
 <h2 id="login-vs-interactive-shell">Login vs. Interactive Shell</h2>
 
@@ -42,9 +70,47 @@
 
 <h3 id="interactive-shell">Interactive Shell</h3>
 
+<p>As  root login as user <em>tux</em>.</p>
+
+<pre><code># su tux
+</code></pre>
+
+<p>Note that only the line from <code>~/.bashrc</code> is displayed.</p>
+
+<p>Type <code>pwd</code> and note that you are not in Tux's home directory</p>
+
+<p>Type <code>exit</code> to logout as <em>tux</em>.</p>
+
+
+
 <h3 id="login-shell">Login Shell</h3>
 
+<p>As  root login as user <em>tux</em> using the <strong>-l</strong> option.</p>
+
+<pre><code># su -l tux
+</code></pre>
+
+<p>Note that both the line from <code>~/.bashrc</code> and the line from <code>~/.bash_profile</code> are displayed.</p>
+
+<p>Type <code>pwd</code> and note that you are in Tux's home directory</p>
+
+<p>Type <code>exit</code> to logout as <em>tux</em> and note that the line from <code>~/bash_logout</code> is displayed.</p>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of the Terminal showing the line from the <code>.bashrc_logout</code> file.</p>
+
+
+
 <h2 id="resources">Resources</h2>
+
+<ul>
+<li>man bash</li>
+<li><p><a href="http://theurbanpenguin.com/wp/?p=3011">The Urban Penguin</a></p></li>
+<li><p><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">Bash Reference Manual - Start Up Files</a></p></li>
+</ul>
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
