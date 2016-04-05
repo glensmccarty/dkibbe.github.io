@@ -1,3 +1,60 @@
+<h1 id="customizing-the-bash-shell">Customizing the Bash Shell</h1>
+
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<p>This assignment is for CentOS 7.</p>
+
+<h2 id="create-a-new-user">Create a New User</h2>
+
+<p>Create a new user.</p>
+
+<pre><code># useraadd tux
+# passwd tux
+</code></pre>
+
+<p>Login as user <code>tux</code>.</p>
+
+<pre><code># su -l tux
+</code></pre>
+
+
+
+<h2 id="create-files">Create Files</h2>
+
+<p>Create an directory, an ordinary file and a symbolic link.</p>
+
+<pre><code>$ mkdir MyStuff ; touch foobar ; ln -s foobar foo
+</code></pre>
+
+<h2 id="custom-prompt">Custom Prompt</h2>
+
+<p>Follow the instructions in the link under <em>Resources</em> to create a custom prompt.</p>
+
+<h2 id="custom-colors">Custom Colors</h2>
+
+<p>Copy <code>/etc/DIR_COLORS</code> to <code>~/.dir_color</code>.</p>
+
+<p>Follow the instructions in the file to change the colors on the directories sho they show up better.</p>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot showing both the custom prompt and the custom directory color.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html">Custom PS1 Prompt</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html#index-prompting">Bash Users Manual</a></li>
+</ul>
+
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
 </blockquote>
