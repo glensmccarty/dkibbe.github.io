@@ -1,6 +1,6 @@
-<h1 id="sed">Sed</h1>
+<h1 id="sed-stream-editor">sed (stream editor)</h1>
 
-<p><code>sed</code> is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default <code>sed</code> outputs to STDOUT and does not alter the original file.</p>
+<p><code>sed</code> is a stream editor for filtering and transforming text and supports regular expressions. By default <code>sed</code> outputs to STDOUT and does not alter the original file.</p>
 
 <h2 id="preparation">Preparation</h2>
 
@@ -9,38 +9,40 @@
 <pre><code>$ cat &gt; twain.txt
 Mark Twain
 Mr. Mark Twain
-Samuel Clements
+Samuel Clemens
 mark twain
-Ctrl+D
 </code></pre>
+
+<p>Create asecond file.</p>
+
+<pre><code>$ cat &gt; linux.txt
+http://example.com/tux/
+</code></pre>
+
+<p>Type <strong>Ctrl+D</strong> on a line by itself to end the file.</p>
 
 <h3 id="substitution">Substitution</h3>
 
 <pre><code>$ sed 's/Mark/Mary/' twain.txt
 </code></pre>
 
-<p>The single quotes are necessary to protect the shell from spaces.</p>
-
-<p>If you only want to see the lines changed use the <strong>-n</strong> and <strong>p</strong> options.</p>
+<p>Sed is case sensitive so <em>mark twain</em> isn't changed. The single quotes are necessary to protect the shell from forward slashes. If you only want to see the lines changed use the <strong>-n</strong> and <strong>p</strong> options.</p>
 
 <pre><code>sed -n 's/mark twain/Tom Sawyer/p' twain.txt
 </code></pre>
 
-<h3 id="multipe">Multipe</h3>
+<h3 id="multiple-substitutions">Multiple Substitutions</h3>
+
+<p>Sed statements are separated by a semicolon so you can use more than one substitution.</p>
 
 <pre><code>$ sed 's/Mark/Samuel/ ; s/Mr./Ms./' twain.txt
 </code></pre>
 
 <h3 id="deletion">Deletion</h3>
 
-<p>The <strong>d</strong> instruction tell <code>sed</code> to delete.</p>
+<p>The <strong>d</strong> instruction tells <code>sed</code> to delete the line rather than make a substitution.</p>
 
 <pre><code>$ sed '/Mark/d' twain.txt
-</code></pre>
-
-<p>You can combine substitution and deletion.</p>
-
-<pre><code>$ sed 's/Mark/Samuel/ ; /Mr. /d' twain.txt
 </code></pre>
 
 <h3 id="sed-scripts">Sed Scripts</h3>
@@ -50,8 +52,9 @@ Ctrl+D
 <pre><code>$ cat &gt; sed.txt
 s/Mark/Samuel/
 /Mr. /d
-Ctrl+D
 </code></pre>
+
+<p>Type <strong>Ctrl+D</strong> on a line by itself to end the file.</p>
 
 <h3 id="edit-in-place">Edit In Place</h3>
 
@@ -65,6 +68,8 @@ Ctrl+D
 <pre><code>$ sed -i.bak 's/mark twain/Tom Sawyer/' twain.txt
 </code></pre>
 
+
+
 <h3 id="write-to-a-file">Write to a File</h3>
 
 <p>The <strong>w</strong> instruction writes changes to the named file. The <strong>-n</strong> option suppresses output to the command line.</p>
@@ -76,7 +81,7 @@ Ctrl+D
 
 <h3 id="display-pattern">Display Pattern</h3>
 
-<p>Here <code>sed</code> just displays the pattern “PASS” at the start of a line.</p>
+<p>Here <code>sed</code> just displays the pattern "PASS" at the start of a line.</p>
 
 <pre><code>$ sed -n '/^PASS/p' /etc/login.defs
 </code></pre>
@@ -97,10 +102,12 @@ Ctrl+D
 <pre><code>$ sed 's_http://example.com/tux/_http://tux.example.com_' linux.txt
 </code></pre>
 
+
+
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="https://www.gnu.org/software/sed/manual/">GNU sed Users’ Manual</a></li>
+<li><a href="https://www.gnu.org/software/sed/manual/">GNU sed Users' Manual</a></li>
 <li><a href="http://www.ibm.com/developerworks/library/l-sed1/">Sed by Example</a></li>
 <li><a href="http://www.ibm.com/developerworks/aix/tutorials/au-unixtips3/index.html">Introducing filters and regular expressions</a></li>
 <li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
