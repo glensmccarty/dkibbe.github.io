@@ -44,7 +44,21 @@
 
 <p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,noquota)</p>
 
-<p>To enable quotas at boot a kernel option must be added to the GRUB defaults. Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
+<p>To enable quotas at boot the <code>/etc/fstab</code> file must be edited and a kernel option must be added to the GRUB defaults.</p>
+
+
+
+<h3 id="edit-etcfstab">Edit /etc/fstab</h3>
+
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""> Not tested yet.</p>
+
+<p>Add uquota,pquota to the <code>/home</code> entry.</p>
+
+
+
+<h2 id="add-quotas-to-grub">Add Quotas to GRUB</h2>
+
+<p>Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
 
 <pre><code> rootflags=uquota,pquota
 </code></pre>
@@ -57,26 +71,18 @@
 # grub2-mkconfig -o /boot/grub2/grub.cfg
 </code></pre>
 
-<p>Reboot the system to make the changes effective. Use the <code>mount</code> command to confirm that quotas are now active.</p>
+<p>Reboot the system to make the changes effective. After the system reboots use the <code>mount</code> command to confirm that quotas are now active.</p>
 
 <pre><code># mount | grep ' / '
 </code></pre>
 
 <p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,usrquota,prjquota)</p>
 
-<h2 id="edit-etcfstab">Edit /etc/fstab</h2>
-
-<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""> Not tested yet.</p>
-
-<p>Add uquota,pquota to the <code>/home</code> entry.</p>
-
-<h3 id="assign-quotas-per-user">Assign Quotas per User</h3>
+<h2 id="assign-quotas-to-a-user">Assign Quotas to a  User</h2>
 
 <p>Use <code>xfs_quota</code> to display the current quotas.</p>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="Quota report" title=""></p>
-
-
 
 <h2 id="set-quotas-for-a-user">Set Quotas for a User</h2>
 
