@@ -59,31 +59,52 @@
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="Quota report" title=""></p>
 
-<h3 id="assign-quotas-per-group">Assign Quotas per Group</h3>
 
 
+<h2 id="set-quotas-for-a-user">Set Quotas for a User</h2>
+
+<pre><code># xfs_quota -x -c 'limit -u bsoft=100m bhard=150m tux' /home/
+</code></pre>
+
+<p>Use <code>xfs_quota</code> to display the current quotas.</p>
+
+<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-6.png" alt="Quota report" title=""></p>
+
+<h3 id="set-quotas-per-group">Set Quotas per Group</h3>
+
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
+
+<h3 id="set-quotas-for-projects">Set Quotas for Projects</h3>
+
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
 <h3 id="set-the-grace-period-for-soft-limits">Set the Grace Period for Soft Limits</h3>
 
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
+
+
+<h3 id="quote-enforcement">Quote enforcement</h3>
+
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
 <h2 id="test-quotas">Test Quotas</h2>
 
-<p>Create a 1 GiB file</p>
+<p>Create a 50 MiB file</p>
 
-<pre><code>$ dd if=/dev/zero of=BigFile bs=q`enter code here`b
+<pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-
+<p>Submit a screen showing that your user has exceeded the quota limit.</p>
 
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/ch-disk-quotas.html">Quotas</a></li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/xfsquota.html">Quotas</a></li>
+<li><a href="http://help.directadmin.com/item.php?id=557">Enable Quotas</a></li>
+<li><a href="http://manpages.ubuntu.com/manpages/trusty/man8/xfs_quota.8.html">Manpage for xfs_quotas</a></li>
 </ul>
 
 <blockquote>
