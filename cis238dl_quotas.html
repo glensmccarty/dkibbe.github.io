@@ -51,13 +51,15 @@
 <pre><code> rootflags=uquota,pquota
 </code></pre>
 
+<p>This will add quotas for users and projects</p>
+
 <p>Now backup and generate a new <code>grub.cfg</code>.</p>
 
 <pre><code># cp /boot/grub2/grub.cfg /root/grub.cfg.orig
 # grub2-mkconfig -o /boot/grub2/grub.cfg
 </code></pre>
 
-<p>Reboot the system to make the changes effective. Use the <code>mount</code> commaqnd to confirm that quotas are now active.</p>
+<p>Reboot the system to make the changes effective. Use the <code>mount</code> command to confirm that quotas are now active.</p>
 
 <pre><code># mount | grep ' / '
 </code></pre>
@@ -66,11 +68,9 @@
 
 <h2 id="edit-etcfstab">Edit /etc/fstab</h2>
 
-<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""> Not tested yet.</p>
 
-<p>Add uquota,gquota</p>
-
-
+<p>Add uquota,pquota to the <code>/home</code> entry.</p>
 
 <h3 id="assign-quotas-per-user">Assign Quotas per User</h3>
 
@@ -113,7 +113,7 @@
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
-
+<p>Quotas can be set to non-enforcing and used just to monitor disk space.</p>
 
 <h2 id="test-quotas">Test Quotas</h2>
 
@@ -127,11 +127,15 @@
 <pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
 
-<p>Crate a second file of the same size and the quota will be exceded.</p>
+<p>Create a second file of the same size.</p>
 
-<p>$ dd if=/dev/zero of=TestFile2 bs=50M count=1</p>
+<pre><code>$ dd if=/dev/zero of=TestFile2 bs=50M count=1
+</code></pre>
 
+<p>Create a third file of the same size and the quota will be exceeded.</p>
 
+<pre><code>$ dd if=/dev/zero of=TestFile2 bs=50M count=1
+</code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
