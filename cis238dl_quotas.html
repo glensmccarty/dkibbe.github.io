@@ -8,6 +8,8 @@
 <li>Projects</li>
 </ul>
 
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>In this assignment you will enable and configure quotes on a XFS filesystem.</p>
@@ -21,17 +23,19 @@
 <li>Demonstrate how quotas limit a user's ability to hog disk space.</li>
 </ol>
 
+
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
+
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
 
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Follow the instruction in the <a href="https://dkibbe.github.io/cis238dl_lvm.html">Extent an LVM Logical Volume</a> assignment to creat a CentOS 7 virtual machine with a separate 1 GiB Logical Volumn mounted on <code>/home</code>. During install create a user account.</p>
+<p>Follow the instruction in the <a href="https://dkibbe.github.io/cis238dl_lvm.html">Extend an LVM Logical Volume</a> assignment to creat a CentOS 7 virtual machine with a separate 1 GiB logical volumne mounted on <code>/home</code>. During install create a user account.</p>
 
-<p>When the system reboots run use <code>df</code> to check that <code>/home</code> is on a separate partition and is approximately 1 GiB.</p>
-
-
+<p>When the system reboots use <code>df</code> to confirm that <code>/home</code> is on a separate partition and is approximately 1 GiB.</p>
 
 <h2 id="enable-quotas">Enable Quotas</h2>
 
@@ -42,16 +46,12 @@
 
 <p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,noquota)</p>
 
-<p>To enable quotas a boot-time option must be added to the GRUB defaults. Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
+<p>To enable quotas at boot a kernel option must be added to the GRUB defaults. Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
 
 <pre><code> rootflags=uquota,pquota
 </code></pre>
 
-<p>This will likely be preceded by <code>rhgb quiet</code>.</p>
-
-<p><code>/boot/grub2/grub.cfg</code></p>
-
-<p>Now backup and generfate a new <code>grub.cfg</code>.</p>
+<p>Now backup and generate a new <code>grub.cfg</code>.</p>
 
 <pre><code># cp /boot/grub2/grub.cfg /root/grub.cfg.orig
 # grub2-mkconfig -o /boot/grub2/grub.cfg
@@ -64,13 +64,13 @@
 
 <p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,usrquota,prjquota)</p>
 
-
-
 <h2 id="edit-etcfstab">Edit /etc/fstab</h2>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
 <p>Add uquota,gquota</p>
+
+
 
 <h3 id="assign-quotas-per-user">Assign Quotas per User</h3>
 
@@ -89,13 +89,19 @@
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-6.png" alt="Quota report" title=""></p>
 
+
+
 <h3 id="set-quotas-per-group">Set Quotas per Group</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
+
+
 <h3 id="set-quotas-for-projects">Set Quotas for Projects</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
+
+
 
 <h3 id="set-the-grace-period-for-soft-limits">Set the Grace Period for Soft Limits</h3>
 
@@ -106,6 +112,8 @@
 <h3 id="quote-enforcement">Quote enforcement</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
+
+
 
 <h2 id="test-quotas">Test Quotas</h2>
 
@@ -123,9 +131,13 @@
 
 <p>$ dd if=/dev/zero of=TestFile2 bs=50M count=1</p>
 
+
+
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screen showing that your user has exceeded the quota limit.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
