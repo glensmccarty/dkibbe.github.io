@@ -1,6 +1,12 @@
 <h1 id="disk-quotas">Disk Quotas</h1>
 
+<p>Disk Quotas limit how much space on a partition users can consume.</p>
+
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p>In this assignment you will enable and configure quotes on a XFS filesystem.</p>
 
 
 
@@ -10,30 +16,48 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Create a new CentOS 7 virtual machine with a 12 GiB virtual hard disk. <code>/home</code> should be on a separate 1 GiB Logical Volume. You can take the space needed from swap. Set the filesystem type to ext4. Make sure networking is active on boot.</p>
+<p>Follow the instruction in the <a href="https://dkibbe.github.io/cis238dl_lvm.html">Extent an LVM Logical Volume</a> assignment to creat a CentOS 7 virtual machine with a separate 1 GiB Logical Volumn mounted on <code>/home</code>. During install create a user account.</p>
 
-<p>During install create a user account.</p>
+<p>When the system reboots run use <code>df</code> to check that <code>/home</code> is on a separate partition and is approximately 1 GiB.</p>
+
+
 
 <h2 id="enable-quotas">Enable Quotas</h2>
 
-<p>yum install quota</p>
+<p>By default quotas are not enabled. The <code>mount</code> command shows:</p>
 
-<p>Edit the <code>etc</code>fstab` file.</p>
-
-<pre><code>dev/sda1       /home               ext4    errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv0 0       1
+<pre><code># mount | grep ' / '
 </code></pre>
 
-<h3 id="remount-home">Remount /home</h3>
+<p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,noquota)</p>
 
-<pre><code># umount /home
-# mount /home
+<p>To enable quotas a boot-time option must be added to the GRUB defaults. Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
+
+<pre><code> rootflags=uquota,pquota
 </code></pre>
 
-<h3 id="create-the-quota-database">Create the Quota Database</h3>
+<p>This will likely be preceded by <code>rhgb quiet</code>.</p>
 
+<p><code>/boot/grub2/grub.cfg</code></p>
 
+<p>Now backup and generfate a new <code>grub.cfg</code>.</p>
+
+<pre><code># cp /boot/grub2/grub.cfg /root/grub.cfg.orig
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+</code></pre>
+
+<p>Reboot the system to make the changes effective. Use the <code>mount</code> commaqnd to confirm that quotas are now active.</p>
+
+<pre><code># mount | grep ' / '
+</code></pre>
+
+<p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,usrquota,prjquota)</p>
 
 <h3 id="assign-quotas-per-user">Assign Quotas per User</h3>
+
+<p>Use <code>xfs_quota</code> to display the current quotas.</p>
+
+<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="Quota report" title=""></p>
 
 <h3 id="assign-quotas-per-group">Assign Quotas per Group</h3>
 
@@ -47,8 +71,10 @@
 
 <p>Create a 1 GiB file</p>
 
-<pre><code>$ dd if=/dev/zero of=BigFile bs=512b
+<pre><code>$ dd if=/dev/zero of=BigFile bs=q`enter code here`b
 </code></pre>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
