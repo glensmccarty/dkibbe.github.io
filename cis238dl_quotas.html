@@ -1,14 +1,25 @@
 <h1 id="disk-quotas">Disk Quotas</h1>
 
-<p>Disk Quotas limit how much space on a partition users can consume.</p>
+<p>Disk quotas limit how much space on a partition users can consume. The XFS filesystem expands the concept of quotas to include:</p>
 
-
+<ul>
+<li>Users</li>
+<li>Groups</li>
+<li>Projects</li>
+</ul>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>In this assignment you will enable and configure quotes on a XFS filesystem.</p>
 
+<p><em>After successfully completing this assignment you will be able to:</em></p>
 
+<ol>
+<li>Enable quotas as a kernel option.</li>
+<li>Set hard and soft limits.</li>
+<li>Display current quota settings.</li>
+<li>Demonstrate how quotas limit a user's ability to hog disk space.</li>
+</ol>
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -121,7 +132,8 @@
 <ul>
 <li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/xfsquota.html">Quotas</a></li>
 <li><a href="http://help.directadmin.com/item.php?id=557">Enable Quotas</a></li>
-<li><a href="http://manpages.ubuntu.com/manpages/trusty/man8/xfs_quota.8.html">Manpage for xfs_quotas</a></li>
+<li><a href="http://linux.die.net/man/8/xfs_quota">Manpage for xfs_quotas</a></li>
+<li><a href="http://xfs.org/docs/xfsdocs-xml-dev/XFS_User_Guide/tmp/en-US/html/index.html">XFS Users Guide</a></li>
 </ul>
 
 <blockquote>
