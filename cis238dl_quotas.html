@@ -78,13 +78,21 @@
 
 <p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,usrquota,prjquota)</p>
 
-<h2 id="assign-quotas-to-a-user">Assign Quotas to a  User</h2>
+<h2 id="set-quotas-for-a-user">Set Quotas for a User</h2>
+
+
+
+<h3 id="display-current-quota-settings">Display Current Quota Settings</h3>
 
 <p>Use <code>xfs_quota</code> to display the current quotas.</p>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="Quota report" title=""></p>
 
-<h2 id="set-quotas-for-a-user">Set Quotas for a User</h2>
+<p>There are no quotas set yet for user <em>tux</em>.</p>
+
+<h3 id="set-quotas-for-a-user-1">Set Quotas for a User</h3>
+
+<p>Here we'll set a hard and soft quota limit for our user. The user will be able to exceed the soft limit for a short period but not the hard limit.</p>
 
 <pre><code># xfs_quota -x -c 'limit -u bsoft=100m bhard=150m tux' /home/
 </code></pre>
@@ -92,8 +100,6 @@
 <p>Use <code>xfs_quota</code> to display the current quotas.</p>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-6.png" alt="Quota report" title=""></p>
-
-
 
 <h3 id="set-quotas-per-group">Set Quotas per Group</h3>
 
@@ -113,7 +119,7 @@
 
 
 
-<h3 id="quote-enforcement">Quote enforcement</h3>
+<h3 id="quote-enforcement">Quote Enforcement</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
@@ -121,7 +127,7 @@
 
 <h2 id="test-quotas">Test Quotas</h2>
 
-<p>Login as your user.</p>
+<p>Login as your user. Here user <em>tux</em>.</p>
 
 <pre><code># su -l tux
 </code></pre>
@@ -138,7 +144,7 @@
 
 <p>Create a third file of the same size and the quota will be exceeded.</p>
 
-<pre><code>$ dd if=/dev/zero of=TestFile2 bs=50M count=1
+<pre><code>$ dd if=/dev/zero of=TestFile3 bs=50M count=1
 </code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
