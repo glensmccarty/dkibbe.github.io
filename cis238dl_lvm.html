@@ -1,8 +1,6 @@
-<h1 id="extending-a-lvm-logical-volume">Extending a LVM Logical Volume</h1>
+<h1 id="extend-a-lvm-logical-volume">Extend a LVM Logical Volume</h1>
 
 <p><img src="https://s3.amazonaws.com/CIS238DL/lvm_layout.png" alt="Logical Volume Management" title=""></p>
-
-
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -106,6 +104,8 @@
 <h2 id="partition-the-drive">Partition the Drive</h2>
 
 <p>Before the drive can be added as a Physical Volume it needs to be partitioned using <code>fdisk</code>.</p>
+
+
 
 <pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># fdisk /dev/sdb</span></code></pre>
 
