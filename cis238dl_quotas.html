@@ -90,10 +90,19 @@
 
 <h2 id="test-quotas">Test Quotas</h2>
 
-<p>Create a 50 MiB file</p>
+<p>Login as your user.</p>
+
+<pre><code># su -l tux
+</code></pre>
+
+<p>Create a 50 MiB file.</p>
 
 <pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
+
+<p>Crate a second file of the same size and the quota will be exceded.</p>
+
+<p>$ dd if=/dev/zero of=TestFile2 bs=50M count=1</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
