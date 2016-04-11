@@ -1,10 +1,18 @@
+<p><img src="http://dennisk.freeshell.org/img/cis126dl_tar-1.png" alt="file" title="file cabinet clipart"></p>
+
+
+
 <h1 id="archiving-and-compressing-data">Archiving and Compressing Data</h1>
+
+
 
 <h2 id="introduction">Introduction</h2>
 
-<p>The <code>tar</code> command was originally designed for backing up data to tape. While it is still used for that purpose it is more commonly used to create “tarball” archives of files.</p>
+<p>The <code>tar</code> command was originally designed for backing up data to tape. While it is still used for that purpose it is more commonly used to create a "tarball", that is an archive of files.</p>
 
-<h2 id="learning-objectives">Learning Objectives</h2>
+
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p><em>When you have successfully completed this assignment you will be able to:</em></p>
 
@@ -33,13 +41,17 @@
 <li><code>file</code></li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
+
+<p>TThis assignment will work on most Linux distributions.</p>
 
 
 
 <h3 id="reading">Reading</h3>
 
-<p>Archiving data is covered in chapter 8 of the textbook. There is a manpage for Tar and an info page for Find.</p>
+<p>Archiving data is covered in chapter 8 of the textbook. There is a man page for <code>tar</code> and an info page for both <code>tar</code> and <code>find</code>.</p>
 
 <h3 id="create-files">Create Files</h3>
 
@@ -50,18 +62,26 @@
 &gt; done
 </code></pre>
 
+
+
 <h2 id="tape-archive-tar">Tape Archive (TAR)</h2>
 
 
 
 <h3 id="basic-syntax">Basic Syntax</h3>
 
+<p>The <code>tar</code> command uses the same syntax format as most commands. Some options are required and <code>tar</code> will complain if they are not given.</p>
+
 <pre><code>tar option(s) archive_name file_name(s)
 </code></pre>
 
 <p>Options can be preceded by a single dash (<strong>-</strong>) but it is common to omit the dash.</p>
 
+
+
 <h3 id="common-options">Common Options</h3>
+
+<p>Some of these options can not be used together. For example <strong>c</strong> and <strong>x</strong>.</p>
 
 <table>
 <thead>
@@ -99,7 +119,7 @@
 
 <h3 id="create-an-archive">Create an Archive</h3>
 
-<p>Create a new archive including all files named <em>foo</em>.</p>
+<p>Create a new archive including all files named <em>foo</em>. This command will create an archive of the files you created. By default <code>tar</code> does not compress files.</p>
 
 <pre><code>$ tar cf foo.tar foo*
 </code></pre>
@@ -128,21 +148,25 @@ foo5
 -rw-rw-r-- tux/tux 1048576 10:00 foo5
 </code></pre>
 
+
+
 <h3 id="extracting-files-from-an-archive">Extracting Files from an Archive</h3>
 
 <p>Delete all the <em>foo</em> files in the <code>/tmp</code> directory</p>
+
+<p>The question mark is a wildcard character which means <em>foo</em> followed by one character.</p>
 
 <pre><code>$ rm foo?
 </code></pre>
 
 <p>then restore the files from the archive.</p>
 
-<pre><code>$ tar xf foo.tar
+<pre><code>$ tar xvf foo.tar
 </code></pre>
 
 <h4 id="extract-a-single-file">Extract a Single File</h4>
 
-<p>Remove <em>foo2</em>.</p>
+<p>Delete <em>foo2</em>.</p>
 
 <pre><code>$ rm foo2
 </code></pre>
@@ -182,7 +206,8 @@ foo2: Mod time differs
 
 <p>The newer file is appended to the archive. You can update multiple files the same way.</p>
 
-<pre><code>$ tar uf foo.tar foo1 foo2 foo3
+<pre><code>$ touch foo1 foo2 foo3
+$ tar uf foo.tar foo1 foo2 foo3
 </code></pre>
 
 <p>The list option along with the verbose option shows the newer files.</p>
@@ -237,7 +262,7 @@ foo2: Mod time differs
 
 <h4 id="compress-an-archive-with-gzip">Compress an Archive with Gzip</h4>
 
-<p>Gzip is a common compression algorithm used with Tar. Create a new archive with Gzip compression.</p>
+<p>Gzip is a common compression algorithm used with <code>ar</code>. Create a new archive with Gzip compression.</p>
 
 <pre><code>$ tar czf foo.tar.gz foo*
 </code></pre>
@@ -270,20 +295,18 @@ $ ls -lh foo.tar.bz2
 
 <h2 id="extensions-on-the-command-line">Extensions on the Command Line</h2>
 
-<p>While it is common to use extensions to make it easy to identify files types. The command line doesn’t require it. Try renaming the foo archive to something else  and then run the <code>file</code> command find its true identity.</p>
+<p>While it is common to use extensions to make it easy to identify files types. The command line doesn't require it. Try renaming the foo archive to something else  and then run the <code>file</code> command find its true identity.</p>
 
 <pre><code>$ mv foo.tar.gz foo.jpg
 $ file foo.jpg 
 archive.tar.gz: gzip compressed data
 </code></pre>
 
-<h2 id="debug-the-assignment">Debug the Assignment</h2>
-
 
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot showing the output of <code>ls -file foo.jpg</code> showing that it is really an archive.</p>
+<p>Submit a screenshot showing the output of <code>tar -tvf foo.tar.gz</code> showing the contents of the archive.</p>
 
 <h2 id="resources">Resources</h2>
 
@@ -293,6 +316,8 @@ archive.tar.gz: gzip compressed data
 <li>man file</li>
 <li>man xargs</li>
 </ul>
+
+<!-- Links -->
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
