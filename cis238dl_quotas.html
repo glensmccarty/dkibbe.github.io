@@ -26,7 +26,10 @@
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <ul>
-<li>xfs_quota</li>
+<li>xfs_quota (basic mode)</li>
+<li>xfs_quota (expert mode)</li>
+<li>Soft limits</li>
+<li>Hard limits</li>
 <li>xfs_info</li>
 <li>grub2_mkconfig</li>
 <li>/etc/fstab</li>
@@ -51,11 +54,10 @@
 
 <h3 id="edit-etcfstab">Edit /etc/fstab</h3>
 
-<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""> Not tested yet.</p>
-
 <p>Add uquota,pquota to the <code>/home</code> entry.</p>
 
-
+<pre><code>defaults,uquota,pquota
+</code></pre>
 
 <h3 id="add-quotas-to-grub">Add Quotas to GRUB</h3>
 
@@ -72,12 +74,13 @@
 # grub2-mkconfig -o /boot/grub2/grub.cfg
 </code></pre>
 
-<p>Reboot the system to make the changes effective. After the system reboots use the <code>mount</code> command to confirm that quotas are now active.</p>
+<p>Reboot the system to make the changes effective. After the system reboots use the <code>xfs_quota</code> command to confirm that quotas are now active /home.</p>
 
-<pre><code># mount | grep ' / '
+<pre><code># xfs_quota
+&gt; print
 </code></pre>
 
-<p>/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,usrquota,prjquota)</p>
+<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-7.png" alt="Screenshop of print" title=""></p>
 
 <h2 id="set-quotas-for-a-user">Set Quotas for a User</h2>
 
@@ -87,7 +90,7 @@
 
 <p>Use <code>xfs_quota</code> to display the current quotas.</p>
 
-<pre><code># xfs_quota -xc 'report -h' /home
+<pre><code># xfs_quota -x -c 'report -h' /home
 </code></pre>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="Quota report" title=""></p>
@@ -127,11 +130,9 @@
 
 <h3 id="quote-enforcement">Quote Enforcement</h3>
 
-<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
-
 <p>Quotas can be set to non-enforcing and used just to monitor disk space.</p>
 
-
+<p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="FixMe icon" title=""></p>
 
 <h2 id="test-quotas">Test Quotas</h2>
 
@@ -161,7 +162,7 @@
 
 <p>Submit a screenshot showing that your user has exceeded the quota limit.</p>
 
-<p><img src="dennisk.freeshell.org/img/cis238dl_quotas-8.png" alt="Screeshot of sample submission" title=""></p>
+<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-8.png" alt="Screeshot of sample submission" title=""></p>
 
 <h2 id="resources">Resources</h2>
 
