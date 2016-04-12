@@ -62,12 +62,10 @@
 
 <h3 id="edit-etcfstab">Edit /etc/fstab</h3>
 
-<p>Add uquota,pquota to the <code>/home</code> entry.</p>
+<p>Add uquota,pquota to the <code>/home</code> entry following defaults.</p>
 
 <pre><code>defaults,uquota,pquota
 </code></pre>
-
-
 
 <h3 id="add-quotas-to-grub">Add Quotas to GRUB</h3>
 
@@ -159,22 +157,27 @@
 <pre><code># su -l tux
 </code></pre>
 
+<p>Run <code>xfs_quota</code> and type <strong>print</strong> to show that only very few blocks are being used.</p>
+
 <p>Create a 50 MiB file.</p>
 
 <pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
 
-<p>Create a second file of the same size.</p>
+<p>Check the quota and note that block usage has increased.</p>
 
-<pre><code>$ dd if=/dev/zero of=TestFile2 bs=50M count=1
+<p>Run the <code>dd</code> command again and increase the count.</p>
+
+<pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
 
-<p>Create a third file of the same size and the quota set for this user will be exceeded.</p>
+<p>This time checking the quota shows that the soft limit has been exceeded.</p>
 
-<pre><code>$ dd if=/dev/zero of=TestFile3 bs=50M count=1
+<p>The third time the hard limit has been exceeded and even a small file czn no be created.</p>
+
+<pre><code>$ dd if=/dev/zero of=TestFile1 bs=1M count=1
+dd: failed to open 'testFile1': Disk quota exceeded.
 </code></pre>
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
