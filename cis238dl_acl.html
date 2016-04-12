@@ -1,8 +1,6 @@
 <h1 id="access-control-lists-acl">Access Control Lists (ACL)</h1>
 
-<p><img src="https://s3.amazonaws.com/CIS238DL/img/checklist.png" alt="Checklist" title=""></p>
-
-
+<p><img src="http://dennisk.freeshell.org/img/checklist.png" alt="Checklist icon" title="Checklist icon"></p>
 
 <h2 id="overview">Overview</h2>
 
@@ -17,7 +15,7 @@
 <ul>
 <li>Remount a filesystem to use ACL. (ext4 only)</li>
 <li>Edit the <code>/etc/fstab</code> file to add the ACL option. (ext4 only)</li>
-<li>List ACL permissions for a file</li>
+<li>List ACL permissions for a file.</li>
 <li>Modify ACL permissions for a file.</li>
 <li>Add a group to ACL permissions.</li>
 </ul>
@@ -26,16 +24,31 @@
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
-<ul>
-<li><strong>ACL</strong> - Access Control Lists package </li>
-<li><strong>Access ACLs</strong> - Specific to a file or directory</li>
-<li><strong>Default ACLs</strong> - Applies to directories only.</li>
-<li><em>* setfacl*</em> - Sets ACLs for files and directories.</li>
-<li><code>/var/tmp</code> - Unlike the <code>/tmp</code> directory</li>
-<li><code>/var/tmp</code> is not cleared on reboot so it make a good place to put files you want others to see.</li>
-<li><code>getfacl</code> - Get ACLs for files and directories.</li>
-<li><code>umask</code> - file mode creation mask</li>
-</ul>
+<dl>
+<dt>ACL</dt>
+<dd>Access Control Lists package</dd>
+
+<dt>Access ACLs</dt>
+<dd>Specific to a file or directory</dd>
+
+<dt>Default ACLs</dt>
+<dd>Applies to directories only.</dd>
+
+<dt><code>setfacl</code></dt>
+<dd>Sets ACLs for files and directories.</dd>
+
+<dt><code>/var/tmp</code></dt>
+<dd>Unlike the <code>/tmp</code> directory</dd>
+
+<dt><code>/var/tmp</code></dt>
+<dd>is not cleared on reboot so it make a good place to put files you want others to see.</dd>
+
+<dt><code>getfacl</code></dt>
+<dd>Get ACLs for files and directories.</dd>
+
+<dt><code>umask</code></dt>
+<dd>file mode creation mask</dd>
+</dl>
 
 
 
@@ -65,10 +78,9 @@
 
 <p>To use ACL permissions without first rebooting the system you need to remount root with the <code>acl</code> option. <em>note:</em> Your actual device name may be difference.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-preprocessor"># mount -o remount -o acl /</span>
-/dev/mapper/centos/root on / <span class="hljs-typedef"><span class="hljs-keyword">type</span> ext4 <span class="hljs-container">(<span class="hljs-title">rw</span>,<span class="hljs-title">acl</span>)</span></span></code></pre>
+<pre><code># mount -o remount -o acl /
+/dev/mapper/centos/root on / type ext4 (rw,acl)
+</code></pre>
 
 
 
@@ -78,9 +90,8 @@
 
 <p>The <code>/etc/fstab</code> file defines filesystems mounted on boot and their options.  You need to add the <code>acl</code> option to root to use Access Control Lists.  Edit <code>/etc/fstab</code> adding the <code>acl</code> option after <code>defaults</code>.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs coffeescript"><span class="hljs-regexp">/dev/mapper/centos/root /</span> ext4 defaults,acl <span class="hljs-number">1</span> <span class="hljs-number">1</span></code></pre>
+<pre><code>/dev/mapper/centos/root / ext4 defaults,acl 1 1
+</code></pre>
 
 
 
@@ -92,21 +103,19 @@
 
 <p>Sam wants other users to read <em>report.txt</em> and also to allow Tux to add comments to the file.  With ordinary Linux permissions Sam would have to allow all users to write to the file not just Tux.  With Access Control Lists Sam can accomplish his goal.  Sam puts the <em>report.txt</em> file in the <code>/var/tmp</code> directory so all can read the file and then assigns <em>read/write</em> permissions for Tux.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs cs">$ touch /<span class="hljs-keyword">var</span>/tmp/report.txt</code></pre>
+<pre><code>$ touch /var/tmp/report.txt
+</code></pre>
 
 <p>The <code>getfacl</code> command shows the ACL permissions.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>getfacl /var/tmp/report.txt
-<span class="hljs-comment"># file: var/tmp/report.txt</span>
-<span class="hljs-comment"># owner: sam</span>
-<span class="hljs-comment"># group: sam</span>
-<span class="hljs-symbol">user:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">group:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">other:</span><span class="hljs-symbol">:r--</span></code></pre>
+<pre><code>$ getfacl /var/tmp/report.txt
+# file: var/tmp/report.txt
+# owner: sam
+# group: sam
+user::rw-
+group::rw-
+other::r--
+</code></pre>
 
 <p>Login as Tux on another terminal and try to edit the file.  <code>vi</code> shows that the file is <em>read-only</em>.  Close <code>vi</code> and return to Sam’s terminal.</p>
 
@@ -116,27 +125,24 @@
 
 <p>Next Sam will add <em>read/write</em> permissions for Tux only.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>cd /var/tmp
-<span class="hljs-variable">$ </span>setfacl -m <span class="hljs-symbol">u:</span><span class="hljs-symbol">tux:</span>rw report.txt</code></pre>
+<pre><code>$ cd /var/tmp
+$ setfacl -m u:tux:rw report.txt
+</code></pre>
 
 <p>The <code>getfacl</code> command shows the change.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>getfacl --omit-header report.txt
-<span class="hljs-symbol">user:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">user:</span><span class="hljs-symbol">:tux</span>;rw-
-<span class="hljs-symbol">group:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">other:</span><span class="hljs-symbol">:r--</span></code></pre>
+<pre><code>$ getfacl --omit-header report.txt
+user::rw-
+user::tux;rw-
+group::rw-
+other::r--
+</code></pre>
 
 <p>The <code>ls</code> command shows a plus sign indicating the file has ACL permissions.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs lasso">$ ls <span class="hljs-attribute">-l</span> report<span class="hljs-built_in">.</span>txt
-<span class="hljs-attribute">-rw</span><span class="hljs-attribute">-rw</span><span class="hljs-attribute">-r</span><span class="hljs-subst">--+</span> <span class="hljs-number">1</span> sam Apr <span class="hljs-number">24</span> report<span class="hljs-built_in">.</span>txt</code></pre>
+<pre><code>$ ls -l report.txt
+-rw-rw-r--+1 sam Apr 24 report.txt
+</code></pre>
 
 <p>Have Tux open the file again and this time Tux can edit the file.</p>
 
@@ -148,9 +154,8 @@
 
 <p>As user Sam remove Tux from the ACL permissions so he can no longer edit <em>reports.txt</em>.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>setfacl -x <span class="hljs-symbol">u:</span>tux report.txt</code></pre>
+<pre><code>$ setfacl -x u:tux report.txt
+</code></pre>
 
 <p>The <code>getfacl</code> command shows Tux no longer has write permissions.</p>
 
@@ -160,26 +165,25 @@
 
 <p>Sam has several users that he would like to comment on the report so he asks the administrator to create the <em>docmaster</em> group and add both Jill and Tux to the group.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-comment"># groupadd docmaster &amp;&amp; usermod -aG docmaster tux &amp;&amp; usermod -aG docmaster jill</span>
-<span class="hljs-comment"># grep docmaster /etc/group</span>
-<span class="hljs-symbol">docmaster:</span><span class="hljs-number">506</span><span class="hljs-symbol">:x</span><span class="hljs-symbol">:tux</span>,jill</code></pre>
+<pre><code># groupadd docmaster &amp;&amp; usermod -aG docmaster tux &amp;&amp; usermod -aG docmaster jill
+# grep docmaster /etc/group
+docmaster:506:x:tux,jill
+</code></pre>
 
 <p>Now Sam modifies <em>reports.txt</em> to allow members of the <em>docmaster</em> group to edit the file.</p>
 
-<pre class="prettyprint"><code class=" hljs css">$ <span class="hljs-tag">setfacl</span> <span class="hljs-tag">-m</span> <span class="hljs-tag">g</span><span class="hljs-pseudo">:docmaster</span><span class="hljs-pseudo">:rw</span> <span class="hljs-tag">report</span><span class="hljs-class">.txt</span></code></pre>
+<pre><code>$ setfacl -m g:docmaster:rw report.txt
+</code></pre>
 
 <p>Sam uses the <code>getfacl</code> command to confirm the change.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>getfacl --omit-header /var/tmp/report.txt
-<span class="hljs-symbol">user:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">group:</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">grooup:</span><span class="hljs-symbol">:docmaster</span><span class="hljs-symbol">:rw-</span>
-<span class="hljs-symbol">mask:</span><span class="hljs-symbol">:rwx</span>
-<span class="hljs-symbol">other:</span><span class="hljs-symbol">:r--</span></code></pre>
+<pre><code>$ getfacl --omit-header /var/tmp/report.txt
+user::rw-
+group::rw-
+group::docmaster:rw-
+mask::rwx
+other::r--
+</code></pre>
 
 
 
@@ -201,7 +205,7 @@
 <li>man acl</li>
 <li>man getfacl</li>
 <li>man setfacl</li>
-<li><a href="https://doc.opensuse.org/documentation/html/openSUSE_113/opensuse-security/cha.security.acls.html">Access Control Lists in Linux</a></li>
+<li><a href="https://doc.opensuse.org/documentation/html/openSUSE_113/opensuse-security/cha.security.acls.html" title="Access Control Lists in Linux">Access Control Lists in Linux</a></li>
 </ul>
 
 <blockquote>
