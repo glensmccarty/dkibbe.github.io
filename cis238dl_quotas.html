@@ -98,35 +98,31 @@
 
 <h3 id="display-current-quota-settings">Display Current Quota Settings</h3>
 
-<p>Use <code>xfs_quota</code> to display the current quotas.</p>
+<p>Use <code>xfs_quota</code> to display the current quotas. the <strong>-x</strong> option sets the Expert mode which allows changing the settings.</p>
 
-<pre><code># xfs_quota -x -c 'report -h' /home
+<pre><code># xfs_quota -x /home
+&gt; report
 </code></pre>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="quotas-5" title="Screenshot of xfs_quota/"></p>
 
 <p>There are no quotas set yet for user <em>tux</em>.</p>
 
-
-
 <h3 id="set-quotas-for-a-user-1">Set Quotas for a User</h3>
 
-<p>Here we'll set a hard and soft quota limit for our user. The user will be able to exceed the soft limit for a short period but not the hard limit.</p>
+<p>Here we'll set a hard and soft quota limit for our user. The user will be able to exceed the soft limit for a short period but not the hard limit. the help screen for limit has a example.</p>
 
-<pre><code># xfs_quota -x -c 'limit -u bsoft=100m bhard=150m tux' /home/
+<pre><code># xfs_quota -x /home
+&gt; help limit
 </code></pre>
 
-<p>Use <code>xfs_quota</code> to display the current quotas.</p>
+<p>Run report again to display the new settings.</p>
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="quotas-4" title="Screenshot of xfs_quota/"></p>
 
-
-
-<h3 id="set-quotas-per-group">Set Quotas per Group</h3>
+<h3 id="set-quotas-for-groups">Set Quotas for Groups</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="fixme" title="Fix me icon"></p>
-
-
 
 <h3 id="set-quotas-for-projects">Set Quotas for Projects</h3>
 
@@ -157,9 +153,11 @@
 <pre><code># su -l tux
 </code></pre>
 
-<p>Run <code>xfs_quota</code> and type <strong>print</strong> to show that only very few blocks are being used.</p>
+<p>Run <code>xfs_quota</code> and type <strong>print</strong> to show that only a few blocks are being used.</p>
 
-<p>Create a 50 MiB file.</p>
+
+
+<h3 id="create-a-50-mib-test-file">Create a 50 MiB Test File</h3>
 
 <pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
 </code></pre>
@@ -168,12 +166,12 @@
 
 <p>Run the <code>dd</code> command again and increase the count.</p>
 
-<pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=1
+<pre><code>$ dd if=/dev/zero of=TestFile bs=50M count=2
 </code></pre>
 
 <p>This time checking the quota shows that the soft limit has been exceeded.</p>
 
-<p>The third time the hard limit has been exceeded and even a small file czn no be created.</p>
+<p>The third time the hard limit has been exceeded and even a small file can not be created.</p>
 
 <pre><code>$ dd if=/dev/zero of=TestFile1 bs=1M count=1
 dd: failed to open 'testFile1': Disk quota exceeded.
