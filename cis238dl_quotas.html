@@ -67,6 +67,8 @@
 <pre><code>defaults,uquota,pquota
 </code></pre>
 
+
+
 <h3 id="add-quotas-to-grub">Add Quotas to GRUB</h3>
 
 <p>Open <code>/etc/defaults/grub</code> and append to the line that starts with <code>GRUB_CMDLINE_LINUX=</code> the following:</p>
@@ -88,7 +90,7 @@
 &gt; print
 </code></pre>
 
-<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-7.png)" alt="quotas-7" title="Screenshot of xfs_quota/print"></p>
+<p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-7.png" alt="quotas-7" title="Screenshot of xfs_quota/print"></p>
 
 
 
@@ -108,6 +110,8 @@
 
 <p>There are no quotas set yet for user <em>tux</em>.</p>
 
+
+
 <h3 id="set-quotas-for-a-user-1">Set Quotas for a User</h3>
 
 <p>Here we'll set a hard and soft quota limit for our user. The user will be able to exceed the soft limit for a short period but not the hard limit. the help screen for limit has a example.</p>
@@ -120,9 +124,13 @@
 
 <p><img src="http://dennisk.freeshell.org/img/cis238dl_quotas-5.png" alt="quotas-4" title="Screenshot of xfs_quota/"></p>
 
+
+
 <h3 id="set-quotas-for-groups">Set Quotas for Groups</h3>
 
 <p><img src="http://dennisk.freeshell.org/img/fixme.png" alt="fixme" title="Fix me icon"></p>
+
+
 
 <h3 id="set-quotas-for-projects">Set Quotas for Projects</h3>
 
@@ -176,6 +184,8 @@
 <pre><code>$ dd if=/dev/zero of=TestFile1 bs=1M count=1
 dd: failed to open 'testFile1': Disk quota exceeded.
 </code></pre>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
