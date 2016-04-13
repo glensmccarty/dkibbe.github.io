@@ -17,9 +17,12 @@
 <li>Create a temporary directory to work in <code>mkdir ~/temp</code> or work in <code>/tmp</code> which is usually cleared on reboot.</li>
 </ul>
 
-<!-- Create a file named *twain.txt* with Mark Twain, Huckleberry &#34;HucK&#34; Finn, Tom Sawyer, Pappy Finn each on a separate line.-->
+<p><!--Use the &lt;code&gt;cat&lt;/code&gt; command to create a new file. Type &lt;strong&gt;Ctrl+D&lt;/strong&gt; on a line by itself to end entry and save the file.&lt;/p&gt;&#10;&#10;&lt;pre&gt;&lt;code&gt;$ cat &amp;gt;&amp;gt; twain.txt&#10;Mark Twain&#10;Samuel Clemens&#10;Huckleberry Finn&#10;&#34;Huck&#34; Finn&#10;Tom Sawyer&#10;Pappy Finn&#10;Ctrl+D&#10;&lt;/code&gt;&lt;/pre&gt;&#10;&#10;&lt;p&gt;--> <br>
+Use <code>touch</code> to create some empty files.</p>
 
-
+<pre><code>$ touch Exam exam{ple,ples,12}
+$ touch {a..z}.txt {0..9}.txt
+</code></pre>
 
 <h2 id="file-globbing-wild-cards">File Globbing (Wild Cards)</h2>
 
@@ -90,7 +93,7 @@ examples
 
 <p>Square brackets match against any character enclosed in the brackets.</p>
 
-<pre><code>$ ls [eE]am*
+<pre><code>$ ls [eE]xam*
 Exam  exam12  example  Example  examples
 </code></pre>
 
@@ -99,8 +102,6 @@ Exam  exam12  example  Example  examples
 <pre><code>$ ls [a-z].txt
 a.txt b.txt c.txt z.txt
 </code></pre>
-
-
 
 <h3 id="posix-character-classes">POSIX Character Classes</h3>
 
@@ -118,11 +119,9 @@ a.txt b.txt c.txt z.txt
 
 <p>Placing an exclamation mark or "bang" after the first bracket tells the shell not to match the character or characters in the bracket.</p>
 
-<pre><code>$ ls [!e]xam*
-Exam  Example
+<pre><code>$ ls [!E]xam*
+exam12  example  examples
 </code></pre>
-
-
 
 <h3 id="match-special-character">Match Special Character</h3>
 
@@ -160,11 +159,31 @@ file 1.txt
 </thead>
 <tbody><tr>
   <td>.</td>
-  <td>Matches any single character.</td>
+  <td>A period matches any single character once.</td>
+</tr>
+<tr>
+  <td>?</td>
+  <td>A question mark matches a single character zero or once.</td>
 </tr>
 <tr>
   <td>*</td>
   <td>Matches preceding character zero or more times.</td>
+</tr>
+<tr>
+  <td>+</td>
+  <td>Must match one or more times.</td>
+</tr>
+<tr>
+  <td>{n}</td>
+  <td>Matches n times exactly.</td>
+</tr>
+<tr>
+  <td>{n,}</td>
+  <td>Matches n times or more.</td>
+</tr>
+<tr>
+  <td>{n,m}</td>
+  <td>Matches at least n times but not more than m times.</td>
 </tr>
 <tr>
   <td>^</td>
@@ -174,18 +193,11 @@ file 1.txt
   <td>$</td>
   <td>Matches end of line.</td>
 </tr>
-<tr>
-  <td>\</td>
-  <td>Escapes special characters</td>
-</tr>
-<tr>
-  <td>?</td>
-  <td>Matches preceding character zero or one times.</td>
-</tr>
 </tbody></table>
 
 
-
+<p>|Escapes special characters <br>
+?|Matches preceding character zero or one times.</p>
 
 <h3 id="matching-a-literal-strings">Matching a Literal Strings</h3>
 
@@ -193,10 +205,11 @@ file 1.txt
 
 <pre><code>$ cat &gt; twain.txt
 Mark Twain
+Mark Twain, esq.
 Mr. Mark Twain
 Samuel Clemens
 Markus Twain
-Mark   Twain
+mark twain
 Ctrl+D
 </code></pre>
 
@@ -205,16 +218,13 @@ Ctrl+D
 <pre><code>$ grep Mark twain.txt
 </code></pre>
 
-
-
 <h3 id="case-insensitive-match">Case-insensitive Match</h3>
 
 <p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
 
-<pre><code>$ grep -i marl twain.txt
+<pre><code>$ grep -i mark twain.txt
+mark twain
 </code></pre>
-
-
 
 <h3 id="title"> </h3>
 
@@ -279,31 +289,30 @@ Ctrl+D
 
 
 
-<h3 id="search-for-a-string-at-the-end-of-line">Search for a String at the End of Line</h3>
+<h3 id="search-for-non-printing-characters">Search for Non-Printing Characters</h3>
 
 <p>Filter lines that end with <em>Mark Twain</em>. This will fail if there is a space before the newline character.</p>
 
 <pre><code>$ grep "Mark Twain$" twain.txt
 </code></pre>
 
-<p>If there is a space at the end of a line the <strong>-E</strong> option to <code>cat</code> will show that.</p>
+<p>If there are spaces, tabs or unusual characters in the file the <strong>-A</strong> option to <code>cat</code> will show that.</p>
 
-<pre><code>  $ cat -E twain.txt
-  Space at end of Mark Twain $
+<p>Open the <em>twain.txt</em> file in Nano and add spaces at the end of a line and tabs between words. The <strong>$</strong> charachter shows the end of the line.</p>
+
+<pre><code>  $ cat -A twain.txt
+  Mark Twain^I$
+  Mr. Mark Twain  $
+  mark twain$
 </code></pre>
 
 
 
-<h2 id="brace-expansion">Brace Expansion</h2>
+<h3 id="dos-files">DOS files</h3>
 
-<p>Here brace expansion is used to create files and bracket expansion is used to display them.</p>
+<p>Use <code>unix2dos</code> to convert the file to DOS line endings then use <code>cat -A</code> command above to display them.  </p>
 
-<pre><code>$ for i in {0,1,2,3,4,5,6,7,8,9}; do touch file$i; done
-$ ls file[0-9]
-file0 file1 file2 file3 file4 file5 file6 file7 file8 file9
-</code></pre>
-
-
+<p></p>
 
 <h3 id="sequence">Sequence</h3>
 
@@ -317,24 +326,63 @@ $ touch file-{1..5}.txt
 <h2 id="comma-separated-list">Comma Separated List</h2>
 
 <pre><code>$ echo {aaa,bbb,ccc,ddd}
+--&gt;
 </code></pre>
-
-
 
 <h2 id="logical-or">Logical OR</h2>
 
 <pre><code>$ grep -E '(Mark|mark)' twain.txt
 </code></pre>
 
-<!--## Character Classes&#10;&#10;Usage: grep [[:alnum:]]&#10;&#10;[:alnum:]|[:alpha:]|[:blank:]|[:cntrl:]&#10;[:digit:]|[:graph:]|[:lower:]|[:print:]&#10;[:punct:]|[:space:]|[:upper:]|[:xdigit:]&#10;&#10;Modify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
+
+
+<h2 id="posix-character-classes-1">POSIX Character Classes</h2>
+
+<p>Usage: grep [[:alnum:]]</p>
+
+<p><em>This is only a partial list.</em></p>
+
+<table>
+<thead>
+<tr>
+  <th>Class</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>[:alnum:]</td>
+  <td>letters and numbers</td>
+</tr>
+<tr>
+  <td>[:alpha:]</td>
+  <td>letters</td>
+</tr>
+<tr>
+  <td>[:digit:]</td>
+  <td>numbers</td>
+</tr>
+<tr>
+  <td>[:lower:]</td>
+  <td>lower case</td>
+</tr>
+<tr>
+  <td>[:punct:]</td>
+  <td>punctuation</td>
+</tr>
+<tr>
+  <td>[:upper:]</td>
+  <td>upper case</td>
+</tr>
+</tbody></table>
+
+
+<!--No submission is needed.No Modify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
 
 <!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
 
 <!--## tr&#10;&#10;The `tr` command can replace non-printing characters.&#10;&#10;This example will replace the new line character with a space putting all words on one line. &#10;&#10;    $ tr '\n' ' ' &lt; regex_sample&#10;&#10;This example will replace all lower case letters with upper case letters.&#10;&#10;    $ tr '[:lower:]' '[:upper:]' &lt; regex_sample-->
 
 <!--## Debug the Assignment-->
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
@@ -353,3 +401,7 @@ $ touch file-{1..5}.txt
 <li><a href="http://linux.die.net/man/7/regex" title="regex(7) - Linux man page">regex(7) - Linux man page</a></li>
 <li><a href="http://linux.die.net/man/7/glob" title="glob(7) - Linux man page">glob(7) - Linux man page</a></li>
 </ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
