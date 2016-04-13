@@ -24,6 +24,8 @@ Use <code>touch</code> to create some empty files.</p>
 $ touch {a..z}.txt {0..9}.txt
 </code></pre>
 
+
+
 <h2 id="file-globbing-wild-cards">File Globbing (Wild Cards)</h2>
 
 <p>Wild cards can be used with common commands to match file names. While similar to regular expressions there are not the same. Regular expressions do not match file or directory names but strings.</p>
@@ -103,6 +105,8 @@ Exam  exam12  example  Example  examples
 a.txt b.txt c.txt z.txt
 </code></pre>
 
+
+
 <h3 id="posix-character-classes">POSIX Character Classes</h3>
 
 <p>POSIX character classes let you match for example a-z and 0-9.</p>
@@ -122,6 +126,8 @@ a.txt b.txt c.txt z.txt
 <pre><code>$ ls [!E]xam*
 exam12  example  examples
 </code></pre>
+
+
 
 <h3 id="match-special-character">Match Special Character</h3>
 
@@ -199,6 +205,8 @@ file 1.txt
 <p>|Escapes special characters <br>
 ?|Matches preceding character zero or one times.</p>
 
+
+
 <h3 id="matching-a-literal-strings">Matching a Literal Strings</h3>
 
 <p>Create a file named <em>twain.txt</em></p>
@@ -218,6 +226,8 @@ Ctrl+D
 <pre><code>$ grep Mark twain.txt
 </code></pre>
 
+
+
 <h3 id="case-insensitive-match">Case-insensitive Match</h3>
 
 <p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
@@ -225,6 +235,8 @@ Ctrl+D
 <pre><code>$ grep -i mark twain.txt
 mark twain
 </code></pre>
+
+
 
 <h3 id="title"> </h3>
 
@@ -312,22 +324,30 @@ mark twain
 
 <p>Use <code>unix2dos</code> to convert the file to DOS line endings then use <code>cat -A</code> command above to display them.  </p>
 
-<p></p>
-
-<h3 id="sequence">Sequence</h3>
-
-<pre><code>$ echo {a..z}
-
-$ touch file-{1..5}.txt
-</code></pre>
 
 
 
-<h2 id="comma-separated-list">Comma Separated List</h2>
+### Sequence
 
-<pre><code>$ echo {aaa,bbb,ccc,ddd}
---&gt;
-</code></pre>
+    <script type="math/tex" id="MathJax-Element-1"> echo {a..z}
+
+    </script> touch file-{1..5}.txt
+
+
+
+
+
+
+
+
+
+
+## Comma Separated List
+
+    $ echo {aaa,bbb,ccc,ddd}
+    --&gt;
+
+
 
 <h2 id="logical-or">Logical OR</h2>
 
@@ -376,7 +396,7 @@ $ touch file-{1..5}.txt
 </tbody></table>
 
 
-<!--No submission is needed.No Modify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
+<!--No submission is needed.No dify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
 
 <!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
 
@@ -384,11 +404,15 @@ $ touch file-{1..5}.txt
 
 <!--## Debug the Assignment-->
 
-<h2 id="what-to-submit">What to Submit</h2>
-
-<p>See the Regular Expression quiz.</p>
 
 
+<h1 id="what-to-submit">What to Submit</h1>
+
+<ul>
+<li>List item</li>
+</ul>
+
+<p>Use the <code>grep</code> command to </p>
 
 <h2 id="resources">Resources</h2>
 
