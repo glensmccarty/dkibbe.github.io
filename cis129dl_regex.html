@@ -1,0 +1,355 @@
+<h1 id="file-globbing-and-regular-expressions">File Globbing and Regular Expressions</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>File globbing and regular expressions are powerful tools needed by every system administrator. With these tools you can quickly filter text files to find what you are looking for.</p>
+
+<!--## Learning Objectives&#10;&#10;When you have successfully completed this assignment you will be able to:*&#10;&#10;- Describe the use of common wild cards.&#10;- Write a simple regular expression.&#10;- Use `tr` to replace non-printing characters.-->
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<ul>
+<li>To make the results stand out alias <code>grep</code> to <code>grep --color=auto</code> if it is not already.</li>
+<li>Create a temporary directory to work in <code>mkdir ~/temp</code> or work in <code>/tmp</code> which is usually cleared on reboot.</li>
+</ul>
+
+<!-- Create a file named *twain.txt* with Mark Twain, Huckleberry &#34;HucK&#34; Finn, Tom Sawyer, Pappy Finn each on a separate line.-->
+
+
+
+<h2 id="file-globbing-wild-cards">File Globbing (Wild Cards)</h2>
+
+<p>Wild cards can be used with common commands to match file names. While similar to regular expressions there are not the same. Regular expressions do not match file or directory names but strings.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Symbol</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>?</td>
+  <td>Matches any single character</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td>Matches any string, including the empty string.</td>
+</tr>
+<tr>
+  <td>[a,i,o]</td>
+  <td>Matches Ja, Ji or Jo.</td>
+</tr>
+<tr>
+  <td>[0-9]</td>
+  <td>Matches example0 to example9.</td>
+</tr>
+<tr>
+  <td>[a-z]</td>
+  <td>Matches examplea to examplez.</td>
+</tr>
+<tr>
+  <td>[A-Z]</td>
+  <td>Matches exampleA to exampleZ.</td>
+</tr>
+</tbody></table>
+
+
+
+
+<h3 id="match-all-characters">Match All Characters</h3>
+
+<p>Match all files beginning with <em>exam</em> followed by any number of characters.</p>
+
+<pre><code>$ touch Exam exam{ple,ples,12}
+</code></pre>
+
+<p>then:</p>
+
+<pre><code>$ ls example*
+example examples example12
+</code></pre>
+
+
+
+<h3 id="match-single-character">Match Single Character</h3>
+
+<p>Match all files beginning with <em>example</em> followed by a single character.</p>
+
+<pre><code>$ ls example?
+examples
+</code></pre>
+
+
+
+<h3 id="character-classes">Character Classes</h3>
+
+<p>Square brackets match against any character enclosed in the brackets.</p>
+
+<pre><code>$ ls [eE]am*
+Exam  exam12  example  Example  examples
+</code></pre>
+
+<p>Or a range of characters</p>
+
+<pre><code>$ ls [a-z].txt
+a.txt b.txt c.txt z.txt
+</code></pre>
+
+
+
+<h3 id="posix-character-classes">POSIX Character Classes</h3>
+
+<p>POSIX character classes let you match for example a-z and 0-9.</p>
+
+<pre><code>$ ls [[:alnum:]].txt
+1.txt  2.txt  a.txt  b.txt
+</code></pre>
+
+<p>See <strong>Resources</strong> below for a complete list.</p>
+
+
+
+<h3 id="example-4-negation">Example 4 - Negation</h3>
+
+<p>Placing an exclamation mark or "bang" after the first bracket tells the shell not to match the character or characters in the bracket.</p>
+
+<pre><code>$ ls [!e]xam*
+Exam  Example
+</code></pre>
+
+
+
+<h3 id="match-special-character">Match Special Character</h3>
+
+<p>To match a special character use the black slash to escape it.</p>
+
+<p>File created with space character.</p>
+
+<pre><code>$ touch file\ 1.txt file.txt
+</code></pre>
+
+<p>Tab completion lists both files.</p>
+
+<pre><code>$ ls file
+file 1.txt  file.txt
+</code></pre>
+
+<p>Use the back slash to prevent the shell from interpreting the space as a special character.</p>
+
+<pre><code>$ ls file\ 1.txt
+file 1.txt
+</code></pre>
+
+
+
+<h2 id="regular-expressions-regex">Regular Expressions (regex)</h2>
+
+<p>Regular expressions are strings of special characters that describe a pattern for searching. The following table show some of the characters special to regular expressions.</p>
+
+<table>
+<thead>
+<tr>
+  <th>Symbol</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>.</td>
+  <td>Matches any single character.</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td>Matches preceding character zero or more times.</td>
+</tr>
+<tr>
+  <td>^</td>
+  <td>Matches start of line.</td>
+</tr>
+<tr>
+  <td>$</td>
+  <td>Matches end of line.</td>
+</tr>
+<tr>
+  <td>\</td>
+  <td>Escapes special characters</td>
+</tr>
+<tr>
+  <td>?</td>
+  <td>Matches preceding character zero or one times.</td>
+</tr>
+</tbody></table>
+
+
+
+
+<h3 id="matching-a-literal-strings">Matching a Literal Strings</h3>
+
+<p>Create a file named <em>twain.txt</em></p>
+
+<pre><code>$ cat &gt; twain.txt
+Mark Twain
+Mr. Mark Twain
+Samuel Clemens
+Markus Twain
+Mark   Twain
+Ctrl+D
+</code></pre>
+
+<p>The simplest regular expression is a literal string. The following matches each line with <em>Mark</em>.</p>
+
+<pre><code>$ grep Mark twain.txt
+</code></pre>
+
+
+
+<h3 id="case-insensitive-match">Case-insensitive Match</h3>
+
+<p>Note the <code>grep</code> is case sensitive. Filtering on <em>mark twain</em> returns nothing unless <strong>-i</strong> option is included.</p>
+
+<pre><code>$ grep -i marl twain.txt
+</code></pre>
+
+
+
+<h3 id="title"> </h3>
+
+<p>The <strong>-v</strong> option reverses the search. This will return all the lines that do not have <em>Mark Twain</em>.</p>
+
+<pre><code>$ grep -v Mark twain.txt
+</code></pre>
+
+
+
+<h3 id="spaces">Spaces</h3>
+
+<p>Use quotes to protect the shell from interpting the space.</p>
+
+<pre><code>$ grep "Mark Twain" twain.txt
+</code></pre>
+
+
+
+<h2 id="extended-regular-expressions">Extended Regular Expressions</h2>
+
+<p>The <code>grep</code> command supports Extended Regular Expressions with the <strong>-E</strong> option. In this example <code>grep</code> will find <strong>Mark</strong> or <strong>mark</strong> but only at the start of a line.</p>
+
+<pre><code>$ grep -E "^[M|m]ark" twain.txt
+</code></pre>
+
+
+
+<h3 id="special-metacharacters">Special (Metacharacters)</h3>
+
+
+
+<h4 id="the-period">The Period</h4>
+
+<p>The period matches a single character. Here <em>n</em> preceded by one character.</p>
+
+<pre><code>$ grep ".n" twain.txt
+</code></pre>
+
+<p>Or <em>ar</em> followed by a single character.</p>
+
+<pre><code>$ grep "ar." twain.txt
+</code></pre>
+
+
+
+<h3 id="the-asterisk">The Asterisk</h3>
+
+<p>An asterisk denotes zero or more characters.</p>
+
+<pre><code>$ grep -E "n*" twain.txt
+</code></pre>
+
+
+
+<h3 id="search-for-string-at-start-of-line">Search for String at Start of Line</h3>
+
+<p>Filter lines that start with <em>Mark *Twain</em></p>
+
+<pre><code>$ grep "^Mark Twain" twain.txt
+</code></pre>
+
+
+
+<h3 id="search-for-a-string-at-the-end-of-line">Search for a String at the End of Line</h3>
+
+<p>Filter lines that end with <em>Mark Twain</em>. This will fail if there is a space before the newline character.</p>
+
+<pre><code>$ grep "Mark Twain$" twain.txt
+</code></pre>
+
+<p>If there is a space at the end of a line the <strong>-E</strong> option to <code>cat</code> will show that.</p>
+
+<pre><code>  $ cat -E twain.txt
+  Space at end of Mark Twain $
+</code></pre>
+
+
+
+<h2 id="brace-expansion">Brace Expansion</h2>
+
+<p>Here brace expansion is used to create files and bracket expansion is used to display them.</p>
+
+<pre><code>$ for i in {0,1,2,3,4,5,6,7,8,9}; do touch file$i; done
+$ ls file[0-9]
+file0 file1 file2 file3 file4 file5 file6 file7 file8 file9
+</code></pre>
+
+
+
+<h3 id="sequence">Sequence</h3>
+
+<pre><code>$ echo {a..z}
+
+$ touch file-{1..5}.txt
+</code></pre>
+
+
+
+<h2 id="comma-separated-list">Comma Separated List</h2>
+
+<pre><code>$ echo {aaa,bbb,ccc,ddd}
+</code></pre>
+
+
+
+<h2 id="logical-or">Logical OR</h2>
+
+<pre><code>$ grep -E '(Mark|mark)' twain.txt
+</code></pre>
+
+<!--## Character Classes&#10;&#10;Usage: grep [[:alnum:]]&#10;&#10;[:alnum:]|[:alpha:]|[:blank:]|[:cntrl:]&#10;[:digit:]|[:graph:]|[:lower:]|[:print:]&#10;[:punct:]|[:space:]|[:upper:]|[:xdigit:]&#10;&#10;Modify *twain.txt* to quote 'Mark' &#34;Twain&#34;. (note: both single and double quotes. Try `grep -E &#34; twain.txt`. Which fails as the shell tries to interpret the quote.&#10;&#10;It's possible to escape the quote.&#10;&#10;    $ grep -E \&#34; twain.txt&#10;or use a character set to capure all the punctuation.&#10;&#10;    $ grep -E [[:punct:]] twain.txt-->
+
+<!--## sed&#10;&#10;`sed` is a stream editor for filtering and transforming text and supports regular expressions. Try these examples. By default `sed` outputs to STDOUT and does not alter the original file.&#10;&#10;    $ sed s/apple/orange/ regex_sample&#10;&#10;    $ sed s/^apple/orange/ regex_sample&#10;-->
+
+<!--## tr&#10;&#10;The `tr` command can replace non-printing characters.&#10;&#10;This example will replace the new line character with a space putting all words on one line. &#10;&#10;    $ tr '\n' ' ' &lt; regex_sample&#10;&#10;This example will replace all lower case letters with upper case letters.&#10;&#10;    $ tr '[:lower:]' '[:upper:]' &lt; regex_sample-->
+
+<!--## Debug the Assignment-->
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>See the Regular Expression quiz.</p>
+
+
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-speakingunix9/" title="IBM DevelopersWorks">IBM DevelopersWorks</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Regular_Expressions" title="Wikibooks: Regular Expressions">Wikibooks: Regular Expressions</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Grep" title="Wikibooks: grep">Wikibooks: grep</a>  </li>
+<li><a href="http://www.linuxjournal.com/content/bash-extended-globbing" title="Bash Extended Globbing">Bash Extended Globbing</a></li>
+<li><a href="http://www.regular-expressions.info/posixbrackets.html" title="POSIX Character Classes">POSIX Character Classes</a></li>
+<li><a href="http://linux.die.net/man/7/regex" title="regex(7) - Linux man page">regex(7) - Linux man page</a></li>
+<li><a href="http://linux.die.net/man/7/glob" title="glob(7) - Linux man page">glob(7) - Linux man page</a></li>
+</ul>
