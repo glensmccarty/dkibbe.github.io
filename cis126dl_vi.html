@@ -1,10 +1,14 @@
 <h1 id="vi-text-editor">Vi Text Editor</h1>
 
+
+
 <h2 id="overview">Overview</h2>
 
 <p>Learning to use a command line text editor in Linux is an important skill every system administration must have. Linux and UNIX both use plain text files for system configuration and a system administrator needs an efficient tool for editing text files. The <code>vi</code> text editor (or <code>vim</code> for <em>vi improved</em>) is such a tool and can be found in one form or another on any Linux system. In fact, it may be the only text editor you have access to.</p>
 
 <p>In this assignment you will create a paper cheat sheet for the <code>vi</code> editor that you will hand in for grading.</p>
+
+
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -22,6 +26,8 @@
 <li>Save the file under a new name.</li>
 </ol>
 
+
+
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <ul>
@@ -36,9 +42,11 @@
 <li>git - A popular version control system created by Linus Torvalds.</li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
-<p>This assignment requires pencil or pen and paper (yes, old school). I’ll have graph paper available but you should have a pen or pencil – several color would be great.</p>
+<p>This assignment requires pencil or pen and paper (yes, old school). I'll have graph paper available but you should have a pen or pencil – several color would be great.</p>
 
 
 
@@ -51,14 +59,18 @@
 <pre><code>$ sudo apt-get install vim
 </code></pre>
 
+
+
 <h3 id="on-centos">On CentOS</h3>
 
 <pre><code># yum install vim
 </code></pre>
 
+
+
 <h2 id="why-text-files-and-not-a-binary-registry">Why Text Files And Not A Binary Registry?</h2>
 
-<p>Using plain text files for system configuration has several advantages over using a database such as the Windows’ registry to store configuration parameters. Some of the advantages are:</p>
+<p>Using plain text files for system configuration has several advantages over using a database such as the Windows' registry to store configuration parameters. Some of the advantages are:</p>
 
 <ul>
 <li>No special tool is needed to edit the files any text editor will work.</li>
@@ -71,22 +83,23 @@
 
 <p>Many programs store system-wide configuration files in the <code>/etc/</code> directory and also let normal users have a customized configuration file in their home directory. <em>Example:</em> The nano text editor has a sample configuration file in <code>/usr/share/doc/nano/examples/</code> that you can copy to your home directory and modify.</p>
 
+
+
 <h2 id="vi-cheat-sheet">Vi Cheat Sheet</h2>
 
 <p>See the cheat sheet link under <em>Resources</em> for instructions. You will need a text file that is longer than one screen to work with. You can copy <code>/usr/share/doc/bash/copyright</code> to your home directory for that purpose.</p>
 
-<pre><code>$ cp /usr/share/doc/bash/copyright .
+<pre><code>$ cd
+$ cp /usr/share/doc/bash/copyright .
 </code></pre>
 
-<p>Notice the period at the end of the command. It means copy to the current directory.</p>
+<p>Notice the period at the end of the command. It means copy to the current directory. The <code>cd</code> command made sure you ran the command from your home directory</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Hand in your paper cheat sheet for grading. Your sheet should include all the commands found on the example cheat sheet for full credit. The cheat sheet will be returned to you so you can use it in class.</p>
 
-<h2 id="xkcd">XKCD</h2>
-
-<p><img src="http://imgs.xkcd.com/comics/real_programmers.png" alt="http://imgs.xkcd.com/comics/real_programmers.png" title=""></p>
+<!--## XKCD&#10;&#10;![http://imgs.xkcd.com/comics/real_programmers.png](http://imgs.xkcd.com/comics/real_programmers.png)-->
 
 <h2 id="resources">Resources</h2>
 
