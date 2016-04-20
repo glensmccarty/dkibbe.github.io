@@ -20,32 +20,81 @@
 
 <h2 id="terms-and-commands-you-should-know">Terms and Commands You Should Know</h2>
 
-<ul>
-<li><strong>/etc/passwd:</strong> A text file that describes user login accounts for the system.</li>
-<li><strong>/etc/shadow:</strong> A text file which contains the password information for the system’s accounts and optional aging information.</li>
-<li><strong>/etc/group:</strong> A text file that defines the groups on the system.</li>
-<li><strong>/etc/gshadow:</strong> A text file which contains the password information for groups.</li>
-<li><strong>/etc/login.defs:</strong> A text file that defines the defaults for accounts.</li>
-<li><strong>/etc/adduser.conf:</strong> Configuration file for the <code>adduser</code> command.</li>
-<li><strong>/etc/skel:</strong> Files placed in this directory will be copied to new users home directory.</li>
-<li><strong>chage:</strong> Change user password expiry information.</li>
-<li><strong>chfn:</strong> Change real user name and information.</li>
-<li><strong>finger:</strong> Read information from a users profile (real name, phone, etc.) if they have one.</li>
-<li><strong>GECOS:</strong> A field in the <code>/etc/passwd</code> file containing the real name and contact information for a user.</li>
-<li><strong>groupadd:</strong> Create a new group.</li>
-<li><strong>groupdel:</strong> Remove a group from the system.</li>
-<li><strong>groupmod:</strong> Modify a group account.</li>
-<li><strong>id:</strong> Print user and group information.</li>
-<li><strong>passwd:</strong> Change a user’s password.</li>
-<li><strong>useradd:</strong> Add a new user to the system (red Hat). The <code>passwd</code> command must also be run.</li>
-<li><strong>adduser:</strong> Add a new user to the system (Debian).</li>
-<li><strong>userdel:</strong> Remove a user.</li>
-<li><strong>usermod:</strong> Modify a user account.</li>
-<li><strong>vipw:</strong> Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code> files.</li>
-<li><strong>who:</strong> Show who is logged into the system.</li>
-<li><strong>id:</strong> Print real and effective user and group IDs.</li>
-<li><strong>su:</strong> Switch to another user (always use with the - dash option.</li>
-</ul>
+<dl>
+<dt>/etc/passwd</dt>
+<dd>A text file that describes user login accounts for the system.</dd>
+
+<dt>/etc/shadow</dt>
+<dd>A text file which contains the password information for the system’s accounts and optional aging information.</dd>
+
+<dt>/etc/group</dt>
+<dd>A text file that defines the groups on the system.</dd>
+
+<dt>/etc/gshadow</dt>
+<dd>A text file which contains the password information for groups.</dd>
+
+<dt>/etc/login.defs</dt>
+<dd>A text file that defines the defaults for accounts.</dd>
+
+<dt>/etc/adduser.conf</dt>
+<dd>Configuration file for the <code>adduser</code> command.</dd>
+
+<dt>/etc/skel</dt>
+<dd>Files placed in this directory will be copied to new users home directory.</dd>
+
+<dt>chage</dt>
+<dd>Change user password expiry information.</dd>
+
+<dt>chfn</dt>
+<dd>Change real user name and information.</dd>
+
+<dt>finger</dt>
+<dd>Read information from a users profile (real name, phone, etc.) if they have one.</dd>
+
+<dt>GECOS</dt>
+<dd>A field in the <code>/etc/passwd</code> file containing the real name and contact information for a user.</dd>
+
+<dt>groupadd</dt>
+<dd>Create a new group.</dd>
+
+<dt>groupdel</dt>
+<dd>Remove a group from the system.</dd>
+
+<dt>groupmod</dt>
+<dd>Modify a group account.</dd>
+
+<dt>id</dt>
+<dd>Print user and group information.</dd>
+
+<dt>passwd</dt>
+<dd>Change a user’s password.</dd>
+
+<dt>useradd</dt>
+<dd>Add a new user to the system (red Hat). The <code>passwd</code> command must also be run.</dd>
+
+<dt>adduser</dt>
+<dd>Add a new user to the system (Debian).</dd>
+
+<dt>userdel</dt>
+<dd>Remove a user.</dd>
+
+<dt>usermod</dt>
+<dd>Modify a user account.</dd>
+
+<dt>vipw</dt>
+<dd>Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code> files.</dd>
+
+<dt>who</dt>
+<dd>Show who is logged into the system.</dd>
+
+<dt>id</dt>
+<dd>Print real and effective user and group IDs.</dd>
+
+<dt>su</dt>
+<dd>Switch to another user (always use with the - dash option.</dd>
+</dl>
+
+
 
 <h2 id="preparations">Preparations</h2>
 
@@ -67,8 +116,10 @@
 <p>The <code>/etc/login.defs</code> file sets defaults for creating user accounts such as when passwords expire. Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90. Be sure you create a backup before you edit the file.</p>
 
 <pre><code>$ cd
-$ cp /etc/login.defs login.defs.bak 
+$ cp /etc/login.defs login.defs.bak
 </code></pre>
+
+
 
 <h2 id="creating-new-users">Creating New Users</h2>
 
@@ -103,6 +154,8 @@ $ cp /etc/login.defs login.defs.bak
 <pre><code># usermod -aG wheel trillian
 </code></pre>
 
+
+
 <h4 id="modify-account-expiration">Modify Account Expiration</h4>
 
 <p>Next change the account expiration to 120 days from today.</p>
@@ -123,6 +176,8 @@ $ sudo grep trillian /etc/shadow
 <li>The output of <code>id trillian</code>.</li>
 <li>The output of <code>chage -l trillian</code></li>
 </ul>
+
+
 
 <h2 id="resources">Resources</h2>
 
