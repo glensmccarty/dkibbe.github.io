@@ -2,6 +2,8 @@
 
 <p>Both <code>su</code> and <code>sudo</code> can be used to work as the root user. Some distributions like Ubuntu disable the root account by default and all work is done using the <code>sudo</code> command. Even on distributions like Red Hat Enterprise Linux and CentOS <code>sudo</code> can be used to delegate root privileges to ordinary users. <code>sudo</code> is similar to <em>run as</em> on Windows.</p>
 
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p><em>After successfully completing this assignment you will be able to:</em> </p>
@@ -13,14 +15,18 @@
 <li>List the advantages of using <code>sudo</code> over <code>su</code>.</li>
 <li>Modify the <code>/etc/sudoers</code> file using <code>visudo</code>.</li>
 <li>Give a user <code>sudo</code> permissions by adding a file to the <code>/etc/sudoers.d</code> directory.</li>
-<li>Describe where Sudo "incidents" are reported.</li>
+<li>Describe where Sudo “incidents” are reported.</li>
 </ol>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
 <p>Do this assignment on the CentOS 7 virtual machine. In the commands used below the <strong>#</strong> character is the root user prompt and <strong>$</strong> is the prompt for ordinary users.</p>
 
-<h3 id="take-snapshot">Take Snapshot</h3>
+
+
+<h3 id="take-a-snapshot-of-the-system">Take a Snapshot of the System</h3>
 
 <p>See the <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">instructions</a> in the VirtualBox Users Manual.</p>
 
@@ -31,6 +37,8 @@
 <pre><code># yum install mutt
 </code></pre>
 
+
+
 <h3 id="etcskel">/etc/skel</h3>
 
 <p>The <em>/etc/skel</em> directory contains files that will be copied to the home directory of any new users created.</p>
@@ -39,6 +47,8 @@
 Welcome aboard!
 EOF
 </code></pre>
+
+
 
 <h3 id="create-users">Create Users</h3>
 
@@ -54,13 +64,13 @@ EOF
 # passwd jstudent
 </code></pre>
 
+
+
 <h3 id="virtual-terminals">Virtual Terminals</h3>
 
-<p>In this assignment you will be working with two virtual terminals. If you are working from a LiveCD you access virtual terminals with the key combination <strong>Crtl+Alt+Fn1</strong> through <strong>Ctrl+Alt+Fn6</strong> and return to the graphical display with <strong>Ctrl+Alt+Fn7</strong>. (* Note:*  some distributions put the GUI on <strong>Ctrl+Alt+Fn1</strong> instead of Ctrl+Alt+Fn7*.). The virtual terminals live outside of the GUI and are useful for troubleshooting when some run away program has turned the graphical display to molasses.</p>
+<p>In this assignment you will be working with two virtual terminals. If you are working from a LiveCD you access virtual terminals with the key combination <strong>Crtl+Alt+Fn1</strong> through <strong>Ctrl+Alt+Fn6</strong> and return to the graphical display with <strong>Ctrl+Alt+Fn7</strong>.  (<em>Note:</em>  some distributions put the GUI on <strong>Ctrl+Alt+Fn1</strong> instead of Ctrl+Alt+Fn7*.). The virtual terminals live outside of the GUI and are useful for troubleshooting when some run away program has turned the graphical display to molasses.</p>
 
-<p>In VirtualBox you will use the <strong>host</strong> plus a function key to access virtual terminals. The default setting for the <strong>host</strong> key is the right control key.</p>
-
-
+<p>In VirtualBox you will use the <strong>host</strong> key plus a function key to access virtual terminals. The default setting for the <strong>host</strong> key is the <em>right</em> control key.</p>
 
 <h2 id="the-su-command">The <code>su</code> Command</h2>
 
@@ -73,7 +83,7 @@ EOF
 <pre><code># su trillian
 </code></pre>
 
-<p>Run <code>ls</code> to list files in the current directory. The command will fial. Run <code>pwd</code> to show you are still in root's home directory, Even though the <code>whoami</code> command shows you are <em>trillian</em> the environment is not set correctly.</p>
+<p>Run <code>ls</code> to list files in the current directory. The command will fail. Run <code>pwd</code> to show you are still in root’s home directory, even though the <code>whoami</code> command shows you are <em>trillian</em> the environment is not set correctly.</p>
 
 <p>Type <code>exit</code> to return to the root user.</p>
 
@@ -84,13 +94,15 @@ EOF
 <pre><code># su -l jstudent
 </code></pre>
 
-<p>The <code>pwd</code> command shows you are in jstudents's home directory. Try the <code>ls</code> command and you will see <em>welcome.txt</em> file.</p>
+<p>The <code>pwd</code> command shows you are in jstudents’s home directory. Try the <code>ls</code> command and you will see <em>welcome.txt</em> file.</p>
 
 <p>Type <code>exit</code> to return to the root user.</p>
 
+
+
 <h2 id="the-sudo-command">The <code>sudo</code> Command</h2>
 
-<p>A disadvantage to using <code>su</code> to allow users to run commands as root is that you must give them the root password and you can't easily limit what they can do. Also, you don't know who (as root) actually ran the command. The <code>sudo</code> command lets you give users in the <em>sudoers</em> file specific root privileges without the need to give them the root password. Their actions are logged as well so you have a record of what each user did.</p>
+<p>A disadvantage to using <code>su</code> to allow users to run commands as root is that you must give them the root password and you can’t easily limit what they can do. Also, you don’t know who (as root) actually ran the command. The <code>sudo</code> command lets you give users in the <em>sudoers</em> file specific root privileges without the need to give them the root password. Their actions are logged as well so you have a record of what each user did.</p>
 
 <p>The <code>/etc/sudoers</code> file is edited with the special program <code>visudo</code>. The <code>visudo</code> command creates a temporary copy of the sudoers file for editing and verifies that any changes have the correct syntax before saving changes to <code>/etc/sudoers</code>. As you may have guessed by the name <code>visudo</code> uses the <code>vi</code> text editor or the default editor.</p>
 
@@ -109,6 +121,8 @@ EOF
 trillian wheel
 </code></pre>
 
+
+
 <h3 id="enabling-the-wheel-group-in-the-sudoers-file">Enabling the wheel Group in the sudoers File</h3>
 
 <p><em>Note:</em> In CentOS 7 the <em>wheel</em> group is already uncommented. You do not need to do this step.</p>
@@ -116,6 +130,8 @@ trillian wheel
 <p>Use <code>visudo</code> to edit <strong>/etc/sudoers</strong>. <code>visudo</code> will automatically open the correct file and lock it so no other user can edit it.</p>
 
 <p>Uncomment the line that lets all members of the <code>wheel</code> group run commands without using a password. Use the search function in <code>vi</code> to easily find the correct line to edit.</p>
+
+
 
 <h3 id="using-sudo">Using sudo</h3>
 
@@ -128,10 +144,10 @@ trillian wheel
 
 <p>Now try the command with <code>sudo</code>.</p>
 
-<pre><code>$ sudo shutdown -r 5
+<pre><code>$ sudo shutdown -r 5 Shutting down to replace a faulty component.
 </code></pre>
 
-<p>You'll be asked for Trillian's password and the command will work. Use the time remaining and switch consoles to the root user to consult the man page for <code>shutdown</code> for the correct option to cancel the shutdown.</p>
+<p>You’ll be asked for Trillian’s password and the command will work. Press <strong>Ctrl+c</strong> to stop the shutdown.</p>
 
 <h3 id="members-not-in-the-sudoers-file">Members Not in the sudoers File</h3>
 
@@ -147,7 +163,7 @@ $ sudo shutdown -r 5
 
 <h2 id="logging">Logging</h2>
 
-<p>All activity of sudoers is logged in <strong>/var/log/secure</strong> on CentOS or <strong>/var/log/audit/audit.log</strong> on Debian. View the end of the log with the <code>tail</code> command and you'll see the commands run by <code>trillian</code> was logged.</p>
+<p>All activity of sudoers is logged in <strong>/var/log/secure</strong> on CentOS or <strong>/var/log/audit/audit.log</strong> on Debian. View the end of the log with the <code>tail</code> command and you’ll see the commands run by <code>trillian</code> was logged.</p>
 
 <p><em>Sudo logs the following information:</em> </p>
 
@@ -163,24 +179,17 @@ $ sudo shutdown -r 5
 
 <h2 id="removing-sudo-privileges">Removing Sudo Privileges</h2>
 
+
+
 <h3 id="remove-trillian-from-the-wheel-group">Remove Trillian From the Wheel Group</h3>
 
-<p>You use the <code>usermod</code> command to remove Trillian from the <em>wheel</em>  group. When you added Trillian to the <em>wheel</em>  group the <strong>-a</strong> option appended the <em>wheel</em>  group to Trillian's supplementary groups. </p>
+<p>Logi out as Trillian and log in as root. You use the <code>vipw</code> command to remove Trillian from the <em>wheel</em>  group. When you added Trillian to the <em>wheel</em>  group the <strong>-a</strong> option appended the <em>wheel</em>  group to Trillian’s supplementary groups.  Use <code>vipw -g</code> to edit the wheel group removing Trillian. Be sure to remove only Trillian’s name.</p>
 
-<pre><code># usermod -G trillian
+<pre><code># vipw -g
+wheel:x:110:trillian
 </code></pre>
 
-
-
-<h3 id="disable-the-wheel-group">Disable the wheel Group</h3>
-
-<p>Make sure you are logged in as root and use <code>visudo</code> to add the comment character <strong>#</strong> to the start of the line to disable the <em>wheel</em>  group having root privileges.</p>
-
-<pre><code># Allow members of group wheel to execute any command
-#%wheel ALL=(ALL:ALL) ALL
-</code></pre>
-
-<p>Go back to Trillian's login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This "Sudo Incident" will be logged as well. In addition, root will receive an email reporting the "incident." Use <code>mutt</code> to see the email.</p>
+<p>Go back to Trillian’s login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This “Sudo Incident” will be logged as well. In addition, root will receive an email reporting the “incident.” Use <code>mutt</code> to see the email.</p>
 
 <h2 id="the-etcsudoersd-directory">The /etc/sudoers.d/ Directory</h2>
 
@@ -192,6 +201,8 @@ $ sudo shutdown -r 5
 
 <pre><code>jstudent centos7=/sbin/shutdown -r 5
 </code></pre>
+
+
 
 <h3 id="test-the-command">Test the Command</h3>
 
@@ -208,16 +219,12 @@ $ sudo shutdown -r 5
 
 <ul>
 <li>Make sure that user <code>trillian</code> is a member of the <em>wheel</em>  group.</li>
-<li>If the <code>groups</code> command doesn't show the wheel group. Log Trillian out than back in.</li>
+<li>If the <code>groups</code> command doesn’t show the wheel group. Log Trillian out than back in.</li>
 <li>Sudoers use their own password and not the root password.</li>
 <li>If Mutt complains that <code>/var/spool/mail/root</code> does not exist create it using the <code>touch</code> command.</li>
 </ul>
 
-
-
-<h2 id="xkcd">XKCD</h2>
-
-<p><img src="https://imgs.xkcd.com/comics/incident.png" alt="Cartoon showing sudo incidents being reported to Santa Claus." title=""></p>
+<!--## XKCD&#10;&#10;![Cartoon showing sudo incidents being reported to Santa Claus.](https://imgs.xkcd.com/comics/incident.png)-->
 
 <h2 id="what-to-submit">What to Submit</h2>
 
