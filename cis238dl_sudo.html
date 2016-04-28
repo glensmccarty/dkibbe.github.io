@@ -30,6 +30,8 @@
 
 <p>See the <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">instructions</a> in the VirtualBox Users Manual.</p>
 
+
+
 <h3 id="install-mutt">Install Mutt</h3>
 
 <p>Mutt is a command line mail client. Install it using Yum. You can use Mutt to read email messages that Sudo sends to root.</p>
@@ -72,6 +74,8 @@ EOF
 
 <p>In VirtualBox you will use the <strong>host</strong> key plus a function key to access virtual terminals. The default setting for the <strong>host</strong> key is the <em>right</em> control key.</p>
 
+
+
 <h2 id="the-su-command">The <code>su</code> Command</h2>
 
 <p>The <code>su</code> command lets you become the root user or another user if you have the password for that account. Using the <strong>-l</strong> (dash el) option gives the full environment including the correct PATH environmental variable so commands work correctly. Always use the dash or you may have problems doing some things as root.</p>
@@ -86,6 +90,8 @@ EOF
 <p>Run <code>ls</code> to list files in the current directory. The command will fail. Run <code>pwd</code> to show you are still in root’s home directory, even though the <code>whoami</code> command shows you are <em>trillian</em> the environment is not set correctly.</p>
 
 <p>Type <code>exit</code> to return to the root user.</p>
+
+
 
 <h2 id="with-l">With -l</h2>
 
@@ -149,6 +155,8 @@ trillian wheel
 
 <p>You’ll be asked for Trillian’s password and the command will work. Press <strong>Ctrl+c</strong> to stop the shutdown.</p>
 
+
+
 <h3 id="members-not-in-the-sudoers-file">Members Not in the sudoers File</h3>
 
 <p>Log in as <code>jstudent</code> and attempt to run the <code>shutdown</code> command.</p>
@@ -160,6 +168,8 @@ $ sudo shutdown -r 5
 <p>The command will fail since <code>jstudent</code> is not in the <em>sudoers</em> file. Type <code>exit</code> to return to the root terminal and notice that you have mail reporting the event.</p>
 
 <p>Use <code>mutt</code> to read the email. Use the <strong>SnipIt</strong> tool in Windows to take a screenshot of the email as your assignment submission.</p>
+
+
 
 <h2 id="logging">Logging</h2>
 
@@ -191,18 +201,18 @@ wheel:x:110:trillian
 
 <p>Go back to Trillian’s login screen and try the <code>sudo</code> command again. The command will fail since members of the <em>wheel</em>  group are no longer permitted <code>sudo</code> privileges. This “Sudo Incident” will be logged as well. In addition, root will receive an email reporting the “incident.” Use <code>mutt</code> to see the email.</p>
 
+
+
 <h2 id="the-etcsudoersd-directory">The /etc/sudoers.d/ Directory</h2>
 
-<p>If the <em>sudoers</em> file includes an <code>includedir</code> directive you can add files to that directory rather than editing the sudoers file directly. This is preferred since it keeps the original file closer to its original state. You should use <code>visudo -f</code> to edit the file so the syntax will be checked when you save the file.</p>
+<p>If the <em>sudoers</em> file includes an <code>includedir</code> directive you can add files to the /etc/sudoers.d directory rather than editing the sudoers file directly. This is preferred since it keeps the original file closer to its original state. You should use <code>visudo -f</code> to edit the file so the syntax will be checked when you save the file.</p>
 
 <p><em>Here is an example:</em> </p>
 
-<p>This entry in <strong>01_jstudent</strong> the user <code>jstudent</code> will be able to run the shutdown command:</p>
+<p>This entry in <strong>/etc/sudoers.d/01_jstudent</strong> the user <code>jstudent</code> will be able to run the shutdown command:</p>
 
-<pre><code>jstudent centos7=/sbin/shutdown -r 5
+<pre><code>jstudent centos77=/sbin/shutdown -r 5
 </code></pre>
-
-
 
 <h3 id="test-the-command">Test the Command</h3>
 
@@ -225,6 +235,8 @@ wheel:x:110:trillian
 </ul>
 
 <!--## XKCD&#10;&#10;![Cartoon showing sudo incidents being reported to Santa Claus.](https://imgs.xkcd.com/comics/incident.png)-->
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
