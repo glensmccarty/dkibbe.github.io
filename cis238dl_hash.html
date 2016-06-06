@@ -9,12 +9,6 @@
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <dl>
-<dt>MD5</dt>
-<dd>definition</dd>
-
-<dt>SHA1</dt>
-<dd>definition</dd>
-
 <dt>md5sum</dt>
 <dd>Compute and check MD5 message digest.</dd>
 
@@ -29,7 +23,7 @@
 
 <ol>
 <li>Download the smallest ISO file from <a href="http://isoredirect.centos.org/centos/7/isos/x86_64/">one of the CentOS mirrors</a>.</li>
-<li>Download the <em>sha256sum.txt</em> from the same mirror. Don’t open the file but save it to the same same directory as the ISO file.</li>
+<li>Download the <em>sha256sum.txt</em> from the same mirror. Don’t open the file but save it to the same directory as the ISO file.</li>
 <li>Open a terminal from the Dash. The Dash is the Ubuntu icon at the top of the Lauchbar.</li>
 </ol>
 
@@ -37,19 +31,16 @@
 
 <h2 id="use-sha-to-verify-a-download">Use SHA to Verify a Download</h2>
 
-<p>Open a terminal from the Dash. Use the <code>cd</code> command to change to the <em>Downloads</em> directory.</p>
-
-<h2 id="use-sha-to-compare-two-photographs">Use SHA to Compare Two Photographs</h2>
-
 <ol>
-<li>Download an image from the Net or use the super hero image you created.</li>
-<li>Open a terminal and navigate to the Download  directory</li>
-<li>sha2556sum </li>
+<li>Open a terminal from the Dash. Use the <code>cd</code> command to change to the <em>Downloads</em> directory.</li>
+<li>Use <code>sha256sum -c sha256sum.txt</code> to verify that the download is not corrupt.</li>
 </ol>
+
+<!--## Use SHA to Compare Two Photographs&#10;&#10;1. Download an image from the Net or use the super hero image you created.&#10;2. Open a terminal and navigate to the Download  directory&#10;3. sha2556sum -->
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-
+<p>Submit a screenshot of the output of the <code>sha256sum</code> command showing that the ISO you downloaded is not corrupt.</p>
 
 <h2 id="resources">Resources</h2>
 
