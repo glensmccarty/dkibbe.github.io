@@ -1,73 +1,51 @@
-<p><div class="toc">
-<ul>
-<li><a href="#here-docs">Here Docs</a><ul>
-<li><a href="#a-basic-here-doc">A Basic here doc</a></li>
-<li><a href="#here-docs-and-functions">Here Docs and Functions</a></li>
-<li><a href="#resources">Resources</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</p>
+# Here Documents
 
-<h1 id="here-docs">Here Docs</h1>
-
-<p>Sometimes you need to output some text to the command line to inform the user of a script. a <em>here doc</em> lets you do that easily.</p>
+A here document contained in a script can be used to deliver information when the script is run similar to the `echo` command. Here is an example from Greg's Bash Guide:
 
 
-
-<h2 id="a-basic-here-doc">A Basic here doc</h2>
-
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">$ cat &lt;&lt; EOF
-&gt; This is a basic here doc.
-&gt; EOF
-This is a basic here doc.</code></pre>
-
-<p>The <strong>EOF</strong> delimiter can be anything that is not likely to appear in the script. EOF (End Of File) is a good choice. You should keep your here docs short.</p>
+	usage() {
+	    cat <<EOF
+		usage: foobar [-x] [-v] [-z] [file ...]
+		A short explanation of the operation goes here.
+		It might be a few lines long, but shouldn't be 	excessive.
+		EOF
+	}
 
 
+The actual here document starts with `cat` and ends with **EOF**. The text between the End Of File markers is the text that is printed out. To make the here document easier to call in thwe script it has been wrapped in a function.
 
-<h2 id="here-docs-and-functions">Here Docs and Functions</h2>
+If the text of the here Doc is indented with Tabs. use the dash (**-**) option to remove them before printing.
 
-<p>You can easily wrap a here doc in a function and call the function whenever needed.</p>
+	cat <<-EOF
 
+## Feeding Data to a Command
 
+Just as text is feed to the screen using `cat` data can be input to a command the same way.
 
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/usr/bin/env bash
-</span>
-<span class="hljs-function"><span class="hljs-title">usage</span></span> ()
-{
-cat &lt;&lt; EOF
-No postional parameter given.
-EOF
-}
+	ftp -n << EOF
+	open mirrors.xmission.com
+	user anonymous nothinghere
+	ascii
+	cd gutenberg
+	get GUTINDEX.01
+	bye
+	EOF
 
-<span class="hljs-function"><span class="hljs-title">right</span></span> ()
-{
-cat &lt;&lt; EOF
-You did it right.
-EOF
-}
+## What to Submit
 
-<span class="hljs-keyword">if</span>
-[[ <span class="hljs-variable">$#</span> <span class="hljs-operator">-lt</span> <span class="hljs-number">1</span> ]]
-<span class="hljs-keyword">then</span>
-usage
-<span class="hljs-keyword">else</span>
-right
-<span class="hljs-keyword">fi</span></code></pre>
+Create a script containing a here document that prints the following information. 
 
+	Today is Tuesday
+	You are logged into a Linux system named xps13.
+	Here is some info about the root partition:
+	Filesystem      Size  Used Avail Use% Mounted on
+	/dev/sda4        99G   26G   68G  28% /
 
+In your script **Tuesday**, **Linux**, **xps13** and the last line (**/dev/sda4...**) should be replaced with the appropriate values from the system the script will be run on.
 
-<h2 id="resources">Resources</h2>
+## Resources
 
-<ul>
-<li><a href="http://mywiki.wooledge.org/BashGuide/InputAndOutput#Heredocs_And_Herestrings">Greg’s Bash Guide</a></li>
-<li><a href="http://www.ibm.com/developerworks/aix/library/au-unixtext/">Introduction to text manipulation on UNIX-based systems</a></li>
-</ul>
+ - [Heredocs and Herestrings](http://mywiki.wooledge.org/BashGuide/InputAndOutput#Heredocs_And_Herestrings)
+ - [Introduction to text manipulation on UNIX-based systems](http://www.ibm.com/developerworks/aix/library/au-unixtext/)
 
-<blockquote>
-  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
-</blockquote>
+> Written with [StackEdit](https://stackedit.io/).<!--se_discussion_list:{"IDHTZ2uVl5FJYtn7Z37y6brk":{"selectionStart":982,"selectionEnd":996,"commentList":[{"content":"cat << EOF\nToday is $(date +%A)\nYou are logged into a $(uname) system named $(hostname).\nHere is some info about the root partition:\nFilesystem      Size  Used Avail Use% Mounted on\n$(df -h | grep -E \\/$)\nHave a nice day!\nEOF"}],"discussionIndex":"IDHTZ2uVl5FJYtn7Z37y6brk"}}-->
