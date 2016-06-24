@@ -33,7 +33,7 @@ The `tar` command was originally designed for backing up data to tape. While it 
 
 ## Preparation
 
-TThis assignment will work on most Linux distributions.
+This assignment will work on most Linux distributions.
 
 ### Reading
 
@@ -166,7 +166,7 @@ Option | Compression |
 --- | ---
 g | Gzip
 j | Bzip2
-J | xz	
+J | xz
 
 Tar by itself does not compress the files. Listing the files with `ls -lh foo*` shows that the archive is slightly larger that the sum of the individual files.
 
@@ -208,7 +208,7 @@ The `find` comamnd is useful to create an archive from a list of files. Here `fi
 While it is common to use extensions to make it easy to identify files types. The command line doesn't require it. Try renaming the foo archive to something else  and then run the `file` command find its true identity.
 
 	$ mv foo.tar.gz foo.jpg
-	$ file foo.jpg 
+	$ file foo.jpg
 	archive.tar.gz: gzip compressed data
 
 ## What to Submit
@@ -222,7 +222,5 @@ Submit a screenshot showing the output of `tar -tvf foo.tar.gz` showing the cont
  - man file
  - man xargs
 
-[fixme]: http://dennisk.freeshell.org/img/fixme.png "Fix me icon"
-[tar-1]: http://dennisk.freeshell.org/img/cis126dl_tar-1.png "file cabinet clipart"
-
-> Written with [StackEdit](https://stackedit.io/).
+[fixme]: https://dkibbe.github.io/images//images/fixme.png "Fix me icon"
+[tar-1]: https://dkibbe.github.io/images//imagesg/cis126dl_tar-1.png "file cabinet clipart"
