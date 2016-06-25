@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Assignment 8.1 - Archiving and Compressing Data</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Assignment 8.1 - Archiving and Compressing Data"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-06-25T10:42-0700"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content="Using tar to archive and compress data"/>
+<meta name="keywords" content="cis238dl, tar, rhcsa"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+<div id="org-div-home-and-up" style="text-align:right;font-size:70%;white-space:nowrap;">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Assignment 8.1 - Archiving and Compressing Data</h1>
+
+<p><img src=" images/cis126dl_tar-1.png"  alt=" images/cis126dl_tar-1.png" />
+</p>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Archiving and Compressing Data</h2>
+<div class="outline-text-2" id="text-1">
+
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Introduction</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+The <code>tar</code> command was originally designed for backing up data to tape.  While it is still used for that purpose it is more commonly used to create a "tarball", that is an archive of files.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Assignment Objectives</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<p>
+<i>When you have successfully completed this assignment you will be able to:</i>
+</p>
+<ol>
+<li>Create a tar archive with and without compression.
+</li>
+<li>Extract files from a tar archive.
+</li>
+<li>List files in a tar archive.
+</li>
+<li>Use <code>gzip</code> and <code>bzip2</code> to compress files.
+</li>
+<li>Use the <code>find</code> command to create an archive or specific files.
+</li>
+<li>Identify the advantages of Xz compression.
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Useful Terms</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<ul>
+<li>TAR (Tape Archive)
+</li>
+<li>Gzip
+</li>
+<li>Bzip2
+</li>
+<li>Xz
+</li>
+<li>Zip
+</li>
+<li>Archive
+</li>
+<li>Compression
+</li>
+<li>Tarball
+</li>
+<li><code>find</code>
+</li>
+<li><code>xargs</code>
+</li>
+<li><code>file</code>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Preparation</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+<p>
+This assignment will work on most Linux distributions.
+</p>
+
+</div>
+
+<div id="outline-container-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> Reading</h4>
+<div class="outline-text-4" id="text-1-4-1">
+
+
+<p>
+Archiving data is covered in chapter 8 of the textbook.  There is a man page for <code>tar</code> and an info page for both <code>tar</code> and <code>find</code>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> Create Files</h4>
+<div class="outline-text-4" id="text-1-4-2">
+
+
+<p>
+Change to the <code>/tmp</code> directory and use the <code>dd</code> command to create 5 files each 1MiB in size.  This <i>for loop</i> will create the files in one step.  After typing the first line press <b>Enter</b> bash will open a new prompt (<b>&gt;</b>) for you to continue the command.
+</p>
+
+
+
+<pre class="example">for i in 1 2 3 4 5
+do dd if=/dev/zero of=foo$i bs=1M count=1
+done
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Tape Archive (TAR)</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+
+</div>
+
+<div id="outline-container-1-5-1" class="outline-4">
+<h4 id="sec-1-5-1"><span class="section-number-4">1.5.1</span> Basic Syntax</h4>
+<div class="outline-text-4" id="text-1-5-1">
+
+
+<p>
+The <code>tar</code> command uses the same syntax format as most commands.  Some options are required and <code>tar</code> will complain if they are not given.
+</p>
+<pre class="example">
+tar option(s) archive_name file_name(s)
+</pre>
+
+
+<p>
+Options can be preceded by a single dash (<b>-</b>) but it is common to omit the dash.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-5-2" class="outline-4">
+<h4 id="sec-1-5-2"><span class="section-number-4">1.5.2</span> Common Options</h4>
+<div class="outline-text-4" id="text-1-5-2">
+
+
+<p>
+Some of these options can not be used together. For example <b>c</b> and <b>x</b>.
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">Option</td><td class="left">Description</td></tr>
+<tr><td class="left">c</td><td class="left">Create archive</td></tr>
+<tr><td class="left">x</td><td class="left">Extract archive</td></tr>
+<tr><td class="left">t</td><td class="left">List files in archive</td></tr>
+<tr><td class="left">u</td><td class="left">Append newer files</td></tr>
+<tr><td class="left">r</td><td class="left">Add files to archive</td></tr>
+<tr><td class="left">d</td><td class="left">Compare files in archive to files on disk</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5-3" class="outline-4">
+<h4 id="sec-1-5-3"><span class="section-number-4">1.5.3</span> Create an Archive</h4>
+<div class="outline-text-4" id="text-1-5-3">
+
+
+<p>
+Create a new archive including all files named <b>foo</b>.  This command will create an archive of the files you created.  By default <code>tar</code> does not compress files.
+</p>
+<pre class="example">
+$ tar cf foobar.tar foo*
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5-4" class="outline-4">
+<h4 id="sec-1-5-4"><span class="section-number-4">1.5.4</span> List the Contents of an Archive</h4>
+<div class="outline-text-4" id="text-1-5-4">
+
+
+<p>
+The <b>t</b> option will list the contents of an archive.
+</p>
+
+
+
+<pre class="example">$ tar tf foobar.tar
+foo1
+foo2
+foo3
+foo4
+foo5
+</pre>
+
+
+<p>
+Adding the <b>v</b> gives a more complete listing.
+</p>
+
+
+
+<pre class="example">$ tar tvf foobar.tar
+-rw-rw-r-- tux/tux 1048576 10:10 foo1
+-rw-rw-r-- tux/tux 1048576 10:00 foo2
+-rw-rw-r-- tux/tux 1048576 10:00 foo3
+-rw-rw-r-- tux/tux 1048576 10:00 foo4
+-rw-rw-r-- tux/tux 1048576 10:00 foo5
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5-5" class="outline-4">
+<h4 id="sec-1-5-5"><span class="section-number-4">1.5.5</span> Extracting Files from an Archive</h4>
+<div class="outline-text-4" id="text-1-5-5">
+
+
+<p>
+Delete all the <b>foo</b> files in the <code>/tmp</code> directory
+</p>
+<p>
+The question mark is a wildcard character which means <b>foo</b> followed by one character.
+</p>
+<pre class="example">
+$ rm foo?
+</pre>
+
+
+<p>
+Then restore the files from the archive.
+</p>
+<pre class="example">
+$ tar xvf foobar.tar
+</pre>
+
+
+<ul>
+<li id="sec-1-5-5-1">Extract a Single File<br/>
+
+<p>
+Delete <b>foo2</b>.
+</p>
+<pre class="example">
+$ rm foo2
+</pre>
+
+
+<p>
+Now extract just <b>foo2</b> from the archive.
+</p>
+
+
+
+<pre class="example">$ tar xf foobar.tar foo2
+$ ls foo?
+foo1
+foo2
+foo3
+foo3
+foo4
+foo5
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1-5-6" class="outline-4">
+<h4 id="sec-1-5-6"><span class="section-number-4">1.5.6</span> Updating Files in an Archive</h4>
+<div class="outline-text-4" id="text-1-5-6">
+
+
+<p>
+You can append a newer file to the archive.  First refresh the timestamp on <b>foo2</b>.
+</p>
+
+
+
+<pre class="example">$ touch foo2
+ls -l foo*
+</pre>
+
+
+<p>
+<i>foo2</i> is newer than the version in the archive.
+</p>
+<p>
+Compare the files in the archive to those on disk.
+</p>
+
+
+
+<pre class="example">$ tar df foobar.tar
+foo2: Mod time differs
+</pre>
+
+
+<p>
+Add the newer <i>foo2</i> to the archive.
+</p>
+<pre class="example">
+$ tar uf foobar.tar foo2
+</pre>
+
+
+<p>
+The newer file is appended to the archive.  You can update multiple files the same way.
+</p>
+<pre class="example">
+$ touch foo1 foo2 foo3
+$ tar uf foobar.tar foo1 foo2 foo3
+</pre>
+
+
+<p>
+The list option along with the verbose option shows the newer files.
+</p>
+
+
+
+<pre class="example">$ tar tvf foobar.tar
+-rw-rw-r-- tux/tux 1048576 10:18 foo1
+-rw-rw-r-- tux/tux 1048576 11:05 foo2
+-rw-rw-r-- tux/tux 1048576 10:34 foo3
+-rw-rw-r-- tux/tux 1048576 10:00 foo4
+-rw-rw-r-- tux/tux 1048576 10:00 foo5
+-rw-rw-r-- tux/tux 1048576 11:24 foo1
+-rw-rw-r-- tux/tux 1048576 11:24 foo2
+-rw-rw-r-- tux/tux 1048576 11:24 foo3
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5-7" class="outline-4">
+<h4 id="sec-1-5-7"><span class="section-number-4">1.5.7</span> Using Compression</h4>
+<div class="outline-text-4" id="text-1-5-7">
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">Option</td><td class="left">Compression</td></tr>
+<tr><td class="left">g</td><td class="left">Gzip</td></tr>
+<tr><td class="left">j</td><td class="left">Bzip2</td></tr>
+<tr><td class="left">J</td><td class="left">xz</td></tr>
+</tbody>
+</table>
+
+
+<p>
+Tar by itself does not compress the files.  Listing the files with <code>ls -lh foo*</code> shows that the archive is slightly larger that the sum of the individual files.
+</p>
+
+
+
+<pre class="example">$ ls -lh foo*
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:13 foo1
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo2
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo3
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo4
+-rw-rw-r-- 1 tux/tux 1.0M Nov 14 10:00 foo5
+-rw-rw-r-- 1 tux/tux 5.1M Nov 14 11:30 foobar.tar
+</pre>
+
+
+<ul>
+<li id="sec-1-5-7-1">Compress an Archive with Gzip<br/>
+
+<p>
+Gzip is a common compression algorithm used with <code>ar</code>.  Create a new archive with Gzip compression.
+</p>
+<pre class="example">
+$ tar czf foobar.tar.gz foo*
+</pre>
+
+
+<p>
+The <code>tar.gz</code> extension shows that this is a compressed archive.
+</p>
+
+
+
+<pre class="example">$ ls -lh foobar.tar.gz
+-rw-rw-r-- 1 tux tux 5.3K Nov 14 11:37 foobar.tar.gz
+</pre>
+
+
+<p>
+The degree of compression will depend on the type of files being compressed.  Image and sound files which are already compressed will benefit least from compression.
+</p>
+</li>
+</ul>
+<ul>
+<li id="sec-1-5-7-2">Compress an Archive with Bzip2<br/>
+
+
+
+
+<pre class="example">$ tar cjf foobar.tar.bz2 foo*
+$ ls -lh foobar.tar.bz2
+        -rw-rw-r-- 1 dennisk dennisk  715 Nov 14 11:42 foobar.tar.bz2
+</pre>
+
+
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Find and Tar</h3>
+<div class="outline-text-3" id="text-1-6">
+
+
+<p>
+The <code>find</code> comamnd is useful to create an archive from a list of files.  Here <code>find</code> searchs in <code>/usr/share/doc/</code> for all text files and dumps them into a tarball.
+</p>
+<pre class="example">
+find /usr/share/doc/ -name *.txt | xargs tar cf archive.tar
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-7" class="outline-3">
+<h3 id="sec-1-7"><span class="section-number-3">1.7</span> Extensions on the Command Line</h3>
+<div class="outline-text-3" id="text-1-7">
+
+
+<p>
+While it is common to use extensions to make it easy to identify files types, the command line doesn't require it.  Try renaming the foo archive to something else  and then run the <code>file</code> command find its true identity.
+</p>
+
+
+
+<pre class="example">$ mv foobar.tar.gz foo.jpg
+$ file foo.jpg
+archive.tar.gz: gzip compressed data
+</pre>
+
+
+<p>
+Before submitting the assignment rename <i>foo.jpg</i> back to <i>foobar.tar.gz</i>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-8" class="outline-3">
+<h3 id="sec-1-8"><span class="section-number-3">1.8</span> What to Submit</h3>
+<div class="outline-text-3" id="text-1-8">
+
+
+<p>
+Submit a screenshot showing the output of <code>tar -tvf foobar.tar.gz</code> showing the contents of the archive.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-9" class="outline-3">
+<h3 id="sec-1-9"><span class="section-number-3">1.9</span> Resources</h3>
+<div class="outline-text-3" id="text-1-9">
+
+
+<ul>
+<li>man tar
+</li>
+<li>info find
+</li>
+<li>man file
+</li>
+<li>man xargs
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-06-25T10:42-0700</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

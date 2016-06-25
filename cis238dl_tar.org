@@ -24,16 +24,16 @@
 
 ** Introduction
 
-The =tar= command was originally designed for backing up data to tape. While it is still used for that purpose it is more commonly used to create a "tarball", that is an archive of files.
+The =tar= command was originally designed for backing up data to tape.  While it is still used for that purpose it is more commonly used to create a "tarball", that is an archive of files.
 
 ** Assignment Objectives
 
 /When you have successfully completed this assignment you will be able to:/
 
- 1. Create a Tar archive with and without compression.
- 2. Extract files from a Tar archive.
- 3. List files in a Tar archive.
- 4. Use Gzip and Bzip2 to compress files.
+ 1. Create a tar archive with and without compression.
+ 2. Extract files from a tar archive.
+ 3. List files in a tar archive.
+ 4. Use =gzip= and =bzip2= to compress files.
  5. Use the =find= command to create an archive or specific files.
  6. Identify the advantages of Xz compression.
 
@@ -57,11 +57,11 @@ This assignment will work on most Linux distributions.
 
 *** Reading
 
-Archiving data is covered in chapter 8 of the textbook. There is a man page for =tar= and an info page for both =tar= and =find=.
+Archiving data is covered in chapter 8 of the textbook.  There is a man page for =tar= and an info page for both =tar= and =find=.
 
 *** Create Files
 
-Change to the =/tmp= directory and use the =dd= command to create 5 files each 1MiB in size. This /for loop/ will create the files in one step. After typing the first line press *Enter* bash will open a new prompt (*>*) for you to continue the command.
+Change to the =/tmp= directory and use the =dd= command to create 5 files each 1MiB in size.  This /for loop/ will create the files in one step.  After typing the first line press *Enter* bash will open a new prompt (*>*) for you to continue the command.
 
 #+BEGIN_EXAMPLE
 for i in 1 2 3 4 5
@@ -73,7 +73,7 @@ done
 
 *** Basic Syntax
 
-The =tar= command uses the same syntax format as most commands. Some options are required and =tar= will complain if they are not given.
+The =tar= command uses the same syntax format as most commands.  Some options are required and =tar= will complain if they are not given.
 
 : tar option(s) archive_name file_name(s)
 
@@ -93,16 +93,16 @@ Some of these options can not be used together. For example *c* and *x*.
 
 *** Create an Archive
 
-Create a new archive including all files named *foo*. This command will create an archive of the files you created. By default =tar= does not compress files.
+Create a new archive including all files named *foo*.  This command will create an archive of the files you created.  By default =tar= does not compress files.
 
-: $ tar cf foo.tar foo*
+: $ tar cf foobar.tar foo*
 
 *** List the Contents of an Archive
 
 The *t* option will list the contents of an archive.
 
 #+BEGIN_EXAMPLE
-	$ tar tf foo.tar
+	$ tar tf foobar.tar
 	foo1
 	foo2
 	foo3
@@ -113,7 +113,7 @@ The *t* option will list the contents of an archive.
 Adding the *v* gives a more complete listing.
 
 #+BEGIN_EXAMPLE
-	$ tar tvf foo.tar
+	$ tar tvf foobar.tar
 	-rw-rw-r-- tux/tux 1048576 10:10 foo1
 	-rw-rw-r-- tux/tux 1048576 10:00 foo2
 	-rw-rw-r-- tux/tux 1048576 10:00 foo3
@@ -129,9 +129,9 @@ The question mark is a wildcard character which means *foo* followed by one char
 
 : $ rm foo?
 
-then restore the files from the archive.
+Then restore the files from the archive.
 
-: $ tar xvf foo.tar
+: $ tar xvf foobar.tar
 
 **** Extract a Single File
 
@@ -142,7 +142,7 @@ Delete *foo2*.
 Now extract just *foo2* from the archive.
 
 #+BEGIN_EXAMPLE
-	$ tar xf foo.tar foo2
+	$ tar xf foobar.tar foo2
 	$ ls foo?
 	foo1
 	foo2
@@ -154,7 +154,8 @@ Now extract just *foo2* from the archive.
 
 *** Updating Files in an Archive
 
-You can append a newer file to the archive. First refresh the timestamp on *foo2*.
+You can append a newer file to the archive.  First refresh the timestamp on *foo2*.
+
 #+BEGIN_EXAMPLE
 	$ touch foo2
 	ls -l foo*
@@ -165,23 +166,23 @@ You can append a newer file to the archive. First refresh the timestamp on *foo2
 Compare the files in the archive to those on disk.
 
 #+BEGIN_EXAMPLE
-	$ tar df foo.tar
+	$ tar df foobar.tar
 	foo2: Mod time differs
 #+END_EXAMPLE
 
 Add the newer /foo2/ to the archive.
 
-: $ tar uf foo.tar foo2
+: $ tar uf foobar.tar foo2
 
-The newer file is appended to the archive. You can update multiple files the same way.
+The newer file is appended to the archive.  You can update multiple files the same way.
 
 : $ touch foo1 foo2 foo3
-: $ tar uf foo.tar foo1 foo2 foo3
+: $ tar uf foobar.tar foo1 foo2 foo3
 
 The list option along with the verbose option shows the newer files.
 
 #+BEGIN_EXAMPLE
-	$ tar tvf foo.tar
+	$ tar tvf foobar.tar
 	-rw-rw-r-- tux/tux 1048576 10:18 foo1
 	-rw-rw-r-- tux/tux 1048576 11:05 foo2
 	-rw-rw-r-- tux/tux 1048576 10:34 foo3
@@ -199,7 +200,7 @@ The list option along with the verbose option shows the newer files.
 | j      | Bzip2       |
 | J      | xz          |
 
-Tar by itself does not compress the files. Listing the files with =ls -lh foo*= shows that the archive is slightly larger that the sum of the individual files.
+Tar by itself does not compress the files.  Listing the files with =ls -lh foo*= shows that the archive is slightly larger that the sum of the individual files.
 
 #+BEGIN_EXAMPLE
 	$ ls -lh foo*
@@ -208,51 +209,53 @@ Tar by itself does not compress the files. Listing the files with =ls -lh foo*= 
 	-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo3
 	-rw-rw-r-- 1 tux/tux 1.0M Nov 14 11:24 foo4
 	-rw-rw-r-- 1 tux/tux 1.0M Nov 14 10:00 foo5
-	-rw-rw-r-- 1 tux/tux 5.1M Nov 14 11:30 foo.tar
+	-rw-rw-r-- 1 tux/tux 5.1M Nov 14 11:30 foobar.tar
 #+END_EXAMPLE
 
 **** Compress an Archive with Gzip
 
-Gzip is a common compression algorithm used with =ar=. Create a new archive with Gzip compression.
+Gzip is a common compression algorithm used with =ar=.  Create a new archive with Gzip compression.
 
-: $ tar czf foo.tar.gz foo*
+: $ tar czf foobar.tar.gz foo*
 
 The =tar.gz= extension shows that this is a compressed archive.
 
 #+BEGIN_EXAMPLE
-	$ ls -lh foo.tar.gz
-	-rw-rw-r-- 1 tux tux 5.3K Nov 14 11:37 foo.tar.gz
+	$ ls -lh foobar.tar.gz
+	-rw-rw-r-- 1 tux tux 5.3K Nov 14 11:37 foobar.tar.gz
 #+END_EXAMPLE
 
-The degree of compression will depend on the type of files being compressed. Image and sound files which are already compressed will benefit least from compression.
+The degree of compression will depend on the type of files being compressed.  Image and sound files which are already compressed will benefit least from compression.
 
 **** Compress an Archive with Bzip2
 
 #+BEGIN_EXAMPLE
-	$ tar cjf foo.tar.bz2 foo*
-	$ ls -lh foo.tar.bz2
-		-rw-rw-r-- 1 dennisk dennisk  715 Nov 14 11:42 foo.tar.bz2
+	$ tar cjf foobar.tar.bz2 foo*
+	$ ls -lh foobar.tar.bz2
+		-rw-rw-r-- 1 dennisk dennisk  715 Nov 14 11:42 foobar.tar.bz2
 #+END_EXAMPLE
 
 ** Find and Tar
 
-The =find= comamnd is useful to create an archive from a list of files. Here =find= searchs in =/usr/share/doc/= for all text files and dumps them into a tarball.
+The =find= comamnd is useful to create an archive from a list of files.  Here =find= searchs in =/usr/share/doc/= for all text files and dumps them into a tarball.
 
 : find /usr/share/doc/ -name *.txt | xargs tar cf archive.tar
 
 ** Extensions on the Command Line
 
-While it is common to use extensions to make it easy to identify files types. The command line doesn't require it. Try renaming the foo archive to something else  and then run the =file= command find its true identity.
+While it is common to use extensions to make it easy to identify files types, the command line doesn't require it.  Try renaming the foo archive to something else  and then run the =file= command find its true identity.
 
 #+BEGIN_EXAMPLE
-	$ mv foo.tar.gz foo.jpg
+	$ mv foobar.tar.gz foo.jpg
 	$ file foo.jpg
 	archive.tar.gz: gzip compressed data
 #+END_EXAMPLE
 
+Before submitting the assignment rename /foo.jpg/ back to /foobar.tar.gz/.
+
 ** What to Submit
 
-Submit a screenshot showing the output of =tar -tvf foo.tar.gz= showing the contents of the archive.
+Submit a screenshot showing the output of =tar -tvf foobar.tar.gz= showing the contents of the archive.
 
 ** Resources
 
@@ -260,5 +263,3 @@ Submit a screenshot showing the output of =tar -tvf foo.tar.gz= showing the cont
  - info find
  - man file
  - man xargs
-
-* COMMENT [tar-1]: https://dkibbe.github.io/images/imagesg/cis126dl_tar-1.png "file cabinet clipart"
