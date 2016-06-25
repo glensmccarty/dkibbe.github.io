@@ -1,0 +1,159 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Scheduling Jobs with cron   
+#+DESCRIPTION: Techniques to secure the SSH server daemon.
+#+KEYWORDS: cron cis238dl
+
+* Scheduling Jobs with cron
+
+The ability to schedule routine jobs on any computer is an important part of administration.  For example, the locate database needs to be updated once a day and old log files need archiving and then to be deleted to make room for new log entries.  On a Linux computer the service that handles this is =crond= which uses the =crontab= utility to let you schedule jobs.  With =crontab= you use a simple syntax to schedule the job.
+
+* Overview of Assignment
+
+  1. Create directory in home directory for personal shell scripts.
+
+  2. Add that directory to your PATH variable.
+
+  3. Create a simple shell script for cron to run.
+
+  4. Make script executable.
+
+  5. Use =crontab= to run the script at one minute intervals.
+
+  6. Monitor the output of the script.
+
+  7. Make changes to see how =crond= reports errors.
+
+Check [[http://dennisk.freeshell.org][my website]] for the latest updated version of this assignment.
+
+* Assignment Objectives
+
+/When you have successfully completed this assignment you will be able to:/
+
+1. Use the =crontab= command to list, edit and remove cron jobs.
+
+2. Add a directory to your PATH variable.
+
+3. Use a command line mail client to read mail.
+
+4. Create a simple script to run as a cron job.
+
+* Terms You Should Know
+
++ crond :: The cron daemon
+
++ crontab :: The command to add, edit or remove cron jobs.
+
++ anacron :: Runs commands periodically.  Unlike =cron= it does not assume that the machine is running continuously.
+
++ at :: Run a command at a later time.
+
++ mutt :: A popular command line mail client.
+
++ script :: A text file containing bash commands similar to a DOS batch file.
+
++ PATH :: Environmental variable that tells the shell where to look for programs to execute.
+	     
+* Preparation
+
+  Any user can create a cron job using the =crontab= utility.  You should do this assignment as an ordinary user not as root.  This assignment should work with minor differences on either the workstation or a virtual machine.
+
+* The crond Configuration File
+
+#+BEGIN_EXAMPLE
+
+# For details see man 5 crontab
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+*  *  *  *  * path to script to be executed
+#+END_EXAMPLE
+
+In this assignment you'll create a new "cron job" that will append the current time to a file.  Since cron uses the =sh= command to run jobs we can put the =date= command in a script.  *Note:* Do not include the user-name in the crontab you create.
+
+* Create a Directory for Personal Shell Scripts
+
+  It is common to place personal scripts in =~/bin= (don't confuse with =/bin= and add that directory to your PATH variable.  Use =echo $PATH= to see if =~/bin= is already included.  Also look for a line in =/.bashrc/= or =/.bash_profile/= that includes that directory.  If that line exists you don't need to modify your PATH.
+
+: mkdir ~/bin
+
+If =~/bin/= is not already in your PATH variable add it with these lines placed in =~/.bash_profile=.
+
+: PATH=$PATH:~/bin
+: export PATH
+
+The change will become effective the next time you open a new shell.
+
+* Create a Script Directory in Your ~/bin Directory
+
+Now create a script in that directory named =mycrontest.sh= using the =echo= command to copy the code below into the =~/bin/mycrontest.sh=.
+
+: echo "/bin/echo It is now $(date +%T) on $(date +%A) >> ~/mycronoutput.txt"  > ~/bin/mycrontest.sh
+
+The quotes around the echo string are required so the shell does not interpreted the append redirect.  The Bash has a built-in editor that makes editing long commands easier. Type *Ctrl+x, Ctrl+e* to open the command in the editor defined in the EDITOR environmental variable.
+
+** Make the Script Executable
+   
+   Before you can run the script it must be executable.
+
+: $ chmod +x ~/bin/mycrontest.sh
+
+   Test the script to make sure it works before creating the cron job.
+
+: $ ./mycrontest.sh
+
+* Adding a new Cron Job
+
+  The =crontab= command is used to write the =crontab= file and notify the cron daemon that there is a new job.  Every minute =crond= wakes up and looks to see if any jobs need to be run.
+
+The options to =crontab= are:
+
++ crontab -l :: List a user's cron jobs
++ crontab -e :: Edit a user's crontab file
++ crontab -r :: Remove a user's cron jobs. /Note:/ This will remove everything in the =crontab= file to remove individual jobs comment them out with the *#* character at the start of the line..
+
+Use =crontab -e= to add an entry running your script every minute
+
+Since the PATH that cron uses may not be the same as your PATH you should give the absolute path to any command you include in the crontab.  Use the =which= command to find the path to the =echo= command.  If all goes well you will see a message that a new crontab has been installed.  If you make a mistake in syntax =crontab= will recognize it just as =visudo= does.
+
+* Monitor the Output of cron
+
+  One a minute cron will update =~/mycrontest.txt=.  You can monitor the file with =tail -F= which will constantly as the file changes.
+
+* Receiving Mail from cron
+
+If cron fails to run a job you will receive an email from the cron daemon about it.  The email may contain information useful should the job fail.  You will receive a message in the terminal that you have mail.  Read the message with =mutt= a popular command line mail client.  Select the message with the arrow keys and type *Enter* to read the message; type *q* to exit.
+
+* Removing a cron job
+
+Use =crontab -r= to remove all cron jobs from your crontab file.
+
+* Troubleshoot the Assignment
+
+  Typos are the main concern with this assignment.  If you make a typo editing the times in the crontab file the =crontab= command will warn you.  If your script isn't found or has an error. The cron daemon will email you.
+
+* What to Submit
+
+Copy and paste these questions into the text-box to complete the assignment.
+
+1. What runlevels is =crond= set to run in on reboot? (CentOS only)
+2. Remove the executable bit from the script and watch one minutes then check for new mail.  What message did you get?
+3. What happens when you place the comment character *#* in front of the crontab entry?  Wait one minute and check the output.  Did the script run.
+4. Use the =which= command to find the path to =emacs= and create the variable =EDITOR=<path to emacs>=.  What happens when you type *Ctrl+x, Ctrl+e* in Bash? 
+5. Place your USER name in =/etc/cron.deny= (Create the file if needed.) and try to run any =crontab= command.  What happens?
+
+* Resources
+
++ man 5 crontab
++ [[http://debian-handbook.info/browse/stable/sect.task-scheduling-cron-atd.html][Scheduling Tasks with cron and atd]]
++ [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6-Beta/html/Deployment_Guide/ch-Automating_System_Tasks.html][Automating System Tasks]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

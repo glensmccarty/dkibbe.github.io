@@ -1,0 +1,194 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: The Apache Web Server (Debian)  
+#+DESCRIPTION: Configuring the Apache webserver
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+   /After finishing this assignment the student will be able to:/
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* COMMENT Overview
+
+* Overview
+
+[[http://dennisk.freeshell.org/img/apache_debian.png]]
+
+  Installing Apache on Debian is different than the installation on CentOS.  The package name is difference and DocumentRoot is in a different directory.  Configuration files are different as well.  However, there is no need to manually start the service since that is done for you at the time of installation.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  - Use =aptitude= to install the Apache web server on a Debian virtual machine.
+  - Enable ports using =ufw=.
+  - Add a virtual host to /sites-enabled/.
+  - Make a site active in /sites-enabled/.
+
+* Terms You Should Know
+
+  - LAMP :: Linux, Apache, MySQL and PHP
+  - =tasksel= :: A user interface for installing tasks such as a LAMP server.
+  - =aptitude= :: High-level interface to the package manager dpkg.
+  - =/usr/share/doc/apache2= :: Contains sample configuration files and READMEs.  /Note:/ This directory should be one of the first places to look for additional documentation about a package.
+  - DocumentRoot :: On Debian =/var/www/=
+  - ServerRoot :: On Debian =/etc/apache2/=
+  - =/etc/apache2/sites-available/= :: Configuration files for virtual hosts go here.
+  - =/etc/apache2/sites-enabled/= :: A symbolic link to the virtual host file in =sites-available= goes here.
+
+* COMMENT Preparation
+
+* The =tasksel= Program
+
+  [[http://dennisk.freeshell.org/img/tasksel.png]]
+
+  =tasksel= is a Debian tool for installing services that require multiple packages similar to =yum groupinstall=.  When you first install Debian =tasksel= is the program you use to select a Desktop or Server install.  You can run =tasksel= later to install any services such as a mail server or OpenSSH server.
+
+* The =aptitude= Program
+
+  For this assignment you'll just install the Apache2 web server. You can use the search option to aptitude to find the Apache2 metapackage. If Aptitude isn't installed you can install it =apt-get=.
+
+  : $ sudo aptitude search apache
+  : p apache2 - Apache HTTP Server metapackage
+  
+  : $ sudo aptitude install apache2
+
+  Did you notice that Apache was already up and running?  You still need to configure the firewall which is disabled by default.
+
+* The Ufw Firewall Tool
+
+  Ubuntu comes with =ufw= which is a very friendly and intuitive command line tool for configuring the Linux firewall.  You can install =ufw= on Debian with any of the APT package tools.  You can type =ufw help= for a list of options.
+
+  The firewall is disabled by default.  You should enable it and allow traffic to port 80 for the main site and port 8080 for the virtual host.
+
+#+BEGIN_EXAMPLE
+$ sudo ufw status
+Status: inactive
+$ sudo ufw enable
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  $ sudo ufw allow http
+  Rule added
+  Rule added (v6)
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  $ sudo ufw allow 8080
+  Rule added
+  Rule added (v6)
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  $ sudo ufw status verbose
+  Status: active
+  Logging: on (low)
+  Default: deny (incoming), allow (outgoing)
+  New profile: skip
+
+  To    Action     From
+  --    ------     ----
+  80    ALLOW IN   Anywhere
+  80    ALLOW IN   Anywhere (v6)
+  8080    ALLOW IN   Anywhere
+  8080    ALLOW IN   Anywhere (v6)
+#+END_EXAMPLE
+
+* Apache Configuration Files
+
+  On Debian the Apache2 configuration files are in =/etc/apache2= and are split between several files.
+
+  - apache2.conf :: The main configuration file which you won't edit.
+
+  - httpd.conf :: Which is used to add directives to the main file.
+
+  - ports.conf :: Defines ports that Apache2 will listen to.
+
+  - sites-available :: Virtual host configuration files go here.
+
+  - sites=enabled :: Symbolic links to virtual hosts go here.
+
+* Creating an IP-Based Virtual Host
+
+  Since we can't use domain names in Firefox to identify our virtual host we'll set up an IP address-based host on port 8080.
+
+  On Debian virtual hosts are placed in the /sites-available/ directory and then sym-linked (See the man page for =ln= if you need a refresher on creating links) to a file in the /sites-enabled/ directory to make them active.  See the last lines in =/etc/apache2/apache2.conf= for more information and the README.Debian file in =/usr/share/doc/apache2=.
+
+  You can copy the default virtual host file to use as template for the new virtual host.
+
+  /Files you need to edit are:/
+
+  - /etc/apache2/ports.conf :: Add a Listen directive for port 8080.
+
+  /Files you need to create:/
+
+    - /etc/apache2/sites-available/example.us :: The virtual host files
+
+    - =/etc/apache2/sites-enable/example.us= :: A symbolic link to =/etc/apache2/sites-available/example.us=
+
+* Create DocumentRoot
+  
+  As in CentOS you need to create the DocumentRoot directory for the virrtual host and create an index.html file in DocumentRoot.
+
+  Don't forget to restart Apache.
+
+  : $ sudo /etc/init.d/apache2 restart
+
+  or
+
+  : $ sudo apache2ctl restart
+
+* Troubleshoot the Assignment
+
+  - Is there a symbolic link from the virtual host file in /sites-available/ to a file in /sites-enabled/?
+
+  - Did you open port 8080 in the firewall?
+
+  - Did you add a directive to listen on port 8080?  This can either be placed in /apache2.conf/ or /ports.conf/ but not both.
+
+  - Did you restart Apache2 after making changes?
+
+* What to Submit
+
+ Submit a screenshot of the output of =apachectl -S=.
+  
+* XKCD
+
+  [[http://imgs.xkcd.com/comics/black_hat_support.png]]
+
+* Resources
+
+  - [[http://debian-handbook.info/][The Debian Administrator's Handbook]]
+  - [[https://help.ubuntu.com/12.04/serverguide/index.html][Ubuntu Server Guide]]
+  - [[https://help.ubuntu.com/community/UFW][UFW - Uncomplicated Firewall]]
+  - [[https://help.ubuntu.com/12.04/serverguide/firewall.html][Ubuntu Firewall Guide]]
+  - man ln
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

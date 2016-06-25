@@ -1,0 +1,199 @@
+
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Working with Processes
+#+DESCRIPTION: 
+#+KEYWORDS: ps, kill, signal, nice, renice
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+#+LINK: kernel http://www.tldp.org/LDP/tlk/kernel/processes.html
+#+LINK: process https://www.ibm.com/developerworks/community/blogs/58e72888-6340-46ac-b488-d31aa4058e9c/entry/an_overview_of_linux_processes21?lang=en
+#+LINK: zombie http://dennisk.freeshell.org/zombie
+#+LINK: white https://en.wikipedia.org/wiki/White_Zombie_%28film%29#External_links
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+   /After finishing this assignment the student will be able to:/
+
+   - Describe a process.
+   - List processes using =ps= and =top=.
+   - Terminate a process with =kill=.
+   - Change the priority of a process using =nice= and =renice=.
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* COMMENT Overview
+
+* Working with Processes
+
+  Every program running on the system is a process and has a PID (Process ID).  The first process to run after the kernel boots is the /init/ process with PID 1. 
+
+  Note:? Systemd will change this. /systend/ will be PID 1.
+
+  Sometimes a process can get out of hand and drain system resources.  It's important to identify a run away process and reduce its priority or terminate it.  In this assignment you will start a process to drive up CPU usage and than use various command line tool to identify, renice and terminate the run away process.
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Describe a process.
+- List processes using =ps= and =top=.
+- Explain the function of the common signals.
+- Change the priority of a process.
+- Terminate a process using different signals.
+
+* Terms You Should Know
+
+- Process :: "A computer program in action"
+- & :: An Ampersand following a command put the command in the background.
+- jobs :: List jobs running in the background.
+- fg :: Bring a back-grounded job to the foreground.
+- PID :: Process ID
+- ps :: Displays static information about processes.
+- top :: Provides a dynamic real-time view of a running system.
+- init :: init is the parent of all processes on the system.
+- nice :: Run a program with modified scheduling priority.
+- renice :: Alter priority of a running process.
+- kill :: Terminate a running process.
+- signal :: Linux supports standard signals (SIGTERM, SIGKILL). See Resources below.
+ 
+* Preparation
+
+  This can be done on the Ubuntu workstation.
+
+* Process States
+
+  As a process executes it changes state according to its circumstances.  Linux processes have the following states.
+
+** Running
+   
+   As a process executes it changes state according to its circumstances.  Linux processes have the following states.: The process is either running (it is the current process in the system) or it is ready to run (it is waiting to be assigned to one of the system's CPUs).
+   
+** Waiting
+
+The process is waiting for an event or for a resource.  Linux differentiates between two types of waiting process; interruptible and uninterruptible.
+
+** Interruptible
+										   Waiting processes can be interrupted by signals whereas uninterruptible waiting processes are waiting directly on hardware conditions and cannot be interrupted under any circumstances.
+
+** Uninterruptible
+
+   Waiting processes are waiting directly on hardware conditions and cannot be interrupted under any circumstances.
+
+* List Processes
+
+  These two tools are used to list running processes.
+
+** A Static List of Processes
+
+   The =ps= command displays a static list of processes.
+
+   : ps -e
+
+** A Dynamic List of Processes
+
+   The =top= command updates the process list every few seconds.
+
+   : top
+
+   Exit =top= by typing *q*.  Display a help screen with *h* or *?*.
+
+* Terminating a Process
+
+** CPU Hog
+
+   The =cpuhog.sh= script creates a process that hogs a single thread on the CPU.  The script takes two arguments a large number and a label.  Here is an example:
+
+   : chmod +x cpuhog.sh
+   : ./cpuhog.sh 10000000000 Hello
+
+** Monitor the process
+
+   Open a new terminal and run the =top= command to see that the script is hogging CPU cycles.
+
+* Die, Process, Die!
+
+** Getting the Correct PID
+
+   The first step to killing a run away process is to identify the Process ID. Use the =ps -e= command to identify the PID.  The PID number will be unique to your system.
+
+** "He's dead, Jim"
+
+   The =kill= command can terminate a process in different ways.  Here are listed to two moist common signals to send to a process.  For a compete list of signals type =kill -l=.
+
+** SIGTERM
+
+   The =kill= command sends the SIGTERM 15 signal to the process asking it to terminate and clear up any temporary files.  This is the default for the command.
+
+   : kill pid_number
+
+** SIGKILL
+
+   You can also send the more powerful SIGKILL 9 signal which kills the process if it doesn't respond to SIGTERM.
+
+    : $ kill -9 pid_number
+
+Use SIGKILL only as a last resort since it can leave temporary files behind.
+
+* Changing the Priority
+
+  Any user can reduce the priority of a process that user started.  Only the root user can increase the priority of a process.
+
+** Starting a Process at a Lower Priority
+
+   Run the =cpuhog.sh= with the =nice= command.
+
+   : nice -n 19 ./cpuhog.sh
+
+** COMMENT renice
+
+** Zombies!
+
+   Download the zombie program which is a small C program to create zombie processes.  Make the program executable and run it from the command line.
+
+    : $ chmod +x zombies
+    : $ ./zomie
+
+    Use the techniques you used above to find and terminate the zombie process.
+
+* COMMENT What to Submit
+
+* COMMENT Answer
+
+* COMMENT XKCD
+
+* Resources
+
+- man init
+- man 7 signal
+- man ps
+- man top
+- man kill
+- [[kernel][The Linux Kernel]]
+- [[process][Overview of Linux Processes]]
+- [[http://dennisk.freeshell.org/other/cpuhog.sh][CPU Hog]] (Bash script)
+- [[zombie][Program to create zombie processes]] (C program)
+- [[http://hisham.hm/htop/][htop]]
+- [[white][White Zombie]] (1932)
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

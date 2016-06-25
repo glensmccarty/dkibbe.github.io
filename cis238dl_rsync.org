@@ -1,0 +1,120 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Backup with rsync
+#+DESCRIPTION: Using Rsync to backup files
+#+KEYWORDS: cis238dl rsync backup
+
+* COMMENT
+
+** TODO Add exclude by file type ISO.
+
+* Overview
+
+  Rsync is the basic tool for backing up files.  Many professional backup tools use it because of its very efficient algorithm.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Use =rsync= to backup files to another directory.
+
+  + Use =rsync= to back up files to a remote host.
+
+  + Create a custom exclude file.
+
+  + Explain how Rsync handles excludes.
+
+* Terms You Should Know
+
+  + Rsync :: A fast, versatile, remote (and local) file-copying tool
+
+  + -a :: Archive - Quick way to say use recursion and preserve almost everything.
+
+  + -n :: Do a dry run.
+
+  + -v :: Be verbose.
+
+  + -l :: Follow symbolic links.
+
+  + -P :: Show progress of individual files.
+
+  + --exclude :: Excluded by pattern.
+
+  + --exclude-from :: Use exclude file.
+
+* Preparation
+
+  You will run =rsync= from your workstation and will back up to a virtual machine.  If you can do the backups to a thumbdrive.
+
+* Backup to a Local Folder
+
+  The simplest way to back up is to back up to a local folder.
+
+  1. Create a new folder.
+
+     : mkdir -p ~/my_stuff/linux_distros/testdir/ ~/my_stuff/testdir
+
+  2. Create some files to back up.
+
+     : cd ~/my_stuff
+     : for data in 1 2 3 4 5 6; do touch mydata-$data; done.
+     : touch testdir/test{1,2,3}
+     : touch linux_distros/testdir/test{A,B,C}
+
+  3. Copy an ISO to =~/mystuff/linux_distros=.
+
+  4. Change to you home directory and run a test backup.
+
+     : rsync -avPn ~/my_stuff ~/my_backups
+
+  5. Rsync will create the =my_backups= directory if it doesn't exist.
+
+* COMMENT Follow Symbolic Links
+
+  By default =rsync= does not copy files with symbolic links.  (It may look like it does here but that's because it's on the same file system.)  Adding the *-l* option causes linked files to be copied.
+
+* Excluding Files From Backup
+
+  You want to exclude the =~/my_stuff/linux_distros= from your backup since you can always download the ISOs again.  You can do that with the *--exclude* option.  You can use a file with the directories, files and patterns you want to exclude with *--exclude-from*.
+
+  : rsync -avPn --exclude 'linux_distros' ~/my_stuff ~/my_backups
+
+* Excluding Directories
+
+  | Directory  | Results                     |
+  |------------+-----------------------------|
+  | testdir    | excl any testdir            |
+  | testdir/   | excl any testdir            |
+  | testdir/*  | incl testdir, excl contents |
+  | /testdir   | incl testdir & contents     |
+  | /testdir/* | incl testdir & contents     |
+  
+* Back Up to Remote Host
+
+  Rsync can back up to a remote host using SSH.  In this example I'm backing up to the /testbackup/ directory in freeshell.org.  The colon (*:*) after the Freeshell.org URL tells rsync that this is a remote host.
+
+  : rsync -avPe ssh --exclude 'linux_distros' my_stuff dennisk@freeshell.org:testbackup
+
+* COMMENT Troubleshoot the Assignment
+
+* COMMENT What to Submit
+
+  Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+1. PUT QUESTION HERE!
+2. PUT QUESTION HERE!
+
+* COMMENT XKCD
+
+* Resources
+
++ [[http://manpages.debian.net][Debian Man Pages Online]]
+
++ [[http://articles.slicehost.com/2007/10/10/rsync-exclude-files-and-folders][rsync - exclude files and folders]]
+
++ [[http://debian-handbook.info/browse/stable/sect.backup.html][The Debian Administrator's Handbook]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

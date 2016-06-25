@@ -1,0 +1,174 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Managing Services with systemd
+#+DESCRIPTION: 
+#+KEYWORDS: systemd
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: 
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+/After finishing this assignment the student will be able to:/
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* Overview
+
+systemd replaces the SysV init scripts for starting services on a Linux system.  While controversial it has become the default on nearly all major Linux distributions.  systemd has these features.
+
+- Based on C Groups
+- Parallel startup of services
+- Faster boot
+- On demand startup of services
+- systemd units
+- Socket-based activation
+
+* Assignment Objectives
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Describe the advantages of systemd
+- Use =systemctl= to start and stop a service.
+- Use =systemctl= to change the target.
+- Use =journalctl= to list log entries.
+
+* Terms You Should Know
+
+- =systemctl= :: Main command for working with systemd.
+- =/etc/systemd/system/= :: Systemd units created and managed by the system administrator.  Takes precedence over the directory with runtime units.
+- =/run/systemd/system/= :: Contains systemd units created at run time.  Takes precedence over the directory with installed service units.
+- =/usr/lib/systemd/system/= :: Contains systemd units shipped with the operating system.
+- systemd units :: Contain information about system services, listening sockets, saved system state snapshots, and other objects that are relevant to the init system.
+
+* Preparation
+
+Use the CentOS 7 minimal installation for this assignment.
+
+* Services
+
+** List all Services
+
+The =systemctl= command is used to list, start and stop services.
+
+: systemctl list-units --type service --all
+
+** List All Currently Loaded Services
+
+: systemctl list-units --type service
+
+** COMMENT Is That Service Enabled?
+
+Enabling a service makes it available on reboot.
+
+: systemctl list-unit-files --type service
+
+** Is Service Active?
+
+Is the service running?
+
+: systemctl is-active name.service
+
+** Check the Status of a Service
+
+: systemctl status dbus.service
+
+** Start, Stop and Reload a Service
+
+: systemctl start httpd.service
+: systemctl stop httpd.service
+: systemctl reload httpd.service
+
+** Enable a Service on Boot
+
+This command replaces the =chkconfig= command.
+
+: systemctl enable httpd.service
+
+** Disable a Service on Boot
+
+: systemctl disable httpd.service
+
+* Working with Targets
+
+systemd replaces runlevels with targets.
+
+** Default Target
+
+Target replace *runlevels*.  The default runlevel is multi-user.
+
+: systemctl get-default
+
+** Currently Loaded Targets
+
+: systemctl list-units --type target
+
+** Rescue Target
+
+: systemctl rescue
+
+Return to the multi-user target with this command.
+
+: systemctl default
+
+** Emergency Target
+
+: systemctl emergency
+
+** Stopping the System
+
+: systemctl poweroff
+
+** Reboot the System
+
+: systemctl reboot
+
+** COMMENT Controlling systemd Remotely
+
+systemd can be used to control a host remotely.
+
+: systemctl --host user_name@host_name command
+
+** Log Files
+
+This command reads the log files from a previous boot.
+
+: journalctl --boot=-1
+
+* COMMENT Creating the emacs.service File
+
+* COMMENT What to Submit
+
+* COMMENT Answer
+
+* COMMENT XKCD
+
+* Resources
+
+- [[https://access.redhat.com/videos/403833][Getting Ready for Systemd]]
+- [[https://www.youtube.com/watch?v%3DBS8cdl7dOUI][RHEL 7 and basic systemd commands]]
+- [[https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/chap-Managing_Services_with_systemd.html][Managing Services with systemd]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

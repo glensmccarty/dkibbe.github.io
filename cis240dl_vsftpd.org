@@ -1,0 +1,195 @@
+#+TITLE:     vsFTPd
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennisk@fastmail.net
+#+DATE:      2013-02-14 Thu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP: index.html  
+#+LINK_HOME: index.html
+
+* Overview
+
+  FTP or File Transfer Protocol is one oldest protocols used on the Net.  (See the resources section for even older file transfer methods like Gopher.)  FTP uses two ports; *port 21* for control commands and *port 20* for the data itself.  The *vftpd* daemon is a popular FTP server for Linux.  In this assignment you will set up a FTP server for anonymous FTP.
+
+  /After completing this assignment you will be able to:/
+
+  1. Install the *vsftpd* daemon using *yum*.
+
+  2. Configure vsFTPd for anonymous use.
+
+  3. Create virtual FTP accounts.
+
+  4. Deny and allow specific user access to FTP.
+
+  5. Demonstrate how SELinux works to protect system files.
+
+* Preparation
+
+  You will need two user accounts for this assignment.  Create an account for =tux= and =jstudent=.  Be sure to assign a simple password to each account so you can remember it.
+
+* How FTP works
+
+** Active vs. Passive mode
+
+*** Active Mode
+
+    1. Client imitates data transfer to local unprivileged port.
+
+    2. Server opens data connection from port 20 to client selected port.
+
+*** Passive Mode
+
+    1. Client asks server to listen on an unprivileged port of the server choice. Server responses with the high port it's listening on.
+
+* Installing the Very Secure FTP Daemon
+
+  vsFTP is in the CentOS official repos and can be installed with:
+
+  #+BEGIN_EXAMPLE
+  # yum install vsftpd
+  #+END_EXAMPLE
+
+  The service must be started before it can be used and configured to start on reboot if desired.
+
+  #+BEGIN_EXAMPLE
+  # service vsftpd start
+  # chkconfig vsftpd on
+  #+END_EXAMPLE
+
+* Configure =iptables=
+
+  The standard ftp ports need to be opened in the firewall.  Do this using =system-config-firewall-tui=.
+
+** TODO Add how to install =system-config-firewall-tui=.
+
+* Configuration
+
+  + =/usr/sbin/vsftpd= :: The Very Secure FTP Daemon
+
+  + =/etc/vsftpd/vsftpd.conf= :: Main configuration file
+
+  + =/etc/vsftpd/ftpusers= :: Lists users /not/ allowed to log into the FTP server
+
+  + =/etc/vsftpd/userlist= :: Either allow or deny users depending on /userlist_deny/ in vsftpd.conf
+
+  + =/var/ftp= :: FTP working directory
+
+  + =/var/ftp/pub= :: Files for anonymous FTP access.
+
+  /Note:/ when editing the =vsftpd.conf= file do not add spaces before or the equal sign (=).
+
+* COMMENT Add section on logging Activate logging of uploads/downloads.
+
+* Configure VSFTP For Anonymous Use
+
+   1. First backup =/etc/vsftpd/vsftpd.conf=.
+
+   2. Anonymous connections are allowed by default so you don't need to make any changes.
+
+   3. Find the sections with the login banner string.
+
+   4. Create a new FTP banner telling users that all activity on the server is logged.
+
+   5. Place a test file in =/var/ftp/pub/=.
+
+   6. From another workstation log in as /anonymous/ using your email address as the password and download the test file you created.  You can use the help command if you are new to ftp.
+
+* Setting a Default Root Directory For anonymous Logins.
+
+  The default login directory for /anonymous/ user is =/var/ftp/.  Next you'll change the default to =/var/ftp/pub/ by adding a new directive to the *vsftpd* configuration file.
+
+  1. Add =anon_root=/var/ftp= below the line that allows /anonymous/ logins.
+
+  2. Reload the configuration file.
+
+* Allow Local Users To Use FTP.
+
+  1. Uncomment /local_enable=YES/ to allow local user account to use FTP.
+
+  2. The change won't be effective until you run =service vsftpd= reload.  This will cause *vsftpd* to reload its configuration file.
+
+  3. On CentOS also need to configure SELinux.
+
+     1. Check SELinux for ftp status with =getsebool -a | grep ftp=.
+
+     2. Check if =ftp_home_dir –> on=.
+
+     3. If it is not enabled change =setseboll -P ftp_home_dir on=.
+
+     4. Local users are /chrooted/ to their home directory.
+
+* Disable anonymous Logins
+
+  Anonymous downloads are allowed by default. Next you'll disable anonymous logins.
+
+  1. Change the line in the vsftpd.conf allowing anonymous logins from YES to NO.
+
+  2. Reload the *vsftpd* daemon.
+
+  3. Try to login as anonymous.
+
+  4. The login should fail.
+
+* Root login
+
+  The =ftpusers= file lists accounts that are not permitted to use FTP.  The root user is included in this list.
+
+  1. Try logging in as the root user.
+
+  2. The login should fail and the attempt logged.
+
+* Removing the ability of a user to use ftp.
+
+  Even if local users are allowed to use ftp you can 'blacklist" a user by adding them to =ftpusers= or =??=.
+
+** TODO =ftpusers= or =??=.
+
+* SELinux (CentOS only)
+
+1. Using the vsftpd server use *ls -Z* to display the SELinux contexts for the anaconda-ks.cfg file in root's home directory.
+
+2. Next copy the anaconda-ks.cfg file to the /var/ftp/pub directory and display the SELinux contexts using *ls -lZ*.
+
+3. Use the *chmod* command to add read permissions for all.
+
+4. In Firefox open the anaconda-ks.cfg you copied to show that it is accessible by FTP.  Use the browser back button to return to the directory listing.
+
+5. From the command line use *chcon* with the *--reference=* option to change the SELinux context of the anaconda-ks.cfg file in /var/ftp/pub directory to match that of the /root/anaconda-ks.cfg file.
+
+6. Refresh the browser window and notice what happens.
+
+7. Use the *restorecon -R* command to restore the correct SELinux context to the /var/ftp/pub directory and its contents.
+
+8. Refresh the browser window and the file will be visible again..
+
+* What To Submit
+
+  Copy and paste these questions along with your answers into the text submission box.
+
+  1. What directory do anonymous users log in to by default?
+
+  2. What directive is used to set the default directory for anonymous logins to =/var/ftp/pub=?
+
+  3. Create an account for another user and add them to \/etc\vsftpd/user_list.  Are they able to log in to the vsftpd server?
+
+  4. Touch your test file.  What ftp command will retrieve the test file /only/ if it is newer than the previous download.
+
+  5. Try accessing your ftp server from Firefox.  How must you enter the URL?
+
+  6. Create a symbolic link in =/var/ftp/pub= to =/tmp=.  Login as anonymous and try to change to =/tmp= using the link. What happens?
+
+  7. Login to ftp as a local user not in and type *pwd*.  What is the output and why?
+
+* Resources
+
++ [[https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Enterprise_Linux/6-Beta/html/Security_Guide/index.html][RHEL Security Guide]]
+
++ [[http://www.hartnell.cc.ca.us/faculty/jlagier/internet/gopher.htm][Gopher, Archie, Veronica, Jughead]]
+
++ =man 5 vsftpd.conf=

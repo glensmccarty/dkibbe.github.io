@@ -1,0 +1,172 @@
+#+TITLE: Securing the SSH Daemon
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DESCRIPTION: Securing the OpenSSH Server
+#+KEYWORDS: SSH, cis238dl
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STYLE: <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+#+STYLE: <style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+#+STYLE: <style type="text/css"> code {color: blue; font-weight:bold;} </style>
+#+LINK_UP:   cis238dl.html
+#+LINK_HOME: index.html
+#+XSLT:
+
+* Assignment Objectives
+
+  SSH is widely used to administer remote hosts and as such is a prime target for exploitation attempts. In this assignment you will configure the SSH server for added security.
+
+  /After You have successfully completed this assignment you will be able to:/
+
+1. Identify the configuration file for the SSH server daemon.
+2. Configure SSH to use a non-standard port.
+3. Improve security be disabling remote root logins.
+4. Reduce the number failed login attempts allowed.
+5. Add a SSH banner.
+
+* Terms and Commands You Should Know
+
+- Daemon :: A background process that handles requests for services such as print spooling and is dormant when not required.
+- Well-Known Ports :: Ports 0-1023 are reserved for common services and can only be accessed by root.
+- /etc/ssh/sshd_conig :: Configuration file for the SSH server daemon.
+- MOTD :: Message Of The Day
+- Fingerprint :: "...a cryptographic hash function to a public key. Since fingerprints are shorter than the keys they refer to, they can be used to simplify certain key management tasks." Wikipedia
+- Netcat :: "...is a feature-rich network debugging and investigation tool" Wikipedia
+- Nmap :: Network port scanner
+- lsof :: List open files.
+- rpm -qc :: The *-qc* option is useful to discover what configuration files a package uses.
+- /etc/services :: Lists services and their default ports. This file is for information only and does no configuration itself.
+
+* Preparation
+
+1. Start a CentOS 7 and Ubuntu virtual machines by importing the centos7.ova and ubuntu.ova.
+2. Create a snapshot of the virtual machines so you can roll back any errors.
+3. Set networking to /Bridged Adapter? and refresh the MAC address.
+4. Run ~ip addr~ on both VMs to confirm that the IP addresses are on the *192.168.201.0/24* network.
+5. Use ~yum~ or ~apt-get~ as appropriate to install Nmap and possibly Zenmap.
+6. Create two ordinary accounts on the CentOS virtual machine.
+7. You can find the most up to date version of this assignment on [[http://dennisk.freeshell.org/][my web site]].
+
+* Port Scanning
+
+  Use ~nmap~ to do a simple scan of the SSH server and you should see that port 22 is open for SSH traffic.
+
+* Connect to the SSH Server
+
+  You should now be able to use ~ssh~ from the second virtual machine to connect to the SSH server as root.
+
+: ssh root@192.169.201.nnn
+
+  Replace nnn with the last octet of the actual IP address of the SSH server.  The first time you connect SSH will ask you to confirm the connection.  After you accept the connection you will be logged in as root.  Type ~exit~ to close the connection.
+
+* Securing the SSH Server Daemon
+
+** The SSH Server Configuration File
+
+   Use the ~rpm -qc openssh-server~ command to show that the SSH server configuration settings are in =/etc/ssh/sshd_config=.  Like most Linux configuration files it is plain text and, at least, on CentOS is well commented.  Notice that lines need to be uncommented for a change to be effective.  Also, You need to reload the configuration file for changes to become effective using the ~systemctl restart sshd.service~ command.
+
+** Disabling Root Logins
+
+   There is no reason for the root user to login directly.  Root should also have an ordinary user account for that purpose and that use either ~su~ or ~sudo~ to perform root functions.  Change this line in the =/etc/ssh/sshd_config= file from *PermitRootLogin* /yes/ to /no/.  If yopu are editing the file with ~vi~ use */Root* to search for the line.
+
+   Restart the service and attempt to log in again as root this time the attempt will fail.
+
+   You should be able to log in as the user you created.  For example:
+
+: $ ssh tux@192.168.201.123
+
+** Change Default Port
+
+   SSH by default listens on port 22.  You can change this by uncommenting the line port 22 and changing the port number to an unused port in the registered or ephemeral range.  See Wikipedia link to ports under Resources below.
+
+ Be sure to follow the instructions in the =sshd_configig= to set SELinux.  Use ~yum whatprovides~ to see what package contains ~semanage~.
+
+* Open the Port in the Firewall
+
+  Install *firewalld*.  Since port 2222 (our example) is not a standard service you need to use this command to open the port.
+
+: # firewall-cmd --add-port=2222/tcp
+
+  Use ~firewall-cmd --list-ports~ to see that the change was made.
+
+** Disable Port 22
+
+   Remove the default port.
+
+: # firewall-cmd --remove-service ssh
+
+Use ~firewall-cmd --list-services~ to see that the change was made.  Run a Nmap scan and there should be no "interesting" ports open.
+
+** Making Changes Permanent
+
+   None of these changes will survive a reboot unless the *--permanent* option is added to the above commands.
+
+* SELinux
+
+  Use the instructions in the configuration file to configure SELinux to recognise the new port.  Use ~yum provides~ if needed to find the correct package to install.
+
+* Mapping the New Port
+
+  Run a Nmap scan on a port range that includes the port you opened for SSH.
+
+: $ nmap -p 2200-2250 192.168.201.nnn
+T
+The Netcat command can useful as well.  It has different package names on different Linux distros so use ~yum search~ or ~apt-cache search~ to find it.
+
+* Protocol
+
+  Assure that the more secure *Protocol 2* is being used. This is the default.
+
+* Reducing the Number of Login Tries
+
+  The default is *6* failed attempt but you can reduce this to a smaller number by changing *MaxAuthTries*.  Edit *MaxAuthTries* to allow only *3* attempts.
+
+* Disabling Password Logins (Optional)
+
+  If you created SSH keys you can disable password logins entirely.  Uncomment and change *PasswordAuthentication* to no to disable password logins.  /Warning:/ If you lose your SSH keys you will not be able to login.
+
+* Adding an MOTD SSH Banner
+
+  Adding a welcome banner that warns that all activity on the server will be logged is a good idea.  Creating a banner text file named =issue.net= and add a line to the =sshd_config= file pointing to the banner.
+
+First create the banner using ~vi~.  Leave a blank line or two below the banner text so the banner appears above the login prompt.  Next add this line to the =/etc/ssh/sshd_config= file. 
+
+: Banner /etc/issue.net
+
+Now reload the configuration file for the change to take effect.
+
+* SSH to the New Port
+
+  Since port 22 is no longer used the ~ssh~ command must be modified to specify the port number.  For example:
+
+: $ ssh -p 2222 tux@192.168.201.123
+
+* COMMENT On Your Own
+
+* COMMENT Common Mistakes
+
+* What to Submit
+  Submit a screenshot of the Netcat command showing that SSH on port 2222 (or another non-standard port) is listening.
+
+* Resource
+
+- [[ports][List OF TCP and UDP port numbers]]
+- [[secure_sshd:][Securing OpenSSH]]
+- [[handbook:][The Debian Administrator's Handbook]]
+- [[fingerprint:][Public key fingerprint]]
+- [[netcat:][Netcat]]
+- [[pgp][How PGP Works]]
+- [[sdf][Permanent link to assignment]]
+
+* Creative Commons License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+#+END_HTML
+-----

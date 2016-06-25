@@ -1,0 +1,214 @@
+#+TITLE: Using su and sudo to Get Work Done as Root
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STYLE: <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+#+STYLE: <style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+#+STYLE: <style type="text/css"> code {color: blue; font-weight:bold;} </style>
+#+LINK_UP:   
+#+LINK_HOME: index.html
+#+LINK: fixme dennisk.freeshell.org/img/fixme.png
+#+XSLT:
+
+* Assignment Objectives
+
+  Using ~su~ and ~sudo~ to Get Work Done as Root
+
+Both ~su~ and ~sudo~ can be used to work as the root user.  Some distributions like Ubuntu disable the root account by default and all work is done using the ~sudo~ command.  Even on distributions like Red Hat Enterprise Linux and CentOS ~sudo~ can be used to delegate root privileges to ordinary users.  Sudo is similar to *run as* on Windows.
+
+/After You have successfully completed this assignment you will be able to:/
+
+1. Use the ~su~ command to log in as the root user.
+2. Create a user and add that user to a group
+3. Explain the value of the *-l* (dash el) option to ~su~.
+4. List the advantages of using sudo over ~su~.
+5. Modify the =/etc/sudoers= file using ~visudo~.
+6. Give a user Sudo permissions by adding a file to the =/etc/sudoers.d= directory.
+7. Describe where Sudo “incidents” are reported.
+
+* Terms and Commands You Should Know
+
+[[fixme]]
+
+* Preparation [EDIT ME!]
+
+1. Do this assignment on the CentOS 7 virtual machine.  In the commands used below the *#* character is the root user prompt and *$* is the prompt for ordinary users.
+2. Take a Snapshot of the System.  See the instructions in the VirtualBox Users Manual.
+1. Start a CentOS 7 virtual machine by importing the centos7.ova.
+2. Create a snapshot of the virtual machine so you can roll back any errors.
+3. You can find the most up to date version of this assignment on [[http://dennisk.freeshell.org/][my web site]].
+
+** Install Mutt
+
+Mutt is a command line mail client.  Install it using Yum.  You can use Mutt to read email messages that Sudo sends to root.
+
+: # yum install mutt
+
+** Virtual Terminals
+
+In this assignment you will be working with two virtual terminals.  If you are working from a LiveCD you access virtual terminals with the key combination *Crtl+Alt+Fn1* through *Ctrl+Alt+Fn6* and return to the graphical display with *Ctrl+Alt+Fn7*.  Some distributions put the GUI on *Ctrl+Alt+Fn1* instead of *Ctrl+Alt+Fn7*.  The virtual terminals live outside of the GUI and are useful for troubleshooting when some run away program has turned the graphical display to molasses.
+
+In VirtualBox you will use the /host/ key plus a function key to access virtual terminals.  The default setting for the host key is the right control key.
+
+** Create two new users trillian and jstudent.
+
+: # useradd trillian
+: # passwd trillian
+
+And jstudent:
+
+: # useradd jstudent
+: # passwd jstudent
+
+* The su Command
+
+The ~su~ command lets you become the root user or another user if you have the password for that account.  Using the *-l* (dash el) option gives the full environment including the correct PATH environmental variable so commands work correctly.  Always use this option or you may have problems doing some things as root.
+
+** Without the -l option
+
+: # su trillian
+
+Run ~ls~ to list files in the current directory.  The command will fail.  Run ~pwd~ to show you are still in root's home directory, even though the ~whoami~ command shows you are Trillian the environment is not set correctly.
+
+Type ~exit~ to return to the root user.
+
+** With -l
+
+Login as jstudent
+
+: # su -l jstudent
+
+The ~pwd~ command shows you are in jstudents's home directory.  Try the ~ls~ command and you will see /welcome.txt/ file.
+
+Type ~exit~ to return to the root user.
+
+* The sudo Command
+
+A disadvantage to using ~su~ to allow users to run commands as root is that you must give them the root password and you can't easily limit what they can do.  Also, you don't know who (as root) actually ran the command.  The ~sudo~ command lets you give users in the sudoers file specific root privileges without the need to give them the root password.  Their actions are logged as well so you have a record of what each user did.
+
+The =/etc/sudoers= file is edited with the special program ~visudo~.  The ~visudo~ command creates a temporary copy of the sudoers file for editing and verifies that any changes have the correct syntax before saving changes to =/etc/sudoers=.  As you may have guessed by the name ~visudo~ uses the ~vi~ text editor or the default editor.
+
+* Add a User to the wheel Group
+
+Add Trillian as a member of the /wheel/ group.  Make sure you type a capital *G*.
+
+: # usermod -aG wheel trillian
+
+Use the ~groups~ or ~id~ command to show that Trillian is now a member of the wheel group.
+
+: # id trillian
+: trillian wheel
+
+* Enabling the wheel Group in the sudoers File
+
+/Note:/ In CentOS 7 the wheel group is already uncommented.  You do not need to do this step.
+
+Use ~visudo~ to edit =/etc/sudoers=. ~visudo~ will automatically open the correct file and lock it so no other user can edit it.
+
+Uncomment the line that lets all members of the wheel group run commands without using a password.  Use the search function in ~vi~ to easily find the correct line to edit.
+
+* Using sudo
+
+Log in as Trillian on another virtual terminal (host+Fn2) and run a command that requires root privileges.
+
+: $ shutdown -r 5
+
+The command will fail.
+
+Now try the command with ~sudo~.
+
+: $ sudo shutdown -r 5 Shutting down to replace a faulty component.
+
+You’ll be asked for Trillian's password and the command will work.  Switch to the root terminal and look up in the man page how to stop a running ~shutdown~ command.
+
+* Members Not in the sudoers File
+
+Log in as =jstudent= and attempt to run the ~shutdown~  command.
+
+: # su -l jstudent 
+: $ sudo shutdown -r 5
+
+The command will fail since jstudent is not in the sudoers file.  Type exit to return to the root terminal and notice that you have mail reporting the event.
+
+Use Mutt to read the email. Use the SnipIt tool in Windows to take a screenshot of the email as your assignment submission.
+
+* Logging
+
+All activity of sudoers is logged in =/var/log/secure= on CentOS or =/var/log/audit/audit.log= on Debian.  View the end of the log with the ~tail~ command and you’ll see the commands run by Trillian was logged.
+
+Sudo logs the following information:
+
+- The command executed.
+- Who ran the command.
+- Which host the command ran on.
+- When the command was executed.
+- The directory from which the command was executed.
+
+* Removing Sudo Privileges
+
+** Remove Trillian From the Wheel Group
+
+Log out as Trillian and log in as root.  You use the ~vipw~ command to remove Trillian from the wheel group.  When you added Trillian to the wheel group the *-a* option appended the wheel group to Trillian's supplementary groups.  Use ~vipw -g~ to edit the wheel group removing Trillian.  Be sure to remove only Trillian's name.
+
+: # vipw -g
+: wheel:x:110:trillian
+
+Go back to Trillian's login screen and try the ~sudo~ command again.  The command will fail since members of the wheel group are no longer permitted sudo privileges.  This "Sudo Incident" will be logged as well.  In addition, root will receive an email reporting the "incident." Use Mutt to see the email.
+
+* The /etc/sudoers.d/ Directory
+
+If the sudoers file includes an *includedir* directive you can add files to the =/etc/sudoers.d= directory rather than editing the sudoers file directly.  This is preferred since it keeps the original file closer to its original state. You should use visudo -f to edit the file so the syntax will be checked when you save the file.
+
+Here is an example:
+
+This entry in =/etc/sudoers.d/01_jstudent= the user jstudent will be able to run the shutdown command:
+
+: jstudent centos77=/sbin/shutdown -r 5
+
+Test the Command
+
+As jstudent run the wrong command
+
+: $ sudo shutdown -h now
+
+It will fail since jstudent can only run the exact command in the sudoers file. Run the correct command and it will work.
+
+* COMMENT On Your Own
+
+* COMMENT Common Mistakes
+
+- Make sure that user trillian is a member of the wheel group.
+- If the groups command doesn’t show the wheel group. Log Trillian out than back in.
+- Sudoers use their own password and not the root password.
+- If Mutt complains that /var/spool/mail/root does not exist create it using the touch command.
+
+* What to Submit
+
+Submit a screenshot of an email from sudo showing an incident.
+
+* Resources
+
+- man sudoers
+- man su
+- man visudo
+- [[using_sudo:][Using Sudo]]
+- [[sample_sudoers:][Sample /etc/sudoers]]
+- [[red_hat_sudo:][Gaining Privileges]] (Red Hat docs)
+
+* Creative Commons License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+#+END_HTML
+-----
+  
+

@@ -1,0 +1,121 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Using the dd command to create a bootable USB Thumbdrive    
+#+DATE:      
+#+DESCRIPTION: EDIT ME!
+#+KEYWORDS: EDIT!
+
+* Assignment Objectives
+
+  This assignment is based on Appendix A - Creating a Linux Installer on Flash/USB Device
+  
+  When you have successfully completed this assignment you will be able to:
+
+  + Verify the integrity of a downloaded ISO using =sha1sum=.
+
+  + Use =dmesg= to verify the exact assigned device for the USB device.
+
+  + Use =dd= from the command line to create a bootable USB thumbdrive.
+
+* Terms and Concepts
+
+  + =dd= :: Used to copy data at a low level.
+
+  + =df= :: Report file system disk space usage
+
+  + =findfs= :: Find a filesystem by label or UUID.
+
+  + /dev/sdx :: Hard drives in Linux are labeled /dev/sda. /dev/sdb, /dev/sdc, etc.
+
+: Example: /dev/sdb1 (First partition on second drive)
+
+  + Unetbootin :: Program to install Linux/BSD distributions to a partition or USB drive.
+
+  + Fedora liveusb-creator ::  The liveusb-creator is a cross-platform tool for easily installing live operating systems on to USB flash drives.
+
+  + Linux LiveUSB Creator :: LinuxLive USB Creator is a free and open-source software for Windows.
+
+  + =wget= :: Utility to download files from the web.
+
+  + =curl= :: Similar to wget
+
+  + =dmesg= :: Print kernel messages
+
+  + =sha1sum= :: Compute and check SHA1 message digest
+
+  + Message Digest :: A cryptographic hash function that makes it easy to determine if a file has changed. 
+
+  + =pinfo= :: Easy to use curses based lynx-style info browser
+
+* Preparation
+
+  *WARNING!:* The =dd= command is merciless it will overwrite all data on the device you specify.  No questions asked.  Disconnect all external devices and use =dmesg= to make certain you know what device you are writing to. 
+
+* Create a bootable USB thumbdrive
+
+** Download CentOS LiveCD ISO
+
+   : jstudent@localhost:~/ $ wget -c http://mirrors.easynews.com//linux/centos/6.4/isos/x86_64/CentOS-6.4-x86_64-minimal.iso 
+
+** Verify the download using =sha1sum=.
+
+   :  jstudent@localhost:~/Dowloads$ sha1sum -c sha1sum.txt
+
+** Identify the device to write to using =dmesg= and/or =findfs=.
+
+#+BEGIN_SRC bash
+[ 4761.041645] scsi 2:0:0:0: Direct-Access     SanDisk  Cruzer Glide     1.26 PQ: 0 ANSI: 5
+[ 4761.044516] sd 2:0:0:0: Attached scsi generic sg1 type 0
+[ 4761.045098] sd 2:0:0:0: [sdb] 7821312 512-byte logical blocks: (4.00 GB/3.72 GiB)
+[ 4761.049043] sd 2:0:0:0: [sdb] Write Protect is off
+[ 4761.049054] sd 2:0:0:0: [sdb] Mode Sense: 43 00 00 00
+[ 4761.049813] sd 2:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[ 4761.066333]  sdb: sdb1
+[ 4761.069306] sd 2:0:0:0: [sdb] Attached SCSI removable disk
+#+END_SRC
+
+*** Disable in BIOS
+
+    This is always the safest.  At the least disconnect all external drives.
+
+*** How hard drives are labeled in Linux
+
+: Ex: /dev/sda2 (Second partition on first drive)
+
+*** Write the data to the drive
+
+: root@localhost: ~/Downloads# dd if=CentOS.iso of=/dev/sdb bs=4M
+
+* What to Submit
+
+  Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+  1. Name an advantage of Ddrescue over dd.
+
+  2. =/dev/sdc2= identifies what device?
+
+  3. =dmeg= is useful because it prints out messages from the _________.
+
+  4. Why is =dd= is useful for copying a Windows partition?
+
+  5. Why do you need to be careful using =dd=?
+
+* Resources
+
++ [[http://www.linuxliveusb.com/][LinuxLive USB Creator (for Windows)]]
+
++ [[http://www.sysresccd.org/][SystemRescueCd]]
+
++ [[http://en.wikipedia.org/wiki/Dd_(Unix)][dd (Wikipedia)]]
+
++ [[http://www.thegeekstuff.com/2010/10/dd-command-examples/][6 Examples to Backup Linux Using dd Command]]
+
++ =pinfo coreutils 'sha1sum invocation'=
+
++ [[http://en.wikipedia.org/wiki/Cryptographic_hash_function][Cryptographic hash function]]
+
++ [[http://www.gnu.org/software/ddrescue/ddrescue.html][Ddrescue - Data recovery tool]]
+
+-----
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

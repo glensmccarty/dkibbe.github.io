@@ -1,0 +1,195 @@
+#+title: Managing Users & Groups
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DESCRIPTION: Creating users
+#+KEYWORDS: cis126dl, users
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STYLE: <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+#+STYLE: <style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+#+STYLE: <style type="text/css"> code {color: blue; font-weight:bold;} </style>
+#+LINK_UP:   cis126dl.html
+#+LINK_HOME: index.html
+#+LINK: fixme ./img/fixme.png 
+#+XSLT:
+
+* Assignment Objectives
+
+Managing users and groups is an important administrative skill.  In this assignment you’ll add two new user accounts from the command line on a Red Hat-based virtual machine.
+
+/After successfully completing this assignment you will be able to:/
+
+1. Create new user accounts from the command line.
+2. Add a user to supplementary groups with the usermod command.
+3. Create content in the =/etc/skel/= directory that will be copied over to the user's home directory.
+4. Describe the difference between a /password/ and a /passphrase/.
+5. Modify system-wide login defaults.
+
+* Terms and Commands You Should Know
+
+- /etc/passwd :: A text file that describes user login accounts for the system.
+- /etc/shadow :: A text file which contains the password information for the system's accounts and optional aging information.
+- /etc/group :: A text file that defines the groups on the system.
+- /etc/gshadow :: A text file which contains the password information for groups.
+- /etc/login.defs :: A text file that defines the defaults for accounts.
+- /etc/adduser.conf :: Configuration file for the adduser command.
+- /etc/skel :: Files placed in this directory will be copied to new users home directory.
+- chage :: Change user password expiry information.
+- chfn :: Change real user name and information.
+- finger :: Read information from a users profile (real name, phone, etc.) if they have one.
+- GECOS :: A field in the =/etc/passwd= file containing the real name and contact - information for a user.
+- groupadd :: Create a new group.
+- groupdel :: Remove a group from the system.
+- groupmod :: Modify a group account.
+- id :: Print user and group information.
+- passwd :: Change a user's password.
+- useradd :: Add a new user to the system (Red Hat). The ~passwd~ command must also be run.
+- adduser :: Add a new user to the system (Debian).
+- userdel :: Remove a user.
+- usermod :: Modify a user account.
+- vipw :: Safely edit the /etc/passwd, /etc/shadow, and /etc/group files.
+- who :: Show who is logged into the system.
+- id :: Print real and effective user and group IDs.
+- su :: Switch to another user (always use with the - dash option.
+
+* Preparations
+
+1. Start a CentOS 7 virtual machine by importing the centos7.ova.
+2. Create a snapshot of the virtual machine so you can roll back any errors.
+3. You can find the most up to date version of this assignment on [[http://dennisk.freeshell.org/cis126dl_users.html][my web site]].
+
+* Adding a File to /etc/skel
+
+The =/etc/skel= directory as defined in =/etc/defaults/useradd= is the place to put any files or directories you want to be copied to a user's home directory when a new user is created.  For this assignment add a /welcome.txt/ file (it can be an empty file) to the =/etc/skel= directory so it will copied to the home directories of the new accounts you create.
+
+#+BEGIN_EXAMPLE
+# touch /etc/skel/welcome.txt
+#+END_EXAMPLE
+
+* Changing the Maximum Days a Password May Be Used
+
+The =/etc/login.defs= file sets defaults for creating user accounts such as when passwords expire.  Find the line that reads *PASSMAXDAYS 99999* and change it to *PASSMAXDAYS 90* using the ~vi~ or ~vim~ text editor.  Be sure you create a backup before you edit the file.
+
+#+BEGIN_EXAMPLE
+# cd
+# cp /etc/login.defs login.defs.bak
+# vi /etc/login.defs
+#+END_EXAMPLE
+
+* Creating New Users
+
+Use the ~useradd~ command to create two new accounts.
+
+** First Account
+
+Create a new account with the login of *jstudent* with the password *Pa$$w0rd*.  Use the *-c* option to add *Jill Student* to the GECOS field.
+
+#+BEGIN_EXAMPLE
+# useradd -c "Jill Student" jstudent
+#+END_EXAMPLE
+
+Run the ~grep~ command and note that the account is locked indicated by the *!!* in the second field since a password has not been set yet.
+
+#+BEGIN_EXAMPLE
+# grep jstudent /etc/shadow
+#+END_EXAMPLE
+
+Next set a password for the account.  The password you use doesn't not meet the security guides set but as root you can over-ride them.  An ordinary user would not be able to set this password.
+
+#+BEGIN_EXAMPLE
+# passwd jstudent
+#+END_EXAMPLE
+
+** Second Account
+
+Create a second new account with the login *trillian* and the passphrase *Heart of Gold*.  A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.
+
+#+BEGIN_EXAMPLE
+# useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
+# passwd trillian
+#+END_EXAMPLE
+
+** Showing the Accounts
+
+Most account information is kept in the =/etc/passwd= file.  The ~tail~ command will show the two new account entries at the end of the file.
+
+#+BEGIN_EXAMPLE
+# tail /etc/passwd
+#+END_EXAMPLE
+
+* Add a Supplemental Group
+
+Run ~id trillian~ to show that Trillian is the member of only her own private group.
+
+Next add Trillian to the /wheel/ supplementary group.  On most Linux distributions the /wheel/ group allows a user to run administrative commands using ~sudo~.Be sure to use the capital *-G* option.
+
+#+BEGIN_EXAMPLE
+# usermod -aG wheel trillian
+#+END_EXAMPLE
+
+After adding Trillian to the wheel group her login name will show in the =/etc/group= file twice.
+
+#+BEGIN_EXAMPLE
+# grep trillian /etc/group
+wheel:x:4:trillain
+trillian:x:1001:
+#+END_EXAMPLE
+
+* Modify Account Expiration
+
+Change the account expiration to *120 days* from today.
+
+#+BEGIN_EXAMPLE
+# chage -l trillian
+# sudo chage -E YYYY-MM-DD trillian
+# chage -l trillian
+#+END_EXAMPLE
+
+* On Your Own
+
+Debian-based distributions like Ubuntu use the ~adduser~ command to create accounts and set the password in one step.  Create the same accounts that you did above on Ubuntu or another Debian-based distribution.
+
+* COMMENT XKCD
+
+#+CAPTION: A black cat stalking a spider
+#+ATTR_HTML: :alt XKCD cartoon
+[[./img/]]authorization.png
+
+* What to Submit
+
+Submit a single, cropped screenshot of the following:
+
+- The output of ~id jstudent~
+- The output of ~id trillian~
+- The output of ~chage -l trillian~
+
+Your screenshot must show that:
+
+1. Both accounts were created.
+2. That Trillian belongs to the wheel group in addition to her own private group.
+3. That password must to be renewed in 90 days and that Triliian's account expires in approx. 120 days.
+
+* Resources
+
+- man 5 login.defs
+- man adduser
+- man usermod
+- man userdel
+- man 5 passwd
+- man passwd
+- man chage
+- man 5 login.defs
+- [[https://en.wikipedia.org/wiki/Wheel_%2528Unix_term%2529][Wheel (Unix term)]]
+
+* Creative Commons License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+#+END_HTML
+-----

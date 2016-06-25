@@ -1,0 +1,106 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  EDIT ME!   
+#+DATE:      
+#+DESCRIPTION: EDIT ME!
+#+KEYWORDS: EDIT!
+
+* Assignment Objectives
+
+When you have successfully completed this assignment you will be able to:
+
++ Find and install a software package using =yum=.
++ Find and install a software package using =apt=.
++ Remove a software package using =yum=.
++ Remove a software package using =apt=.
++ Find the version of an installed package using =rpm=.
++ Find the version of an installed package using =dpkg=.
+
+* Terms and Concepts
+
++ Package Management System :: define term
+
++ APT :: Advanced Package Tool
+
++ Yum :: Yellow Dog Updater Modified
+
++ =dpkg= :: Package manager for Debian
+
++ =rpm= :: Red Hat Package Manager
+
++ =aptitude= :: High-level interface to the package manager
+
++ Synaptic :: Graphical management of software packages
+
++ =tasksel= :: A user interface for installing tasks
+
++ Repo :: Software repository
+
+* Preparation
+
+#+CAPTION: 
+#+LABEL:   fig:SED-HR4049
+[[http://imgs.xkcd.com/comics/im_an_idiot.png]]
+
+
+* Install a Package From a Software Repository
+
+  You've heard that there is a user-friendly command line file manager for CentOS but you don't know the name of the package.  The first step is to use =yum search= to search for the package.
+
+#+BEGIN_SOURCE bash
+$ yum search file manager
+========== N/S Matched: file, manager ==========
+mc.x86_64 : User-friendly text console file manager and visual shell
+#+END_SOURCE
+
+Now that you have the package name you can find more information using =yum info mc=.
+
+#+BEGIN_SOURCE bash
+$ yum info mc
+#+END_SOURCE
+
+The output of that command will give a lot of information about the package including a short description, version number and file size, which repo the package is in, license informantion and where to find more about the package.
+
+#+BEGIN_SOURCE bash
+$ yum install mc
+#+END_SOURCE
+
+Yum will install the package, a manual page and any dependencies needed.  Whenever there is a security fix or update for the MC package the package management system will take care of it automatically.
+
+* RPM
+
+While the =rpm= command can install packages on a Red Hat-based system it does not handle dependencies so =yum= is prefered for installations.
+
+For a complete list of installed pacakges:
+
+#+BEGIN_SOURCE bash
+$ rpm -qa | less
+#+END_SOURCE
+
+To find the version number of a single package:
+
+#+BEGIN_SOURCE bash
+$ rpm -q mc
+#+END_SOURCE
+
+To list the files belonging to a package:
+
+#+BEGIN_SOURCE bash
+$ rpm -ql mc
+#+END_SOURCE
+
+* What to Submit
+
+Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+1. QUESTION HERE!
+
+* Resources
+
++ [[http://debian-handbook.info][The Debian Administrator's Handbook]]
+
++ [[http://www.ibm.com/developerworks/linux/library/l-lpic1-v3-102-5/][RPM and YUM package management]]
+
+-----
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

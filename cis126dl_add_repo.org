@@ -1,0 +1,106 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Adding a 3rd Party Repository to CentOS
+#+DATE:   <2013-04-09 Tue>
+#+DESCRIPTION: How to add addition software repositories to CentOS
+#+KEYWORDS: CentOS, Repo, Repository, Protect Base
+
+* Assignment Objectives
+
+  In this assignment you'll add a third-part software repository to CentOS.
+
+  When you have successfully completed this assignment you will be able to:
+
+  + Add a new software source from a list of third-party repositories on the CentOS Wiki.
+  + Use =yum search= to find a software package.
+  + Use =yum install= to install a software package.
+  + Use =rpm= to find the version of an installed package.
+  + Use the Protect Base plugin to protect system files.
+
+* Terms and Concepts
+
+  + yum :: A interactive, rpm based, package manager.
+  + rpm :: A powerful package manager, which can be used to build, install, query, verify, update, and erase individual software packages.
+  + =/etc/yum.repo.d/= ::  Directory that holds repository information.
+  + yum-plugin-priorities :: Set the priority for different repos.
+  + yum-plugin-protectbase :: Set CentOS-Base protection.  See precaution on the CentOS Wiki page.
+
+* Preparation
+
+  You should do this assignment on a CentOS virtual machine.
+
+  If you are used to having =htop= on your system you will be disappointed that CentOS does not include the package.
+
+#+BEGIN_EXAMPLE
+# yum install htop
+No package htop available.
+#+END_EXAMPLE
+
+  There are several methods to install new software packages in CentOS, but your first stop when looking for software should always be the official repositories.  The software in these repositories has been tested to work with CentOS, should never cause any harm to the system, will be updated automatically if there is a security issue and will be easy to uninstall if needed.  But what do you do if the software you want isn't in an official repo?  Rather than go out to the Web searching see if what you want is available from a respected third-party repository.
+
+  Linux software repositories are the original App Stores.  Linux has had them for over a decade.  Since each Linux distro is put together slightly differently there are official software repositories for each one.  Repositories make installing software easy.  Usually one or two mouse clicks and the program is installed along with any dependencies and the package management system will keep the program up to date when a new version or security fixes come out.
+
+  Not all Linux distros have all software officially supported, especially a distro like Red Hat or CentOS which has a more limited focus.  Unofficial repos can vary in quality but there are several well respected ones for CentOS that should not cause any problems.  The CentOS wiki lists 3rd-party repos that are available for CentOS. Be sure the read the warning on that page about the dangers of using a 3rd-party repository!
+
+* Installing Extra Packages for Enterprise Linux
+
+  The CentOS Wiki lists several 3rd party software repositories under the Package Management, CentOS Repositories section.  In this assignment you'll install the EPEL (Extra Packages for Enterprise Linux) repository.  This repository adds up to date packages from Fedora.
+
+Installing software from a EPEL is a two step process.  First, you install a small RPM package.  This places a file in =/etc/yum.repos.d/= giving the package management system information about the new repo.  The next time you run Add/Remove Programs or =yum update= that information will be read by the package management system and you will have access to all the new packages.  Then you can search for and install packages as you do normally.
+
+Find the link to the EPEL RPM package on the CentOS Wiki and use the =rpm= command to download and install the file inside the virtual machine.  The /noarch/ in the package name means that it will work for either a 32-bit (i386) or a 64-bit (x86_64) system.
+
+#+BEGIN_EXAMPLE
+# rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+Retrieving http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm                                                                             
+Preparing...                ##################################################  
+epel-release 
+#+END_EXAMPLE
+
+Now search for =htop= and you'll find it in the EPEL repository.  But before installing the package set up ProtectBase in the next section.
+
+#+BEGIN_EXAMPLE
+# yum search htop
+Loaded plugins: fastestmirror, presto
+Loading mirror speeds from cached hostfile
+ * base: mirror.veracruz.co
+ * epel: epel.mirror.freedomvoice.com
+ * extras: mirror.rackspace.com
+ * updates: mirrors.usc.edu
+============================== N/S Matched: htop ===============================
+htop.x86_64 : Interactive process viewer
+#+END_EXAMPLE
+
+* Protecting the CentOS Base install
+
+  When adding an extra repository it is important that none of the newer packages upgrade packages in the base install.  This can result in a broken system or at least one that is harder to maintain.  Installing =yum-plugin-protectbase= will assure that Base updates always have priority.
+
+: yum install yum-plugin-protectbase
+
+The instruction on the CentOS Wiki will tell you to add protect=1 or protect=0 as needed.
+
+* Install =htop=
+
+  Now you can install the =htop= package.
+
+: # yum install htop
+
+* What to Submit
+
+Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+1. What is the danger of using a 3rd-party repo without setting up ProtectBase or Priorities first?
+2. Why is it necessary to use a program like ProtectBase?
+3. At your new job most of your production machines run Red Hat Enterprise Linux (RHEL) but the development machine to test new installs runs CentOS with CentOSPlus.  Why might you run into problems using this machine to test installs. 
+4. If you install a 3rd-party repo can you expect to receive support from the CentOS team.
+
+* Resources
+
++ [[http://wiki.centos.org/AdditionalResources/Repositories][Third-party Repos for CentOS]]
++ [[https://access.redhat.com/security/updates/backporting/%3Fcid%3D3630970][Backporting security fixes]]
++ [[http://wiki.centos.org/PackageManagement/SourceInstalls][Software Installation from Source]] (Why you don't want to do it.)
++ [[http://wiki.centos.org/PackageManagement/Yum/ProtectBase][Protect Base]]
+
+-----
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

@@ -1,0 +1,127 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+TITLE:     Rescue a Non-Booting System from the Grub2 Command Prompt
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DESCRIPTION: Using the GRUB2 command prompt to rescue a non-booting system.
+#+KEYWORDS: grub bootloader
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP: sitemap.html  
+#+LINK_HOME: index.html
+#+XSLT:
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+None
+** Learning Objectives
+
+/After finishing this assignment the student will be able to:/
+
+** Lesson Material
+- CentOS 7 ISO
+- VirtualBox
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* Overview
+
+GRUB2 is the bootloader responsible for finding the Linux kernel and booting the operating system.  GRUB2 has a powerful command line that can be used to rescue a non-booting system.  In this assignment you will use GRUB2 commands to boot a CentOS 7 installation.
+
+* Assignment Objectives
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Install CentOS 7.
+- Identify the GRUB2 configuration files.
+- Access the GRUB2 prompt.
+- Use GRUB commands to find and boot the Linux kernel.
+
+* Terms You Should Know
+
+- =/etc/default/grub= Editable GRUB2 configuration file.
+- =/etc/grub.d/= :: Directory for customization files.
+- =/boot/grub/grub.cfg= :: Main GRUB2 configuration file.  Do not edit directly.
+- Initial Ram File System :: Provides an initial filesystem until the root partition can be accessed.
+- GRUB2 :: The GRand Unified Bootloader 
+
+* Preparation
+
+  For this assignment you need to install CentOS 7 Minimal as a virtual machine.
+
+* The GRUB2 Prompt
+
+  1. After installation reboot the virtual machine.
+  2. As soon as the GRUB menu appears press *c* to access the GRUB2 prompt.
+  3. Press Tab to list available commands.
+  4. GRUB2 supports tab completion for commands and file names.
+
+** Loading Modules
+
+CentOS uses Logical Volume Management (LVM) and the XFS filesystem.  Before GRUB2 can access files on these filesystems kernel modules need to be loaded.
+
+: grub> set pager=1
+: grub> insmod lvm xfs
+
+** Listing Partitions and LVM Volumes 
+
+Use the =ls= command to list the devices on the virtual machine.  Make a note of the LVM logical volume names as they may be different on your virtual machine.
+
+: grub> ls
+: (hd0) (hd0,msdos2) (hd0,msdos1) (lvm/centos-root) (lvm/centos-swap)
+
+=(hd0,msdos1)= and =(hd0,msdos2)= refer to =/dev/sda1= and =/dev/sda2=.  The other entries refer to LVM Logical Volumes.  GRUB2 uses the drive names provided by the BIOS.
+
+** Listing Files on the First Partition
+
+Use =ls= to list the files on the =/boot= partition.
+
+: grub> ls (hd0,1)/
+
+** List Files on the Root Partition
+
+Root is mounted as a LVM logical volume.  Use this command to list the files.
+
+: grub> ls (lvm/centos-root)/
+
+** Rescue the System
+
+Now that you know where to find the Linux kernel and the root partition you can run commands to boot the system.  Tab completion makes it easy to find the correct kernel and matching initial ram filesystem.  /Use tab completion to find a matching kernel and initramfs./
+
+#+BEGIN_EXAMPLE
+
+grub> set root=(hd0,1)
+grub> linux /vmlinuz-<version>-<arch> root=/dev/mapper/centos-root
+grub> initrd /initramfs-<version>-<arch>.img
+grub> boot
+
+#+END_EXAMPLE
+
+* What to Submit
+
+Submit a screenshot of the GRUB2 commands you used to boot the system.
+
+* COMMENT Answer
+
+* COMMENT XKCD
+
+* Resources
+
+- [[https://en.wikipedia.org/wiki/Initramfs][initramfs]]
+- [[https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/ch-Working_with_the_GRUB_2_Boot_Loader.html][Working with the GRUB2 Boot Loader]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

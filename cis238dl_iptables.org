@@ -1,0 +1,180 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE: Iptables - The Linux Firewall
+#+STARTUP: indent
+
+#+ATTR_HTML: alt="Brick firewall with flames" title="A Real Firewall" align="center"
+[[http://dennisk.freeshell.org/img/firewall_with_flames.png]]
+
+* Overview
+
+/After successfully completing this exercise you will be able to:/
+
+1. List the current firewall rules.
+2. Remove (flush) the current rules.
+3. Use a command line tool to add a new rule to the firewall.
+4. Write a simple firewall rule.
+
+* Terms You Should Know
+
+1) Netfilter :: Linux kernel firewall framework
+
+2) iptables :: Administration tool for IPv4 packet filtering and NAT
+
+3) ip6tables :: Administration tool for IPv6 packet filtering and NAT
+
+4) iptables-save :: Dump current iptables rules to STDOUT or named file.
+
+5) iptables-restore :: Restore an iptables rule set from named file.
+
+6) ip6tables-save :: Same as above but for IPv6
+
+7) ip6tables-restore :: Same as above but for IPv6
+
+8) system-config-firewall-tui :: Easy to use command line tool for modifying the firewall.
+
+9) TCP :: [[https://en.wikipedia.org/wiki/Transmission_Control_Protocol][Transmission Control Protocol]]
+
+10) UDP :: [[https://en.wikipedia.org/wiki/User_Datagram_Protocol][User Datagram Protocol]]
+
+11) ICMP :: [[https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol][Internet Control Message Protocol]]
+
+* Preparation
+
+1. This lab is designed for CentOS.
+
+2. Start this lab with snapshot of the baseline virtual machine.  In all labs you will work with a snapshot rather than the baseline virtual machine itself.
+
+3. 3. Clear Bash history =history -c=.
+
+4. 4. If you want to record the session start [[script:][script]].
+
+* Iptables Chains
+
+Iptables filters packets based on their destination using three rule chains.
+
++ INPUT Chain :: Packets coming in from the outside world.
+
++ OUTPUT Chain :: Packets going to the outside.
+
++ FORWARD Chain :: Packets being rerouted to another host.
+
+The basic pattern for an iptables rule is:
+
+| Action | Prot | Opt | Source   | Destination      | Condition                 |
+|--------+------+-----+----------+------------------+---------------------------|
+| ACCEPT | all  | --  | anywhere | 192.168.201.0/24 | state RELATED,ESTABLISHED |
+
+In the above example a packet representing any protocol (TCP, UDP, ICMP) is accepted from any source IP address and delivered to any host on the 192.168.201.0/24 network /if/ it is in response to an established connection or is related to an established connection.
+
+Iptables rules are acted on from top to bottom so if the first rule is:
+
+#+begin_example
+Chain INPUT (policy ACCEPT)
+#+end_example
+
+Then any packet /not/ matching a following rule will be let through.  Because rules are read from top to bottom the first policy often defaults to DROP rather than ACCEPT. 
+
+#+ CAPTION: Options to the =iptables= command.
+
+| Option | Action                      |
+|--------+-----------------------------|
+| -A     | Append rule to end of chain |
+| -D     | Delete rule from chain      |
+| -L     | List rules                  |
+| -F     | Flush all rules             |
+  
+You can list current iptables rules wit the *-L* option:
+
+#+begin_example
+ # iptables --line-numbers -nL
+#+end_example
+
+or
+
+#+begin_example
+ # iptables-save
+#+end_example
+
+* Matching
+
+An iptables rule can have three possible outcomes.
+
+| If rule is to      | do this (-j)                                                          |
+|--------------------+-----------------------------------------------------------------------|
+| ACCEPT             | Packet is allowed to proceed to next rule                             |
+| REJECT             | Packet is refused and an error message is sent to the requesting host |
+| DROP               | Packet is dropped without sending an error message                    |
+
+* Current Firewall Rules
+
+Current firewall rules are stored in =/etc/sysconfig/iptables=.  Basic configuration is in =/etc/sysconfig/iptables-config=.  There are IPv6 versions of these files as well.
+
+* Adding rules to an existing firewall
+
+The command line tool for modifying firewall rules is =system-config-firewall-tui=.  The =tui= means it has an ncurses interface.  Close enough to a GUI tool to be easy to work with.
+
+After modifying the firewall rules you can restart the firewall daemon one of two ways.
+
+#+begin_example
+ # /etc/init.d/iptables restart
+#+end_example
+
+or
+
+#+begin_example
+ # service iptables restart
+#+end_example
+
+** Adding a rule to open port 2830 for SSH
+
+1. First use =iptables-save= to capture the current state to a file names ipt-old.
+2. Next backup then edit =/etc/ssh/sshd_config= to change the port that the SSH server listens on to port 2830.
+3. Restart the service so your change takes affect.
+4. Use =system-config-firewall-tui= to disable the default port 22.
+5. Create a new rule opening port 2830 for TCP traffic using =system-config-firewall-tui=.
+6. Use =nmap= from another computer to show that port 2830 is open.
+7. Log in using =ssh= over port 2830.  Use =-p 2830= to specify the correct port.
+8. Use =iptables-save= to output the new firewall to a text file named ipt-new.
+9. Run a =diff= on =/etc/sysconfig/iptables.old= and =ipt-new= and submit the output of the diff to complete the assignment.
+
+** Adding a rule by hand
+
+1. Restore the default rules with =iptables-restore=.
+   : # iptables-restore /etc/sysconfig/iptables.old
+
+2. Next you will add a new rule by hand.
+
+3. Open port 80 for HTTP traffic.
+   : # iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+
+4. To save the changes after a reboot use the =service= command.
+   : # service iptables save
+
+5. List your changes with =iptables-save= should show the rule is in place.
+
+* Troubleshoot the Assignment
+
++ Make sure you back up the current rule set.
+
++ Be sure you restart =iptables=.
+
+* What to Submit
+
+** TODO Need something to submit. 				   :CIS238DL:
+
+* Resources
+
++ man iptables
++ [[http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/index.html][Red Hat Security Guide]]
++ [[https://www.youtube.com/watch%3Fv%3DldB8kDEtTZA][Mastering IPTables - Part 1]]
++ [[https://www.youtube.com/watch%3Fv%3DaDaEXxRHeXY][Mastering IPTables - Part 2]]
++ [[https://www.youtube.com/watch%3Fv%3DJojqHKcSxpo][Mastering IPTables - Final Installment]]
++ [[http://www.ibm.com/developerworks/opensource/library/os-iptables/index.html][Firewall uptime and security with iptables]]
++ [[http://wiki.centos.org/HowTos/Network/IPTables][Setting up iptables on CentOS]]
++ [[http://www.novell.com/coolsolutions/feature/18139.html][Simple Firewall Configuration Using NetFilter/iptables]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

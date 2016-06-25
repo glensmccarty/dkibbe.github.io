@@ -1,0 +1,92 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+TITLE:     Using Internet Relay Chat (IRC)
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DATE:      2015-04-06 Mon
+#+DESCRIPTION: How to use Internet Relay Chat (IRC)
+#+KEYWORDS: IRC chat
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP: sitemap.html  
+#+LINK_HOME: index.html
+#+XSLT:
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+/After finishing this assignment the student will be able to:/
+
+- Use an web browser to log into an IRC chat channel
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* COMMENT Overview
+
+* Assignment Objectives
+
+  IRC is one of the oldest real-time ways to communicate on the Internet.  Most Linux distributions and Free and Open Source software projects have a channel on Freenode.  In this assignment you will log into a channel and post an entry.
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Use a web browser to log into Freenode.
+-  Join an IRC chat channel.
+- Post a chat.
+- Use common IRC commands.
+
+* Terms You Should Know
+
+- IRC :: Internet Relay Chat
+- Channel :: A channel is a chat room and begins with the *#* character.  Example: *#ubuntu-us-az*.
+- IRC commands :: IRC command begin with the */* character.  Example: */join*
+- Freenode :: Freenode hosts thousands of channels related to free Open Source software.
+
+* Preparation
+
+  This assignment can be done using any web browser.  Go to [[http://irchelp.org][IRC Help]] and click on /Get Started/.  Read /The IRC Prelude/.
+
+* Using IRC
+
+  1. Go to the Freenode site.
+  2. Click on /webchat/ in the left hand column.
+  3. Login using a nickname of your choosing.
+  4. Enter /cis126dl/ as the channel name.
+  5. Post an entry which includes your real name.
+  6. Log out of the Channel.
+
+  If the nickname you choose is registered you will get that name followed by an underscore. /Example:/ tux_ instead of tux.
+
+* What to Submit
+
+  This assignment is done during the class period.  I will verify that you logged into the channel.
+  
+* COMMENT Answer
+
+* COMMENT XKCD
+
+* Resources
+
+- [[http://en.wikipedia.org/Internet_Relay_Chat][Internet relay Chat]] (Wikipedia)
+- [[http://freenode.net][Freenode]]
+- [[http://irchelp.org][IRC Help]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

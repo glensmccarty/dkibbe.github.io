@@ -1,0 +1,138 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Network File Share
+#+DESCRIPTION: Use NFS to mount a remote file share.
+#+KEYWORDS: nfs, cis240dl
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+
+* Overview
+
+  NFS has been around since the 1980s as a convenient why to share files over the network. In this exercise you will set up an NFS server and access files from a network client.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Install and configure the Network File System Server.
+
+  + Configure the NFS client
+
+  + Mount a remote share on a local directory.
+
+* Terms You Should Know
+
+  + /etc/exports :: Show exported directories on localhost or a remote host.
+
+  + showmount -e :: Show exported directories on localhost or a remote host.
+
+  + exportfs -rv :: Assures that the export table is updated.
+
+  + /etc/sysconfig/nfs :: The NFS configuration file
+
+  + rpc :: Routines that allow C programs to make procedure calls on other machines across the network.
+
+* Preparation
+* Configure the Server
+
+   Install the NFS file server.
+
+   : root@vm1 # yum groupinstall "NFS File Server"
+
+   The service can be started with the =service= command.  Start =rpcbind= first.
+
+   : root@vm1 # service rpcbind start  : root@vm1 service rpcbind start  
+   : root@vm1 # service nfs start
+
+   =nfslock= needs to be started as well.
+
+   : root@vm1 # service nfslock start
+
+    Make sure all start on reboot.
+
+    : root@vm1 # chkconfig rpcbind on
+    : root @vm1 # chkconfig nfs on
+    : root@vm1 # chkconfig nfslock on
+
+** Export a Directory
+
+    First create a directory to share. */srv/nfs* would be a good choice then add the directory to */etc/exports*.
+
+    : /etc/exports
+    : /srv/nfs/ 192.168.201.0/24(sync)
+
+    The *sync* option makes sure that file writes are successfully completed before they are acknowledged to the client. Another option, *ro* makes the export read-only.
+
+    Run =exportfs= to update the export table.
+
+    : exportfs -rv
+    : exporting 192.168.201.0/24:/srv/nfs
+    : showmount -e
+    : Export list for localhost.localdomain:
+    : /srv/nfs 192.168.201.0/24
+
+    Place an empty file in the directory to share.
+
+    : touch /srv/nfs/success!
+
+*** Iptables
+
+    Open port 2049 for the Trusted Service NFSv4 using =system-config-firewall-tui=.
+
+** SELinux
+
+    For this assignment place SELinux in permissive mode only if needed.
+
+    : root@vm1 # setenforce 0
+
+    The =getenforce= command will show the current state of SELinux.
+
+* Configure the NFS Client
+
+   Check that the NFS Utilities package is installed.
+
+   : root@vm2 # rpm -q nfs-utils
+   : ntf-utils-1.2.3-36.el6.x86_64
+
+   Make a directory to mount the NFS share on.
+
+   : mkdir -p /mnt/nfs_share
+
+** Mount the directory
+
+   From the client mount the directory.
+
+   : root@vm2 # mount 192.168.214.73:/srv/nfs /mnt/nfs_share
+   : root@vm2 # ls /mnt/nfs_share
+   : filenfs.txt
+
+* What to Submit
+
+  Submit a screenshot of the output of =mount | grep nfs= on the client showing the IP address of the NFS share.
+
+* COMMENT What to Submit
+
+  1. Change the file permissions to an exported directory to 777 and change the =setsebool= command to off.  Can you still access the directory?
+
+  2. Make the share read-only again and look at the permissions for */myshare*.  What permissions does ls -l still show for */myshare*?
+
+* Resources
+
++ [[https://access.redhat.com/site/documentation/Red_Hat_Enterprise_Linux/][RHEL Storage Administration Guide]]
+
++ man exports
+
++  man nfs
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

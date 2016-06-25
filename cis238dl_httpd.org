@@ -1,0 +1,361 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Apache Web Server (CentOS)
+#+DESCRIPTION: Installing and configuring Apache on CentOS.
+#+KEYWORDS: cis238dl httpd
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+   /After finishing this assignment the student will be able to:/
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* Overview
+
+  [[http://news.netcraft.com/wp-content/uploads/2012/09/ssloct20121.png]]
+
+  Back in the 1990s when the Internet was just taking off and the demand for web sites started to sky rocket ISPs realized that using Linux and the Apache web server offered real advantages by allowing one server to host multiple web sites.  In this assignment you will install and configure Apache to host two web sites -- example.us and staff.example.us.
+  
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  - Install the Apache web server.
+  - Configure Apache to start on reboot.
+  - Manually add a firewall rule to open port 80 and 8080 for http.
+  - Identify the important directives in the main Apache configuration file.
+  - Add a configuration file for a IP-based virtual host.
+  - Add a configuration file for a name-based virtual host.
+  - Edit the =/etc/hosts= file to add host IP addresses.
+
+* Terms You Should Know
+
+  - httpd :: The Apache web server daemon
+  - /etc/httpd/conf/httpd.conf :: The main Apache configuration.
+  - ServerName :: The directive that Apache uses determine the FQDN.
+  - ServerRoot :: The where Apache's configuration files are found. (Not the same as /DocumentRoot/)
+  - Listen :: The port or ports Apache will listen on for request. The default is port 80.
+  - DocumentRoot :: The directory where Apache will find content to server.  This is where you put the index.html file.  Each virtual host has a different /DocumentRoot/.
+  - FQDN :: Fully Qualified Domain Name
+  - DNS :: Domain Name Service (The Internet's phone book)
+  - TLD :: Top Level Domain (.com, .net. .org, .us, .ca, etc.)
+  - Directive :: An instruction in an Apache configuration file such as /DocumentRoot/.
+  - service :: The =service= command is used to start and stop services.
+  - =dig= :: DNS lookup utility
+  - Whois :: Whois Directory Service 
+  - chkconfig :: Used to configure service to start on reboot.
+  - iptables :: The user space tool for working with netfilter.
+- Virtual Host :: A virtual host uses the same IP address as the main web site but has a separate DocumentRoot and log files.
+
+* COMMENT Preparation
+
+  Setting up Apache on CentOS is different that on Debian.  Use a CentOS virtual machine for this assignment.  For the name-based virtual hosts section you'll need a second virtual machine on the same network.
+
+  In this assignment you will be working with two computers -- the workstation you are sitting at and a virtual machine that will be the Apache server.  To make it clear what commands are run on each I'll use this prompt for the workstation:
+
+  : tux@instr $
+
+  And this prompt for the virtual machine:
+
+  : jstudent@vm1 $
+
+  or if root access is required on the virtual machine:
+
+  : root@vm1 #
+
+* Preparation
+
+  Use two CentOS-minimal virtual machines.  One for IP-based virtual hosts and a second for name-based virtual hosts.  Give each virtual host a unique hostname by editing /etc/sysconfig/network and rebooting the system.
+
+* Installing the Web Server Meta Package
+
+  The group options to =yum= lets you install pre-defined groups.  Use /grouplist/ to show all the groups.
+
+  : root@vm1 # yum grouplist
+
+  : root@vm1 #yum groupinstall "Web Server"
+
+  Unlike Debian you must manually start Apache on CentOS and configure it to start on reboot.
+
+#+BEGIN_EXAMPLE
+root@vm1 # service httpd status
+httpd is stopped
+root@vm1 # service httpd start
+Starting httpd:        [ OK ]
+root@vm1 # service httpd status
+httpd (pid 1218) is running...
+
+root@vm1 # chkconfig httpd on
+#+END_EXAMPLE
+
+* Setting ServerName and Starting the Service
+
+** ServerName
+
+   Before starting the httpd daemon set the ServerName directive to the IP address of your server.  This can be done in the main Apache configuration file or added to the =/etc/httpd/conf.d/vhosts.conf= file you will create below.  If you place the directive in the vhosts.conf file place it at the beginning outside of the file outside of the VirtualHost directive.  See the VirtualHost directive under 8.1 below.  In this assignment you'll add all customizations to the =vhosts.conf= file.
+
+** DocumentRoot
+
+   Since you'll set virtual host directives for all hosts in =vhosts.conf= comment out the DocumentRoot directive in =httpd.conf=.
+
+** Start the Service
+
+   Unlike Debian you must manually start Apache on CentOS and configure it to start on reboot.
+
+#+BEGIN_EXAMPLE
+root@centos # service httpd status
+httpd is stopped
+root@centos # service httpd start
+Starting httpd:        [ OK ]
+root@centos # service httpd status
+httpd (pid 1218) is running...
+#+END_EXAMPLE
+
+   Configure the service to start on reboot.
+
+: root@centos # chkconfig httpd on
+
+* Open Ports 80 and 8080 in the Firewall
+
+  While you can use =system-config-firewall-tui= to manage the firewall adding rules by hand are not hard.  You can use these commands to list the current rule set.
+
+  : root@vm1 # iptables --line-numbers -L
+
+  : root@vm1 # iptables-save
+
+  The =iptables-save= command's output is easier to read and is in the same format used to enter new rules.  Also it's easy to count the rule numbers.
+
+  This command will insert a rule as the given rule number.  /Remember rules are read from the top down so watch where you put this rule./
+
+  : root@vm1 # iptables -I INPUT 3 -p tcp -m state --state NEW -m tcp --dport http -j ACCEPT
+
+  You can add comments to rules as well.
+
+    : root@vm1 # iptables -I INPUT 7 -p tcp -m state --state NEW -m tcp --dport 8080 -j ACCEPT -m comment --comment "This is for IP-based virtual hosts"
+
+  Any rule changes are temporary until you make them permanent.
+
+  : root@vm1 # service iptables save
+  : root@vm1 # iptables: Saving firewall rules to /etc/sysconfig/iptables:[ OK ]
+
+* Configure Apache to Listen on Port 8080
+
+  By default Apache listens only on port 80.  Add a second *Listen* directive to =vhosts.conf= at the top of the file outside of any /VirtualHost/ directives.  See the next section for an example =vhosts.conf= file.
+
+Now run =nmap= from the other virtual machine and you should see that the ports are open.
+
+#+BEGIN_EXAMPLE
+root@centos-live # nmap 192.168.201.85
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+8080/tcp open  http-proxy
+#+END_EXAMPLE
+
+* IP-based Virtual Hosts
+
+  Apache supports IP-based virtual hosts which use a different port for each host and name-based virtual hosts which all of the hosts use the same IP address.  In this section you'll create an IP-based virtual host and then display the index page in Firefox using the IP address and port number.
+
+** The /etc/httpd/conf.d Directory
+
+   You will put all the /VirtualHost/ directives in =/etc/httpd/conf.d/vhosts.conf=.
+
+*** First Virtual Host
+
+  This directory holds customizations for the main Apache configuration file.  See the README in the directory for details.  The easiest way to create the file needed is to use the =tail= command to copy the /VirtualHost/ directive from the main Apache configuration file to a new file and then uncomment the directive to make it active.
+
+  : root@vm1 # tail -7 /etc/httpd/conf/httpd.conf > /etc/httpd/conf.d/vhosts.conf
+
+  Here is an example of a configured virtual host for an intranet site for company employees:
+
+#+BEGIN_EXAMPLE
+<VirtualHost *.80>
+	ServerAdmin webmaster@example.us
+	DocumentRoot /var/www/example.us
+	ServerName example.us
+	ErrorLog logs/example.us-error_log
+	CustomLog logs/example.us-access_log common
+</VirtualHost>
+#+END_EXAMPLE
+
+  To use this example you can do a global search and replace in =vi= using the search and replace command in command mode:
+
+: :%s/search_string/replacement_string/g
+
+  You will also need to edit the /DocumentRoot/ directive in this file (not the main configuration file) to match where the actual /DocumentRoot/ is.  Here is an example:
+
+  : DocumentRoot /var/www/example.us
+
+  Our new site /example.us/ will be reachable on port 80 while /staff.example.us/ is reachable on the port 8080.
+
+  Create the /DocumentRoot/ directory and place an /index.html/ file in that shows you are connected to /example.us/. /Note:/ You don't have to write actual HTML; a plain text file will do just name it /index.html/.
+
+*** Second Virtual Host
+
+    Repeat copying the /VirtualHost/ directive from =/etc/httpd/conf/httpd.conf=.  But this time /append/ the directive to the file to create a second virtual host.
+
+    : root@vm1 # tail -7 /etc/httpd/conf/httpd.conf >> /etc/httpd/conf.d/vhosts.conf
+
+    Change /dummy-host.example.com/ to /staff.example.us/ for the second virtual host and create an /index.html/ in the correct /DocumentRoot/ directory for this virtual host.
+
+* Restart Apache and Test the Configuration
+
+  After making changes to the Apache configuration restart the service.
+
+: root@vm1 # service httpd reload
+
+or:
+
+: root@vm1 # /etc/init.d/httpd restart
+
+or
+
+: root@vm1 # apachectl restart
+
+** Test the Configuration
+
+   Test the configuration with =apachectl -S=.  The output should show there is a virtual host on port 80 and port 8080.
+
+#+BEGIN_EXAMPLE
+*:80                   example.us (/etc/httpd/conf.d/vhosts.conf:12)
+*:8080                 staff.example.us (/etc/httpd/conf.d/vhosts.conf:4)
+#+END_EXAMPLE
+
+   You can now reach the new site by typing the IP address into Firefox followed by the port.  Example:
+
+/192.168.201.74:8080/
+
+* Name-based Virtual Hosts
+
+  For name-based virtual hosts the /vhosts.conf/ file needs a couple of changes.  You need to add the /NameVirtualHost/ directive and change the virtual hosts to listen on port 80.  Here I've also added a second virtual host for the German branch of the company.  Notice that it has its own /DocumentRoot/ and log files.
+
+#+BEGIN_EXAMPLE
+NameVirtualHost *:80
+
+<VirtualHost *.80>
+	ServerAdmin webmaster@staff.example.us
+	DocumentRoot /var/www/staff.example.us
+	ServerName staff.example.us
+	ErrorLog logs/staff.example.us-error_log
+	CustomLog logs/staff.example.us-access_log common
+</VirtualHost>
+
+<VirtualHost *.80>
+	ServerAdmin webmaster@example.de
+	DocumentRoot /var/www/example.de
+	ServerName example.de
+	ErrorLog logs/example.de-error_log
+	CustomLog logs/example.de-access_log common
+</VirtualHost>
+#+END_EXAMPLE
+
+** Accessing the Name-Based Virtual Hosts
+
+   You can't reach the name-based virtual hosts from the workstation since /example.us/ and /staff.example.us/ are not registered domains and do not exist in the DNS database.  Instead you'll add the IP address and host names to the =/etc/hosts/= file on another virtual machine.  Use the actual IP address of your virtual host.
+
+   : root@vm2 # echo 192.168.201.123 example.us staff.example.us >> /etc/hosts
+
+   Install the =elinks= text-based web browser to access the websites by name.
+
+* COMMENT .htaccess
+
+  The =.htaccess= file lets you give custom instructions to Apache.  Here you'll use the file to point to a custom error page, to prevent listing the directory contents and to password protect a member's only sub-directory.
+
+See https://www.linode.com/docs/websites/apache/apache-2-web-server-on-centos-6
+
+** 11.1 Custom 404 Error Page
+
+The Apache web server has many error codes but the most common one you will encounter is the "404 Page Not Found" error.  Adding a line to the =.htaccess= file located in /DocumentRoot/ will serve a custom version of the page.
+
+   1. Create a custom 404 page in DocumentRoot or under a sub-directory such as errors.
+   2. Point to the new page with this line in the =.htaccess= file.
+       : ErrorDocument 404 /notfound.html
+   3. Try to access a page that doesn't exist on the site.  You should see your custom error page.
+
+** Prohibit Directory Listing
+
+   1. Create a sub-directory under /DocumentRoot/.
+   2. Use =touch= to create a couple of empty files. Dvo not name any of the files /index.html/.
+   3. Use Firefox to Navigate to the directory and you will see the files listed.
+   4. Create a =.htaccess= file in the sub-directory with this line.
+   : Options -Indexes
+
+    You can also place the =.htaccess= in /DocumentRoot/ to apply to all sub-directories.
+
+** Password Protection
+
+   =.htaccess= can password protect a directory.  Place this =.htaccess= file in a directory you want to protect such as members.
+
+   1. Add a file /members.html/ to the directory and access it from the browser.  You should be able to see the contents of the directory unless you have a =.htaccess= file in DocumentRoot.
+    2. Create the .htaccess file in the members directory.
+
+#+BEGIN_EXAMPLE
+    AuthName "Members Only Area"
+    AuthType Basic
+    AuthUserFile /full/path/to/.htpasswd
+    Require valid-user
+#+END_EXAMPLE
+
+    3. Use the =htpasswd= command to create the =.htpasswd= file and add a user such as jstudent.  You will be prompted for a new password.
+
+    : $ htpasswd -c .htpasswd jstudent
+
+    4. Refresh the page in the browser and you should be asked to enter a user name and password.
+
+* TODO Create DocumentRoot in /srv/www/.  See FSH.	  :CIS238DL:CIS240DL:
+
+* TODO SeLinux and Apache				  :CIS238DL:CIS240DL:
+
+  See https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Managing_Confined_Services/chap-Managing_Confined_Services-The_Apache_HTTP_Server.html
+
+semanage is in policycoreutils-python
+
+* Troubleshoot the Assignment
+
+  - There are many opportunities for typos in this assignment.  Check your work carefully.
+  - If you are working from a printed copy of the assignment check that long commands are not cut off in the printout.
+  - Make sure Apache is listening on both port 80 and port 8080.
+  - If you are trying to debug your virtual host configuration you find the restarting Apache with =apachectl restart= gives more debugging information that =service httpd restart=.
+  - Be sure to refresh the page in Firefox.
+
+* What to Submit
+
+  Submit a screen shot of the output of =apachectl -S= showing the VirtualHosts and that the syntax is OK.
+
+* XKCD
+
+  [[http://imgs.xkcd.com/comics/cia.png]]
+
+* Resources
+
+- [[http:redhat.com/docs][Red Hat Security Guide]]
+- [[http://httpd.apache.org/docs/2.4/getting-started.html][Apache Docs: Getting Started]]
+- [[http://httpd.apache.org/docs/2.4/ssl/ssl_howto.html][SSL Configuration]]
+- [[http://httpd.apache.org/docs/2.4/vhosts/name-based.html][Name-based vs. IP-based Virtual Hosts]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

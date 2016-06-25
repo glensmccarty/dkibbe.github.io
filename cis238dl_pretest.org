@@ -1,0 +1,50 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE: CIS238DL Pretest
+#+STARTUP: indent
+
+* Instructions
+
+1. This test consists of 30 questions designed to test basic Linux command line skills.  /You do not need to turn this test in and no one will ask to see your answers./  Still you should treat this as a real test and do your best to answer every question. *You have 20 minutes to finish the test.*
+2. Before you start this test turn off your monitor, turn over your keyboard, put away any books or paper and place your phone in your pocket or backpack.  There should be nothing on your desk but a bottle of water if you want.
+3. This is *not* an open book test and you are expected to do your own work.  You may not talk to anyone but the instructor during the test.
+4. Each question assumes the system you are logged into is running a stock CentOS install and has a host name of /example.com/.
+5. Each questions assumes that you are logged into a non-root account named /jstudent/ and that the current directory is jstudent's home directory /home/jstudent/
+6. Enter commands exactly as you would on the command line.  You can include the Bash prompt ($ or # as appropriate) if you want but it isn't necessary unless the question asks you to do so.
+7. Questions that require superuser privileges assume that you have the root password and that the system *does not use sudo.*
+8. Print your answer after the question /Example:/ Question 1 This is question one.  Your answer to  question one goes here.
+9. Unless you are given the absolute path to a directory all directories are the standard well-know directories that are common to most Linux distros.
+10. You have *20 minutes* to complete the test.  You will be notified when *2 minutes* are left.
+11. When you are done turn your paper face down and just chill.  (No, you *can not* turn on your monitor, turn over the keyboard or take out your phone. Relax!)
+   
+* Questions
+
++ Question 1 :: List the files in the current directory including permissions, ownership and hidden files.
++ Question 2 :: Without changing the current directory list the files in =/tmp= directory.
++ Question 3 :: Make your current directory the =/etc= directory.
++ Question 4 :: Typing a single command with no options return to your home directory.
++ Question 5 :: Create a variable called /MYVAR/ with a value of /HAMSTER/.
++ Question 6 :: Use the =echo= command to show the value of MYVAR.
++ Question 7 :: Change the permissions of /file.txt/ to read, write, execute for the owner and no permissions for group and others.
++ Question 8 :: Become superuser using the =su= command.  Be sure to include the option that /provides an environment similar to what the user would expect had the user logged in directly./
++ Question 9 :: Create a new user account with a login name of /trillian./
++ Question 10 :: As root change trillian's password.
++ Question 11 :: Change to the directory containing system logs.
++ Question 12 :: Show the first 10 lines only of secure.log
++ Question 13 :: Show the manual page for the =man= program.
++ Question 14 :: Ping /example.net/ four times.
++ Question 15 :: Use SSH to log into /example.net/ where you have an account named student1.
++ Question 16 :: As root install the =foobar= program.  (Assume the program is in the CentOS Extras repo.)
++ Question 17 :: Query for the version number of the =foobar= program.  (Assume that =foobar= is already installed on your system.)
++ Question 18 :: Create a new empty file named /file2.txt/.
++ Question 19 :: Append "Hello World" to /file2.txt/.
++ Question 20 :: Rename /file2.txt/ to /file2.jpg/.
++ Question 21 :: Copy /file2.jpg/ to /file.bak/.
++ Question 22 :: Remove /file2.jpg/.
++ Question 23 :: List the groups that you belong to.
++ Question 24 :: Use =grep= to find /jstudent/ in the /passwd/ file.
++ Question 25 :: List processes running in the current shell only.
++ Question 26 :: Kill /PID 1234/ with the /TERM/ signal.
++ Question 27 :: From your home directory create the sub-directory /Labwork/ under /~/Documents/CIS238DL/ which already exists.
++ Question 28 :: Remove the empty directory /~/temp/.
++ Question 29 :: Remove /~/Documents/CIS238DL/Labwork/ and all it's contents.
++ Question 30 :: From the command line shutdown the system in 2 minutes.  Include a message explaining the reason for the shutdown.

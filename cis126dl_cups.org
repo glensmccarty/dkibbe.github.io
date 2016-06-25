@@ -1,0 +1,220 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  CUPS
+#+DESCRIPTION: CUPS
+#+KEYWORDS: cis126dl cups printer
+
+* Overview
+
+  CUPS is the standard printing system for Unix and Linux.  CUPS offers several ways to configure printers.  We'll use the web interface and the command line to configure a printer and print a manpage using Ghostscript.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Install the CUPS printer server.
+
+  + Configure CUPS for remote administration.
+
+  + Add a printer using the CUPS web interface.
+
+  + Add a printer from the command line.
+
+
+* Terms You Should Know
+
+  + CUPS :: Common Unix Printing System
+
+  + /etc/cups/cupsd.conf :: Main CUPS configuration file.
+
+  + IPP :: Internet Printing Protocol
+
+  + lp :: Line Printer
+
+  + lpq :: Line Printer Queue
+
+  + lprm :: Remove a print job.
+
+  + lpstat :: Check the status of printers. Use *-a* to list all.
+
+  + lpadmin :: Configure CUPS from the command line.
+
+  + lpinfo :: Lists the drivers CUPS supports.
+
+  + ppd :: PostScript Printer Description
+
+  + PostScript :: Page description language
+
+  + Ghostscript :: A free implementation of PostScript
+
+* Preparation
+
+  Complete the assignment on a CentOS virtual machine.
+
+* Install the CUPS Print Server
+
+  Use *grouplist* to find the correct group to install.
+
+#+BEGIN_EXAMPLE
+root@vm1# yum grouplist *print*
+Print Client
+Print Server
+#+END_EXAMPLE
+
+  Install the Print Server
+
+#+BEGIN_EXAMPLE
+root@vm1# yum groupinstall 'Print Server'
+#+END_EXAMPLE
+
+* Open Internet Printing Protocol Ports
+
+  Use =system-config-firewall-tui= to open the trusted service.
+
+  [[http://dennisk.freeshell.org/img/firewall_ipp.png]]
+
+* Configure CUPS for Remote Administration
+
+  Backup =/etc/cups/cupsd.conf=.
+
+  By default CUPS only listens on localhost.  Place the comment character in front of the /Listen/ directive and add a line to listen on a port instead.
+
+#+BEGIN_EXAMPLE
+# Listen localhost:631
+Port 631
+#+END_EXAMPLE
+
+  To change access to server, admin pages, configuration files add this line to the appropriate sections.
+
+#+BEGIN_EXAMPLE
+Allow from all
+#+END_EXAMPLE
+
+  Reload =cups= and you should now be able to access the CUPS web interface remotely from the workstation.
+
+#+BEGIN_EXAMPLE
+root@vm1# service cups reload
+#+END_EXAMPLE
+
+* Use Web Browser to configure a printer.
+
+  Connect to CUPS on Port 631 from Firefox.
+
+#+BEGIN_EXAMPLE
+https://<IP address of virtual machine>:631
+#+END_EXAMPLE
+
+  Click the Administration link and enter root's authentication on virtual machine.
+
+** Add a Printer from the Web Interface
+
+   Select "Add a Printer" and configure a HP JetDirect printer.
+
+   Use the PostScript ppd.
+
+   Make the printer the default for the system.
+
+#+BEGIN_EXAMPLE
+root@vm1 # lpadmin -d <name of printer>
+#+END_EXAMPLE
+
+** Print from the Command Line
+
+   Print a manpage.
+
+#+BEGIN_EXAMPLE
+man -t pwd | lp
+#+END_EXAMPLE
+
+* Configure CUPS From the Command Line.
+
+  The =lpadmin= command is used to configure CUPS from the command line.  You'll need to run =lpinfo= to find the proper ppd file for your make and model printer.
+
+  Find the correct ppd file
+
+#+BEGIN_EXAMPLE
+root@vm1# lpinfo -m | grep 'LaserJet 4250'
+lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz
+#+END_EXAMPLE
+
+  Then use =lpadmin= to add the printer. Use a different printer name such as *hp\_laser2*.  The backward slashes in the command below can be left out if the command is typed on a single line. The slashes tell the shell that the command is continued on the next line.
+
+#+BEGIN_EXAMPLE
+root@vm1# lpadmin -p "hp_laser" -E \
+-v socket://192.168.201.221 \
+-m "lsb/usr/HP/hp-laserjet_4250-ps.ppd.gz" \
+-D "This line is for information only." \
+-L "Location"
+#+END_EXAMPLE
+
+  Check that the printer is ready.
+
+#+BEGIN_EXAMPLE
+root@vm1# lpstat -a
+hp_laser accepting requests since. . .
+#+END_EXAMPLE
+
+  Set the printer as the default so you don't need to type the printer name each time you want to print.
+
+#+BEGIN_EXAMPLE
+lpadmin -d "hp_laser"
+#+END_EXAMPLE
+
+  =lpq= confirms the printer is ready and set is default.
+
+#+BEGIN_EXAMPLE
+root@vm1# lpq
+hp_laser is ready
+no entries
+#+END_EXAMPLE
+
+** Print a Man Page
+
+   Use the same command as before to print a man page.
+
+* PostScript
+
+  PostScript is a page description programming language.  It creates a plain text file that describes how to put the characters on the page based on the properties of the ppd file used.  You can test this by creating a Postscript file (on the workstation not the virtual machine) and opening the text file with =less=..
+
+#+BEGIN_EXAMPLE
+root@vm1# man -t pwd > pwd.ps
+root@vm1# less pwd.ps
+#+END_EXAMPLE
+
+** Convert PostScript to PDF.
+
+   Portable Document Format or PDF is derived from PostScript.  You can convert a PostScript file to a PDF with =ps2pdf=.
+
+#+BEGIN_EXAMPLE
+$ ps2pdf pwd.ps
+$ epdfview pwd.pdf
+#+END_EXAMPLE
+
+* Troubleshoot the Assignment
+
+  1. Plenty of chances for typos in this assignment.
+
+  2. If after running =lpstat -a= you get an error that the printer is not accepting requests you probably did not enable the printer by omitting *-E*.
+
+  3. The classroom printer connects through a Windows box in the lab.  Expect the web page to be S-L-O-W.
+
+* What to Submit
+
+  Turn in the manpage /you/ printed with your name on it.
+
+* COMMENT XKCD
+
+  [[https://sslimgs.xkcd.com/comics/3d_printer.png]]
+
+* Resources
+
+  + [[https://wiki.archlinux.org/index.php/CUPS#Remote_access_to_web_interface][Remote Access to CUPS Web Interface]]
+
+  + [[http://adobe.com/print/features/psvspdf/][Postscript vs. PDF]]
+
+  + [[http://www.ghostscript.com][Ghostscript]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

@@ -1,0 +1,221 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: RAID
+#+DESCRIPTION: Software RAID in Linux
+#+KEYWORDS: RAID
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+#+LINK: raid https://www.youtube.com/watch?v=PP0iQs8qBNU
+#+LINK: redhat https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/ch-raid.html
+#+LINK: debian http://debian-handbook.info/browse/stable/advanced-administration.html
+#+LINK: raidsetup http://dennisk.freeshell.org/img/raid1-anaconda_setup.png
+#+LINK: raidpart http://dennisk.freeshell.org/img/raid1-anaconda_part.png
+#+LINK: tuxraid http://dennisk.freeshell.org/img/tux_raid.png
+
+#+ATTR_HTML: alt: Tux the Linux penguin cloned multiple times.
+[[http://dennisk.freeshell.org/img/tux_raid.png]]
+
+
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+** Learning Objectives
+
+/After finishing this assignment the student will be able to:/
+
+** Lesson Material
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+** Homework
+
+* COMMENT Overview
+
+* Assignment Objectives
+
+RAID (Redundant Array of Independent Disks) is widely used to protect data from hard drive failure.  In this assignment you will create a RAID 1 array and then fail and then replace one of the disks. 
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Explain the purpose of RAID
+- Describe several common RAID set ups
+- Explain the purpose of the =/etc/fstab= and =/etc/mtab= files.
+- Demonstrate how RAID is used to protect data.
+- Degrade a RAID array by failing a device
+- Monitor the rebuild process.
+- Add a new drive to the RAID array.
+
+* Terms You Should Know
+
+- RAID :: Redundant Array of Independent Disks 
+- RAID 0 :: Stripping for performance, no redundancy 
+- RAID 1 :: Mirroring for redundancy 
+- RAID 5 :: Comprises block-level striping with distributed parity (fault tolerance). 
+- /etc/fstab :: Lists device names mounted at boot time. 
+- /etc/mtab :: Shows current mounted filesystems. 
+- mdadm :: CLI tool for administering RAID. 
+- fsck :: Filesystem check. 
+ - mirror :: Data duplicated over multiple disks. 
+- strip :: Data fragments spread over multiple disks. 
+- /proc/mdstat :: Lists existing RAID volumes and their states. 
+
+* Preparation
+
+1. Create a new virtual machine using the pre-configured /centos-raid.ova/ from my website under Module 4.
+2. Use the CentOS minimal ISO as the install media.
+
+* Configure RAID During Installation
+
+1. Boot the virtual machine and proceed with a normal install.
+2. Set the hostname to /centos/.
+3. Activate networking on the same screen.
+4. On the /Which type of installation would you like?/ screen check /Review and modify layout/ at the bottom. Click /Next/ to continue.
+5. On the next screen move all data storage devices to the /Install Target Devices/ column.
+6. Make sure the boot loader is installed on =/dev/sda= and click /Next/.
+
+#+ATTR_HTML: alt: Install target screenshot
+[[http://dennisk.freeshell.org/img/raid-target.png]]
+
+** Remove Devices from the LVM Group 
+
+1. Double click on the =vg_centos= LVM volume group at the top of the screen and uncheck /sdb1/, /sdc1/, /sdd1/, and /sde1/. Leave /sda2/ checked.
+2. The amount of disk space needs to be adjusted.
+3. Select the /swap/ partition and reduce the size to 200MB.
+4. Select =lv_root= at the boot of the screen and click the Edit button. Adjust the size of =lv_root= to the maximum allowed.  Free Space should now equal zero.
+5. Edit the LVM physical volumes /sdb/, /sdc/, /sdd/, /sde/ and change the type from /Physical volume (LVM)/ to /Software RAID/.
+
+** Create the RAID Device
+
+Next you'll add the RAID partitions to the RAID array.
+
+1. Select /sdb/ and click the /Create/ button to create a /RAID Device/.
+2. Select the /sdb/ from the list of /Allowable Drives/ and set the size to /Fill to maximum allowable size/. Do the same with /sdc/, and /sdd/. Leave /sde/ as it is.
+3. Mount the RAID device on /home
+4. When done the layout should look like this. (lv_root and lv_swap mush equal size of vg_centos.)
+
+#+ATTR_HTML: alt:
+[[http://dennisk.freeshell.org/img/raid1-anaconda_setup.png]]
+
+** Finish the Install
+
+1. Click /Next/, accept the warning message and format the disks.
+2. Accept the defaults for the boot loader.
+3. After the installation is finished reboot the virtual machine and login as root.
+
+* RAID Management
+
+** Examining the Current Setup
+
+1. Login in as root and run =df -h= to show that =/home= is mounted on =/dev/md0= with a size of about 1GiB.
+
+2. The =mdadm= command is used for monitoring and troubleshooting RAID.  See the Debian Handbook for an excellent chapter on working with RAID.
+
+    : # mdadm /dev/md0
+    : /dev/md0 1022.44MiB raid1 2 devices, 1 spare. Use mdadm --detail for more detail.
+
+ 3. Using the *--detail* option you will see that the RAID 1 array is active, in good health and has one hot-swapable spare drive.
+
+** Failing a Drive in the Array
+
+*** Preparation
+
+1. Before simulating a drive failure install =mutt= so root can receive emails from the kernel about the status of the RAID array.
+2. The =/home= partition has no data currently so any drive failure will be fixed before we can observe the process.
+3. Create a new user /tux/.
+4. Log in as /tux/ and run this command to create a file sized about 1GiB.
+
+: $ dd if=/dev/zero of=big_file bs=1M count=1000
+
+5. Exit the /tux/ account.
+
+*** Fail a RAID Drive
+
+1. The =mdadm= command can simulate the failure of a drive.
+
+: # mdadm /dev/md0 --fail /dev/sdc1
+
+2. The =mdadm --detail /dev/md0= command shows the array is recovering and that there is one faulty device and no spares.
+3. Open =mutt= and root will have mail reporting the event.
+
+*** Removing the Faulty Drive
+
+Next you'll remove the faulty drive and replace the spare that was used.
+
+1. Remove the failed drive.
+
+: # mdadm /dev/md0 --remove /dev/sdc1
+
+The RAID array no longer has a hot spare.  Next you'll take the /sde/ drive and add it to the array.
+
+*** Add a New Drive
+
+**** Prepare the Unformatted Drive
+
+1. Use fdisk to prepare /sde/.
+
+: # fdisk /dev/sde
+
+2. Type *m* to access the help manual from within =fdisk=.
+3. Type *p* to "print" the current partition table which is empty.
+4. Create a new primary partition as /sde1/ using all the space (the default).
+5. Typing *p* will show the default type is /linux/.
+6. Use *t* to change the type to /linux raid auto/ or type *fd*.
+7. Type *p* to see the partition table.  The type should now be /linux raid auto/.
+8. Type *w* to write the partition table and *q* to exit =fdisk=.
+
+**** Add the Drive to the Array
+
+1. Add the new drive to the array using mdadm.
+
+: # mdadm /dev/md0 --add /dev/sde
+
+2. =mdadm --detail /dev/md0= will show that /sde/ was added as a spare.
+
+Next you'll severely degrade the array and reboot the virtual machine to show that the data is still there.
+
+**** Degrade the Array
+
+1. Fail /sdb1/ and run =mdadm --detail /dev/md0= to see that /sde/ is added as an active device and that no spares exist.
+2. Fail one of the remaining active devices leaving only one device in the array and no spares. Our RAID array is now seriously degraded.  If the last drive fails all data will be lost.
+3. Reboot the virtual machine and log in as /tux/.  Despite losing all but one drive the array is still working and the data still there.  However, as a system administrator you had better put buying a couple of new drives at the top of your list!
+
+* Troubleshoot the Assignment
+
++ Make sure that you set up the RAID partitions to use the remaining space on the drive.
++ Make sure that the file type is *raid* and not the default *ext4*.
++ Make sure the resize the volume group.
++ In a few cases =mdadm= accepts only the device /sdx/ instead of /sdx1/ for example.  If one doesn't work try the other.
+
+* What to Submit
+
+Submit a screenshot of the email from mdadm monitoring.
+
+* COMMENT Answer
+
+* COMMENT XKCD
+
+* Resources
+
+- [[raid][All About RAID]] (YouTube)
+- [[redhat][Redundant Array of Independent Disks (RAID)]]
+- [[debian][RAID and LVM]] (The Debian Handbook)
+- [[http://dennisk.freeshell.org/other/centos64-raid.ova][centos64-raid.ova]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

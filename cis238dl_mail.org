@@ -1,0 +1,148 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  You've Got Mail!
+#+DESCRIPTION: Setting up Postfix and Dovecot.
+#+KEYWORDS: cis238dl cis240dl postfix dovecot imap smtp mail
+
+[[https://wm.sdf.org/gallery/albums/userpics/10081/postfix_logo.jpg]]
+
+* Overview
+
+  Email has been a major reason to network computers together and an important service.
+
+* Assignment Objectives
+
+/When you have successfully completed this assignment you will be able to:/
+
++ Install and configure an email server.
+
++ Use =telnet= to test the server.
+
++ Access log files to troubleshoot delivery problems.
+
+* Terms You Should Know
+
+  + Postfix :: The Postfix mail server
+
+  + Dovecot :: The Dovecot IMAP Server
+
+  + SMTP :: Simple Mail Transport Protocol (port 25)
+
+  + POP :: (port 110)
+
+  + IMAP :: (port 143)
+
+  + /etc/postfix/main.cf :: The main Postfix configuration file.
+
+* Preparation
+
+** TODO Hostname should be set to something in /etc/sysconfig/networks (iceberg1.ba1e)
+
+* Install the Mail Server
+
+  You can use the /groupinstall/ option to install the mail server.
+
+#+BEGIN_EXAMPLE
+root@vm1# yum groupinstall 'E-mail Server'
+#+END_EXAMPLE
+
+This installed Postfix and Dovecot along with other packages.
+
+* Configure Postfix
+
+  Along with sendmail and Exim Postfix is a popular e-mail server.  It is the default on CentOS.
+
+** main.cf
+
+   These directives need to be set.
+
+   + Uncomment /myorigin = $myhostname/
+
+   + /inet_interfaces = all/
+
+   + /mynetworks_style = subnet/
+
+   Start or Restart the Postfix service.
+
+* Test Postfix with Telnet
+
+  You can test the Postfix server by accessing port 25 with =telnet= and sending commands directly to the mail server.
+
+  From the workstation connect to the Postfix MTA.
+
+#+BEGIN_EXAMPLE
+$ telnet 192.168.203.87 25
+Trying 192.168.203.87...
+Connected to 192.168.203.87.
+Escape character is '^]'.
+220 iceberg1.ba1e ESMTP Postfix
+EHLO iceberg1.ba1e
+250-iceberg1.ba1e
+250-PIPELINING
+250-SIZE 10240000
+250-VRFY
+250-ETRN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250 DSN
+MAIL FROM: tux
+250 2.1.0 Ok
+RCPT TO: dennis
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+This is a test mail.
+.
+250 2.0.0 Ok: queued as B4A2A419A4
+QUIT
+221 2.0.0 Bye
+Connection closed by foreign host.
+#+END_EXAMPLE
+
+* Mutt - a Command Line E-mail MUA
+
+  Install Mutt using Yum.
+
+#+BEGIN_EXAMPLE
+root@vm1# yum install mutt
+#+END_EXAMPLE
+
+Copy the sample con figuration file from */usr/share/doc/mutt-*/* to tux's home directory.
+
+Download [[http://dennisk.freeshell.org/muttrc-local][muttrc-local]] and rename it to /.muttrc-local.
+
+Create the /Maildir/ directory.
+
+* COMMENT Configure Dovecot
+
+* Allow SMTP and IMAP
+
+  Use =system-config-firewall-tui= to allow remote access to Port 25.
+
+* Troubleshoot the Assignment
+
+  + Make sure port are open.
+
+  + Try restarting Postfix.
+
+* COMMENT What to Submit
+
+Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+1. PUT QUESTION HERE!
+2. PUT QUESTION HERE!
+
+* XKCD
+
+  [[http://imgs.xkcd.com/comics/security_question.png]]
+
+* Resources
+
+  + [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/index.html][Red Hat Deployment Guide]]
+
+  + [[http://www.cs.umd.edu/class/spring2002/cmsc434-0101/MUIseum/applications/firstemail.html][The First Email]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

@@ -1,0 +1,173 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Working with Hard and Soft Links
+#+DESCRIPTION: Working with hard and soft links
+#+KEYWORDS: cis126dl links symbolic
+
+* Overview
+
+  Linux offers two types of file links -- hard links and symbolic links.  Symbolic links are useful for conveniently accessing a file in another location.  For example, placing a symbolic or soft link to your resume buried in your documents directory on your desktop.  Hard link are more specialized and are used by backup software to conserve space.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Create a symbolic link to a file or directory.
+
+  + Create a hard link to a file.
+
+  + Explain the difference between hard and symbolic links.
+
+  + Identify hard and symbolic links.
+
+  + Describe the function of an inode.
+
+* Terms You Should Know
+
+  + ln :: The link command
+
+  + Symbolic link :: A symbolic or soft link links to a file by name and can link to directories and files on other file systems.  Removing the original file breaks the symbolic link.
+
+  + Hard link :: Links to a file by inode number. As long as one link remains the data is accessible.  All links are equal.
+
+  + ls -i :: The -i option shows the inode number of a file.
+
+  + stat :: Shows Detailed statistics about a file or file system.
+
+  + inode :: Index number to a file.
+
+  + Block :: 
+
+  + Superblock :: 
+
+  + Filesystem :: 
+
+* Preparation
+
+  No preparation is needed.  (Start script?)
+
+  1. Change to /tmp.
+
+     : $ cd /tmp
+
+  2. Create an ordinary file /foo/.
+
+     : $ touch foo
+
+  3. Create a directory /foobar/.
+
+     : $ mkdir foobar
+
+* Symbolic (soft) Links
+
+  1. Create a symbolic link from /foo/ to /foo-soft/.  An easy way to remember the file order is that the =ln= command is similar to the copy or move commands in that the first file named is the /source/ and the second file is the /destination/.
+
+     : $ ln -s foo foo-soft
+
+  2. Use the =ls= command to show that the a symbolic link has been created to /foo/ and that the inodes are different.  Also, the *l* before the permissions shows that /foo-soft/ is a symbolic link.
+
+     #+BEGIN_EXAMPLE 
+     $ ls -il foo*
+     11502 -rw-r--r-- 1 tux tux    0 Dec 21 10:23 foo
+     12657 lrwxrwxrwx 1 tux tux    3 Dec 21 10:23 foo-soft -> foo
+     #+END_EXAMPLE 
+
+  3. Next create a hard link to /foo/ named /foo-hard/.
+
+     : $ ln foo foo-hard
+
+  4. Use =ls= to show that /foo-hard/ points to the same inode as /foo/ and that there are two links pointing to the same inode.  Also, both are ordinary files indicated by the dash before the permissions.
+
+     #+BEGIN_EXAMPLE
+     $ ls -il foo*
+     11502 -rw-r--r-- 2 tux tux    0 Dec 21 10:23 foo
+     11502 -rw-r--r-- 2 tux tux    0 Dec 21 10:23 foo-hard
+     12657 lrwxrwxrwx 1 tux tux    3 Dec 21 10:23 foo-soft -> foo
+     #+END_EXAMPLE
+
+  5. Remove /foo/ and relist the files.  The link has been broken indicated by the reverse video.
+
+     : $ rm foo
+
+  6. Creating a new file named /foo/ will fix the broken link but the new file will have a new inode number which is different from that of /foo-hard/.
+
+  7. Try to make a hard link to the directory foobar named /foodir/.  You will receive a error message from the =ln= command.
+
+     #+BEGIN_EXAMPLE
+     $ ln foobar foodir
+     ln: `foobar/': hard link not allowed for directory
+     #+END_EXAMPLE 
+
+  8. Make a symbolic link to /foobar/.
+
+     #+BEGIN_EXAMPLE
+     $ ln -s foobar foodir
+     #+END_EXAMPLE
+
+  9. Use =ls= again to list the files.  This time add the *-d* option to show that foodir links to a directory.
+
+     #+BEGIN_EXAMPLE
+     $ ls -ild foo*
+     12703 -rw-r--r-- 1 tux tux    0 Dec 21 10:36 foo
+     12653 drwxr-xr-x 2 tux tux 4096 Dec 21 10:23 foobar
+     12705 lrwxrwxrwx 1 tux tux    7 Dec 21 10:45 foodir -> foobar/
+     11502 -rw-r--r-- 1 tux tux    0 Dec 21 10:23 foo-hard
+     12657 lrwxrwxrwx 1 tux tux    3 Dec 21 10:23 foo-soft -> foo
+     #+END_EXAMPLE 
+
+* The =stat= Command
+
+  The =stat= command shows more information about files.
+
+  #+BEGIN_EXAMPLE
+  $ stat foodir
+  File: `foodir' -> `foobar/'
+  Size: 7         	Blocks: 0          IO Block: 4096   symbolic link
+  Device: fe01h/65025d	Inode: 12705       Links: 1
+  Access: (0777/lrwxrwxrwx)  Uid: ( 1000/ tux)   Gid: ( 1000/ tux)
+  Access: 2013-12-21 10:45:07.191814447 -0700
+  Modify: 2013-12-21 10:45:02.451814585 -0700
+  Change: 2013-12-21 10:45:02.451814585 -0700
+  Birth: -
+ #+END_EXAMPLE 
+
+* Remove the test files
+
+  #+BEGIN_EXAMPLE 
+  : $ rm foo*
+  rm: cannot remove `foobar': Is a directory
+  #+END_EXAMPLE 
+  
+  The =rm= command can not remove directories.  Use =rm -rf= or =rmdir= for an empty directory.
+
+* Troubleshoot the Assignment
+
+* What to Submit
+
+* Question Bank
+
++ What is NOT part of a file's inode?
+  A. File name
+  B.
+  C. 
+  D.
+  ANSWER: A
+
++ To link to a directory what type of link must be used?  /Select two./
+  A. Symbolic
+  B. Soft
+  C. Hard
+  D. Links can not be make to directories.
+  Answer: A, B
+
+* COMMENT XKCD
+
+* Resources
+
++ [[http://www.ibm.com/developerworks/aix/library/au-speakingunix14/][Speaking UNIX: It is all about the inode]]
+
++ [[http://www.linux-mag.com/id/8658/][What’s an inode?]]
+
++ man ln
+
++ man stat
+

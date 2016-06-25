@@ -1,0 +1,329 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Regular Expressions
+#+DESCRIPTION: Working with wildcards and regular expressions.
+#+KEYWORDS: cis238dl regex grep sed wildcards
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: 
+#+LINK_HOME: index.html
+#+LINK: checklist https://openclipart.org/people/DaKo/imagebot_com-2012042714194724316.svg
+#+LINK: re http://www.ibm.com/developerworks/aix/library/au-speakingunix9/
+#+LINK: sed https://en.wikibooks.org/wiki/Sed
+#+LINK: regex http://www.ibm.com/developerworks/aix/library/au-speakingunix9/
+#+LINK: rubular http://rubular.com
+
+* Assignment Objectives
+
+File globing and regular expressions are powerful tools needed by every system administrator.
+
+/When you have successfully completed this assignment you will be able to:/
+
+- Describe the use of common wildcards.
+- Write a simple regular expression
+- Use =sed= to modify text in a file.
+- Use =tr= to replace non-printing characters.
+
+* COMMENT Terms You Should Know
+
+- Term :: define term
+
+* Preparation
+
+If not already set (Check with =type= command.) alias =grep= to =grep --color=auto= to make the results stand out.
+
+: alias grep='grep --color=auto'
+
+Create a text file named /twain.txt/ with this content.
+
+#+BEGIN_EXAMPLE
+Mark Twain
+Huckleberry "Huck" Finn
+Tom Sawyer
+Pap Finn
+Samuel Clements
+Becky Thatcher
+Joe Harper
+#+END_EXAMPLE
+
+Create file /regex\_sample/
+
+#+BEGIN_EXAMPLE
+apple
+bat
+ball
+ant
+eat
+pant
+people
+taste
+applebaum
+applejack
+crabapple
+#+END_EXAMPLE
+
+* File Globing (Wildcards)
+
+ Wildcards can be used with common commands.  While similar to regular expressions there are not the same.
+
+| Symbol  | Description                                     |
+|---------+-------------------------------------------------|
+| ?       | Matches any single character.                   |
+| *       | Matches any string, including the empty string. |
+| [a,i,o] | Matches *Ja*, *Ji* or *Jo*.                     |
+| [0-9]   | Matches *example0* to *example9*.               |
+| [a-z]   | Matches *examplea* to *examplez*.               |
+| [A-Z]   | Matches *exampleA* to *exampleZ*.               |
+
+** Example 1 - Match All Characters
+
+Match all files beginning with *exam* followed by any number of characters.
+
+Use =touch example example100 examples= to create three files.
+
+#+BEGIN_EXAMPLE
+$ ls example*
+example example100 examples
+#+END_EXAMPLE
+
+** Example 2 - Match a Single Character
+
+Match all files beginning with *example* followed by a single character.
+
+Use =touch example{1..3}= to create three files.
+
+#+BEGIN_EXAMPLE
+$ ls example?
+example1 example2 example3
+#+END_EXAMPLE
+
+Note that *example*, *example100* were not matched.
+
+** Example 3 - Match a Character
+
+Create a text file named /example3/ containing *bot*, *bit*, *bat*, *boot*, *bait*.
+
+#+BEGIN_EXAMPLE
+$ grep [a,i,o] example3
+bot
+bit
+bat
+boot
+bait
+#+END_EXAMPLE
+
+** Example 4 - Matching Numbers
+
+To the /example3/ text file add these lines:
+
+123 Tranquil Tr.
+456 Leisure Ln.
+789 Peaceful Pl.
+
+#+BEGIN_EXAMPLE
+$ grep [0-9] example3
+123 Tranquil Tr.
+456 Leisure Ln.
+789 Peaceful Pl.
+#+END_EXAMPLE
+
+** Example 4 - Matching Case
+
+#+BEGIN_EXAMPLE
+$ grep [A-Z] example3
+123 Tranquil Tr.
+456 Leisure Ln.
+789 Peaceful Pl.
+#+END_EXAMPLE
+
+* Regular Expressions
+
+| Symbol | Description                                                                    |
+|--------+--------------------------------------------------------------------------------|
+| .      | Matches any character.                                                         |
+| ^      | Matches start of string.                                                       |
+| $      | Matches end of string.                                                         |
+| \      | Escape special characters                                                      |
+| ()     | Groups regular expressions.                                                    |
+| ?      | Matches exactly one character.                                                 |
+| {n}    | Matches the preceding character appearing 'n' times.                           |
+| {n,m}  | Matches the preceding character appearing 'n' times but not more than 'm' times. |
+| {n,}   | Matches the preceding character only when it appears 'n' times or more.       |
+
+** Literal Strings
+
+The simplest regular expression is a literal string.  The following matches each line with *Mark Twain* but only if on the same line.
+
+: $ grep "Mark Twain" twain.txt
+
+#+BEGIN_COMMENT
+
+or if the quotes are left out both *Mark* and *Twain* separately.
+
+: $ grep Mark Twain twain.txt
+
+#+END_COMMENT
+
+Note that =grep= is case sensitive.  Filtering on *mark twain* returns nothing unless the *-i* option is included.
+
+The *-v* option inverts the search.  This will return all the lines that /do not/ have *Mark Twain*.
+
+: $ grep -v "Mark Twain" twain.txt
+
+** Special (Metacharacters)
+
+*** The Period
+
+The period returns a single character.  Here *n* preceded by one character.
+
+: $ grep ".n" twain.txt
+
+*** The Asterisk
+
+Or two *n*s followed by a single character.
+
+: $ grep ".nn" twain.txt
+
+** Search for Character at Start of Line
+
+Filter lines that start with *Mark Twain*.
+
+: $ grep ^"Mark Twain" twain.txt
+
+** Search for Characters at the End of Line
+
+Filter lines that end with *Mark Twain*.
+
+: $ grep ^"Huck" twain.txt
+
+** COMMENT Extended Regular Expressions
+
+*** p\{2}
+
+#+BEGIN_EXAMPLE
+grep -E p\{2} regex_sample
+#+END_EXAMPLE
+
+** COMMENT "a+t"
+
+#+BEGIN_EXAMPLE
+grep -E "a+t" regex_sample
+#+END_EXAMPLE
+
+** Brace Expansion
+
+*** Sequence
+
+/A sequence from 1 to 10:/
+
+{1..10}
+
+/A sequence from 1 to 10:/
+
+{a..z}
+
+#+BEGIN_EXAMPLE
+echo {1..10}
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+touch file-{a..z}
+#+END_EXAMPLE
+
+*** Comma Separated List
+
+{aa,bb,cc,dd}
+
+#+BEGIN_EXAMPLE
+echo {aaa,bbb,ccc,ddd}
+#+END_EXAMPLE
+
+Here brace expansion is used to create files and bracket expansion is used to display them.
+
+: $ for i in {0..9}; do touch file$i; done
+: $ ls file[0-9]
+: file0 file1 file2 file3 file4 file5 file6 file7 file8 file9
+
+* Character Classes
+
+** Regular Expression
+
+Character Classes are used to match a range of characters.  Try these on the [[rubular][Rubular]] site.
+
+| Matches all upper, lower case and numbers. | [a-zA-Z0-9] |
+| Matches all upper and lower case.          | [a-zA-Z]    |
+| Matches numbers.                           | [0-9]       |
+| Matches upper case.                        | [A-Z]       |
+
+You can negate a class using the caret (*^*).
+
+: [^aeiou]
+
+* COMMENT Posix Character Classes
+
+| [:alnum:] | [:alpha:] | [:blank:] | [:cntrl:]  |
+| [:digit:] | [:graph:] | [:lower:  | :print:]   |
+| [:punct:] | [:space:] | [:upper:] | [:xdigit:] |
+
+* sed
+
+=sed= is a stream editor for filtering and transforming text and supports regular expressions.  Try these examples.  By default =sed= outputs to STDOUT and does not alter the original file.
+
+/This example replaces apple with orange:/
+
+#+BEGIN_EXAMPLE
+sed s/apple/orange/ regex_sample
+#+END_EXAMPLE
+
+/This example replaces apple with orange if apple is at the beginning of the line:/
+
+#+BEGIN_EXAMPLE
+sed s/^apple/orange/ regex_sample
+#+END_EXAMPLE
+
+* tr
+
+The =tr= command can replace non-printing characters.
+
+/This example will replace the new line character with a space putting all words on one line:/
+
+#+BEGIN_EXAMPLE
+tr '\n' ' ' < regex_sample
+#+END_EXAMPLE
+
+/This example will replace all lower case letters with upper case letters:/
+
+#+BEGIN_EXAMPLE
+tr '[:lower:]' '[:upper:]' < regex_sample
+#+END_EXAMPLE
+
+* COMMENT Troubleshoot the Assignment
+
+* COMMENT What to Submit
+
+Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+
+1. Use =tr= to place all the words in regex_sample
+
+* COMMENT XKCD
+
+  [[https://sslimgs.xkcd.com/comics/regular_expressions.png]]
+
+* Resources
+
+  - [[re][Speaking UNIX, Part 9: Regular expressions]]
+  - man regex
+  - man glob
+  - [[sed][Wikibooks: sed]]
+  - [[regex][Wikibooks: Regular Expressions]]
+  - [[rubular][A regular expression editor]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

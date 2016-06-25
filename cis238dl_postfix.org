@@ -1,0 +1,313 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+TITLE: Postfix
+#+DESCRIPTION: Setting up the Postfix MTA
+#+KEYWORDS: postfix mta cis238dl email mail
+#+STARTUP: indent
+#+EXPORT_EXCLUDE_TAGS: cis240dl cis238dl cis126dl
+#+LINK_UP: cis238dl.html
+
+* Overview
+
+[[https://wm.sdf.org/gallery/albums/userpics/10081/postfix_logo.jpg]]
+
+Postfix is a popular Mail Transfer Agent and is the default on RHEL and CentOS.  In this assignment you'll set up Postfix for basic operation and use the *netcat* utility to send mail directly to the server from the command line.
+
+* Assignment Objectives
+
+/When you have successfully completed this assignment you will be able to:/
+
++ Install and configure Postfix and Dovecot for basic operation.
+
++ Describe the functions of a MTA, MDA and MUA.
+
++ Install and configure a text-based mail client (Mutt).
+
++ Use netcat to test Postfix.
+
+* Terms You Should Know
+
++ MTA :: Mail Transfer Agent (sendmail, Sendmail, Postfix, Exim)
+
++ MDA :: Mail Delivery Agent (procmail)
+
++ MUA :: Mail User Agent (Thunderbird, mutt, Sylpheed)
+
++ IMAP :: Internet Message Access Protocol Client connects to the IMAP server and the messages stay on the server.
+
++ POP :: Post Office Protocol Client downloads mail to host.
+
++ SMTP :: Simple Mail Transport Protocol
+
++ Mail Submission Port 587 :: Alternate to port 25
+
++ mbox :: The mbox format stores mail in a single large file.
+
++ Maildir :: The Maildir format stores each email message as a separate file with a unique name.  Messages are stored in a special Maildir directory structure.
+
++ /var/log/maillog :: 
+
++ /etc/postfix/main.cf :: The main configuration file for Postfix
+
++ /etc/aliases :: Email address aliases, an example would be mail to postmaster@example.com is routed to joeadmin@example.com.  Run =newaliases= after making any changes to this file.
+
++ newaliases :: This command should be run after any changes to */etc/aliases*.
+
++ /etc/dovecot/covecot.conf :: The main Dovecot configuration file.
+
++ postsuper :: The Postfix superintendent
+
++ mailq :: Command to print contents of mail queue to STDOUT.
+
++ mutt :: The Mutt Mail User Agent "All mail clients suck.  This one just sucks less."
+
++ Reverse DNS lookup :: Used to check if the message was sent from a MTA with a legitimate *MX* record.
+
++ Open Relay ::  In the distant past when life was good any MTA would gladly forward your email to its destination for you.  No authentication was required.
+
++ SPAM :: SPAM is defined as... Well, I think you know already.
+
++ Dovecot :: IMAP and POP server
+
++ postconf :: Postfix utility
+
++ MX Record :: Mail exchange record
+
++ Port 25 :: SMTP
+
++ Port 587 :: Mail submission
+
++ Port 110 :: POP3
+
++ Port 143 :: IMAP
+
++ Port 993 :: IMAPS
+
+* Preparation
+** TODO Set up Postfix on both vms so mail can be sent both ways.  Set IP addresses in the hosts file.  Include other servers so studen A can send mail to student B. :CIS238DL:
+
+** Set Networking
+
+In VirtualBox set /Networking/ to /Bridged/ on each virtual machines.  Be sure to refresh the MAC address on both machines so that each has a unique IP address.  One virtual machine will be the Postfix MTA and the other will be used for the MUA.
+
+** Set HOSTNAME on Server
+
+Edit =/etc/sysconfig/network= and set a hostname using your first initial and last name dot com for the server and dot net for the client.
+
+/Example for John Doe use this hostname on the server:/
+
+: HOSTNAME=jdoe.com
+
+/and on the client:/
+
+; HOSTNAME=jdoe.net
+
+/Note:/ Reboot each virtual machine after making this change.
+
+** Add User Accounts
+
+Add two user accounts /tux/ on the server and an account for yourself on the client.  Be sure to set passwords for each.
+
+** Hosts file
+
+On the client add a line to the */etc/hosts* listing the IP address for the server host.
+
+/Example: If the server is jdoe.com use this line./
+
+: 192.168.201.123 jdoe.com
+
+/On the server list the IP address of the client:/
+
+: 192.168.201.124 jdoe.net
+
+Postfix will access the /hosts/ file to direct the mail properly.
+
+** Install on Client
+
+Install the following packages on the CentOS client.
+
++ Nmap
+
++ Netcat
+
++ Mutt
+
+* TODO Configure etckeeper 					   :CIS238DL:
+
+* COMMENT Configure Mutt 					   :CIS238DL:
+
+Create a hidden =~/.muttrc= configuration file in $HOME for each user with these options.  /Note:/ This is not a complete configuration file but just enough for Mutt to read Mairdir.
+
+#+BEGIN_EXAMPLE
+set mbox_type=Maildir
+set folder="~/Maildir"
+set mbox="~/Maildir"
+set spoolfile="~/Maildir"
+#+END_EXAMPLE
+
+![fixme][]set editor="nano -t +8"
+
+![fixme][] To limit the width of text to 72 characters, edit your .nanorc file and add:
+
+![fixme][] set fill 72
+
+![fixme][]Also, in muttrc file, you can specify the line to start editing so that you will skip the mail header:
+
+![fixme][] set editor="nano +7"
+
+/Note:/ You can use =curl= to grab the file from =dennisk.freeshell.org/sample_muttrc= and redirect it to =~/.muttrc=.
+
+* Install Postfix and Dovecot
+
+Use =yum groupinstall= to install the *E-Mail Server* meta package.  Yum installs =postfix=, =Dovecot=, =spamassassin= and dependencies.  Start =postfix= and =dovecot= and configure them to start on boot up.
+
+* Configure Postfix
+
+To set Postfix as an open relay on the local network here are the options that need to be changed in the *main.cf* file.  Configuration settings starting with a *$* are variables that you will set.  A good way to learn about Postfix's capabilities is the read the comments in */etc/postfix/main.cf*.  /You'll be making a lot of changes so back up the file first!/
+
+1. Uncomment *myhostname* and replace /host.domain.tld/ with the *hostname* of the server.
+
+2. Uncomment *mydomain* and replace /domain.tld/ with the domain of the mail server.  /Example:/ jdoe.com.
+
+3. Uncomment *mynetworks* and replace *168.100.189.0/24* with *192.168.201.0/24*.
+
+4. Uncomment *mynetworks\_style = subnet*
+
+5. Uncomment *myorigin = $mydomain*
+
+6. Uncomment *mydestination = $myhostname, localhost.$mydomain*.
+
+7. Uncomment *inet\_interfaces = all*.
+
+8. Comment *inet\_interfaces = localhost*.
+
+9. Restart the Postfix daemon.
+
+   : # service postfix restart
+
+10. Check that Postfix will start on reboot.
+    
+   : # chkconfig --list postfix
+
+    Postfix will now accept mail for outside delivery.
+
+    Use =service postfix restart= to reload the changes to the Postfix configuration file.  You can use =postconf -n= to display the configuration options.
+
+* Configure Dovecot
+
+Dove does not require any changes to the configuration file but you should create a fresh set of keys for IMAPS.
+
+1. Move the default keys from */etc/pki/dovecot/certs/dovecot.pem* and */etc/pki/dovecot/private/dovecot.pem* to root's home directory.  Rename the private does so it does not overwrite the cert.
+
+2. Run this script to generate a new private key and self-signed certificate.
+
+   : # sh /usr/libexec/dovecot/mkcert.sh
+
+3. Restart the Dovecot service to make changes effective.
+
+* Configure the Firewall
+
+#+ATTR_HTML alt="system-config-firewall-tui screenshot"
+[[https://wm.sdf.org/gallery/albums/userpics/10081/firware_email.png]]
+
+Open ports *25* (SMTP) and *993* (Secure IMAP) on the firewall using =system-config-firewall-tui=.
+
+Use Nmap from the client to confirm a service is listening on those ports.
+
+: # nmap 192.168.201.123
+
+* Add an Alias for Root Mail
+
+Edit =/etc/aliases= and redirect root mail to *tux*.  Be sure to run the =newaliases= command for your change to take effect.
+
+* COMMENT Use telnet to Test Postfix
+
+use =telnet= or =nc= to directly access port 25 and the Postfix MTA from another virtual machine.  Use the instructions under resources.  Since this is an open relay you can skip AUTH LOGIN.
+
+: netcat jdoe.com 25
+
+or
+
+: telnet 192.168.201.123 25
+
+Postfix should respond.
+
+* Sending Email Directly to the Server
+
+You can send an email directly to port 25 to test Postfix.  Follow the Linux Journal article below -- "Sending Email with Netcat."
+
+* Log files
+
+Postfix logs to =/var/log/maillog=.  Use the tail command to check the log for any error messages.
+
+** Graylisting
+
+SDF uses graylisting to limit spam.  Send a mail from the the Postfix server to dennisk@sdf.lonestar.org and check the log.  You'll see that the SDF mail server responded with "Server is busy. Please retry."  Postfix will retry delivery later.  Spammer's usually don't.  When Postfix resends the email SDF will mark the Postfix server as legitimate.
+
+* Troubleshoot the Assignment
+
++ Are the needed ports open on the firewall?  Use =iptables-save= to check.
+
++ Typos or missing configuration options?  Check with =postconf -n=.
+
++ Was =newaliases= run after making changes?
+
++ Was Postfix and Dovecot configuration files reloaded after making changes?
+
++ You may need to manually configure a network interface.
+
+  : # dhclient -v eth1
+
+* XKCD
+
+#+ATTR_HTML alt="XKCD cartoon - Where are the bodies hidden"
+[[http://imgs.xkcd.com/comics/security_question.png]]
+
+* What to Submit
+
+Send a email from the Postfix server to dennisk@mesacc.edu.
+
+* COMMENT What to Submit
+
+Copy and paste these questions along with your answers into the text submission box.
+
+1. Where does Postfix log error messages?
+
+2. Send an email to /dennisk@sdf.lonestar.org/.  Wait a few minutes and check the Postfix log.  What anti-spam technique is the mail server using?
+
+3. What editor does Mutt use by default?
+
+* Resources
+
++ [[http://www.postfix.org/BASIC_CONFIGURATION_README.html][Postfix Basic Configuration]]
+
++ [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s1-email-mta.html][Mail Transport Agents]]
+
++ [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/sect-Security_Guide-Server_Security-Securing_Postfix.html][Securing Postfix]]
+
++ [[http://wiki2.dovecot.org/QuickConfiguration][Quick Configuration]]
+
++ [[https://www.fastmail.fm/help/spam_virus_protection_smtp_stage.html][SMTP stage checks]]
+
++ [[http://technet.microsoft.com/en-us/library/aa995718%28v=exchg.65%29.aspx][How to Use Telnet to Test SMTP Communication]]
+
++ [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/sect-Security_Guide-Server_Security-Verifying_Which_Ports_Are_Listening.html][Verifying Which Ports Are Listening]]
+
++ [[https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol][Simple Mail Transport Protocol]]
+
++ [[http://customer.comcast.com/help-and-support/internet/email-port-25-no-longer-supported/][Why is Comcast supporting port 465?]]
+
++ [[http://www.linuxjournal.com/content/sending-email-netcat][Sending Email with Netcat]]
+
++ /etc/services
+
++ /usr/share/doc/postfix
+
++ /usr/share/doc/dovcot
+
++ [[http://dovecot.org][Dovecot]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

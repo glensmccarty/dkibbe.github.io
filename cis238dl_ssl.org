@@ -1,0 +1,148 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:  Self-Signed SSL Certificate
+#+DESCRIPTION: Create a self-signed SSL certificate. 
+#+KEYWORDS: cis238dl ssl apache
+
+* Overview
+
+  [[https://www.secure-travel.co.uk/images/ssl_padlock.jpg]]
+
+  SSL is the encryption technology used to protect your confidentiality on the web.  It is similar to using SSH keys in that there is a public and private key involved.  In addition the public key (in the certificate sent to Firefox) is signed by Certificate Authority (CA) that vouches for the authenticity of the web site.  It is somewhat like using a Notary Public to verify your signature.
+
+  In this assignment you will create and install a self-signed certificate for the Apache web server.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Create a SSL certificate.
+
+  + Open a port in the firewall for https.
+
+  + Connect to the Apache web server using SSL
+
+* Terms You Should Know
+
+  + SSL :: Secure Socket Layer -- The encryption technology that protects sites on the web.
+
+  + PKI :: Public-key Infrastructure
+
+  + CA :: Certificate Authority, a recognized agency that issues SSL certificates such as Verisign.
+
+  + .key :: The extension for the private key
+
+  + .csr :: The signing request sent to the registrar. (Not used here.)
+
+  + .crt :: Self-signed key
+
+* Preparation
+
+  Use the same CentOS virtual machine with Apache installed. 
+
+* Generate the Private Key
+
+  This OpenSSL command will generate a 2048-bit private key.  The actual key name can be anything you like just keep the /.key/ extension.  Create the key in root's home directory.  Later you'll copy the key to =/etc/pki/tls/private/=
+
+  : root@vm1 # openssl genrsa -out ca.key 2048 
+
+* Generate the CSR
+
+  [[https://wm.sdf.org/gallery/albums/userpics/10081/csr.png]]
+
+  Create the CSR with this command.  Replace /Common Name/ with your first and last name.  /Note:/ This **must** be in the screenshot you submit!
+
+  : root@vm1 # openssl req -new -key ca.key -out ca.csr 
+
+* Generate and Install the Self-Signed Key
+
+  In public-key infrastructure (PKI) systems, a Certificate Signing Request (CSR) is sent to a Certificate Authority in order to apply for a digital identity certificate.  In this assignment you will self-sign the public key.
+
+  : root@vm1 # openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt
+
+  Copy this to =/etc/pki/tls/certs=.
+
+* COMMENT Delete the CSR
+
+  Once the CSR has been used to create the private key it is no longer needed.
+
+  : root@vm1 # rm ca.csr
+
+* Install the Private Key and CSR
+
+  Copy the private key and the csr to =/etc/pki/tls/private=.
+
+  : root@vm1 # cp ca.key ca.csr /etc/pki/tls/private/
+
+* COMMENT What should the permissions be?  They look to be too open.
+
+* Enable the New Certificate
+
+  The last step is to enable the new certificate in =/etc/httpd/conf.d/ssl.conf=.  There are two directives that must be edited.
+
+  : SSLCertificateFile
+  : SSLCertificateKeyFile
+
+  Comment out these lines and add a new entry below each with your key and certificate.
+
+* Open Port 443 in the Firewall
+
+  While you can use =system-config-firewall-tui= to manage the firewall adding rules by hand are not hard.  You can use one of these commands to list the current rule set.
+
+  : root@vm1 # iptables --line-numbers -L
+
+  : root@vm1 # iptables-save
+
+  The =iptables-save= command's output is easier to read and is in the same format used to enter new rules.  Also it's easy to count the rule numbers.
+
+  This command will insert a rule as the given rule number.  /Remember rules are read from the top down so watch where you put this rule./
+
+* Add a Secure Virtual Host
+
+  You can add a secure virtual host for any website you have created to =/etc/httpd/conf.d/vhosts.conf=.  See [[Resources]] below for a link to the template on my web site.  The entry will look like this:
+
+#+BEGIN_EXAMPLE
+<VirtualHost *:443>
+        SSLEngine on
+        SSLCertificateFile /etc/pki/tls/certs/ca.crt
+        SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+        <Directory /var/www/vhosts/yoursite.com/httpsdocs>
+        AllowOverride All
+        </Directory>
+        DocumentRoot /var/www/vhosts/yoursite.com/httpsdocs
+        ServerName yoursite.com
+</VirtualHost>
+#+END_EXAMPLE  
+
+* Troubleshoot the Assignment
+
+  + Make sure your name appears in the certificate screenshot.
+
+  + Did you copy the files to the correct directories?
+
+  + Is port 443 open in the firewall?
+
+  + In Firefox you can view the certificate details again under the /Tools, Page Info/ menu.
+
+* XKCD
+
+  [[http://imgs.xkcd.com/comics/security_question.png]]
+
+* What to Submit
+
+  Submit a screenshot of the certificate details from the warming dialog in Firefox.
+
+* Resources
+
+  + [[http://wiki.centos.org/HowTos/Https][Setting UP a SSL Secured Web server with CentOS]]
+
+  + [[https://www.eff.org/https-everywhere-node][https Everywhere]]
+
+  + [[dennisk.freeshell.org/vh443][Secure VirtualHost template]]
+
+  + [[http://dennisk.freeshell.org/vh433][SSL Virtual Host Template]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

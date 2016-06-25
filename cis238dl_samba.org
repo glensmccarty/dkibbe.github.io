@@ -1,0 +1,168 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-steely.org
+#+TITLE:  Samba
+#+DESCRIPTION: Configuring Samba
+#+KEYWORDS: samba smb windows cis238dl cis240dl
+#+EXPORT_EXCLUDE_TAGS: cis240dl cis238dl cis126dl
+
+* Overview
+
+  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  + Configure a Samba server on CentOS
+
+  + Configure SELinux to work with Samba
+
+  + Connect to the Samba server from a Windows workstation.
+
+* Terms You Should Know
+
+  + /etc/samba/smb.conf :: The Samba configuration file.
+
+  + smb :: Server Message Block daemon
+
+  + nmb :: NetBIOS Message Block daemon
+
+* Preparation
+
+  Use a CentOS virtual Machine on the 192.168.201.0/24 network.
+
+* COMMENT Microsoft Networking
+
++ NetBIOS names - 15 characters max.
+
++ NetBEUI NetBIOS Extended User Interface (Not routeable)
+
++ Name resolution requests are through broadcasts
+
++ Originally limited to 255 nodes.
+
++ NetBIOS adopted to TCP/IP with SMA
+
++ NetBIOS names registered with a single master browser.
+
++ **net view**
+
++ **net user**
+
++ **ipconfig \all**
+
+* Configure Samba
+
+** The Comment Characters
+
+   /Samba configuration file uses two types of comments./
+
+   + # (hash) :: Comments and text
+
+   + ; (semicolon) :: Options
+
+/Be sure to uncomment options that you change./
+
+** NetBIOS
+
+1. Set *netbios name* to a unique name.
+
+   : netbios name = DK-SERVER
+
+2. Set *interfaces*
+
+   : interfaces = lo eth1 192.168.201.0/24*
+
+3. Set *hosts* 
+
+   : hosts allow = 192.168.201.0/24
+
+4. Set *security*
+
+   : security = user
+
+/Make sure eth<n> is your active interface!/
+
+* Testing the Configuration
+
+  Use =testparm= to check the configuration
+
+  1. Global settings
+
+  2. Network-related
+
+  3. Logging
+
+  4. Standalone
+
+  5. Domain Controller
+
+  6. Browse Control
+
+  7. Name Resolution
+
+  8. Printer options
+
+  9. Filesystem options
+
+* Add a Samba User
+
+  1. Add a Samba user.  The account must already exist.  The Samba password can be different.
+
+     : # smbpasswd -a jstudent
+
+* SELinux
+
+  SELinux needs to be configured for Samba.  Follow the instructions in the *smb.conf* to configure SELinux.  The =setsebool= command will take a while.
+
+* Firewall
+
+  Use =system-config-firewall-tui= to open ports for Samba.
+
+[[https://wm.sdf.org/gallery/albums/userpics/10081/firewall_samba.png]]
+
+** COMMENT
+| Port | Protocol | Description                  |
+|------+----------+------------------------------+
+|  137 | UDP      | NetBIOS name service         |
+|  138 | UDP      | NetBIOS datagram service     |
+|  139 | UDP      | NetBIOS session service      |
+|  445 | TCP      | Microsoft directory services |
+
+* COMMENT /etc/services
+
+  Grep */etc/service* for these lines.
+
+<pre>
+netbios-ns	137/udp		# NETBIOS Name Service
+netbios-dgm	138/udp		# NETBIOS Datagram Service
+netbios-ssn	139/tcp		# NETBIOS Session Service
+microsoft-ds	445/tcp		# Microsoft-DS
+</pre>
+
+* On Your Own
+
+  SWAT is the browser-based configuration tool for Samba.  See if you can set it up.
+ 
+* Connect
+
+  From the Windows Run Dialog box connect to the Samba server.
+
+  [[https://wm.sdf.org/gallery/albums/userpics/10081/run.png]]
+
+* COMMENT Troubleshoot the Assignment
+
+* What to Submit
+
+  Submit a screenshot of the Windows Explorer accessing the Samba server.
+
+* Resources
+
+  + [[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-File_and_Print_Servers.html#s1-Samba][Red Hat Deployment Guide]]
+
+  + [[http://www.samba.org/samba/docs/][Samba Documentation]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML

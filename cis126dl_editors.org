@@ -1,0 +1,164 @@
+#+SETUPFILE: ~/.emacs.d/org-templates/level-wave.org
+#+STARTUP: indent
+#+AUTHOR: Dennis Kibbe
+#+EMAIL: dennis.kibbe@mesacc.edu
+#+TITLE: Linux Text Editors
+#+DESCRIPTION: In this assignment students create a paper cheat sheet for the Vi text editor.
+#+KEYWORDS: cis126dl, nano, vi, vim, emacs
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+LINK_UP: sitemap.html
+#+LINK_HOME: index.html
+
+* COMMENT Lesson Plan
+
+** Course Competencies
+
+- 7. Use the Visual Editor (Vi) to edit and create text documents. (III)
+
+** Learning Objectives
+
+/After finishing this assignment the student will be able to:/
+
+See below.
+
+** Lesson Material
+
+- Pens, colored pencils
+- Plain paper, graph paper
+
+** Lesson Sequence
+
+*** Activate Prior Knowledge: 2 min.
+
+*** Making Content Meaningful, Interaction and Assessment: 7-9 min.
+
+- Explain why using a text editor is an important administration skill.
+
+** Homework
+
+- Turn in paper cheat sheet.
+- This assignment can be done in place of the on in NDG.
+
+* Overview
+
+  Learning to use a command line text editor in Linux is an important skill every system administration must have.  Linux and UNIX both use plain text files for system configuration and a system administrator needs an efficient tool for editing text files.  The =vi= text editor (or =vim= for Vi Improved) is such a tool and can be found in one form or another on any Linux system.  In fact, it may be the only text editor you have access to.
+
+  In this assignment you will create paper cheat sheet for the =vi= editor that you will hand in for grading.  We'll also look briefly at two other popular editors -- Emacs and nano.
+
+* Assignment Objectives
+
+  /When you have successfully completed this assignment you will be able to:/
+
+  - Explain the advantages of plain text configuration files.
+  - Open a text file in =vi= or =vim=.
+  - Navigate a text file in the Command mode.
+  - Use the Edit mode to make changes to the file.
+  - Use search to find words in the file.
+  - Use replace to replace a single word or all the words that match the term in a file.
+  - Save the changes to the file and exit.
+  - Exit =vi= without saving any changes.
+  - Save the file under a new name.
+
+* Terms You Should Know
+
+  - ASCII :: Plain unformatted text.
+
+  - vi :: The =vi= text editor. On some system =vi= may link to =vim=.
+
+  - vim :: VI Improved
+
+  - vimtutor :: Vim Tutor opens a sample file to edit.
+
+  - Edit Mode :: In =vi= this mode is used for editing text.
+	     
+  - Command Mode :: In =vi= this mode is used for navigation.  You can return to the command or normal mode at any time by pressing the /Esc/ key.
+
+  - nano :: A light-weight text editor found on many system.  A free implementation of the =pico= text editor.
+		    
+  - Emacs :: The text editor created by Richard Stallman -- a popular alternative to =vi=.
+
+* Preparation
+  
+  This assignment requires pencil or pen and paper (yes, old school).  I'll have graph paper available but you should have a pen or pencil -- several color would be great.  Type =vimtutor= on the command line to start =vim= with a sample file to edit.
+
+  If =vimtutor= is not installed you can install it with =sudo apt-get install vim=.
+
+* Why Text Files And Not A Binary Registry?
+
+  Using plain text files for system configuration has several advantages over using a database such as the Windows' registry to store configuration parameters.  Some of the advantages are:
+
+  - No special tool is needed to edit the files any text editor will work.
+  - Comments and instructions can be included in the configuration file itself.  (The hash or # symbol is usually used to mark these.)
+  - Text files can be easily backed up with the =cp= (copy) command or placed under version control.
+  - Version control makes it easy to document changes and undo changes if needed.
+  - Using the =diff= command to compare a modified file with the original makes it easy to spot mistakes and acts as a reminder of what changes were made.
+  - Since separate files are used for each program file sizes are small.
+
+    Many programs store system-wide configuration files in the */etc/* directory and also let normal users have a customized configuration file in their home directory.  /Example:/ The nano text editor has a sample configuration file in */usr/share/doc/nano/examples/* that you can copy to your home directory and modify.
+
+* Vi Cheat sheet
+
+  See the cheat sheet link under /Resources/ for instructions.
+
+* On Your Own
+
+When editing text configuration files you should always make a backup.  This lets you easily recover form mistakes.  Another advantage is that you can use the =diff= command to check your work.
+
+** Create a Test File
+
+1. Change to the =/tmp= directory.
+2. Create a new file named /hello/.
+3. Add this line to the file. "Hello World!"
+4. Save the file and exit =vi=.
+
+** Make Changes
+
+1. Copy /hello/ to /hello2/.
+2. Open /hello2/ and change "Hello World!" to "Hi World!"
+3. On a new line add "Goodbye World!"
+4. Save the changes and close =vi=.
+
+** Use =diff= to Show the Changes
+
+5. Use =diff= to show the differences between the two files.
+
+#+BEGIN_EXAMPLE
+tux@iceberg:/tmp$ diff hello hello2
+1c1,2
+< Hello World!
+---
+> Hi World!
+> Goodbye World!
+#+END_EXAMPLE
+
+Lines preceded by *<* appear in /hello/ and lines preceded by *>* are in /hello2/. 
+
+* COMMENT Troubleshoot the Assignment
+
+* What to Submit
+
+  Hand in your paper cheat sheet for grading.  Your sheet should include all the commands found on the example cheat sheet for full credit.  The cheat sheet will be returned to you so you can use it in class.
+
+* COMMENT Answer
+
+* XKCD
+
+#+ATTR_HTML: :alt XKCD cartoon about text editors
+  [[http://imgs.xkcd.com/comics/real_programmers.png]]
+
+* Resources
+
+  - [[http://www.vim.org/][VIM home page]]
+  - [[http://sachachua.com/blog/2013/05/how-to-learn-emacs-a-hand-drawn-one-pager-for-beginners/][Emacs One-Page Cheat sheet]]
+  - [[http://www.nano-editor.org][Nano homepage]]
+  - [[http://www.ibm.com/developerworks/linux/tutorials/l-vi/][vi intro -- the cheat sheet method]]
+
+* License
+
+#+BEGIN_HTML
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+#+END_HTML
+
