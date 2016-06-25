@@ -1,4 +1,4 @@
-#+TITLE: Assignment 8.1 - Archiving and Compressing Data
+#+TITLE: Assignment 8.1 - Archiving and Compressing File
 #+AUTHOR:    Dennis Kibbe
 #+EMAIL:     dennis.kibbe@mesacc.edu
 #+DESCRIPTION: Using tar to archive and compress data
@@ -15,12 +15,10 @@
 #+LINK_UP:   
 #+LINK_HOME: index.html
 #+LINK: fixme file: images/fixme.png
-#+LINK: cabinet file: images/cis126dl_tar-1.png
+#+LINK: cabinet file: images/file_cabinet-40%.png
 #+XSLT:
 
 [[cabinet]]
-
-* Archiving and Compressing Data
 
 ** Introduction
 
