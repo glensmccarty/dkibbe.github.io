@@ -1,21 +1,7 @@
-
+#+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
 #+TITLE: Assignment 9.1 - Killing a Run Away Process
-#+AUTHOR:    Dennis Kibbe
-#+EMAIL:     dennis.kibbe@mesacc.edu
-#+DESCRIPTION:
+#+DESCRIPTION: An introduction to working with processes.
 #+KEYWORDS: cis126dl, ps, top, kill, nice, renice, RHCSA
-#+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
-#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
-#+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
-#+STYLE: <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
-#+STYLE: <style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
-#+STYLE: <style type="text/css"> code {color: blue; font-weight:bold;} </style>
-#+LINK_UP:   
-#+LINK_HOME: index.html
-#+LINK: fixme file: images/fixme.png "Fix Me clipart"
 #+LINK: top-cpuhog file: images/top-cpuhog.jpg "Screen shoot of cat process running in top"
 #+LINK: ps-cpuhog file: images/ps-cpuhog.jpg "Screenshot of ps command"
 #+LINK: zombie http://dennisk.freeshell.org/other/zombie
