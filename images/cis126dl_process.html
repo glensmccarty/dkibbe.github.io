@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Assignment 9.1 - Killing a Run Away Process</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Assignment 9.1 - Killing a Run Away Process"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-06-27T09:00-0700"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content=""/>
+<meta name="keywords" content="cis126dl, ps, top, kill, nice, renice, RHCSA"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+<div id="org-div-home-and-up" style="text-align:right;font-size:70%;white-space:nowrap;">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Assignment 9.1 - Killing a Run Away Process</h1>
+
+
+
+<div id="outline-container-1" class="outline-3">
+<h3 id="sec-1"><span class="section-number-3">1</span> Introduction</h3>
+<div class="outline-text-3" id="text-1">
+
+
+<p>
+   Sometimes a process can get out of hand and drain system resources.  It’s important to identify a run away process and terminate it.  In this assignment you will start a process to drive up CPU usage and than use various command line tool to identify and terminate the run away process.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-3">
+<h3 id="sec-2"><span class="section-number-3">2</span> Commands and Terms You Should Know</h3>
+<div class="outline-text-3" id="text-2">
+
+
+<dl>
+<dt>Process</dt><dd>A computer program in action
+</dd>
+<dt>&amp;</dt><dd>An Ampersand following a command put the command in the background.
+</dd>
+<dt><code>jobs</code></dt><dd>List jobs running in the background.
+</dd>
+<dt><code>fg</code></dt><dd>Bring a back-grounded job to the foreground.
+</dd>
+<dt>PID</dt><dd>Process ID
+</dd>
+<dt><code>ps</code></dt><dd>Displays static information about processes.
+</dd>
+<dt><code>pstree</code></dt><dd>Displays a hierarchical view of processes.
+</dd>
+<dt><code>top</code></dt><dd>Provides a dynamic real-time view of a running system.
+</dd>
+<dt><code>htop</code></dt><dd>An interactive process view that allows scrolling.
+</dd>
+<dt><code>init</code></dt><dd>init is the parent of all processes on a non-systemd system.
+</dd>
+<dt><code>nice</code></dt><dd>Run a program with modified scheduling priority.
+</dd>
+<dt><code>renice</code></dt><dd>Alter priority of a running process.
+</dd>
+<dt><code>kill</code></dt><dd>Terminate a running process.
+</dd>
+<dt>signal</dt><dd>Linux supports standard signals (SIGTERM, SIGKILL).  See Resources below.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-3">
+<h3 id="sec-3"><span class="section-number-3">3</span> Preparation</h3>
+<div class="outline-text-3" id="text-3">
+
+
+<p>
+   This lab can be done on any virtual machine.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-3">
+<h3 id="sec-4"><span class="section-number-3">4</span> Process States</h3>
+<div class="outline-text-3" id="text-4">
+
+
+<p>
+   As a process executes it changes state according to its circumstances.  Linux processes have the following states:
+</p>
+<dl>
+<dt>Running</dt><dd>The process is either running (it is the current process in the system) or it is ready to run (it is waiting to be assigned to one of the system's CPUs).
+</dd>
+<dt>Waiting</dt><dd>The process is waiting for an event or for a resource.  Linux differentiates between two types of waiting process; interruptible and uninterruptible.  Interruptible waiting processes can be interrupted by signals whereas uninterruptible waiting processes are waiting directly on hardware conditions and cannot be interrupted under any circumstances.
+</dd>
+<dt>???</dt><dd>Stopped {: The process has been stopped, usually by receiving a signal.  A process that is being debugged can be in a stopped state.
+</dd>
+<dt>Zombie</dt><dd>This is a halted process whose parent died before it finished.  A zombie process will be taken over by init and terminated.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-3">
+<h3 id="sec-5"><span class="section-number-3">5</span> A CPU Hog</h3>
+<div class="outline-text-3" id="text-5">
+
+
+<p>
+   To simulate a runaway process redirect <code>/dev/zero</code> which outputs an endless stream of zeros to <code>/dev/null</code> which is a black hole.
+</p>
+<pre class="example">
+$ cat /dev/zero &gt;/dev/null
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-3">
+<h3 id="sec-6"><span class="section-number-3">6</span> Monitor the process</h3>
+<div class="outline-text-3" id="text-6">
+
+
+<p>
+   Open a new terminal and run the <code>top</code> command to see that the cat command is hogging CPU cycles.
+</p>
+<p>
+   <a href=" images/top-cpuhog.jpg "Screen shoot of cat process running in top""> images/top-cpuhog.jpg "Screen shoot of cat process running in top"</a>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Die, Process, Die!</h2>
+<div class="outline-text-2" id="text-1">
+
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Getting the Correct PID</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   The first step to killing a run away process is to identify the Process ID.  Use the ps command to identify the PID.  The PID number will be unique to your system.
+</p>
+<p>
+   <a href=" images/ps-cpuhog.jpg "Screenshot of ps command""> images/ps-cpuhog.jpg "Screenshot of ps command"</a>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> "He's dead, Jim"</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<p>
+   The <code>kill</code> command is used to end a process. You can only terminate a process you own.  The root user can terminate any process.
+</p>
+<pre class="example">
+$ kill pid_number
+</pre>
+
+
+<p>
+   You should see the process disappear from <code>top</code>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Using different signals to kill a process</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+
+</div>
+
+<div id="outline-container-1-3-1" class="outline-4">
+<h4 id="sec-1-3-1"><span class="section-number-4">1.3.1</span> SIGTERM</h4>
+<div class="outline-text-4" id="text-1-3-1">
+
+
+<p>    
+    The <code>kill</code> command without any options sends SIGTERM (signal 15) to the process asking it to terminate and clear up any temporary files.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-3-2" class="outline-4">
+<h4 id="sec-1-3-2"><span class="section-number-4">1.3.2</span> SIGKILL</h4>
+<div class="outline-text-4" id="text-1-3-2">
+
+
+<p>
+    You can also send the more powerful SIGKILL (signal 9) which kills the process if it doesn't respond to SIGTERM.
+</p>
+<pre class="example">
+$ kill -9 pid_number
+</pre>
+
+
+<p>
+    Use SIGKILL only as a last resort since it can leave temporary behind.
+</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> On Your Own</h2>
+<div class="outline-text-2" id="text-2">
+
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Zombies!</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   Download <a href="http://dennisk.freeshell.org/other/zombie">this small C program</a> to create a zombie processes.
+</p>
+<p>
+   Make the program executable and run it from the command line.
+</p>
+<pre class="example">
+$ chmod +x zombies
+$ ./zomie
+</pre>
+
+
+<p>
+   Use the techniques you used above to find and remove the zombie process.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> What to Submit</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   Submit a screenshot of the <code>/dev/zero &gt; /dev/null</code> process running in <code>top</code>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Resources</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<ul>
+<li>man init
+</li>
+<li>man ps
+</li>
+<li>man 7 signal
+</li>
+<li><a href="http://www.tldp.org/LDP/tlk/kernel/processes.html">The Linux Kernel</a>
+</li>
+<li><a href="https://www.ibm.com/developerworks/community/blogs/58e72888-6340-46ac-b488-d31aa4058e9c/entry/an_overview_of_linux_processes21?lang=en">An Overview of Linux Processes</a>
+</li>
+<li><a href="http://dennisk.freeshell.org/other/zombie">A small C program to create zombie processes</a> (Right click to download.)
+</li>
+<li><a href="https://www.youtube.com/watch?v=g3JGItKPT8g">White Zombie</a> (1932)
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-06-27T09:00-0700</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

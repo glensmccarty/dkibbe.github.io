@@ -1,0 +1,124 @@
+
+#+TITLE: Assignment 9.1 - Killing a Run Away Process
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DESCRIPTION:
+#+KEYWORDS: cis126dl, ps, top, kill, nice, renice, RHCSA
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STYLE: <link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle" /> 
+#+STYLE: <style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+#+STYLE: <style type="text/css"> code {color: blue; font-weight:bold;} </style>
+#+LINK_UP:   
+#+LINK_HOME: index.html
+#+LINK: fixme file: images/fixme.png "Fix Me clipart"
+#+LINK: top-cpuhog file: images/top-cpuhog.jpg "Screen shoot of cat process running in top"
+#+LINK: ps-cpuhog file: images/ps-cpuhog.jpg "Screenshot of ps command"
+#+LINK: zombie http://dennisk.freeshell.org/other/zombie
+
+** Introduction
+
+   Sometimes a process can get out of hand and drain system resources.  It’s important to identify a run away process and terminate it.  In this assignment you will start a process to drive up CPU usage and than use various command line tool to identify and terminate the run away process.
+
+** Commands and Terms You Should Know
+
+   - Process :: A computer program in action
+   - & ::  An Ampersand following a command put the command in the background.
+   - =jobs= :: List jobs running in the background.
+   - =fg= ::  Bring a back-grounded job to the foreground.
+   - PID ::  Process ID
+   - =ps= ::  Displays static information about processes.
+   - =pstree= ::  Displays a hierarchical view of processes.
+   - =top= ::  Provides a dynamic real-time view of a running system.
+   - =htop= ::  An interactive process view that allows scrolling.
+   - =init= ::  init is the parent of all processes on a non-systemd system.
+   - =nice= ::  Run a program with modified scheduling priority.
+   - =renice= ::  Alter priority of a running process.
+   - =kill= ::  Terminate a running process.
+   - signal ::  Linux supports standard signals (SIGTERM, SIGKILL).  See Resources below.
+   
+** Preparation
+
+   This lab can be done on any virtual machine.
+
+** Process States
+
+   As a process executes it changes state according to its circumstances.  Linux processes have the following states:
+
+   - Running :: The process is either running (it is the current process in the system) or it is ready to run (it is waiting to be assigned to one of the system's CPUs).
+   - Waiting :: The process is waiting for an event or for a resource.  Linux differentiates between two types of waiting process; interruptible and uninterruptible.  Interruptible waiting processes can be interrupted by signals whereas uninterruptible waiting processes are waiting directly on hardware conditions and cannot be interrupted under any circumstances.
+   - Stopped {: The process has been stopped, usually by receiving a signal.  A process that is being debugged can be in a stopped state.
+   - Zombie :: This is a halted process whose parent died before it finished.  A zombie process will be taken over by init and terminated.
+
+** A CPU Hog
+
+   To simulate a runaway process redirect =/dev/zero= which outputs an endless stream of zeros to =/dev/null= which is a black hole.
+
+   : $ cat /dev/zero >/dev/null
+
+** Monitor the process
+
+   Open a new terminal and run the =top= command to see that the cat command is hogging CPU cycles.
+
+   [[top-cpuhog]]
+
+* Die, Process, Die!
+
+** Getting the Correct PID
+
+   The first step to killing a run away process is to identify the Process ID.  Use the ps command to identify the PID.  The PID number will be unique to your system.
+
+   [[ps-cpuhog]]
+
+** "He's dead, Jim"
+
+   The =kill= command is used to end a process. You can only terminate a process you own.  The root user can terminate any process.
+
+   : $ kill pid_number
+
+   You should see the process disappear from =top=.
+
+** Using different signals to kill a process
+
+*** SIGTERM
+    
+    The =kill= command without any options sends SIGTERM (signal 15) to the process asking it to terminate and clear up any temporary files.
+
+*** SIGKILL
+
+    You can also send the more powerful SIGKILL (signal 9) which kills the process if it doesn't respond to SIGTERM.
+
+    : $ kill -9 pid_number
+
+    Use SIGKILL only as a last resort since it can leave temporary behind.
+
+* On Your Own
+
+** Zombies!
+
+   Download [[http://dennisk.freeshell.org/other/zombie][this small C program]] to create a zombie processes.
+
+   Make the program executable and run it from the command line.
+
+    : $ chmod +x zombies
+    : $ ./zomie
+
+   Use the techniques you used above to find and remove the zombie process.
+
+** What to Submit
+
+   Submit a screenshot of the =/dev/zero > /dev/null= process running in =top=.
+
+** Resources
+
+   - man init
+   - man ps
+   - man 7 signal
+   - [[http://www.tldp.org/LDP/tlk/kernel/processes.html][The Linux Kernel]]
+   - [[https://www.ibm.com/developerworks/community/blogs/58e72888-6340-46ac-b488-d31aa4058e9c/entry/an_overview_of_linux_processes21?lang%3Den][An Overview of Linux Processes]]
+   - [[http://dennisk.freeshell.org/other/zombie][A small C program to create zombie processes]] (Right click to download.)
+   - [[https://www.youtube.com/watch?v%3Dg3JGItKPT8g][White Zombie]] (1932)
