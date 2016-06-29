@@ -261,3 +261,4 @@ Submit a screenshot showing the output of =tar -tvf foobar.tar.gz= showing the c
  - info find
  - man file
  - man xargs
+ - [[http://computer.howstuffworks.com/file-compression.htm][How File Compression Works]]

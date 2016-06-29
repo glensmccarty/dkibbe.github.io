@@ -2,8 +2,10 @@
 #+TITLE: Assignment 9.1 - Killing a Run Away Process
 #+DESCRIPTION: An introduction to working with processes.
 #+KEYWORDS: cis126dl, ps, top, kill, nice, renice, RHCSA
-#+LINK: top-cpuhog file: images/top-cpuhog.jpg "Screen shoot of cat process running in top"
-#+LINK: ps-cpuhog file: images/ps-cpuhog.jpg "Screenshot of ps command"
+#+LINK: top-cpuhog file: images/top-cpuhog.jpg
+#+LINK: ps-cpuhog file: images/ps-cpuhog.jpg
+#+LINK: gnome_sys_mon1 file: images/gnome_sys_mon1.png
+#+LINK: gnome_sys_mon2 file: images/gnome_sys_mon2.png
 #+LINK: zombie http://dennisk.freeshell.org/other/zombie
 
 ** Introduction
@@ -14,17 +16,19 @@
 
    - Process :: A computer program in action
    - & ::  An Ampersand following a command put the command in the background.
+   - !! :: Run the previous command again.
    - =jobs= :: List jobs running in the background.
    - =fg= ::  Bring a back-grounded job to the foreground.
    - PID ::  Process ID
    - =ps= ::  Displays static information about processes.
    - =pstree= ::  Displays a hierarchical view of processes.
    - =top= ::  Provides a dynamic real-time view of a running system.
-   - =htop= ::  An interactive process view that allows scrolling.
+   - =htop= ::  An interactive process view that allows scrolling. (Install using =apt-get=.)
    - =init= ::  init is the parent of all processes on a non-systemd system.
    - =nice= ::  Run a program with modified scheduling priority.
    - =renice= ::  Alter priority of a running process.
    - =kill= ::  Terminate a running process.
+   - =killall= :: Terminate a process by name
    - signal ::  Linux supports standard signals (SIGTERM, SIGKILL).  See Resources below.
    
 ** Preparation
@@ -37,7 +41,7 @@
 
    - Running :: The process is either running (it is the current process in the system) or it is ready to run (it is waiting to be assigned to one of the system's CPUs).
    - Waiting :: The process is waiting for an event or for a resource.  Linux differentiates between two types of waiting process; interruptible and uninterruptible.  Interruptible waiting processes can be interrupted by signals whereas uninterruptible waiting processes are waiting directly on hardware conditions and cannot be interrupted under any circumstances.
-   - Stopped {: The process has been stopped, usually by receiving a signal.  A process that is being debugged can be in a stopped state.
+   - Stopped  :: The process has been stopped, usually by receiving a signal.  A process that is being debugged can be in a stopped state.
    - Zombie :: This is a halted process whose parent died before it finished.  A zombie process will be taken over by init and terminated.
 
 ** A CPU Hog
@@ -46,33 +50,79 @@
 
    : $ cat /dev/zero >/dev/null
 
-** Monitor the process
+** Monitor Processes
 
-   Open a new terminal and run the =top= command to see that the cat command is hogging CPU cycles.
+*** From the Desktop
 
-   [[top-cpuhog]]
+    1. Click on the Dash and type *monitor* then click on *System Monitor*.
+
+       [[gnome_sys_mon1:]]
+
+    2. Select the *Resources* tab and notice that a process is consuming to many CPU cycles.
+    3. Select the *Processes* tab and click on the *%CPU* header to sort.  The =cat= entry should be the first entry in the column.
+
+       [[gnome_sys_mon2:]]
+
+*** From the Terminal
+
+    Open a new terminal and run the =top= command to see that the =cat= command is hogging CPU cycles.
+
+    [[top-cpuhog]]
 
 * Die, Process, Die!
 
+** Using the Gnome System Monitor
+
+   On the *Processes* tab highlight the =cat= entry and right click and select *End Process*.  Return to the command line to see that the process has been *terminated*.
+
+   : $ cat /dev/zero > /dev/null
+   : Terminated
+
 ** Getting the Correct PID
 
-   The first step to killing a run away process is to identify the Process ID.  Use the ps command to identify the PID.  The PID number will be unique to your system.
+   Run the =cat= command again but this time in the background.  The *&* start the process in the background.
 
-   [[ps-cpuhog]]
+   : $ cat /dev/zero > /dev/null &
+
+   The =jobs= command shows processes running in the background in the current terminal.
+
+   #+BEGIN_EXAMPLE
+   $ jobs
+   [1]   Running             cat /dev/zero > /dev/null &
+   #+END_EXAMPLE
+
+   The first step to killing a run-away process is to identify the Process ID.  Use the =ps= command to identify the PIDs of the processes in the current terminal.  The PID number will be unique to your system.
+
+   #+BEGIN_EXAMPLE
+   $ ps
+   PID TTY          TIME CMD
+   14476 pts/0    00:00:00 bash
+   18396 pts/0    00:03:45 cat
+   18454 pts/0    00:00:00 ps
+   #+END_EXAMPLE
 
 ** "He's dead, Jim"
 
-   The =kill= command is used to end a process. You can only terminate a process you own.  The root user can terminate any process.
+   The =kill= command is used to end a process.  You can only terminate a process you own.   The root user can terminate any process.
 
    : $ kill pid_number
 
    You should see the process disappear from =top=.
 
-** Using different signals to kill a process
+** Using Different Signals to End a Process
 
 *** SIGTERM
     
     The =kill= command without any options sends SIGTERM (signal 15) to the process asking it to terminate and clear up any temporary files.
+
+    : kill 18396
+
+    The =jobs= command confirms that the process is dead.
+
+    #+BEGIN_EXAMPLE
+    $ jobs
+    [1]   Terminated              cat /dev/zero > /dev/null
+    #+END_EXAMPLE
 
 *** SIGKILL
 
@@ -80,30 +130,62 @@
 
     : $ kill -9 pid_number
 
+    #+BEGIN_EXAMPLE
+    $ cat /dev/zero > /dev/null &
+    [3] 18879
+   $ kill -9 18879
+   $ jobs
+   [1]  Killed                 cat /dev/zero > /dev/null
+   #+END_EXAMPLE
+
     Use SIGKILL only as a last resort since it can leave temporary behind.
+
+* Terminate a Process by Name
+
+  If a program has more that a single instance running you can kill all of them by name using killall.
+
+  1. Start several =sleep 60&= commands.  (*Hint:* Use =!!= after the first =sleep 60&= to rerun it again.  See the =history= manpage.)
+  2. List the background processes with =jobs=.
+  3. Terminate them all with =killall=.
+
+* COMMENT Changing the Priority of a Process
 
 * On Your Own
 
 ** Zombies!
 
-   Download [[http://dennisk.freeshell.org/other/zombie][this small C program]] to create a zombie processes.
+   Download [[http://dennisk.freeshell.org/other/zombie][this small C program]] to create a zombie processes.  You can use =wget= or =curl= from the command line to retrieve the program.
+
+   : $ wget http://dennisk.freeshell.org/other/zombie
 
    Make the program executable and run it from the command line.
 
-    : $ chmod +x zombies
-    : $ ./zomie
+    : $ chmod +x zombie
+    : $ ./zombie
 
    Use the techniques you used above to find and remove the zombie process.
 
+** Htop - A Nicer Top
+
+   Htop is a nicer version of =top= developed  by Hisham  Muhammad.  It is in the Universe repository.  Instsll =htop= and see how you like it.
+
+   #+BEGIN_EXAMPLE
+   $ sudo apt-add-repository universe
+   $ sudo apt-get-update
+   $ sudo apt-get install htop
+   #+END_EXAMPLE
+
 ** What to Submit
 
-   Submit a screenshot of the =/dev/zero > /dev/null= process running in =top=.
+   Submit a screenshot of the =cat /dev/zero > /dev/null= process running in =top=.
 
 ** Resources
 
    - man init
    - man ps
-   - man 7 signal
+   - man nice
+   - man wget
+   - [[http://linux.die.net/man/8/renice][renice]]
    - [[http://www.tldp.org/LDP/tlk/kernel/processes.html][The Linux Kernel]]
    - [[https://www.ibm.com/developerworks/community/blogs/58e72888-6340-46ac-b488-d31aa4058e9c/entry/an_overview_of_linux_processes21?lang%3Den][An Overview of Linux Processes]]
    - [[http://dennisk.freeshell.org/other/zombie][A small C program to create zombie processes]] (Right click to download.)

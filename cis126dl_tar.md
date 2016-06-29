@@ -222,4 +222,4 @@ Submit a screenshot showing the output of `tar -tvf foo.tar.gz` showing the cont
  - man file
  - man xargs
 
-[tar-1]: https://dkibbe.github.io/images/imagesg/cis126dl_tar-1.png "file cabinet clipart"
+[tar-1]: https://dkibbe.github.io/images/cis126dl_tar-1.png "file cabinet clipart"
