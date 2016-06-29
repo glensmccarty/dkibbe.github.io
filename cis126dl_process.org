@@ -146,7 +146,7 @@
 
   1. Start several =sleep 60&= commands.  (*Hint:* Use =!!= after the first =sleep 60&= to rerun it again.  See the =history= manpage.)
   2. List the background processes with =jobs=.
-  3. Terminate them all with =killall=.
+  3. Terminate all the =sleep= processes with =killall sleep=.
 
 * COMMENT Changing the Priority of a Process
 
@@ -167,7 +167,7 @@
 
 ** Htop - A Nicer Top
 
-   Htop is a nicer version of =top= developed  by Hisham  Muhammad.  It is in the Universe repository.  Instsll =htop= and see how you like it.
+   Htop is a nicer version of =top= developed  by Hisham  Muhammad.  It is in the Universe repository.  Install =htop= and see how you like it.
 
    #+BEGIN_EXAMPLE
    $ sudo apt-add-repository universe
