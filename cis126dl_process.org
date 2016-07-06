@@ -133,9 +133,9 @@
     #+BEGIN_EXAMPLE
     $ cat /dev/zero > /dev/null &
     [3] 18879
-   $ kill -9 18879
-   $ jobs
-   [1]  Killed                 cat /dev/zero > /dev/null
+    $ kill -9 18879
+    $ jobs
+    [1]  Killed                 cat /dev/zero > /dev/null
    #+END_EXAMPLE
 
     Use SIGKILL only as a last resort since it can leave temporary behind.
@@ -149,6 +149,13 @@
   3. Terminate all the =sleep= processes with =killall sleep=.
 
 * COMMENT Changing the Priority of a Process
+
+  : $ nice
+  0
+
+  : nice -n 20 updatedb
+
+  : renice 
 
 * On Your Own
 

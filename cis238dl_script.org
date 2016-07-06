@@ -2,24 +2,38 @@
 #+TITLE:  Shell Scripting
 #+DESCRIPTION: 
 #+KEYWORDS: cis238dl bash
+#+LINK: shellcheck http://shellcheck.net
 
 * Overview
 
-  The Linux shell has a powerful scripting language.  Any command you can run at the prompt you can put into a script for later use.
+  The Linux shell has a powerful scripting language.  Any command you can run at the prompt you can put into a script to automate it for later use.
 
 * Assignment Objectives
 
   /When you have successfully completed this assignment you will be able to:/
 
-  + Lists the parts of a shell script.
-
-  + Create a simple shell script.
+  - Lists the parts of a shell script.
+  - Explain the function of the Shebang line.
+  - Create a simple shell script.
+  - Make the script executable.
 
 * COMMENT Terms You Should Know
 
-+ Term :: define term
+  - `chmod` :: 
+  - Shebang :: 
+  - POSIX :: 
 
 * COMMENT Preparation
+
+  Create a new directory in your home directory for the scripts you create.
+
+  : $ mkdir ~/bin
+
+  If the directory isn't part of your PATH you can add it temporary with this command.
+
+  : $ PATH=$PATH:/home/tux/bin
+
+** COMMENT The ~/bin Directory
 
 * Variables
 
@@ -49,7 +63,7 @@ echo "I am $remark too!"
 
 * Comments
 
-  Every script should be well comments.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash (*#*) sign.
+  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash (*#*) sign.
 
 #+BEGIN_EXAMPLE
 #!/bin/bash
@@ -66,10 +80,11 @@ echo "I am $remark too!"
 #+BEGIN_EXAMPLE
 $ chmod +x myscript.sh
 $ ./myscript.sh
+#+END_EXAMPLE
 
 Your PATH variable may include a *~/bin* directory.  If it does that would be a good place to keep your scripts.
 
-* Tests
+* COMMENT Tests
 
   It always a good idea to test for a condition.
 
@@ -116,20 +131,18 @@ Copy and paste these questions along with your answers into the submission text-
 
 2. Create a script that copies foobar to ~/temp and test that ~/temp exists. 
 
-* XKCD
+* COMMENT XKCD
 
   [[https://sslimgs.xkcd.com/comics/packages.png]]
 
 * Resources
 
-+ [[http://www.ibm.com/developerworks/aix/library/au-getstartedbash/][Bash scripting for beginning system administrators]]
-
-+ [[http://linuxcommand.org][LinuxCommand.org]]
-
-+ [[http://www.maricopa.edu/curriculum/A-C/042cis239dl.html][ Linux Shell Scripting ]]
-
-* License
-
-#+BEGIN_HTML
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"/></a><br/> This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
-#+END_HTML
+  - [[http://www.ibm.com/developerworks/aix/library/au-getstartedbash/][Bash scripting for beginning system administrators]]
+  - [[http://linuxcommand.org][LinuxCommand.org]]
+  - [[http://www.maricopa.edu/curriculum/A-C/042cis239dl.html][Linux Shell Scripting]]
+  - [[https://en.wikibooks.org/wiki/Bash_Shell_Scripting][Bash Shell Scripting - Wikibooks]]
+  - [[https://www.gnu.org/software/bash/manual/bashref.html][Bash Reference Manual]]
+  - [[http://bash.cyberciti.biz/guide/Main_Page][Linux Shell Scripting Tutorial]]
+  - [[https://google.github.io/styleguide/shell.xml][Google Shell Script Style Guide]]
+  - [[https://en.wikipedia.org/wiki/POSIX][POSIX]]
+  - [[shellcheck][ShellCheck]]

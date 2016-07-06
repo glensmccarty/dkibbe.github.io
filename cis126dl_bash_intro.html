@@ -1,41 +1,426 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="revealjs/css/reveal.css">
-	<link rel="stylesheet" href="revealjs/css/theme/black.css" id="theme">
-	<!--Add support for earlier versions of Internet Explorer -->
-	<!--[if lt IE 9]>
-	<script src="lib/js/html5shiv.js"></script>
-	<![endif]-->
+<title>Introduction to Bash Shell Scripting</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="revealjs/css/reveal.css">
+<link rel="stylesheet" href="revealjs/css/theme/moon.css" id="theme">
+<!--Add support for earlier versions of Internet Explorer -->
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
 </head>
 <body>
-	<!-- Wrap the entire slide show in a div using the "reveal" class. -->
-	<div class="reveal">
-		<div class="slides">
-			<section>
-				<h1>Introduction to the Bash Shell</h1>
-				<p>or how to be a shell Ninja</p>
-			</section>
-			<section id="show-a-link">
-				<h1>Show a live link</h1>
-				<p>Slide 2 discussed here</p>
-				<p>See <a href="http://www.htmlcheats.com">HTMLCheats.com</a><p>
-			</section>
-			<section>
-				<h1>Slide 3</h1>
-				<p>How does one revisit an arbitrary slide in code?</p>
-				<p>Visit internal slide<a href="#/show-a-link"> 2</a>
-			</section>
-		</div>
-	</div>
-	<script src="revealjs/lib/js/head.min.js"></script>
-	<script src="revealjs/js/reveal.js"></script>
-	<script>
-  	// Required, even if empty.
-  	Reveal.initialize({
-  	});
- </script>
-</body>
+<!-- Wrap the entire slide show in a div using the "reveal" class. -->
+<div class="reveal">
+<div class="slides">
+  <section>
+  <h1>Introduction to Bash Shell Scripting</h1>
+  <p>or how to be a shell Ninja</p>
+  </section>
+  <section>
+  <h1>The Bash shell has a powerful scripting language.</h1>
+  <p>Scripting lets system administrators:</p>
+  <ul>
+    <li>Combine commands to accomplish a task.</li>
+    <li>Automate repetitive processes.</li>
+    <li>Branch after testing for a condition.</li>
+    <li>Improve efficiency.</li>
+    <li>Delegate tasks.</li>
+  </ul>
+  </section>
+  <section>
+  <h1>Why scripts are important</h1>
+  <p>Bash shell scripts start many system processes.</p>
+  <pre>
+					<code>
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          rsyslog
+# Required-Start:    $remote_fs $time
+# Required-Stop:     umountnfs $time
+# X-Stop-After:      sendsigs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: enhanced syslogd
+# Description:       Rsyslog is an enhanced multi-threaded syslogd.
+#                    It is quite compatible to stock sysklogd and can be
+#                    used as a drop-in replacement.
+### END INIT INFO
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Which shell am I using?</h1>
+  <p>The <strong>SHELL</strong> environmental variable determines what your default shell is.</p>
+  <pre>
+					<code>
+$ echo $SHELL
+/bin/bash
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Which shell am I using?</h1>
+  <p>The <strong>SHELL</strong> environmental variable determines what your default shell is.</p>
+  <pre>
+					<code>
+$ env | grep SHELL
+<span style="color:red">SHELL</span>= /bin/bash
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Which shell? (cont.)</h1>
+  <p>The <em>/etc/passwd</em> configuration file is where the info is kept.</p>
+  <pre>
+					<code>
+ddennisk:x:1001:1001:Dennis Kibbe,,,:/home/dennisk:<span style="color:red">/bin/bash</span>
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Programming at the command line</h1>
+  <p>You can enter programming commands directly at the command line.</p>
+  <pre>
+					<code>
+$ for i in {1..5}
+> do touch file$i
+> done
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Editing scripts</h1>
+  <p>Shell scripts must be edited in a text editor that saves the script as plain, unformatted ASCII text. Common editors are:</p>
+  <ul>
+    <li>Vi/Vim</li>
+    <li>Emacs</li>
+    <li>Nano</li>
+    <li>Gedit</li>
+    <li>notepad++</li>
+  </ul>
+  </section>
+  <section>
+  <h1>Editing scripts</h1>
+  <p>Editors <em>not</em> to use are any word processor.</p>
+  </section>
+  <section>
+  <h1>Line endings</h1>
+  <p>Windows uses both a carriage return and a new line character. Linux and Unix use new line only. Editing a script in Windows notepad will break the script.</p>
+  <pre>
+					<code>
+#!/bin/bash^M
+# This script was edited in Windows Notepad^M
+^M
+echo "Hello World"^M
+^M
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Anatomy of a shell script</h1>
+  <p>Common parts of a shell script are:</p>
+  <ul class="incremental">
+    <li>Shebang</li>
+    <li>Comments</li>
+    <li>Variables</li>
+    <li>Functions</li>
+    <li>Exacutable code</li>
+  </ul>
+  </section>
+  <section>
+  <h1>Shebang</h1>
+  <p>The <strong>Shebang</strong> line assures that the script is run as a Bash script and must be the first line in the script.</p>
+  <pre>
+					<code>
+#!/bin/bash
+					</code>
+				</pre>
+  </section>
+  <section>
+  <h1>Shebang (cont.)</h1>
+  <p>The <strong>Shebang</strong> line assures that the script is run as a Bash script and must be the first line in the script.</p>
+  <pre>
+<code>
+	#!/usr/bin/env bash
+</code>
+					</pre>
+  </section>
+  <section>
+  <h1>Comments</h1>
+  <p>Any text after the hash tag character <strong>#</strong> is a comment. Here is an example from <code>~/.bashrc</code>.</p>
+  <pre>
+<code>
+	# uncomment for a colored prompt, if the terminal has the capability; turned
+	# off by default to not distract the user: the focus in a terminal window
+	# should be on the output of commands, not on the prompt
+	force_color_prompt=yes <span style="color:red"># This is also a comment.</span>
+</code>
+					</pre>
+  </section>
+  <section>
+  <h1>Variables</h1>
+  <p>Defining variables in your script will make it easier to modify.</p>
+  <pre>
+<code>
+	#!/usr/bin/env bash
+
+	# Set message to print.
+	message="Hello world"
+
+	# Print the value of message to STDOUT.
+
+	echo "$message"
+
+	# END
+</code>
+					</pre>
+  </section>
+  <section>
+  <h1>Variables (cont.)</h1>
+  <p>The dollar sign in from of the variable name tells <code>echo</code> to print the value of the variable and not just the word <em>message</em>.</p>
+  <pre>
+<code>
+	$ echo $message
+</code>
+					</pre>
+  </section>
+  <section>
+  <h1>Functions</h1>
+  <p>Functions are mini-scripts you can call inside your script. First define the function...</p>
+  <pre>
+<code>
+	#!/usr/bin/env bash
+
+	# define usage function
+	usage(){
+		echo "Usage: $0 greeting"
+		exit 1
+	}
+</code>
+					</pre>
+  </section>
+  <section>
+  <h1>Functions (cont.)</h1>
+  <p>then call it when needed.</p>
+  <pre>
+<code>
+	if [[ ! $1 ]]; then
+	usage
+	else
+	echo "$1"
+	fi
+
+	# END
+</code>
+					</pre>
+  </section>
+<section>
+<h1>Conditionals</h1>
+<p>Depending on the outcome of a test something is done. Example from <em>~/.bashrc</em>.</p>
+<pre>
+<code>
+	f# Alias definitions.
+	# You may want to put all your additions into a separate file like
+	# ~/.bash_aliases, instead of adding them here directly.
+	# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+		if [ -f ~/.bash_aliases ]; then
+		    . ~/.bash_aliases
+		fi
+</code>
+					</pre>
+</section>
+<section>
+<h1>Code</h1>
+<p>Finally the code that does the work.</p>
+<pre>
+<code>
+	$ echo "Hello World"
+</code>
+					</pre>
+</section>
+<section>
+<h1>Positional Parameter</h1>
+<p>Positional Parameters let you feed arguments to the script. Use quotes around multiple words.</p>
+<pre>
+					<code>
+$ myscript.sh Hello World
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Positional Parameter (cont.)</h1>
+<p>Each positional parameters is identified by a number 1 to 9.</p>
+<pre>
+					<code>
+#!/usr/bin/env bash
+
+# Prints the value of the first two positional parameters.
+
+echo "$1" "$2"
+
+# END
+					</code>
+				</pre>
+</section>
+<section>
+<h1>For Loop</h1>
+<pre>
+					<code>
+$ for i in apple banana cherry "red grapes" ; do echo "$i"; done
+					</code>
+				</pre>
+</section>
+<section>
+<h1>If/Then/Else</h1>
+<pre>
+					<code>
+if [[ ! $1 ]]
+then echo "I have nothing to print."
+else
+echo "$1"
+fi
+
+# END
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Conditionals</h1>
+<pre>
+					<code>
+if [[ ! $1 ]]; then
+echo "I have nothing to print."
+else
+echo "$1"
+fi
+
+# EED
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Variables</h1>
+<pre>Variable are easy to set.</pre>
+<pre>
+					<code>
+message="Hello World"
+echo $message
+
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Variables (cont.)</h1>
+<pre>You can used pre-definded environmental variables, too.</pre>
+<pre>
+					<code>
+echo "Today is $(date +%A) and you are logged into $HOSTNAME as $USER."
+					</code>
+				</pre>
+</section>
+<section>
+<h1>While loops</h1>
+<pre>
+					<code>
+#!/bin/bash
+
+# Set inital value for variable
+counter=0
+
+while [ $counter -lt 10 ]; do
+echo "The counter is $counter"
+sleep 1
+let counter=counter+1
+done
+
+# END
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Until loops</h1>
+<pre>
+					<code>
+#!/bin/bash
+
+# Set inital value for variable
+counter=10
+
+until [ $counter -eq 0 ]; do
+echo "The counter is $counter"
+sleep 1
+let counter=counter-1
+done
+
+# END
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Exit Code</h1>
+<p>Every program returns an <em>exit code</em> when it finishes. An exit code of zero means that the command succeeded.</p>
+<pre>
+					<code>
+$ ls /tmp
+$ echo $?
+0
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Exit Code (cont.)</h1>
+<p>Every program returns an <em>exit code</em> when it finishes. An exit code other than zero means that the command failed.</p>
+<pre>
+					<code>
+$ ls /temp
+ls: cannot access /temp: No such file or directory
+$ echo $?
+1
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Getting help</h1>
+<p>Typing <code>help</code> followed by a keyword brings up Bash help.</p>
+<pre>
+					<code>
+help test
+test: test [expr]
+Evaluate conditional expression.
+
+Exits with a status of 0 (true) or 1 (false) depending on
+the evaluation of EXPR.  Expressions may be unary or binary.  Unary
+expressions are often used to examine the status of a file.  There
+are string operators and numeric comparison operators as well.
+
+The behavior of test depends on the number of arguments.  Read the
+bash manual page for the complete specification.
+					</code>
+				</pre>
+</section>
+<section>
+<h1>Resources</h1>
+<ul>
+  <li><a href="" title="Bash Reference ManualBash Reference Manual">Bash Reference Manual</a></li>
+  <li><a href="" title="Greg's Bash Guide">Greg's Bash Guide</a></li>
+  <li><a href="http://explainshell.com/" title="Shell ExplainedShell Explained">Shell Explained</a></li>
+  <li><a href="https://google.github.io/styleguide/shell.xml" title="Google Style Guide">Google Style Guide</a></li>
+  <li><a href="http://webchat.freenode.net" title="Bash IRC Channel">Bash IRC Channel</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Unix_shell" title="Unix shell">Unix shell</a> (Wikipedia)</li>
+  <li><a href="https://kb.iu.edu/d/acux" title="How do I convert between Unix and Windows text files?">How do I convert between Unix and Windows text files?</a></li>
+</ul>
+</section>
+</div>
+</div>
+<script src="revealjs/lib/js/head.min.js"></script>
+<script src="revealjs/js/reveal.js"></script>
+<script>
+// Required, even if empty.
+Reveal.initialize({
+});
+</script>
 </body>
 </html>
