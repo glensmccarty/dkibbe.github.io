@@ -1,0 +1,92 @@
+\documentclass[12pt,handout,aspectratio=169]{beamer}
+\usepackage{alltt}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{listings}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{todonotes}
+%\mode<presentation>
+\mode<presentation>{ \usetheme{boxes} \usetheme{Berlin} }
+%\usetheme{Berlin}
+%\usecolortheme{seahorse}
+\usefonttheme[onlylarge]{structuresmallcapsserif}
+\usefonttheme[onlysmall]{structurebold}
+%\setbeamercolor{title}{fg=red!80!black,bg=red!20!white}
+%Information to be included in the title page:
+\title{Introduction to Shell Scripting}
+\subtitle{or how to be a shell Ninja}
+\author{Dennis Kibbe \\\href{mailto:dennis.kibbe@mesacc.edu}{dennis.kibbe@mesacc.edu}}
+\institute{Mesa Community College \\Network Academy}
+\date{Fall 2016}
+\subject{Computer Information Systems}
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+\begin{frame}
+  \frametitle{Why Script?}
+  \framesubtitle{A bit more information about this}
+  % Content goes here
+  Scripting lets system administrators:
+  \begin{itemize}
+  \item Combine commands to accomplish a task.
+    \pause
+  \item Automate repetitive processes.
+    \pause
+  \item Branch after testing for a condition.
+    \pause
+  \item Improve efficiency.
+    \pause
+  \item
+    \pause
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{System Files}
+  \framesubtitle{Bash shell scripts start many system processes.}
+  \begin{block}{Starts the rsyslog Daemon}
+    \begin{verbatim}
+NAME=rsyslog
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Which Shell?}
+  \framesubtitle{Finding your default shell}
+  \begin{block}{The SHELL Variable}
+    \begin{verbatim}
+      $ env | grep SHELL
+      SHELL=/bin/bash
+    \end{verbatim}
+  \end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Which Shell?}
+  \framesubtitle{Finding your default shell}
+  \begin{block}{/etc/passwd}
+    \begin{verbatim}
+      tux:x:1000:1000:Tux Penguin,,,:/home/tux:/bin/bash
+    \end{verbatim}
+  \end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Second Slide}
+   \begin{block}{This is a Block}
+    \begin{verbatim}
+      $ for i in {1..5}
+      > do touch file\$i
+      > done
+    \end{verbatim}
+   \end{block}
+\end{frame}
+\end{document}
