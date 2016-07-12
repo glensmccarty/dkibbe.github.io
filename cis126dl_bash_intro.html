@@ -15,11 +15,11 @@
 <div class="reveal">
 <div class="slides">
   <section>
-  <h1>Introduction to Bash Shell Scripting</h1>
+  <h2>Introduction to Bash Shell Scripting</h2>
   <p>or how to be a shell Ninja</p>
   </section>
   <section>
-  <h1>The Bash shell has a powerful scripting language.</h1>
+  <h2>The Bash shell has a powerful scripting language.</h2>
   <p>Scripting lets system administrators:</p>
   <ul>
     <li>Combine commands to accomplish a task.</li>
@@ -30,7 +30,7 @@
   </ul>
   </section>
   <section>
-  <h1>Why scripts are important</h1>
+  <h2>Why scripts are important</h2>
   <p>Bash shell scripts start many system processes.</p>
   <pre>
 					<code>
@@ -51,7 +51,7 @@
 				</pre>
   </section>
   <section>
-  <h1>Which shell am I using?</h1>
+  <h2>Which shell am I using?</h2>
   <p>The <strong>SHELL</strong> environmental variable determines what your default shell is.</p>
   <pre>
 					<code>
@@ -61,7 +61,7 @@ $ echo $SHELL
 				</pre>
   </section>
   <section>
-  <h1>Which shell am I using?</h1>
+  <h2>Which shell am I using?</h2>
   <p>The <strong>SHELL</strong> environmental variable determines what your default shell is.</p>
   <pre>
 					<code>
@@ -71,7 +71,7 @@ $ env | grep SHELL
 				</pre>
   </section>
   <section>
-  <h1>Which shell? (cont.)</h1>
+  <h2>Which shell? (cont.)</h2>
   <p>The <em>/etc/passwd</em> configuration file is where the info is kept.</p>
   <pre>
 					<code>
@@ -80,7 +80,7 @@ ddennisk:x:1001:1001:Dennis Kibbe,,,:/home/dennisk:<span style="color:red">/bin/
 				</pre>
   </section>
   <section>
-  <h1>Programming at the command line</h1>
+  <h2>Programming at the command line</h2>
   <p>You can enter programming commands directly at the command line.</p>
   <pre>
 					<code>
@@ -91,7 +91,7 @@ $ for i in {1..5}
 				</pre>
   </section>
   <section>
-  <h1>Editing scripts</h1>
+  <h2>Editing scripts</h2>
   <p>Shell scripts must be edited in a text editor that saves the script as plain, unformatted ASCII text. Common editors are:</p>
   <ul>
     <li>Vi/Vim</li>
@@ -102,7 +102,7 @@ $ for i in {1..5}
   </ul>
   </section>
   <section>
-  <h1>Editing scripts</h1>
+  <h2>Editing scripts</h2>
   <p>Editors <em>not</em> to use are any word processor.</p>
   <ul>
     <li>Microsoft Word</li>
@@ -111,7 +111,7 @@ $ for i in {1..5}
   </ul>
   </section>
   <section>
-  <h1>Line endings</h1>
+  <h2>Line endings</h2>
   <p>Windows uses both a carriage return and a new line character. Linux and Unix use new line only. Editing a script in Windows notepad will break the script.</p>
   <pre>
 					<code>
@@ -124,7 +124,7 @@ echo "Hello World"^M
 				</pre>
   </section>
   <section>
-  <h1>Anatomy of a shell script</h1>
+  <h2>Anatomy of a shell script</h2>
   <p>Common parts of a shell script are:</p>
   <ul class="incremental">
     <li>Shebang</li>
@@ -135,7 +135,7 @@ echo "Hello World"^M
   </ul>
   </section>
   <section>
-  <h1>Shebang</h1>
+  <h2>Shebang</h2>
   <p>The <strong>Shebang</strong> line assures that the script is run as a Bash script and must be the first line in the script.</p>
   <pre>
 					<code>
@@ -144,7 +144,7 @@ echo "Hello World"^M
 				</pre>
   </section>
   <section>
-  <h1>Shebang (cont.)</h1>
+  <h2>Shebang (cont.)</h2>
   <p>The <strong>Shebang</strong> line assures that the script is run as a Bash script and must be the first line in the script.</p>
   <pre>
 <code>
@@ -153,7 +153,7 @@ echo "Hello World"^M
 					</pre>
   </section>
   <section>
-  <h1>Comments</h1>
+  <h2>Comments</h2>
   <p>Any text after the hash tag character <strong>#</strong> is a comment. Here is an example from <code>~/.bashrc</code>.</p>
   <pre>
 <code>
@@ -165,7 +165,7 @@ echo "Hello World"^M
 					</pre>
   </section>
   <section>
-  <h1>Variables</h1>
+  <h2>Variables</h2>
   <p>Defining variables in your script will make it easier to modify.</p>
   <pre>
 <code>
@@ -183,7 +183,7 @@ echo "Hello World"^M
 					</pre>
   </section>
   <section>
-  <h1>Variables (cont.)</h1>
+  <h2>Variables (cont.)</h2>
   <p>The dollar sign in from of the variable name tells <code>echo</code> to print the value of the variable and not just the word <em>message</em>.</p>
   <pre>
 <code>
@@ -192,7 +192,7 @@ echo "Hello World"^M
 					</pre>
   </section>
   <section>
-  <h1>Functions</h1>
+  <h2>Functions</h2>
   <p>Functions are mini-scripts you can call inside your script. First define the function...</p>
   <pre>
 <code>
@@ -207,7 +207,7 @@ echo "Hello World"^M
 					</pre>
   </section>
   <section>
-  <h1>Functions (cont.)</h1>
+  <h2>Functions (cont.)</h2>
   <p>then call it when needed.</p>
   <pre>
 <code>
@@ -222,7 +222,7 @@ echo "Hello World"^M
 					</pre>
   </section>
 <section>
-<h1>Conditionals</h1>
+<h2>Conditionals</h2>
 <p>Depending on the outcome of a test something is done. Example from <em>~/.bashrc</em>.</p>
 <pre>
 <code>
@@ -238,7 +238,7 @@ echo "Hello World"^M
 					</pre>
 </section>
 <section>
-<h1>Code</h1>
+<h2>Code</h2>
 <p>Finally the code that does the work.</p>
 <pre>
 <code>
@@ -247,7 +247,7 @@ echo "Hello World"^M
 					</pre>
 </section>
 <section>
-<h1>Positional Parameter</h1>
+<h2>Positional Parameter</h2>
 <p>Positional Parameters let you feed arguments to the script. Use quotes around multiple words.</p>
 <pre>
 					<code>
@@ -256,7 +256,7 @@ $ myscript.sh Hello World
 				</pre>
 </section>
 <section>
-<h1>Positional Parameter (cont.)</h1>
+<h2>Positional Parameter (cont.)</h2>
 <p>Each positional parameters is identified by a number 1 to 9.</p>
 <pre>
 					<code>
@@ -271,7 +271,7 @@ echo "$1" "$2"
 				</pre>
 </section>
 <section>
-<h1>For Loop</h1>
+<h2>For Loop</h2>
 <pre>
 					<code>
 $ for i in apple banana cherry "red grapes" ; do echo "$i"; done
@@ -279,7 +279,7 @@ $ for i in apple banana cherry "red grapes" ; do echo "$i"; done
 				</pre>
 </section>
 <section>
-<h1>If/Then/Else</h1>
+<h2>If/Then/Else</h2>
 <pre>
 					<code>
 if [[ ! $1 ]]
@@ -293,7 +293,7 @@ fi
 				</pre>
 </section>
 <section>
-<h1>Conditionals</h1>
+<h2>Conditionals</h2>
 <pre>
 					<code>
 if [[ ! $1 ]]; then
@@ -307,7 +307,7 @@ fi
 				</pre>
 </section>
 <section>
-<h1>Variables</h1>
+<h2>Variables</h2>
 <pre>Variable are easy to set.</pre>
 <pre>
 					<code>
@@ -318,7 +318,7 @@ echo $message
 				</pre>
 </section>
 <section>
-<h1>Variables (cont.)</h1>
+<h2>Variables (cont.)</h2>
 <pre>You can used pre-definded environmental variables, too.</pre>
 <pre>
 					<code>
@@ -327,7 +327,7 @@ echo "Today is $(date +%A) and you are logged into $HOSTNAME as $USER."
 				</pre>
 </section>
 <section>
-<h1>While loops</h1>
+<h2>While loops</h2>
 <pre>
 					<code>
 #!/bin/bash
@@ -346,7 +346,7 @@ done
 				</pre>
 </section>
 <section>
-<h1>Until loops</h1>
+<h2>Until loops</h2>
 <pre>
 					<code>
 #!/bin/bash
@@ -365,7 +365,7 @@ done
 				</pre>
 </section>
 <section>
-<h1>Exit Code</h1>
+<h2>Exit Code</h2>
 <p>Every program returns an <em>exit code</em> when it finishes. An exit code of zero means that the command succeeded.</p>
 <pre>
 					<code>
@@ -376,7 +376,7 @@ $ echo $?
 				</pre>
 </section>
 <section>
-<h1>Exit Code (cont.)</h1>
+<h2>Exit Code (cont.)</h2>
 <p>Every program returns an <em>exit code</em> when it finishes. An exit code other than zero means that the command failed.</p>
 <pre>
 					<code>
@@ -388,7 +388,7 @@ $ echo $?
 				</pre>
 </section>
 <section>
-<h1>Getting help</h1>
+<h2>Getting help</h2>
 <p>Typing <code>help</code> followed by a keyword brings up Bash help.</p>
 <pre>
 					<code>
@@ -407,7 +407,7 @@ bash manual page for the complete specification.
 				</pre>
 </section>
 <section>
-<h1>Resources</h1>
+<h2>Resources</h2>
 <ul>
   <li><a href="" title="Bash Reference ManualBash Reference Manual">Bash Reference Manual</a></li>
   <li><a href="" title="Greg's Bash Guide">Greg's Bash Guide</a></li>
