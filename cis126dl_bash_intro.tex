@@ -7,14 +7,28 @@
 \usepackage{relsize}
 \usepackage{tikz}
 \usepackage{todonotes}
+\mode<presentation>
+{
+  \usetheme{Frankfurt}
+  \usecolortheme{seahorse}
+  \useoutertheme{infolines}
+  \useinnertheme{rounded}
+  \transdissolve
+  \setbeamercovered{transparent}
+  \hypersetup{colorlinks=true,linkcolor=blue}
+  \graphicspath{ {./images/} }
+%  \transdissolve<2>
+  \beamerdefaultoverlayspecification{<+->}
+  \beamertemplatenavigationsymbolsempty
+}
 %\mode<presentation>
-\mode<presentation>{ \usetheme{boxes} \usetheme{Berlin} }
-\useoutertheme{shadow}
+%\mode<presentation>{ \usetheme{boxes} \usetheme{Berlin} }
+%\useoutertheme{shadow}
 %\setbeamertemplate{blocks}[rounded][shadow=true]
 %\usetheme{Frankfurt}
 %\usecolortheme{seahorse}
-\usefonttheme[onlylarge]{structuresmallcapsserif}
-\usefonttheme[onlysmall]{structurebold}
+%\usefonttheme[onlylarge]{structuresmallcapsserif}
+%\usefonttheme[onlysmall]{structurebold}
 %\setbeamercolor{title}{fg=red!80!black,bg=red!20!white}
 %Information to be included in the title page:
 \title{Introduction to Shell Scripting}
@@ -339,7 +353,7 @@ counter=0
 while [ $counter -lt 10 ]; do
 echo "The counter is $counter"
 sleep 1
-let counter=counter+1
+let counter=$counter+1
 done
 
 # END
