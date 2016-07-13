@@ -9,7 +9,9 @@
 \usepackage{todonotes}
 %\mode<presentation>
 \mode<presentation>{ \usetheme{boxes} \usetheme{Berlin} }
-%\usetheme{Berlin}
+\useoutertheme{shadow}
+%\setbeamertemplate{blocks}[rounded][shadow=true]
+%\usetheme{Frankfurt}
 %\usecolortheme{seahorse}
 \usefonttheme[onlylarge]{structuresmallcapsserif}
 \usefonttheme[onlysmall]{structurebold}
@@ -27,6 +29,8 @@
 \frametitle{Table of Contents}
 \tableofcontents[currentsection]
 \end{frame}
+\addtocounter{framenumber}{-1}
+\section{Parts of a Script}
 \begin{frame}
   \frametitle{Why Script?}
   \framesubtitle{A bit more information about this}
@@ -40,8 +44,6 @@
   \item Branch after testing for a condition.
     \pause
   \item Improve efficiency.
-    \pause
-  \item
     \pause
   \end{itemize}
 \end{frame}
@@ -70,6 +72,9 @@ NAME=rsyslog
     \end{verbatim}
   \end{block}
 \end{frame}
+
+\section{Which Shell Are You Using?}
+
 \begin{frame}[fragile]
   \frametitle{Which Shell?}
   \framesubtitle{Finding your default shell}
@@ -80,8 +85,9 @@ NAME=rsyslog
   \end{block}
 \end{frame}
 \begin{frame}[fragile]
-  \frametitle{Second Slide}
-   \begin{block}{This is a Block}
+  \frametitle{Programming At The Command Line}
+  You can enter programming commands directly at the command line.
+   \begin{block}{At the Command Line}
     \begin{verbatim}
       $ for i in {1..5}
       > do touch file\$i
@@ -89,4 +95,304 @@ NAME=rsyslog
     \end{verbatim}
    \end{block}
 \end{frame}
+
+\section{Using the Correct Editor}
+
+\begin{frame}
+  \frametitle{Editing Scripts}
+  Shell scripts must be edited in a text editor that saves the script as plain, unformatted ASCII text. Common editors are:
+  \begin{itemize}
+  \item Vi/Vim
+  \item Emacs
+  \item Nano
+  \item Gedit
+  \item notepad++
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Editing Scripts}
+  Editors not to use are any word processor such as:
+  \begin{itemize}
+  \item Libre Office
+  \item OpenOffice.org
+  \item M\$ Word
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Line Endings}
+  Windows uses both a carriage return and a new line character.  Linux and Unix use new line only.  Editing a script in Windows notepad will break the script.
+  \begin{block}{Line endings}
+\begin{verbatim}
+#!/bin/bash^M
+    # This script was edited in Windows Notepad^M
+    ^M
+    echo "Hello World"^M
+    ^M
+\end{verbatim}
+  \end{block}
+\end{frame}
+\section{Parts of a Script}
+
+\begin{frame}
+  \frametitle{Anatomy Of A Shell Script}
+  Common parts of a shell script are:
+  \begin{itemize}
+  \item Shebang
+  \item Comments
+  \item Variables
+  \item Functions
+  \item Exacutable code
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Shebang}
+  The Shebang line assures that the script is run as a Bash script and must be the first line in the script.
+\begin{block}{}
+\begin{verbatim}
+#!/bin/bash
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Shebang (Cont.)}
+  The Shebang line assures that the script is run as a Bash script and must be the first line in the script.
+\begin{block}{}
+\begin{verbatim}
+#!/usr/bin/env bash
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Comments}
+  Any text after the hash tag character \# is a comment. Here is an example from ~/.bashrc.
+\begin{block}{Comments}
+\begin{verbatim}
+# uncomment for a colored prompt, if the terminal has the capability; turned
+	# off by default to not distract the user: the focus in a terminal window
+	# should be on the output of commands, not on the prompt
+	force_color_prompt=yes # This is also a comment.
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Variables}
+  Defining variables in your script will make it easier to modify.
+\begin{block}{}
+  \begin{verbatim}
+	#!/usr/bin/env bash
+
+	# Set message to print.
+	message="Hello world"
+
+	# Print the value of message to STDOUT.
+
+	echo "$message"
+
+	# END
+  \end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Variables (Cont.)}
+  The dollar sign in from of the variable name tells echo to print the value of the variable and not just the word message.
+\begin{block}{}
+\begin{verbatim}
+$ echo $message
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Functions}
+  Functions are mini-scripts you can call inside your script. First define the function...
+\begin{block}{}
+\begin{verbatim}
+#!/usr/bin/env bash
+
+# define usage function
+
+usage(){
+echo "Usage: $0 greeting"
+exit 1
+}
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Functions (Cont.)}
+  then call it when needed.
+\begin{block}{}
+\begin{verbatim}
+	if [[ ! $1 ]]; then
+	usage
+	else
+	echo "$1"
+	fi
+
+	# END
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Conditionals}
+  Depending on the outcome of a test something is done. Example from ~/.bashrc.
+\begin{block}{}
+\begin{verbatim}
+	f# Alias definitions.
+	# You may want to put all your additions into a separate file like
+	# ~/.bash_aliases, instead of adding them here directly.
+	# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+		if [ -f ~/.bash_aliases ]; then
+		    . ~/.bash_aliases
+		fi
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Code}
+  Finally the code that does the work.
+\begin{verbatim}
+$ echo "Hello World"
+\end{verbatim}
+
+\end{frame}
+\section{Feeding Variables to a script}
+
+\begin{frame}[fragile]
+  \frametitle{Positional Parameter}
+  Positional Parameters let you feed arguments to the script. Use quotes around multiple words.
+\begin{block}{}
+\begin{verbatim}
+$ myscript.sh Hello World
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Positional Parameter (Cont.)}
+  Each positional parameters is identified by a number 1 to 9.
+\begin{block}{}
+\begin{verbatim}
+#!/usr/bin/env bash
+
+# Prints the value of the first two positional parameters.
+
+echo "$1" "$2"
+
+# END
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{For Loop}
+  Do iterations over a list.
+\begin{verbatim}
+$ for i in apple banana cherry "red grapes" ; do echo "$i"; done
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{If/Then/Else}
+\begin{block}{}
+\begin{verbatim}
+if [[ ! $1 ]]
+then echo "I have nothing to print."
+else
+echo "$1"
+fi
+\end{verbatim}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Conditionals}
+\begin{verbatim}
+if [[ ! $1 ]]; then
+echo "I have nothing to print."
+else
+echo "$1"
+fi
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Variables}
+  Variable are easy to set.
+\begin{verbatim}
+message="Hello World"
+echo $message
+\end{verbatim}
+
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Variables (Cont.)}
+You can used pre-definded environmental variables, too.
+\begin{verbatim}
+  echo "Today is $(date +%A) and you are logged into $HOSTNAME as $USER."
+\end{verbatim}
+
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{While Loops}
+  \begin{verbatim}
+    #!/bin/bash
+
+# Set inital value for variable
+counter=0
+
+while [ $counter -lt 10 ]; do
+echo "The counter is $counter"
+sleep 1
+let counter=counter+1
+done
+
+# END
+  \end{verbatim}
+\end{frame}
+\section{Exit Codes}
+
+\begin{frame}[fragile]
+  \frametitle{Exit Code}
+  Every program returns an exit code when it finishes. An exit code of zero means that the command succeeded.
+\begin{verbatim}
+$ ls /tmp
+$ echo $?
+0
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Exit Code (Cont.)}
+  Every program returns an exit code when it finishes. An exit code other than zero means that the command failed.
+\begin{verbatim}
+$ ls /temp
+ls: cannot access /temp: No such file or directory
+$ echo $?
+1
+\end{verbatim}
+
+\end{frame}
+\section{Finding help}
+
+\begin{frame}[fragile]
+  \frametitle{Getting Help}
+\begin{verbatim}
+help test
+test: test [expr]
+Evaluate conditional expression.
+
+Exits with a status of 0 (true) or 1 (false) depending on the evaluation of EXPR.  Expressions may be unary or binary.  Unary expressions are often used to examine the status of a file.  There are string operators and numeric comparison operators as well.
+
+The behavior of test depends on the number of arguments.  Read the bash manual page for the complete specification.
+\end{verbatim}
+
+\end{frame}
+\begin{frame}
+  \frametitle{Resources}
+  \begin{itemize}
+  \item \href{http://www.shellcheck.net/}{Shell Check}
+  \item \href{http://mywiki.wooledge.org/BashGuide}{Greg's Bash Guide}
+  \item \href{http://explainshell.com/}{Shell Explained}
+  \item \href{https://google.github.io/styleguide/shell.xml}{Google Style Guide}
+    \item \href{https://kb.iu.edu/d/acux}{How do I convert between Unix and Windows text files?}
+
+    
+  \end{itemize}
+\end{frame}
+
 \end{document}
