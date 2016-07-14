@@ -1,0 +1,73 @@
+\documentclass[12pt,handout,aspectratio=169]{beamer}
+\usepackage{fancybox}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{todonotes}
+\mode<presentation>
+{
+  \usetheme{AnnArbor}
+  \usecolortheme{seahorse}
+  \useoutertheme{infolines}
+  \useinnertheme{rounded}
+  \transdissolve
+  \setbeamercovered{transparent}
+  \hypersetup{colorlinks=true,linkcolor=blue}
+  \graphicspath{ {./images/} }
+%  \transdissolve<2>
+  \beamerdefaultoverlayspecification{<+->}
+  \beamertemplatenavigationsymbolsempty
+}
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]
+%\usefonttheme[onlylarge]{structuresmallcapsserif}
+%\usefonttheme[onlysmall]{structurebold}
+%\setbeamercolor{title}{fg=red!80!black,bg=red!20!white}
+%Information to be included in the title page:
+\title{Su \& Sudo}
+\subtitle{Working as root}
+\author{Dennis Kibbe\\\href{mailto:dennis.kibbe@mesacc.edu}{dennis.kibbe@mesacc.edu}}
+\institute{Mesa Community College\\Network Academy}
+\date{Fall 2016}
+\subject{Computer Information Systems}
+\begin{document}
+\maketitle
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+\begin{frame}
+\frametitle{First Slide}
+\framesubtitle{A bit more information about this}
+%Content goes here
+Contents of the first slide
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{Second Slide}
+%Content goes here
+Contents of the second slide
+\end{frame}
+\begin{frame}
+  \frametitle{User Privilege Lines}
+  \begin{block}{}
+\begin{semiverbatim}
+\textbf{root} ALL=(ALL:ALL) ALL
+\end{semiverbatim}
+  \end{block}
+\end{frame}
+\begin{frame}
+  \frametitle{User Privilege Lines}
+  \begin{block}{}
+\begin{semiverbatim}
+root \textbf{ALL}=(ALL:ALL) ALL
+\end{semiverbatim}
+  \end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Examples}
+\begin{semiverbatim}
+root		ALL = (ALL) ALL
+%wheel		ALL = (ALL) ALL
+\end{semiverbatim}
+\end{frame}
+\end{document}
