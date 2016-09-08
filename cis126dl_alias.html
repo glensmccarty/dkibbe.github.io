@@ -37,7 +37,7 @@
 <dd>Hidden Bash configuration file.</dd>
 
 <dt><code>~/.bash_aliases</code></dt>
-<dd>Commands in this hidden file will be sourced (included in) by the <code>~/.bashrc</code> file when a terminal is opened.</dd>
+<dd>Commands in this hidden file will be included in the <code>~/.bashrc</code> file when a terminal is opened.</dd>
 
 <dt>Dot files</dt>
 <dd>Hidden files and directories that start with a peroid.</dd>
@@ -57,9 +57,9 @@
 
 <h3 id="the-nano-text-editor">The Nano Text Editor</h3>
 
-<p>For this assignment you can use the graphical text editor (Gedit) or the command line editor, Nano. Nano is simple to use as you can see by these screenshots. See Resources for a short video tutorial.</p>
+<p>For this assignment you can use the graphical text editor, Gedit or the command line editor, Nano. Nano is simple to use as you can see by these screenshots. See Resources for a short video tutorial.</p>
 
-<p>Start nano from the command line.</p>
+<p>From your home directory start nano from the command line.</p>
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/nano-1.png" alt="Start nano from the command line" title="Start nano from the command line"></p>
 
@@ -67,13 +67,9 @@
 
 <p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/nano-2.png" alt="Using the nano menu" title="Nano screenshot"></p>
 
-
-
 <h2 id="scenario">Scenario</h2>
 
-<p>You are a system administration who works on both Windows and Linux servers. You want to create an command alias for the <code>ping</code> command so it works the same way on both servers. That is, ping a web site four times then stop.</p>
-
-
+<p>If you are a system administration who works on both Windows and Linux servers. You may want to create a command alias for the <code>ping</code> command so it works the same way on both Operating systems. That is, ping a web site four times then stop.</p>
 
 <h2 id="using-the-type-command">Using the <code>type</code> Command</h2>
 
@@ -89,7 +85,7 @@ ls is aliased to `ls --color=auto'
 
 <h2 id="using-the-unalias-command">Using the <code>unalias</code> Command</h2>
 
-<p>The color option on a dark background sometimes makes directories very hard to see. Let’s remove the color option with the <code>unalias</code> command. Using Tab completion you only need to type the first three letters of <code>unalias</code> the command.</p>
+<p>The color option on a dark background sometimes makes directories very hard to see. Let’s remove the color option with the <code>unalias</code> command. Using Tab completion you don’t need to type the whole command.</p>
 
 <pre><code>$ unalias ls
 </code></pre>
@@ -99,9 +95,7 @@ ls is aliased to `ls --color=auto'
 <p>$ type ls <br>
 ls is /bin/ls</p>
 
-<p>This is a temporary change and will revert when you close the current terminal.</p>
-
-
+<p>This is a temporary change and will revert back when you close the current terminal.</p>
 
 <h2 id="using-the-alias-command">Using the <code>alias</code> Command</h2>
 
@@ -141,23 +135,22 @@ Desktop/ Documents/ Downloads/ Music/ /Videos
 some-link@ some-file.txt some-script.sh*
 </code></pre>
 
-<p>The new alias isn’t permanent and will disappear when the current shell closes. To make the alias permanent add it to the <code>.bashrc</code> or a hidden <code>.bash_aliases</code> file in your home directory. The <code>.bash_aliases</code> may not exist but you can create it using the <code>nano</code> or <code>vi</code> text editor. Using a separate file is safer than editing <code>.bashrc</code> and makes your customizations portable to other systems.</p>
+<p>The new alias isn’t permanent and will disappear when the current shell closes. To make the alias permanent add it to <code>.bashrc</code> or  <code>.bash_aliases</code> file in your home directory. The <code>.bash_aliases</code> may not exist but you can create it using the <code>nano</code> or <code>vi</code> text editor. Using a separate file is safer than editing <code>.bashrc</code> and makes your customizations portable to other systems.</p>
 
 <p>Here is a sample <code>~/.bash_aliases</code> file.</p>
 
 <pre><code>alias ls='ls -F'
 alias ll='l -lh'
-alias du=`du -sh * | sort -nr'
+alias free="free -mt"
+alias c=clear
 </code></pre>
 
 <h2 id="removing-an-alias">Removing an Alias</h2>
 
-<p>To temporarily run a command without the alias use <em>**</em> before the command. This will run <code>/bin/ls</code> with no options.</p>
+<p>To temporarily run a command without the alias use <strong>\</strong> before the command. This will run <code>/bin/ls</code> with no options.</p>
 
 <pre><code>$ \ls
 </code></pre>
-
-
 
 <h2 id="create-an-alias-to-the-ping-command">Create an Alias to the <code>ping</code> Command</h2>
 
@@ -195,9 +188,9 @@ alias du=`du -sh * | sort -nr'
 
 
 
-<h3 id="make-an-alias-permanent">Make an alias Permanent.</h3>
+<h3 id="make-an-alias-permanent">Make an Alias Permanent</h3>
 
-<p>Our new alias is only temporary and will revert back to the default when the current shell is closed. To make the alias permanent put the command just as you typed it on the command line in the <code>~/.bash_aliases</code> file.</p>
+<p>Our new alias is only temporary and will revert back to the default when the current shell is closed. To make the alias permanent put the command just as you typed it on the command line in  <code>~/.bash_aliases</code>.</p>
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
@@ -205,7 +198,7 @@ alias du=`du -sh * | sort -nr'
 <li>Files that start with a period like <code>.bashrc</code> are hidden from the <code>ls</code> command unless you use the <code>-a</code> option.</li>
 <li>Don’t forget the quotes around <code>ls -F</code> they are required because of the space character.</li>
 <li>The <code>.bash_aliases</code> file is a hidden file you create with a text edit (gedit, nano or vi). it goes in your home directory.</li>
-<li>Some distributions may want aliases to be in a file with a different name such as <code>~/.aliases</code>.</li>
+<li>Some distributions may want aliases to be put in a file with a different name such as <code>~/.aliases</code>.</li>
 </ol>
 
 <h2 id="what-to-submit">What to Submit</h2>
