@@ -4,9 +4,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>In this assignment you will work with two Bash configuration files in your home directory.  ~/.profile is the main Bash configuration script and is run when first logging into a terminal or when opening a Bash login shell using <code>bash -l</code>. The ~/.bashrc file is executed when opening a new Bash shell. </p>
-
-<p><em>Tested on Ubuntu 14.01.1 LTS</em></p>
+<p>In this assignment you will work with two Bash configuration files in your home directory.  <code>~/.profile</code> is the main Bash configuration script and is run when first logging into a terminal or when opening a Bash login shell using <code>bash -l</code>. The <code>~/.bashrc</code> file is executed when opening a new Bash shell. </p>
 
 
 
@@ -20,7 +18,7 @@
 <li><code>~/.bash_logout</code></li>
 <li><code>~/.bash_history</code></li>
 <li>Nano text editor</li>
-<li>`Hidden "dot" files</li>
+<li>`Hidden “dot” files</li>
 <li><code>bash</code></li>
 <li><code>history</code></li>
 <li><code>env</code></li>
@@ -28,40 +26,60 @@
 <li><code>ls -a</code></li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
-<p>Do this assignment on the Ubuntu LiveCD or from a guest session. Click the gear icon in the upper right corner of the desktop and select Guest Session, a new Guest Session will open.</p>
+<p>Do this assignment on the Ubuntu.</p>
 
-<p>If you do this assignment in your home directory make backup copies of <code>~/.profile</code> , <code>~/.bashrc</code> and <code>.bash_logout</code> before continuing. </p>
+<p>If you do this assignment in your home directory make backup copies of <code>~/.profile</code> , <code>~/.bashrc</code> and <code>.bash_logout</code> before continuing.  You can also create a snapshot in VirtualBox so you can roll back changes.</p>
 
 <pre><code>$ cp .profile profile.bak
-cp .bashrc. bashrc.bak
+$ cp .bashrc. bashrc.bak
 $ cp .bash_logout bash_logout.bak
 </code></pre>
 
 <p>Clear the Bash history with <code>history -c</code> before starting.</p>
 
-<h3 id="edit-bashrc">Edit ~/.bashrc</h3>
+
+
+<h3 id="edit-bashrc">Edit <code>~/.bashrc</code></h3>
 
 <p>Click on the Dash search icon in the upper left corner of the desktop and type <em>terminal</em> to bring up the bash shell.  Open <code>~/.bashrc</code> with the Nano text editor.</p>
 
 <pre><code>$ nano .bashrc
 </code></pre>
 
-<p>Scroll to the bottom of the file and after the last line press Enter and type <code>echo "This line from .bashrc. The time is $(date +%R) and you are logged into $(hostname)."</code></p>
+<p>Navigate to the bottom of the file and after the last line press <strong>Enter</strong> and type:</p>
+
+<pre><code>echo "This line from .bashrc. The time is $(date +%R) and you are logged into $(hostname)."
+</code></pre>
 
 <p>The <code>$(date +%R)</code> will be replaced by the current time.</p>
 
 <p>Press <strong>Ctrl+O</strong> to save the changes and <strong>Ctrl+X</strong> to exit Nano.</p>
 
-<h3 id="edit-profile">Edit ~/.profile</h3>
 
-<p>Open <code>~/.profile</code> in Nano and scroll to the bottom of the file. <br>
-After the last line press <strong>Enter</strong> and type <code>echo "This line is from .profile."</code></p>
 
-<h3 id="edit-bashlogout">Edit ~/.bash_logout</h3>
+<h3 id="edit-profile">Edit <code>~/.profile</code></h3>
 
-<p>Open <code>~/.bash_logout</code> scroll to the last; press <strong>Enter</strong> and type <code>echo "The time is now $(date +%R), goodbye."</code> Save the changes to the file. Exit Nano.</p>
+<p>Open <code>~/.profile</code> in Nano and navigate to the bottom of the file. After the last line press <strong>Enter</strong> and type:</p>
+
+<pre><code>echo "This line is from .profile."
+</code></pre>
+
+
+
+<h3 id="edit-bashlogout">Edit <code>~/.bash_logout</code></h3>
+
+<p>Open <code>~/.bash_logout</code> scroll to the last; press <strong>Enter</strong> and type:</p>
+
+<pre><code>echo "The time is now $(date +%R), goodbye."
+</code></pre>
+
+<p>Save the changes to the file and exit Nano.</p>
+
+
 
 <h2 id="start-assignment">Start Assignment</h2>
 
@@ -75,38 +93,42 @@ After the last line press <strong>Enter</strong> and type <code>echo "This line 
 <li>Leave the Terminal open for the next step.</li>
 </ol>
 
+
+
 <h3 id="profile">~/.profile</h3>
 
 <ol>
-<li>At the terminal prompt type <code>bash -l</code> to open a new login session.</li>
+<li>At the terminal prompt type <code>bash --login</code> to open a new login session.</li>
 <li>Observe that both the line from <code>.bashrc</code> and <code>.profile</code> appear above the prompt. The <code>.bashrc</code> file is sourced from  <code>.profile</code>.</li>
 <li>Leave the Terminal open for the next step.</li>
 </ol>
+
+
 
 <h3 id="bashlogout">~/.bash_logout</h3>
 
 <ol>
 <li>Type <code>exit</code> to close the login shell and return to the previous shell.</li>
 <li>Observer that the line from <code>.bash_logout</code> displays on the screen.</li>
+<li>Take screenshot for submission.</li>
 <li>Type <code>exit</code> or <strong>CTRL+D</strong> as many times as needed to logout of the terminal.</li>
 </ol>
 
-<h2 id="quick-nano-tutorial">Quick nano Tutorial</h2>
-
-<p><img src="http://classfiles.dennisk.fastmail.net/nano_tutorial.png" alt="nano tutorial" title=""></p>
-
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of the Terminal showing the line from the <code>.bashrc_logout</code> file.</p>
+<p>Submit a screenshot similar to this example before you exit the last terminal. <br>
+<img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/bash_env-1.png" alt="Example submission" title="Example submission"></p>
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li>man bash</li>
 <li><a href="http://theurbanpenguin.com/wp/?p=3011">The Urban Penguin</a></li>
-<li><a href="http://www.howtogeek.com/113330/how-to-master-ubuntus-unity-desktop-8-things-you-need-to-know/">How to master Ubuntu's Unity Desktop</a></li>
-<li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">Bash Reference Manual - Start uUp Files</a></li>
+<li><a href="http://www.howtogeek.com/113330/how-to-master-ubuntus-unity-desktop-8-things-you-need-to-know/">How to master Ubuntu’s Unity Desktop</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">Bash Reference Manual - Start Up Files</a></li>
 </ul>
+
+<!--links-->
 
 <blockquote>
   <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
