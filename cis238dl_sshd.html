@@ -1,5 +1,7 @@
 <h1 id="secure-shell-server">Secure Shell Server</h1>
 
+
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p>SSH is widely used to administer remote hosts and as such is a prime target for exploitation attempts. In this assignment you will configure the SSH server for added security.</p>
@@ -29,10 +31,10 @@
 <dd>Configuration file for the SSH server daemon</dd>
 
 <dt>Fingerprint</dt>
-<dd>"...a cryptographic hash function to a public key. Since fingerprints are shorter than the keys they refer to, they can be used to simplify certain key management tasks." <a href="https://en.wikipedia.org/wiki/Public_key_fingerprint">Wikipedia</a></dd>
+<dd>“…a cryptographic hash function to a public key. Since fingerprints are shorter than the keys they refer to, they can be used to simplify certain key management tasks.” <a href="https://en.wikipedia.org/wiki/Public_key_fingerprint">Wikipedia</a></dd>
 
 <dt>Netcat</dt>
-<dd>"...is a feature-rich network debugging and investigation tool" <a href="https://en.wikipedia.org/wiki/Netcat">Wikipedia</a></dd>
+<dd>“…is a feature-rich network debugging and investigation tool” <a href="https://en.wikipedia.org/wiki/Netcat">Wikipedia</a></dd>
 
 <dt>Nmap</dt>
 <dd>Network port scanner</dd>
@@ -51,9 +53,7 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Start both a CentOS 7 and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine.</p>
-
-
+<p>Start both a CentOS 7 (or Fedora 7)  and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine.</p>
 
 <h3 id="networking">Networking</h3>
 
@@ -68,9 +68,7 @@
 
 <h3 id="install-nmap">Install Nmap</h3>
 
-<p>Use <code>yum</code> or <code>apt-get</code> as appropriate to install <code>nmap</code> and possibly <code>zenmap</code>.</p>
-
-
+<p>Use <code>yum</code> or <code>apt-get</code> as appropriate to install <code>nmap</code> and possibly <code>zenmap</code> If you have a graphical desktop.</p>
 
 <h3 id="scanning-ports">Scanning Ports</h3>
 
@@ -80,15 +78,8 @@
 
 <h2 id="connect-to-the-ssh-server">Connect to the SSH Server</h2>
 
-<p>You should now be able to use <code>ssh</code> from the second virtual machine to connect to the SSH server as <em>root</em>. </p>
-
-<p><code>ssh root@192.169.201.nnn</code> </p>
-
-<p>Replace <em>nnn</em> with the last octet of the actual IP address of the SSH server. The first time you connect SSH will ask you to confirm the connection.</p>
-
-<p>After you accept the connection you will be logged in as root. Type <code>exit</code> to close the connection.</p>
-
-
+<p>See the rubric on how you must meet this criteria. <br>
+</p>
 
 <h2 id="securing-the-ssh-server-daemon">Securing the SSH Server Daemon</h2>
 
@@ -98,39 +89,22 @@
 
 <p>Use the <code>rpm -qc openssh-server</code> command to show that the SSH server configuration settings are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>systemctl restart sshd.service</code> command.</p>
 
-
-
 <h3 id="disabling-root-logins">Disabling Root Logins</h3>
 
-<p>There is no reason for the <em>root</em> user to login directly. Root should also have an ordinary user account for that purpose and that use either <code>su</code> or <code>sudo</code> to perform root functions. Change this line in the <code>/etc/ssh/sshd_conf</code> file from <strong>PermitRootLogin</strong> <em>yes</em> to <em>no</em>. <em>Note:</em> In <code>vi</code> use /Root to search for the line.</p>
-
-<p>Restart the service and attempt to log in again as <em>root</em> this time the attempt will fail.</p>
-
-<p>You should be able to log in as the user you created. For example:</p>
-
-<pre><code>$ ssh tux@192.168.201.123
-</code></pre>
-
-
+<p>You must not be able to log in as root. <br>
+</p>
 
 <h3 id="change-default-port">Change Default Port</h3>
 
-<p>SSH by default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
+<p>See the rubric for the criteria you must meet. <br>
+<!--SSH by default listens on port 22. You can change this by uncommenting the line **port 22** and changing the port number to an unused port in the **registered** or **ephemeral** range. See Wikipedia link to ports under *Resources* below.--></p>
 
 <p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
 
-
-
 <h4 id="open-the-port-in-the-firewall">Open the Port in the Firewall</h4>
 
-<p>Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) is not a standard service you need to use this command to open the port.</p>
-
-<pre><code># firewall-cmd --add-port=2222/tcp
-</code></pre>
-
-<p>Use <code>firewall-cmd --list-ports</code> to see that the change was made.</p>
-
-
+<p>Use <code>firewalld</code> to close the default port and open the appropriate port. <br>
+</p>
 
 <h4 id="disable-port-22">Disable Port 22</h4>
 
@@ -141,13 +115,11 @@
 
 <p>Use <code>firewall-cmd --list-services</code> to see that the change was made.</p>
 
-<p>Run a <code>nmap</code> scan and there should be no "interesting" ports open.</p>
-
-
+<p>Run a <code>nmap</code> scan and there should be no “interesting” ports open.</p>
 
 <h4 id="making-changes-permanent">Making Changes Permanent</h4>
 
-<p>None of these changes will survive a reboot unless the <strong>--permanent</strong> option is added to the above commands.</p>
+<p>None of these changes will survive a reboot unless the <strong>–permanent</strong> option is added to the above commands.</p>
 
 
 
@@ -176,9 +148,8 @@
 
 <h3 id="reducing-the-number-of-login-tries">Reducing the Number of Login Tries</h3>
 
-<p>The default is <strong>6</strong> failed attempt but you can reduce this to a smaller number by changing <strong>MaxAuthTries</strong>. Edit <strong>MaxAuthTries</strong> to allow only attempts.</p>
-
-
+<p>See the rubric. <br>
+<!--The default is **6** failed attempt but you can reduce this to a smaller number by changing **MaxAuthTries**. Edit **MaxAuthTries** to allow only attempts.--></p>
 
 <h3 id="disabling-password-logins-optional">Disabling Password Logins (Optional)</h3>
 
@@ -198,27 +169,20 @@
 
 <p>Now reload the configuration file for the change to take effect.</p>
 
-
-
-<h2 id="ssh-to-the-new-port">SSH to the New Port</h2>
-
-<p>Since port 22 is no longer used the ssh command much be modified. For example:</p>
-
-<pre><code>$ ssh -p 222 tux@192.168.201.123
-</code></pre>
-
-
+<!--## SSH to the New Port&#10;&#10;Since port 22 is no longer used the ssh command much be modified. For example:&#10;&#10;    $ ssh -p 222 tux@192.168.201.123-->
 
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of the Netcat command showing that SSH on port 2222 (or another non-standard port) is listening.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></li>
 <li><a href="http://wiki.centos.org/HowTos/Network/SecuringSSH">Securing OpenSSH</a></li>
-<li><a href="http://debian-handbook.info">The Debian Administrator's Handbook</a></li>
+<li><a href="http://debian-handbook.info">The Debian Administrator’s Handbook</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Public_key_fingerprint">Public key fingerprint</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Netcat">Netcat</a></li>
 <li><a href="http://dennisk.freeshell.org/cis238dl_sshd.html">Permanent link to assignment</a></li>
