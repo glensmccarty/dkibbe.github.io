@@ -2,7 +2,10 @@
 #+TITLE:  CUPS
 #+DESCRIPTION: CUPS
 #+KEYWORDS: cis126dl cups printer
-
+#+INFOJS_OPT: http://orgmode.org/org-info.js
+#+INFOJS_OPT: toc:nil ltoc:t view:info mouse:underline buttons:nil
+#+INFOJS_OPT: up:http://orgmode.org/worg/
+#+INFOJS_OPT: home:http://orgmode.org
 * Overview
 
   CUPS is the standard printing system for Unix and Linux.  CUPS offers several ways to configure printers.  We'll use the web interface and the command line to configure a printer and print a manpage using Ghostscript.

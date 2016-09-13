@@ -1,6 +1,9 @@
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <h1 id="installing-software-using-apt">Installing Software Using APT</h1>
 
+<h2>Introduction</h2>
 
+In this assignment you will use the Advanced Package Tool (APT) to install software on Ubuntu.  APT is the package management system used on Debian-based distributions like Ubuntu.
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -10,26 +13,37 @@
 
 <ol>
 <li>Find a package using <code>apt-cache</code>.</li>
-<li>Obtain additional information on a package.</li>
+<li>Obtain a additional informantion on a package.</li>
 <li>Install a package using <code>apt-get</code>.</li>
 <li>Find the version of a package.</li>
 <li>Remove a package.</li>
 </ol>
 
+<dl>
 <h2 id="terms-and-commands-you-should-know">Terms and Commands You Should Know</h2>
 
-<ul>
-<li><strong>APT:</strong> Debian’s Advanced Package Tool</li>
-<li><strong>apt-cache:</strong> Query the APT cache</li>
-<li><strong>apt-get</strong> APT package handling utility – command-line interface</li>
-<li><strong>apt-get update:</strong> Resynchronize the local package index files from their sources.</li>
-<li><strong>apt-get upgrade:</strong> Install the newest versions of all packages currently installed on the system.</li>
-<li><strong>add-apt-repository:</strong> Enable a repository.</li>
-<li><strong>dpkg:</strong> Package manager for Debian</li>
-<li><strong>/etc/apt/sources.list:</strong> List of configured APT data sources</li>
-<li><strong>/var/log/apt/history.log:</strong> Install history log</li>
-<li><strong>Repository:</strong> A collection of software build for a specific Linux distribution.</li>
-</ul>
+<dl>
+<dt><strong>APT</strong></dt>
+<dd>Debian's Advanced Package Tool</dd>
+<dt><strong>apt-cache</strong></dt>
+<dd>Query the APT cache</dd>
+<dt><strong>apt-get</strong></dt>
+<dd>APT package handling utility – command-line interface</dd>
+<dt><strong>apt-get update</strong></dt>
+<dd>Resynchronize the local package index files from their sources.</dd>
+<dt><strong>apt-get upgrade</strong></dt>
+<dd>Install the newest versions of all packages currently installed on the system.</dd>
+<dt><strong>add-apt-repository</strong></dt>
+<dd>Enable a repository.</dd>
+<dt><strong>dpkg</strong></dt>
+<dd>Package manager for Debian</dd>
+<dt><strong>/etc/apt/sources.list</strong></dt>
+<dd>List of configured APT data sources</dd>
+<dt><strong>/var/log/apt/history.log</strong></dt>
+<dd>Install history log</dd>
+<dt><strong>Repository</strong></dt>
+<dd>A collection of software build for a specific Linux distribution.</dd>
+</dl>
 
 
 
@@ -41,15 +55,15 @@
 
 <h2 id="adding-a-repository">Adding a Repository</h2>
 
-<p>Canonical, the company that sponsors Ubuntu does not support all the available software itself. Community supported software is in a separate repository. First you need to add that <em>repo</em> to the <em>/etc/apt/sources.list</em>.</p>
+<p>Canonical, the company that sponsors Ubuntu does not support all the available software itself.  Community supported software is in a separate repository.  First you need to add that <em>repo</em> to the <em>/etc/apt/sources.list</em>.</p>
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">    $ cat /etc/apt/sources.lists</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs">$ cat /etc/apt/sources.lists</code></pre>
 
-<p>The output shows the repositories that are enabled. To fin the program we are looking for we’ll add the <em>Universal</em> repository.</p>
+<p>The output shows the repositories that are enabled.  To find the program we are looking for we'll add the <em>Universa</em> repository.</p>
 
-<pre><code>$ sudo add-apt-repository universe
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo add-apt-repository universe
 'universe' distribution component added for all sources.
 </code></pre>
 
@@ -57,21 +71,21 @@
 
 <h2 id="finding-a-package-to-install">Finding a Package to Install</h2>
 
-<p>A co-worker mentioned that there is a real-time interactive command line process viewer like <code>top</code> but with a nicer interface. However you don’t know the name of the package. Use <code>apt-cache</code> to find the correct package.</p>
+<p>Someone told you that there is a real-time interactive command line process viewer like top but nicer.  However you don’t know the name of the package.  Use <code>apt-cache</code> to find the correct package.</p>
 
 <p>First update the local package list if not already done.</p>
 
-<pre><code>$ sudo apt-get update
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo apt-get update
 </code></pre>
 
 <p>Next use <code>apt-cache</code> to find the package:</p>
 
-<pre><code>$ apt-cache search "process viewer"
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ apt-cache search "process viewer"
 gnome-system-monitor - Process viewer and system resource monitor for GNOME
 htop - interactive process viewer
 </code></pre>
 
-<p><code>htop</code> looks like what we want.  Let’s find out more about the package.</p>
+<p><code>htop</code> looks like what we want.  Let's find out more about the package.</p>
 
 <pre><code>$ apt-cache show htop
 </code></pre>
@@ -84,7 +98,7 @@ htop - interactive process viewer
 
 <p>You can install <code>htop</code> with <code>apt-get</code>.  Installing software on Ubuntu requires sudo privileges.</p>
 
-<pre><code>$ sudo apt-get install htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo apt-get install htop
 Reading package lists... Done
 Building dependency tree       
 Reading state information... Done
@@ -106,34 +120,31 @@ Processing triggers for man-db ...
 Setting up htop (1.0.2-1) ...
 </code></pre>
 
-<p>APT installs <code>htop</code> along with any dependencies and installs the manpage as well</p>
+<p>APT installs <code>htop</code> along with any dependencies and installs the manpage as well.</p>
 
 <p>Run the new program:</p>
 
-<pre><code>$ htop
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ htop</code></pre>
 
 <p><img src="https://s3.amazonaws.com/CIS126DL/Images/htop2.png" alt="htop screenshot" title="htop"></p>
 
 <p>To find out more about <code>htop</code> see the manpage.</p>
 
-<pre><code>$ man htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ man htop
 </code></pre>
-
-
 
 <h2 id="program-version">Program Version</h2>
 
-<p>Most programs accept the <code>-v</code> option to show the version number.</p>
+<p>Most programs accept the <strong>-v</strong> option to show the version number.</p>
 
-<pre><code>$ htop -v
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ htop -v
 htop 1.0.2 - (C) 2004-2011 Hisham Muhammad
 Released under the GNU GPL.
 </code></pre>
 
 <p>The <code>dpkg</code> command can also be used:</p>
 
-<pre><code>$ dpkg --list htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ dpkg --list htop
     Desired=Unknown/Install/Remove/Purge/Hold
 | Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
 |/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
@@ -142,23 +153,19 @@ Released under the GNU GPL.
 ii  htop               1.0.2-1        amd64          interactive processes viewer
 </code></pre>
 
-
-
 <h2 id="package-archive">Package Archive</h2>
 
 <p>The installed Debian archives (deb packages) are stored in the <em>/var</em> directory.</p>
 
-<pre><code>$ ls /var/cache/apt/archives/ | grep htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ ls /var/cache/apt/archives/ | grep htop
 htop_1.0.2-1_amd64.deb
 </code></pre>
-
-
 
 <h2 id="removing-an-installed-package">Removing an Installed Package</h2>
 
 <p>APT can also remove an installed package:</p>
 
-<pre><code>$ sudo apt-get remove htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo apt-get remove htop
 Reading package lists... Done
 Building dependency tree       
 Reading state information... Done
@@ -169,9 +176,9 @@ After this operation, 188 kB disk space will be freed.
 Do you want to continue [Y/n]?
 </code></pre>
 
-<p>The <code>remove</code> option will not remove any configuration files. To remove configuration files as well use <code>purge</code>.</p>
+<p>The <code>remove</code> option will not remove any configuration files.  To remove configuration files as well use <code>purge</code>.</p>
 
-<pre><code>$ sudo apt-get purge htop
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo apt-get purge htop
 Reading package lists... Done
 Building dependency tree       
 Reading state information... Done
@@ -181,13 +188,11 @@ htop*
 Purge htop [1.0.2-1]
 </code></pre>
 
-
-
 <h2 id="install-aptitude">Install <code>aptitude</code></h2>
 
 <p>Aptitude is not installed by default.</p>
 
-<pre><code>$ apt-cache show aptitude
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ apt-cache show aptitude
 Description-en: terminal-based package manager
 aptitude is a package manager with a number of useful features,
 including: a mutt-like syntax for matching packages in a flexible
@@ -200,7 +205,7 @@ aptitude is also Y2K-compliant, non-fattening, naturally cleansing, and housebro
 
 <p>Here the <code>-s</code> option will simulate the installation:</p>
 
-<pre><code>$ sudo apt-get -s install aptitude
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo apt-get -s install aptitude
 Reading package lists... Done
 Building dependency tree       
 Reading state information... Done
@@ -223,8 +228,6 @@ Conf libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
 Conf aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64]) 
 </code></pre>
 
-
-
 <h2 id="keeping-your-system-up-to-date">Keeping Your System Up to Date</h2>
 
 <p>The <code>apt-get update</code> and <code>apt-get upgrade</code> commands are used to keep a Debian system up to date.  The <code>apt-get dist-upgrade</code> will upgrade a system to the latest stable release. <em>Example:</em> From Squeeze to Wheezy.</p>
@@ -237,10 +240,7 @@ Conf aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64])
 
 <p>First:</p>
 
-<pre><code>$ sudo  tail /var/log/apt/history.log
-</code></pre>
-
-<p>Next open the graphical Screenshot utility to take a cropped screenshot of the virtual machine terminal.</p>
+<pre class="prettyprint"><code class="language-bash hljs"><code>$ sudo  tail /var/log/apt/history.log</code></pre>
 
 <!--![Take Screenshot]()-->
 

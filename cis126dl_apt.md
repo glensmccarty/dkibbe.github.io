@@ -70,7 +70,7 @@ You can install `htop` with `apt-get`.  Installing software on Ubuntu requires s
 
 	$ sudo apt-get install htop
 	Reading package lists... Done
-	Building dependency tree       
+	Building dependency tree
 	Reading state information... Done
 	The following NEW packages will be installed:
 	htop
