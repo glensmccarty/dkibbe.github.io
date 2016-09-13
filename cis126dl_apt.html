@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Installing Software Using APT</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Installing Software Using APT"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-09-13T16:36-0700"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content=""/>
+<meta name="keywords" content="cis126dl"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle.css" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript" src="http://orgmode.org/org-info.js">
+/**
+ *
+ * @source: http://orgmode.org/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://orgmode.org/org-info.js.
+ *
+ * Copyright (C) 2012-2013  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://orgmode.org/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
+org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
+org_html_manager.set("LOCAL_TOC", "above");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "0");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Installing Software Using APT</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Assignment Objectives</a></li>
+<li><a href="#sec-2">2 Terms and Commands You Should Know</a></li>
+<li><a href="#sec-3">3 Preparation</a></li>
+<li><a href="#sec-4">4 Adding a Repository</a></li>
+<li><a href="#sec-5">5 Finding a Package to Install</a></li>
+<li><a href="#sec-6">6 Installing <code>htop</code></a></li>
+<li><a href="#sec-7">7 Program Version</a></li>
+<li><a href="#sec-8">8 Package Archive</a></li>
+<li><a href="#sec-9">9 Removing an Installed Package</a></li>
+<li><a href="#sec-10">10 Install <code>aptitude</code></a></li>
+<li><a href="#sec-11">11 Keeping Your System Up to Date</a></li>
+<li><a href="#sec-12">12 What to Submit</a></li>
+<li><a href="#sec-13">13 Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Assignment Objectives</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+In this assignment you will find and install the <code>htop</code> process viewer. <code>htop</code> is an improved version of <code>top</code>.
+</p>
+<p>
+<i>After completing this assignment you will be able to:</i>
+</p>
+<ol>
+<li>Find a package using <code>apt-cache</code>.
+</li>
+<li>Obtain additional information on a package.
+</li>
+<li>Install a package using <code>apt-get</code>.
+</li>
+<li>Find the version of a package.
+</li>
+<li>Remove a package.
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Terms and Commands You Should Know</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<dl>
+<dt>APT</dt><dd>Debian's Advanced Package Tool
+</dd>
+<dt>apt-cache</dt><dd>Query the APT cache
+</dd>
+<dt>apt-get</dt><dd>APT package handling utility &ndash; command-line interface
+</dd>
+<dt>apt-get update</dt><dd>Resynchronize the local package index files from their sources.
+</dd>
+<dt>apt-get upgrade</dt><dd>Install the newest versions of all packages currently installed on the system.
+</dd>
+<dt>add-apt-repository</dt><dd>Enable a repository.
+</dd>
+<dt>dpkg</dt><dd>Package manager for Debian
+</dd>
+<dt>/etc/apt/sources.list</dt><dd>List of configured APT data sources
+</dd>
+<dt>/var/log/apt/history.log</dt><dd>Install history log
+</dd>
+<dt>Repository</dt><dd>A collection of software build for a specific Linux distribution.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Preparation</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+You need <code>sudo</code> privileges so do this assignment in the Ubuntu virtual machine.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Adding a Repository</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+Canonical, the company that sponsors Ubuntu does not support all the available software itself.  Community supported software is in a separate repository.  First you need to add that <b>repo</b> to the <b>/etc/apt/sources.list</b>.
+</p>
+<pre class="example">
+$ cat /etc/apt/sources.lists
+</pre>
+
+
+<p>
+The output shows the repositories that are enabled.  To fin the program we are looking for we'll add the <b>Universal</b> repository.
+</p>
+<p>
+$ sudo add-apt-repository universe
+'universe' distribution component added for all sources.
+</p>
+<p>
+Next run <code>apt-get update</code> to refresh the local package database.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Finding a Package to Install</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+A co-worker mentioned that there is a real-time interactive command line process viewer like <code>top</code> but with a nicer interface.  However you don't know the name of the package.  Use <code>apt-cache</code> to find the correct package.
+</p>
+<p>
+First update the local package list if not already done.
+</p>
+<pre class="example">
+$ sudo apt-get update
+</pre>
+
+
+<p>        
+Next use <code>apt-cache</code> to find the package:
+</p>
+
+
+
+<pre class="example">$ apt-cache search "process viewer"
+gnome-system-monitor - Process viewer and system resource monitor for GNOME
+htop - interactive process viewer
+</pre>
+
+
+<p>
+<code>htop</code> looks like what we want.  Let's find out more about the package.
+</p>
+<pre class="example">
+$ apt-cache show htop
+</pre>
+
+
+<p>
+Description-en: interactive processes viewer Htop is an ncursed-based process viewer similar to top, but it allows one to scroll the list vertically and horizontally to see  all processes and their full command lines.
+</p>
+<p> 
+The <code>show</code> option to <code>apt-cache</code> lists a lot more information about the program.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Installing <code>htop</code></h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p> 
+You can install <code>htop</code> with <code>apt-get</code>.  Installing software on Ubuntu requires sudo privileges.
+</p>
+
+
+
+<pre class="example">$ sudo apt-get install htop
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following NEW packages will be installed:
+htop
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 69.0 kB of archives.
+After this operation, 188 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu/ raring/universe htop amd64 1.0.2-1 [69.0 kB]
+Fetched 69.0 kB in 0s (84.3 kB/s)
+Selecting previously unselected package htop.
+(Reading database ... 251318 files and directories currently installed.)
+Unpacking htop (from .../htop_1.0.2-1_amd64.deb) ...
+Processing triggers for bamfdaemon ...
+Rebuilding /usr/share/applications/bamf-2.index...
+Processing triggers for desktop-file-utils ...
+Processing triggers for gnome-menus ...
+Processing triggers for man-db ...
+Setting up htop (1.0.2-1) ...
+</pre>
+
+
+<p>
+APT installs <code>htop</code> along with any dependencies and installs the manpage as well
+</p>
+<p>
+Run the new program:
+</p>
+<pre class="example">
+$ htop
+</pre>
+
+
+<p>
+<img src="./images/htop2.png"  alt="./images/htop2.png" />
+</p>
+<p>
+To find out more about <code>htop</code> see the manpage.
+</p>
+<pre class="example">
+$ man htop
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Program Version</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<p>
+Most programs accept the <b>-v</b> option to show the version number.
+</p>
+
+
+
+<pre class="example">$ htop -v
+htop 1.0.2 - (C) 2004-2011 Hisham Muhammad
+Released under the GNU GPL.
+</pre>
+
+
+<p>
+The <code>dpkg</code> command can also be used:
+</p>
+
+
+
+<pre class="example">
+$ dpkg --list htop
+Desired=Unknown/Install/Remove/Purge/Hold
+| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||/ Name               Version        Architecture   Description
++++-==================-==============-==============-============================
+ii  htop               1.0.2-1        amd64          interactive processes viewer
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Package Archive</h2>
+<div class="outline-text-2" id="text-8">
+
+
+<p>
+The installed Debian archives (deb packages) are stored in the <b>/var</b> directory.
+</p>
+
+
+
+<pre class="example">$ ls /var/cache/apt/archives/ | grep htop
+htop_1.0.2-1_amd64.deb
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Removing an Installed Package</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+APT can also remove an installed package:
+</p>
+
+
+<pre class="example">$ sudo apt-get remove htop
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+htop*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 188 kB disk space will be freed.
+Do you want to continue [Y/n]?
+</pre>
+
+
+<p>
+The <code>remove</code> option will not remove any configuration files.  To remove configuration files as well use <code>purge</code>.
+</p>
+
+
+
+<pre class="example">$ sudo apt-get purge htop
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+htop*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+Purge htop [1.0.2-1]
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Install <code>aptitude</code></h2>
+<div class="outline-text-2" id="text-10">
+
+
+<p>
+Aptitude is not installed by default.
+</p>
+
+
+
+<pre class="example">$ apt-cache show aptitude
+Description-en: terminal-based package manager
+aptitude is a package manager with a number of useful features,
+including: a mutt-like syntax for matching packages in a flexible
+manner, dselect-like persistence of user actions, the ability to
+retrieve and display the Debian changelog of most packages, and a
+command-line mode similar to that of apt-get.
+
+aptitude is also Y2K-compliant, non-fattening, naturally cleansing, and housebroken.
+</pre>
+
+
+<p>
+Here the <code>-s</code> option will simulate the installation:
+</p>
+
+
+
+<pre class="example">$ sudo apt-get -s install aptitude
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+aptitude-common libboost-iostreams1.49.0 libcwidget3 libept1.4.12
+Suggested packages:
+aptitude-doc-en aptitude-doc tasksel debtags libcwidget-dev
+The following NEW packages will be installed:
+aptitude aptitude-common libboost-iostreams1.49.0 libcwidget3 libept1.4.12
+0 upgraded, 5 newly installed, 0 to remove and 0 not upgraded.
+Inst aptitude-common (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [all])
+Inst libboost-iostreams1.49.0 (1.49.0-3.2ubuntu1 Ubuntu:13.04/raring [amd64])
+Inst libcwidget3 (0.5.16-3.4ubuntu1 Ubuntu:13.04/raring [amd64])
+Inst libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
+Inst aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64])
+Conf aptitude-common (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [all])
+Conf libboost-iostreams1.49.0 (1.49.0-3.2ubuntu1 Ubuntu:13.04/raring [amd64])
+Conf libcwidget3 (0.5.16-3.4ubuntu1 Ubuntu:13.04/raring [amd64])
+Conf libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
+Conf aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64]) 
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Keeping Your System Up to Date</h2>
+<div class="outline-text-2" id="text-11">
+
+
+<p>
+The <code>apt-get update</code> and <code>apt-get upgrade</code> commands are used to keep a Debian system up to date.  The <code>apt-get dist-upgrade</code> will upgrade a system to the latest stable release.  n*Example:* From Squeeze to Wheezy.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> What to Submit</h2>
+<div class="outline-text-2" id="text-12">
+
+
+<p>
+Submit a cropped screenshot of the last 10 lines of the history log showing that <code>htop</code> was install than uninstalled.
+</p>
+<pre class="example">
+$ sudo  tail /var/log/apt/history.log
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Resources</h2>
+<div class="outline-text-2" id="text-13">
+
+
+<ul>
+<li><a href="http://debian-handbook.info/browse/stable/">The Debian Administrator's Handbook</a>
+</li>
+<li>man apt
+</li>
+<li>man apt-cache
+</li>
+<li>man apt-get
+</li>
+<li>man add-apt-repository
+</li>
+<li>man 5 sources.list
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-09-13T16:36-0700</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
