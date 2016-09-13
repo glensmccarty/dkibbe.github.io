@@ -1,10 +1,10 @@
-<h1 id="create-a-command-aliases">Create a Command Aliases</h1>
-
-
+<h1 id="create-a-command-alias">Create a Command Alias</h1>
 
 <h2 id="overview">Overview</h2>
 
-<p>Command aliases and Bash functions which we'll look at under scripting let a Linux system administrator create custom commands. In this assignment you will create a custom aliasfor the <code>ping</code> command.</p>
+<p>Command aliases and Bash functions which we’ll look at under scripting let a Linux system administrator create custom commands. In this assignment you will create a custom alias for the <code>du</code> command.</p>
+
+
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -14,14 +14,16 @@
 <li>Determine a command type using the <code>type</code> command.</li>
 <li>Use the <code>alias</code> command to create a new alias.</li>
 <li>Use the <code>unalias</code> command to remove an alias.</li>
-<li>Make aliases permanent by adding them to <code>~/.bashrc</code> or <code>~/.bash_aliases</code>.</li>
+<li>Make aliases permanent by adding them to <code>~/.bash_aliases</code>.</li>
 </ol>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <dl>
 <dt><code>type</code></dt>
-<dd>Shows what type a command is -- alias, shell builtin or stand alone.</dd>
+<dd>Shows what type a command is – alias, shell builtin or stand alone.</dd>
 
 <dt><code>alias</code></dt>
 <dd>Used to create a command alias or show all aliases.</dd>
@@ -29,26 +31,43 @@
 <dt><code>unalias</code></dt>
 <dd>Removes an alias</dd>
 
+<dt><code>~/.bashrc</code></dt>
+<dd>Hidden Bash configuration file.</dd>
+
 <dt><code>~/.bash_aliases</code></dt>
-<dd>Commands in this file will be sourced (included in) by the <code>~/.bashrc</code> file.</dd>
+<dd>Commands in this hidden file will be included in the <code>~/.bashrc</code> file when a terminal is opened.</dd>
 
 <dt>Dot files</dt>
-<dd>hidden files and directories that start with a peroid.</dd>
+<dd>Hidden files and directories that start with a peroid.</dd>
 
 <dt><code>ls</code></dt>
-<dd>List files</dd>
+<dd>Command to list files.</dd>
 
 <dt><code>ping</code></dt>
-<dd>Send an ICMP ECHO_REQUEST (Are you there?) packet to a network host and record whether an ICMP ECHO_RESPONSE (Yes, I'm here.) packet was received back.</dd>
+<dd>Send an ICMP ECHO_REQUEST (Are you there?) packet to a network host and record whether an ICMP ECHO_RESPONSE (Yes, I’m here.) packet was received back.</dd>
 </dl>
 
 <h2 id="preparation">Preparation</h2>
 
 <p>Tested on Ubuntu 14.04 and CentOS 7</p>
 
+
+
+<h3 id="the-nano-text-editor">The Nano Text Editor</h3>
+
+<p>For this assignment you can use the graphical text editor, Gedit or the command line editor, Nano. Nano is simple to use as you can see by these screenshots. See Resources for a short video tutorial.</p>
+
+<p>From your home directory start nano from the command line.</p>
+
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/nano-1.png" alt="Start nano from the command line" title="Start nano from the command line"></p>
+
+<p>Using the nano menu.</p>
+
+<p><img src="https://raw.githubusercontent.com/dkibbe/dkibbe.github.io/master/images/nano-2.png" alt="Using the nano menu" title="Nano screenshot"></p>
+
 <h2 id="scenario">Scenario</h2>
 
-<p>You are a system administration who works on both Windows and Linux servers. You want to create an command alias for the <code>ping</code> command so it works the same way on both servers. That is, ping a web site four times then stop.</p>
+<p>If you are a system administration who works on both Windows and Linux servers. You may want to create a command alias for the <code>ping</code> command so it works the same way on both Operating systems. That is, ping a web site four times then stop.</p>
 
 <h2 id="using-the-type-command">Using the <code>type</code> Command</h2>
 
@@ -58,11 +77,13 @@
 ls is aliased to `ls --color=auto'
 </code></pre>
 
-<p>The <code>type</code> command shows that the <code>ls</code> you type is actually an alias. The <code>--color=auto</code> option to <code>ls</code> displays files, directories, links and executables in different colors.</p>
+<p>The <code>type</code> command shows that the <code>ls</code> command you type is actually an alias. The <code>--color=auto</code> option to <code>ls</code> displays files, directories, links and executables in different colors.</p>
+
+
 
 <h2 id="using-the-unalias-command">Using the <code>unalias</code> Command</h2>
 
-<p>The color option on a dark background sometimes makes directories very hard to see. Let's remove the color option with the <code>unalias</code> command. Using Tab completion you only need to type the first three letters of <code>unalias</code> the command.</p>
+<p>The color option on a dark background sometimes makes directories very hard to see. Let’s remove the color option with the <code>unalias</code> command. Using Tab completion you don’t need to type the whole command.</p>
 
 <pre><code>$ unalias ls
 </code></pre>
@@ -72,11 +93,11 @@ ls is aliased to `ls --color=auto'
 <p>$ type ls <br>
 ls is /bin/ls</p>
 
-
+<p>This is a temporary change and will revert back when you close the current terminal.</p>
 
 <h2 id="using-the-alias-command">Using the <code>alias</code> Command</h2>
 
-<p>Without the color option it is hard to tell whether a file is an ordinary file, a directory, an executable or a link so we'll use <code>alias</code> to map <code>ls</code> to <code>ls -F</code> which will add an indicator to each file type (See the table below). Be sure to include the quote marks in the command so the shell treats the space character correctly.</p>
+<p>Without the color option it is hard to tell whether a file is an ordinary file, a directory, an executable or a link so we’ll use <code>alias</code> to map <code>ls</code> to <code>ls -F</code> which will add an indicator to each file type (See the table below). Be sure to include the quote marks in the command so the shell treats the space character correctly.</p>
 
 <table>
 <thead>
@@ -112,41 +133,83 @@ Desktop/ Documents/ Downloads/ Music/ /Videos
 some-link@ some-file.txt some-script.sh*
 </code></pre>
 
-<p>The new alias isn't permanent and will disappear when the current shell closes. To make the alias permanent add it to the <code>.bashrc</code> or a hidden <code>.bash_aliases</code> file in your home directory. The <code>.bash_aliases</code> may not exist but you can create it using the <code>nano</code> or <code>vi</code> text editor. Using a separate file is safer than editing <code>.bashrc</code> and makes your customizations more portable.</p>
+<p>The new alias isn’t permanent and will disappear when the current shell closes. To make the alias permanent add it to <code>.bashrc</code> or  <code>.bash_aliases</code> file in your home directory. The <code>.bash_aliases</code> may not exist but you can create it using the <code>nano</code> or <code>vi</code> text editor. Using a separate file is safer than editing <code>.bashrc</code> and makes your customizations portable to other systems.</p>
 
-<p>Here is a sample <code>.bash_aliases</code> file.</p>
+<p>Here is a sample <code>~/.bash_aliases</code> file.</p>
 
 <pre><code>alias ls='ls -F'
 alias ll='l -lh'
-alias du=`du -sh * | sort -nr'
+alias free="free -mt"
+alias c=clear
 </code></pre>
 
 <h2 id="removing-an-alias">Removing an Alias</h2>
 
-<p>To temporarily run a command without the alias use <em>**</em> before the command.</p>
+<p>To temporarily run a command without the alias use <strong>\</strong> before the command. This will run <code>/bin/ls</code> with no options.</p>
 
 <pre><code>$ \ls
 </code></pre>
+
+<h2 id="create-an-alias-to-the-ping-command">Create an Alias to the <code>ping</code> Command</h2>
+
+<p>The <code>ping</code> command works differently on Linux compared to Windows.</p>
+
+
+
+<h3 id="on-windows">On Windows</h3>
+
+<p>Ping runs 4 times and then stops.</p>
+
+
+
+<h3 id="on-linux">On Linux</h3>
+
+<p>Ping run continuously until stopped by pressing <strong>Ctrl + C</strong>.</p>
+
+<pre><code>$ ping mesacc.edu
+</code></pre>
+
+
+
+<h3 id="create-the-alias">Create the Alias</h3>
+
+<p>To have <code>ping</code> on Linux work the same way as it does on Windows you can create an alias.</p>
+
+<pre><code>$ alias ping="ping -c4"
+</code></pre>
+
+<p>Now when you tyoe <code>ping mesacc.edu</code> the command will stop after 4 counts. How did we know what option to use? The manpage for <code>ping</code> provides that informantion.</p>
+
+<p>$ man ping</p>
+
+<p>Manpages use the <code>less</code> command to display the page so you can refer to the section in Chapter 7 on using <code>less</code>.</p>
+
+
+
+<h3 id="make-an-alias-permanent">Make an Alias Permanent</h3>
+
+<p>Our new alias is only temporary and will revert back to the default when the current shell is closed. To make the alias permanent put the command just as you typed it on the command line in  <code>~/.bash_aliases</code>.</p>
 
 <h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
 
 <ol>
 <li>Files that start with a period like <code>.bashrc</code> are hidden from the <code>ls</code> command unless you use the <code>-a</code> option.</li>
-<li>Don't forget the quotes around <code>ls -F</code> they are required because of the space character.</li>
+<li>Don’t forget the quotes around <code>ls -F</code> they are required because of the space character.</li>
+<li>The <code>.bash_aliases</code> file is a hidden file you create with a text edit (gedit, nano or vi). it goes in your home directory.</li>
+<li>Some distributions may want aliases to be put in a file with a different name such as <code>~/.aliases</code>.</li>
 </ol>
-
-
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of the <code>.bash_alias</code> you created showing the alias you created for the <code>ping</code> command so it functions the same on Linux as on Windows.</p>
+<p>Submit a screenshot of the command you would use to create an alias for the <code>du</code> command that shows a summary and the file size in human-readable form.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
 <ul>
 <li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-useful-bash-aliases-and-functions" title="An Introduction to Useful Bash Aliases and Functions">An Introduction to Useful Bash Aliases and Functions</a></li>
-<li><a href="http://www.freebsd.org/cgi/man.cgi%3Fquery%3Dls" title="BSD ls manpage">The very complete BSD <code>ls</code> manpage</a></li>
-<li><a href="http://www.codeuniversity.com/templates/bash_alias" title="sample bash_alias file">Sample bash_alias file</a></li>
+<li><a href="https://www.youtube.com/watch?v=45KO4KO2DTo" title="Linux Commands for Beginners: 05 - Nano">Nano tutorial on YouTube</a></li>
 </ul>
 
 <!-- links -->

@@ -1,0 +1,81 @@
+<h1 id="network-file-system-nfs">Network File System (NFS)</h1>
+
+
+
+<h2 id="overview">Overview</h2>
+
+<p>NFS has been around since the 1980s as a convenient why to share files over the network. In this exercise you will set up an NFS server and access files from a network client.</p>
+
+<h2 id="assignment-objectives">Assignment Objectives</h2>
+
+<p><em>When you have successfully completed this assignment you will be able to:</em></p>
+
+<ol>
+<li>Configure the Network File System server on CentOS 7. </li>
+<li>Configure the NFS client.</li>
+<li>Mount a remote share on a local directory.</li>
+<li>Edit <code>/etc/fstab</code> to make the mount available on boot.</li>
+</ol>
+
+<h2 id="term-you-should-know">Term You Should Know</h2>
+
+<dl>
+<dt>/etc/exports</dt>
+<dd>Show exported directories on localhost or a remote host.</dd>
+
+<dt>showmount -e</dt>
+<dd>Show exported directories on localhost or a remote host.</dd>
+
+<dt>exportfs -rv</dt>
+<dd>Updates the export table.</dd>
+
+<dt>/etc/sysconfig/nfs</dt>
+<dd>The NFS configuration file</dd>
+
+<dt>rpc</dt>
+<dd>Routines that allow C programs to make procedure calls on other machines across the network.</dd>
+
+<dt>NFS</dt>
+<dd>Network File System</dd>
+</dl>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>In this assignment you will set up a NFS server for another team to connect to and they will do the same for your team. Both machines must be on the 1.92.168.201.0/24 network and have unique IP addresses.</p>
+
+<p>In VirtualBox set networking to <em>Bridged Adapter</em> and make sure <em>Connect the cable</em> is checked.</p>
+
+<h2 id="configure-the-nfs-server">Configure the NFS Server</h2>
+
+<p>Follow the instructions Chapter 4 to set up the server which should be on Fedora 7.</p>
+
+<h2 id="configure-the-nfs-client">Configure the NFS Client</h2>
+
+<p>Set up the client following the instructions in Chapter 4 on either Ubuntu or Fedora. You will edit the <code>/etc/fstab</code> file to make the share available on boot.</p>
+
+<h2 id="troubleshoot-the-assignment">Troubleshoot the Assignment</h2>
+
+<ul>
+<li>Make sure both virtual machines are on the same network and can ping each other.</li>
+<li>Create a file so you can see that the directory is mounted properly.</li>
+<li>Use <code>nmap</code> from the client to map open ports on the NFS server. </li>
+<li>Port 2049 needs to be open on the server.</li>
+<li>Make sure you are using the correct IP addresses for your NFS server and the subnet you are on.</li>
+</ul>
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of the <code>mount | grep nfs</code> command on the client showing that the share is mounted.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+<li>man exports</li>
+<li>man nfs</li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/index.html">RHEL 7 Storage Administration Guide</a></li>
+<li><a href="https://fedoraproject.org/wiki/FirewallD?rd=FirewallD/#Using_firewall-cmd">Using firewall-cmd</a></li>
+</ul>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
