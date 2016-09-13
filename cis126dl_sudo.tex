@@ -37,15 +37,62 @@
 \tableofcontents[currentsection]
 \end{frame}
 \begin{frame}
-\frametitle{First Slide}
-\framesubtitle{A bit more information about this}
-%Content goes here
-Contents of the first slide
+\frametitle{Su \& Sudo}
+The su and sudo commands are used to run commands as root on a Linux system. Some distributions have sudo installed and active by default others don't and use su.  We'll look at both and examine the advantages of sudo over su.
 \end{frame}
 \begin{frame}[fragile]
 \frametitle{Second Slide}
-%Content goes here
-Contents of the second slide
+The su command will switch to another user if that user's password is known.
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{SU Example}
+\begin{verbatim}
+tux@instr:~]$ su - jstudent
+Password: (Enter password for jstudent)
+jstudent@intr:~]$ pwd
+/home/jstudent
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Login Shell}
+If the user login isn't given root is assumed. The -l option assures that the complete path for the user is used.
+\begin{verbatim}
+tux@instr:~]$ su -l
+Password: (Enter password for root)
+root@intr:~]# pwd
+/root
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Login Shell}
+\begin{verbatim}
+jstudent@intr:~]$ su
+Password:
+root@intr:~]# echo $PATH
+	  /usr/local/bin:/usr/bin:/bin:/usr/games:/home/jstudent/bin
+root@intr:/home/jstudent]# pwd
+/home/jstudent
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{login Shell}
+\begin{verbatim}
+jstudent@intr:~]$ su -
+Password:
+root@intr:~]# echo $PATH
+	  /usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/root/bin
+root@intr:~]# pwd
+/root
+\end{verbatim}
+\end{frame}
+\begin{frame}
+  \frametitle{Su - Disadvantages}
+  \begin{itemize}
+  \item The root password must be shared.
+  \item Full root privileges are given.
+  \item There is no audit trail.
+  \item Managing many root users is hard.
+  \end{itemize}
 \end{frame}
 \begin{frame}
   \frametitle{User Privilege Lines}
@@ -62,6 +109,57 @@ Contents of the second slide
 root \textbf{ALL}=(ALL:ALL) ALL
 \end{semiverbatim}
   \end{block}
+\end{frame}
+\begin{frame}
+  \frametitle{Sudo}
+    %\includegraphics[height=3cm]{sudo_penguin.jpg}
+\end{frame}
+\begin{frame}
+  \frametitle{Sudo Advantages}
+  \begin{itemize}
+  \item The root account can be locked.
+  \item Sudoers use their own password.
+  \item Fine-grained permissions are possible.
+  \item All activity is logged.
+  \item Managing sudoers is easy.
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Sudo configuration}
+  /etc/sudoers is the main configuration file.  The must be edited using visudo.  A mistake editing the file may require booting from a rescue disk!
+\end{frame}
+\begin{frame}
+  \frametitle{Aliases and Specifications}
+  \begin{itemize}
+  \item Aliases
+  \item User Specifications
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Aliases}
+  \begin{itemize}
+  \item User\_Alias
+  \item Runas\_Alias
+  \item Host\_Alias
+  \item Cmnd\_Alias
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{User Alias}
+User\_Alias defines groups of users
+\begin{verbatim}
+User_Alias	FULLTIMERS = millert, mikef, dowdy
+User_Alias	PARTTIMERS = bostley, jwfox, crawl
+User_Alias	WEBMASTERS = will, wendy, wim
+\end{verbatim}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Runas Alias}
+  Runas\_Alias defines how processes are run.
+\begin{verbatim}
+Runas_Alias	OP = root, operator
+Runas_Alias	DB = oracle, sybase
+\end{verbatim}
 \end{frame}
 \begin{frame}[fragile]
   \frametitle{Examples}
