@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Installing Software Using APT</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="Installing Software Using APT"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2016-09-13T16:36-0700"/>
+<meta name="generated" content="2016-09-13T17:40-0700"/>
 <meta name="author" content="Dennis Kibbe"/>
 <meta name="description" content=""/>
-<meta name="keywords" content="cis126dl"/>
+<meta name="keywords" content="cis126dl cups printer"/>
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   html { font-family: Times, serif; font-size: 12pt; }
@@ -196,46 +196,27 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Assignment Objectives</a></li>
-<li><a href="#sec-2">2 Terms and Commands You Should Know</a></li>
-<li><a href="#sec-3">3 Preparation</a></li>
-<li><a href="#sec-4">4 Adding a Repository</a></li>
-<li><a href="#sec-5">5 Finding a Package to Install</a></li>
-<li><a href="#sec-6">6 Installing <code>htop</code></a></li>
-<li><a href="#sec-7">7 Program Version</a></li>
-<li><a href="#sec-8">8 Package Archive</a></li>
-<li><a href="#sec-9">9 Removing an Installed Package</a></li>
-<li><a href="#sec-10">10 Install <code>aptitude</code></a></li>
-<li><a href="#sec-11">11 Keeping Your System Up to Date</a></li>
-<li><a href="#sec-12">12 What to Submit</a></li>
-<li><a href="#sec-13">13 Resources</a></li>
+<li><a href="#sec-1">1 Overview</a></li>
+<li><a href="#sec-2">2 Assignment Objectives</a></li>
+<li><a href="#sec-3">3 Terms and Commands You Should Know</a></li>
+<li><a href="#sec-4">4 Preparation</a></li>
+<li><a href="#sec-5">5 Adding a Repository</a></li>
+<li><a href="#sec-6">6 Finding a Package to Install</a></li>
+<li><a href="#sec-7">7 Installing htop</a></li>
+<li><a href="#sec-8">8 Program Version</a></li>
+<li><a href="#sec-9">9 8 Package Archive</a></li>
+<li><a href="#sec-10">10 Removing an Installed Package</a></li>
+<li><a href="#sec-11">11 Install aptitude</a></li>
+<li><a href="#sec-12">12 Keeping Your System Up to Date</a></li>
+<li><a href="#sec-13">13 What to Submit</a></li>
+<li><a href="#sec-14">14 Resources</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Assignment Objectives</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
-
-
-<p>
-In this assignment you will find and install the <code>htop</code> process viewer. <code>htop</code> is an improved version of <code>top</code>.
-</p>
-<p>
-<i>After completing this assignment you will be able to:</i>
-</p>
-<ol>
-<li>Find a package using <code>apt-cache</code>.
-</li>
-<li>Obtain additional information on a package.
-</li>
-<li>Install a package using <code>apt-get</code>.
-</li>
-<li>Find the version of a package.
-</li>
-<li>Remove a package.
-</li>
-</ol>
 
 
 </div>
@@ -243,8 +224,37 @@ In this assignment you will find and install the <code>htop</code> process viewe
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Terms and Commands You Should Know</h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Assignment Objectives</h2>
 <div class="outline-text-2" id="text-2">
+
+
+<p>
+In this assignment you will find and install the <code>htop</code> process viewer.  <code>htop</code> is an improved version of <code>top</code>.
+</p>
+<p>
+<i>After completing this assignment you will be able to:</i>
+</p>
+<ul>
+<li>Find a package using apt-cache.
+</li>
+<li>Obtain additional information on a package.
+</li>
+<li>Install a package using <code>apt-get.</code>
+</li>
+<li>Find the version of a package.
+</li>
+<li>Remove a package.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Terms and Commands You Should Know</h2>
+<div class="outline-text-2" id="text-3">
 
 
 <dl>
@@ -252,7 +262,7 @@ In this assignment you will find and install the <code>htop</code> process viewe
 </dd>
 <dt>apt-cache</dt><dd>Query the APT cache
 </dd>
-<dt>apt-get</dt><dd>APT package handling utility &ndash; command-line interface
+<dt>apt-get</dt><dd>APT package handling utility – command-line interface
 </dd>
 <dt>apt-get update</dt><dd>Resynchronize the local package index files from their sources.
 </dd>
@@ -275,25 +285,25 @@ In this assignment you will find and install the <code>htop</code> process viewe
 
 </div>
 
-<div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Preparation</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Preparation</h2>
+<div class="outline-text-2" id="text-4">
 
 
 <p>
-You need <code>sudo</code> privileges so do this assignment in the Ubuntu virtual machine.
+You need Sudo privileges so do this assignment in the Ubuntu virtual machine.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Adding a Repository</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Adding a Repository</h2>
+<div class="outline-text-2" id="text-5">
 
 
 <p>
-Canonical, the company that sponsors Ubuntu does not support all the available software itself.  Community supported software is in a separate repository.  First you need to add that <b>repo</b> to the <b>/etc/apt/sources.list</b>.
+Canonical, the company that sponsors Ubuntu does not support all the available software itself.  Community supported software is in a separate repository.  First you need to add that repo to the <code>/etc/apt/sources.list</code>.
 </p>
 <pre class="example">
 $ cat /etc/apt/sources.lists
@@ -301,12 +311,13 @@ $ cat /etc/apt/sources.lists
 
 
 <p>
-The output shows the repositories that are enabled.  To fin the program we are looking for we'll add the <b>Universal</b> repository.
+The output shows the repositories that are enabled.  To find the program we are looking for we'll add the <i>Universe</i> repository.
 </p>
-<p>
-$ sudo add-apt-repository universe
-'universe' distribution component added for all sources.
-</p>
+<pre class="example">
+$ sudo add-apt-repository universe 'universe' distribution component added for all sources.
+</pre>
+
+
 <p>
 Next run <code>apt-get update</code> to refresh the local package database.
 </p>
@@ -314,13 +325,13 @@ Next run <code>apt-get update</code> to refresh the local package database.
 
 </div>
 
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Finding a Package to Install</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Finding a Package to Install</h2>
+<div class="outline-text-2" id="text-6">
 
 
 <p>
-A co-worker mentioned that there is a real-time interactive command line process viewer like <code>top</code> but with a nicer interface.  However you don't know the name of the package.  Use <code>apt-cache</code> to find the correct package.
+A co-worker mentioned that there is a real-time interactive command line process viewer like top but with a nicer interface.  However you don't know the name of the package.  Use <code>apt-cache</code> to find the correct package.
 </p>
 <p>
 First update the local package list if not already done.
@@ -330,7 +341,7 @@ $ sudo apt-get update
 </pre>
 
 
-<p>        
+<p>
 Next use <code>apt-cache</code> to find the package:
 </p>
 
@@ -339,34 +350,31 @@ Next use <code>apt-cache</code> to find the package:
 <pre class="example">$ apt-cache search "process viewer"
 gnome-system-monitor - Process viewer and system resource monitor for GNOME
 htop - interactive process viewer
+htop looks like what we want. Let's find out more about the package.
+</pre>
+
+
+
+<pre class="example">$ apt-cache show htop
+
+Description-en: interactive processes viewer Htop is an ncursed-based process viewer similar to top, but it allows one to scroll the list vertically and horizontally to see all processes and their full command lines.
 </pre>
 
 
 <p>
-<code>htop</code> looks like what we want.  Let's find out more about the package.
-</p>
-<pre class="example">
-$ apt-cache show htop
-</pre>
-
-
-<p>
-Description-en: interactive processes viewer Htop is an ncursed-based process viewer similar to top, but it allows one to scroll the list vertically and horizontally to see  all processes and their full command lines.
-</p>
-<p> 
-The <code>show</code> option to <code>apt-cache</code> lists a lot more information about the program.
+The <b>show</b> option to <code>apt-cache</code> lists a lot more information about the program.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Installing <code>htop</code></h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Installing htop</h2>
+<div class="outline-text-2" id="text-7">
 
 
-<p> 
-You can install <code>htop</code> with <code>apt-get</code>.  Installing software on Ubuntu requires sudo privileges.
+<p>
+You can install <code>htop</code> with <code>apt-get</code>.  Installing software on Ubuntu requires Sudo privileges.
 </p>
 
 
@@ -395,7 +403,7 @@ Setting up htop (1.0.2-1) ...
 
 
 <p>
-APT installs <code>htop</code> along with any dependencies and installs the manpage as well
+APT installs <code>htop</code> along with any dependencies and installs the manpage as well.
 </p>
 <p>
 Run the new program:
@@ -409,7 +417,7 @@ $ htop
 <img src="./images/htop2.png"  alt="./images/htop2.png" />
 </p>
 <p>
-To find out more about <code>htop</code> see the manpage.
+To find out more about htop see the manpage.
 </p>
 <pre class="example">
 $ man htop
@@ -420,9 +428,9 @@ $ man htop
 
 </div>
 
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> Program Version</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Program Version</h2>
+<div class="outline-text-2" id="text-8">
 
 
 <p>
@@ -434,16 +442,8 @@ Most programs accept the <b>-v</b> option to show the version number.
 <pre class="example">$ htop -v
 htop 1.0.2 - (C) 2004-2011 Hisham Muhammad
 Released under the GNU GPL.
-</pre>
+The dpkg command can also be used:
 
-
-<p>
-The <code>dpkg</code> command can also be used:
-</p>
-
-
-
-<pre class="example">
 $ dpkg --list htop
 Desired=Unknown/Install/Remove/Purge/Hold
 | Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
@@ -458,13 +458,13 @@ ii  htop               1.0.2-1        amd64          interactive processes viewe
 
 </div>
 
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Package Archive</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 8 Package Archive</h2>
+<div class="outline-text-2" id="text-9">
 
 
 <p>
-The installed Debian archives (deb packages) are stored in the <b>/var</b> directory.
+The installed Debian archives (deb packages) are stored in the <code>/var</code> directory.
 </p>
 
 
@@ -478,14 +478,15 @@ htop_1.0.2-1_amd64.deb
 
 </div>
 
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> Removing an Installed Package</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Removing an Installed Package</h2>
+<div class="outline-text-2" id="text-10">
 
 
 <p>
 APT can also remove an installed package:
 </p>
+
 
 
 <pre class="example">$ sudo apt-get remove htop
@@ -501,7 +502,7 @@ Do you want to continue [Y/n]?
 
 
 <p>
-The <code>remove</code> option will not remove any configuration files.  To remove configuration files as well use <code>purge</code>.
+The remove option will not remove any configuration files.  To remove configuration files as well use <b>purge</b>.
 </p>
 
 
@@ -516,13 +517,14 @@ htop*
 Purge htop [1.0.2-1]
 </pre>
 
-</div>
 
 </div>
 
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Install <code>aptitude</code></h2>
-<div class="outline-text-2" id="text-10">
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Install aptitude</h2>
+<div class="outline-text-2" id="text-11">
 
 
 <p>
@@ -540,12 +542,8 @@ retrieve and display the Debian changelog of most packages, and a
 command-line mode similar to that of apt-get.
 
 aptitude is also Y2K-compliant, non-fattening, naturally cleansing, and housebroken.
+Here the -s option will simulate the installation:
 </pre>
-
-
-<p>
-Here the <code>-s</code> option will simulate the installation:
-</p>
 
 
 
@@ -572,32 +570,33 @@ Conf libept1.4.12 (1.0.9 Ubuntu:13.04/raring [amd64])
 Conf aptitude (0.6.8.1-2ubuntu2 Ubuntu:13.04/raring [amd64]) 
 </pre>
 
-</div>
 
-</div>
-
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> Keeping Your System Up to Date</h2>
-<div class="outline-text-2" id="text-11">
-
-
-<p>
-The <code>apt-get update</code> and <code>apt-get upgrade</code> commands are used to keep a Debian system up to date.  The <code>apt-get dist-upgrade</code> will upgrade a system to the latest stable release.  n*Example:* From Squeeze to Wheezy.
-</p>
 </div>
 
 </div>
 
 <div id="outline-container-12" class="outline-2">
-<h2 id="sec-12"><span class="section-number-2">12</span> What to Submit</h2>
+<h2 id="sec-12"><span class="section-number-2">12</span> Keeping Your System Up to Date</h2>
 <div class="outline-text-2" id="text-12">
+
+
+<p>
+The <code>apt-get update</code> and <code>apt-get upgrade</code> commands are used to keep a Debian system up to date.  The <code>apt-get dist-upgrade</code> will upgrade a system to the latest stable release.  <i>Example:</i> From Squeeze to Wheezy.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> What to Submit</h2>
+<div class="outline-text-2" id="text-13">
 
 
 <p>
 Submit a cropped screenshot of the last 10 lines of the history log showing that <code>htop</code> was install than uninstalled.
 </p>
 <pre class="example">
-$ sudo  tail /var/log/apt/history.log
+$ sudo tail /var/log/apt/history.log
 </pre>
 
 
@@ -605,13 +604,13 @@ $ sudo  tail /var/log/apt/history.log
 
 </div>
 
-<div id="outline-container-13" class="outline-2">
-<h2 id="sec-13"><span class="section-number-2">13</span> Resources</h2>
-<div class="outline-text-2" id="text-13">
+<div id="outline-container-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> Resources</h2>
+<div class="outline-text-2" id="text-14">
 
 
 <ul>
-<li><a href="http://debian-handbook.info/browse/stable/">The Debian Administrator's Handbook</a>
+<li>The Debian Administrator's Handbook
 </li>
 <li>man apt
 </li>
@@ -630,7 +629,7 @@ $ sudo  tail /var/log/apt/history.log
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2016-09-13T16:36-0700</p>
+<p class="date">Date: 2016-09-13T17:40-0700</p>
 <p class="author">Author: Dennis Kibbe</p>
 <p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
