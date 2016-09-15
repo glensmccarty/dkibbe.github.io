@@ -1,0 +1,128 @@
+#+SETUPFILE:  ~/.emacs.d/org-templates/level-0.org
+#+TITLE:     Samba
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DATE:      2016-09-15 Thu
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+* Introduction
+
+  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
+
+* Assignment Objectives
+
+  When you have successfully completed this assignment you will be able to:
+
+  - Configure a Samba server on Fedora
+  - Configure SELinux to work with Samba.
+  - Connect to the Samba server from a Windows workstation.
+
+* Terms You Should Know
+
+  - /etc/samba/smb.conf :: The Samba configuration file.
+  - smb :: Server Message Block daemon
+  - nmb :: NetBIOS Message Block daemon
+  - system-config-samba :: GUI configuration tool for Samba
+  - firewall-config :: GUI firewall configuration tool
+
+* Preparation
+
+  - Use a Fedora virtual Machine on the 192.168.201.0/24 network.
+  - Set networking to /Bridged adapter/, connect the cable and refresh the MAC address.
+  - Boot the VM and take a [[https://www.virtualbox.org/manual/ch01.html#snapshots][snapshot]] in VirtualBox so you can roll back if you have problems.
+
+* Assignment
+
+** Create Samba User
+   
+   Create a new user that you will add as a Samba user.
+
+#+BEGIN_EXAMPLE
+# useradd jstudent
+#+END_EXAMPLE
+
+** Create a Samba Share
+
+   1. Add a directory to share.
+
+   : # mkdir -p /srv/data
+
+*** Add Content
+
+    : echo "This is on 192.168.201.123" > /srv/data/Success!
+
+    Use the IP address of your Samba server.
+
+** Add Samba Group
+
+   : # groupadd staff
+
+*** Add to Samba Group
+
+    : # usermod -aG staff jstudent
+    : # smbpasswd -a tux
+
+** Set Permissions and Ownership
+
+   : # chgrp -R staff /srv/smb/data
+   : # chmod 0755 /srv/smb/data
+
+** SELinux
+
+#+BEGIN_EXAMPLE
+# chcon -R -t samba_share_t /srv/smb/data
+# semanage fcontext -a -t samba_share_t /srv/smb/data
+# setsebool -P samba_enable_home_dirs on
+#+END_EXAMPLE
+
+* Install Configuration Tools
+
+#+BEGIN_EXAMPLE
+# dnf install system-config-samba firewall-config
+#+END_EXAMPLE
+
+* Configuration
+
+** Samba
+
+   Open the Samba configuration tool.
+
+   1. Add /jstudent/ as a Samba user.
+   2. Add =/srv/data= as a Samba share.
+
+** Firewall
+
+   Open the firewall configuration tool.
+
+   1. Add /Samba/ as a service.
+   2. Make the change permanent.
+
+* Test the Configuration
+
+  You can test the configuration from another Linux VM using =smbclient=.
+
+  : $ smbclient -L \\192.168.201.123 -U jstudent
+
+* Connect from Windows
+
+  From the Windows Run dialog box.
+
+  : \\192.168.201.123
+
+  You will be asked for the user name and password for /jstudent/.  The network password will be the same.
+
+* What to Submit
+
+  Submit a screenshot of the output of the =smbclient= command or from Windows showing the connection.
+
+* COMMENT Resources

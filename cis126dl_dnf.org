@@ -23,23 +23,27 @@ Not all Linux distributions use the same package management system to install so
 
 /After completing this assignment you will be able to:/
 
-1. Find a package using =dnf=
+1. Find a package using =dnf=.
 2. Install a package using =dnf=.
-3. 
 
 * Terms You Should Know
 
-- =dnf= :: The new package management tool.
+- =dnf= :: The new package management tool for fedora.
 
 * Preparation
 
-Use the Fedora virtual machine
+  Use the Fedora virtual machine
 
 * Assignment
 
+  Digital Ocean has an excellent page on package managers.  Use these instructions to install Google Chromium.
+
 * What to Submit
+
+Submit a screenshot of =dnf list chromium= showing that the chromium browser is installed. 
 
 * Resources
 
+- [[https://www.digitalocean.com/community/tutorials/package-management-basics-apt-yum-dnf-pkg][Package Management Basics: apt, yum, dnf, pkg]]
 - [[https://docs.fedoraproject.org/en-US/Fedora/24/html/System_Administrators_Guide/ch-DNF.html][Fedora documantion]]
 - [[https://www.linux.com/learn/what-you-need-know-about-fedoras-switch-yum-dnf][What You Need to Know About Fedora’s Switch From Yum to DNF]]
