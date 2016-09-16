@@ -3,9 +3,9 @@
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Samba on Fedora</title>
+<title>Samba on CentOS using CLI tools</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<meta name="title" content="Samba on Fedora"/>
+<meta name="title" content="Samba on CentOS using CLI tools"/>
 <meta name="generator" content="Org-mode"/>
 <meta name="generated" content="2016-09-15 Thu"/>
 <meta name="author" content="Dennis Kibbe"/>
@@ -189,7 +189,7 @@ for the JavaScript code in this tag.
 </div>
 
 <div id="content">
-<h1 class="title">Samba on Fedora</h1>
+<h1 class="title">Samba on CentOS using CLI tools</h1>
 
 
 <div id="table-of-contents">
@@ -200,26 +200,32 @@ for the JavaScript code in this tag.
 <li><a href="#sec-2">2 Assignment Objectives</a></li>
 <li><a href="#sec-3">3 Terms You Should Know</a></li>
 <li><a href="#sec-4">4 Preparation</a></li>
-<li><a href="#sec-5">5 Create Samba User</a></li>
-<li><a href="#sec-6">6 Create a Samba Share</a>
+<li><a href="#sec-5">5 Install Samba</a></li>
+<li><a href="#sec-6">6 Create Samba User</a></li>
+<li><a href="#sec-7">7 Create a Samba Share</a>
 <ul>
-<li><a href="#sec-6-1">6.1 Add Content</a></li>
-<li><a href="#sec-6-2">6.2 Add Samba Group</a></li>
-<li><a href="#sec-6-3">6.3 Add jstudent to the Samba Group</a></li>
-<li><a href="#sec-6-4">6.4 Set Permissions and Ownership</a></li>
+<li><a href="#sec-7-1">7.1 Add Content</a></li>
+<li><a href="#sec-7-2">7.2 Add a Group</a></li>
+<li><a href="#sec-7-3">7.3 Add jstudent to the Group</a></li>
+<li><a href="#sec-7-4">7.4 Set Permissions and Ownership</a></li>
 </ul>
 </li>
-<li><a href="#sec-7">7 SELinux</a></li>
-<li><a href="#sec-8">8 Install Configuration Tools</a></li>
+<li><a href="#sec-8">8 SELinux</a></li>
 <li><a href="#sec-9">9 Configuration</a>
 <ul>
-<li><a href="#sec-9-1">9.1 Samba</a></li>
-<li><a href="#sec-9-2">9.2 Firewall</a></li>
-<li><a href="#sec-9-3">9.3 Test the Configuration</a></li>
+<li><a href="#sec-9-1">9.1 Start the Services</a></li>
+<li><a href="#sec-9-2">9.2 Enable the Services on Boot</a></li>
+<li><a href="#sec-9-3">9.3 Test the Configuration</a>
+<ul>
+<li><a href="#sec-9-3-1">9.3.1 Test the Configuration</a></li>
+<li><a href="#sec-9-3-2">9.3.2 Test the Connection</a></li>
+</ul></li>
 </ul>
 </li>
-<li><a href="#sec-10">10 Connect from Windows</a></li>
-<li><a href="#sec-11">11 What to Submit</a></li>
+<li><a href="#sec-10">10 Firewall Configuration</a></li>
+<li><a href="#sec-11">11 Connect from Windows</a></li>
+<li><a href="#sec-12">12 What to Submit</a></li>
+<li><a href="#sec-13">13 Resources</a></li>
 </ul>
 </div>
 </div>
@@ -230,7 +236,7 @@ for the JavaScript code in this tag.
 
 
 <p>
-  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
+  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.  In this assignment you will configuration Samba on CentOS 7 using command line tools.
 </p>
 </div>
 
@@ -245,11 +251,13 @@ for the JavaScript code in this tag.
   When you have successfully completed this assignment you will be able to:
 </p>
 <ul>
-<li>Configure a Samba server on Fedora.
+<li>Configure a Samba server on CentOS 7.
 </li>
 <li>Create a Samba user.
 </li>
 <li>Configure SELinux to work with Samba.
+</li>
+<li>Configure a firewall to allow Samba connections.
 </li>
 <li>Connect to the Samba server from a Windows workstation.
 </li>
@@ -293,9 +301,9 @@ for the JavaScript code in this tag.
 
 
 <ul>
-<li>Use a Fedora virtual Machine on the 192.168.201.0/24 network.
+<li>Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network.
 </li>
-<li>Set networking to <i>Bridged adapter</i>, connect the cable and refresh the MAC address.
+<li>Set networking to <i>Bridged Adapter</i>, connect the cable and refresh the MAC address.
 </li>
 <li>Boot the VM and take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems.
 </li>
@@ -307,8 +315,25 @@ for the JavaScript code in this tag.
 </div>
 
 <div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Create Samba User</h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> Install Samba</h2>
 <div class="outline-text-2" id="text-5">
+
+
+<p>
+  If needed install <code>samba</code>, <code>samba-client</code> and <code>rcpbind</code>.
+</p>
+<pre class="example">
+# yum install samba samba-client rpcbind
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Create Samba User</h2>
+<div class="outline-text-2" id="text-6">
 
 
 <p>   
@@ -321,13 +346,21 @@ for the JavaScript code in this tag.
 </pre>
 
 
-</div>
+<p>
+   Than add <i>jstudent</i> as a Samba user.
+</p>
+<pre class="example">
+# smbpasswd -a jstudent
+</pre>
+
 
 </div>
 
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Create a Samba Share</h2>
-<div class="outline-text-2" id="text-6">
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Create a Samba Share</h2>
+<div class="outline-text-2" id="text-7">
 
 
 <ol>
@@ -344,9 +377,9 @@ for the JavaScript code in this tag.
 
 </div>
 
-<div id="outline-container-6-1" class="outline-3">
-<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Add Content</h3>
-<div class="outline-text-3" id="text-6-1">
+<div id="outline-container-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> Add Content</h3>
+<div class="outline-text-3" id="text-7-1">
 
 
 <p>
@@ -360,9 +393,9 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-6-2" class="outline-3">
-<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Add Samba Group</h3>
-<div class="outline-text-3" id="text-6-2">
+<div id="outline-container-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> Add a Group</h3>
+<div class="outline-text-3" id="text-7-2">
 
 
 <pre class="example">
@@ -374,9 +407,9 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-6-3" class="outline-3">
-<h3 id="sec-6-3"><span class="section-number-3">6.3</span> Add jstudent to the Samba Group</h3>
-<div class="outline-text-3" id="text-6-3">
+<div id="outline-container-7-3" class="outline-3">
+<h3 id="sec-7-3"><span class="section-number-3">7.3</span> Add jstudent to the Group</h3>
+<div class="outline-text-3" id="text-7-3">
 
 
 <pre class="example">
@@ -389,9 +422,9 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-6-4" class="outline-3">
-<h3 id="sec-6-4"><span class="section-number-3">6.4</span> Set Permissions and Ownership</h3>
-<div class="outline-text-3" id="text-6-4">
+<div id="outline-container-7-4" class="outline-3">
+<h3 id="sec-7-4"><span class="section-number-3">7.4</span> Set Permissions and Ownership</h3>
+<div class="outline-text-3" id="text-7-4">
 
 
 <pre class="example">
@@ -405,13 +438,13 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> SELinux</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> SELinux</h2>
+<div class="outline-text-2" id="text-8">
 
 
 <p>
-  The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.
+  The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.  If the necessary SELinux tools are not installed use <code>yum whatprovides semanage</code> to find the correct package.
 </p>
 
 
@@ -426,15 +459,27 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Install Configuration Tools</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Configuration</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+  Backup <code>/etc/samba/smb.conf</code> and uncomment the [public] section.  Change the shared directory to match the one you created.
+</p>
+
+</div>
+
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> Start the Services</h3>
+<div class="outline-text-3" id="text-9-1">
 
 
 
 
 
-<pre class="example"># dnf install system-config-samba firewall-config
+<pre class="example"># systemctl start smb.service
+# systemctl start nmb.service
 </pre>
 
 
@@ -442,48 +487,17 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 </div>
 
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> Configuration</h2>
-<div class="outline-text-2" id="text-9">
-
-
-
-</div>
-
-<div id="outline-container-9-1" class="outline-3">
-<h3 id="sec-9-1"><span class="section-number-3">9.1</span> Samba</h3>
-<div class="outline-text-3" id="text-9-1">
-
-
-<p>
-   Open the Samba configuration tool.
-</p>
-<ol>
-<li>Add <i>jstudent</i> as a Samba user.
-</li>
-<li>Add <code>/srv/data</code> as a Samba share.
-</li>
-</ol>
-
-
-</div>
-
-</div>
-
 <div id="outline-container-9-2" class="outline-3">
-<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Firewall</h3>
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Enable the Services on Boot</h3>
 <div class="outline-text-3" id="text-9-2">
 
 
-<p>
-   Open the firewall configuration tool.
-</p>
-<ol>
-<li><i>Sambaclient</i> should already be checked as a service.
-</li>
-<li>Make the change permanent.
-</li>
-</ol>
+
+
+
+<pre class="example"># systemctl enable smb.service
+# systemctl enable nmb.service
+</pre>
 
 
 </div>
@@ -496,7 +510,18 @@ echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
 
 
 <p>
-   You can test the configuration from another Linux VM using <code>smbclient</code>.
+   Use <code>testparm</code> to test the syntax of the file.
+</p>
+
+</div>
+
+<div id="outline-container-9-3-1" class="outline-4">
+<h4 id="sec-9-3-1"><span class="section-number-4">9.3.1</span> Test the Configuration</h4>
+<div class="outline-text-4" id="text-9-3-1">
+
+
+<p>
+     You can test the configuration from another Linux VM using <code>smbclient</code>.
 </p>
 <pre class="example">
 $ smbclient -L \\192.168.201.123 -U jstudent
@@ -504,13 +529,66 @@ $ smbclient -L \\192.168.201.123 -U jstudent
 
 
 </div>
+
+</div>
+
+<div id="outline-container-9-3-2" class="outline-4">
+<h4 id="sec-9-3-2"><span class="section-number-4">9.3.2</span> Test the Connection</h4>
+<div class="outline-text-4" id="text-9-3-2">
+
+
+<p>
+    Before configuring the firewall you can test the connection from a Windows workstation on the same subnet.  You will be asked to login as the Samba user you created.  If asked for a network password use the one you created for your user.
+</p>
+<pre class="example">
+\\192.168.201.123
+</pre>
+
+
+
+
+
+
+
+
+</div>
+</div>
 </div>
 
 </div>
 
 <div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Connect from Windows</h2>
+<h2 id="sec-10"><span class="section-number-2">10</span> Firewall Configuration</h2>
 <div class="outline-text-2" id="text-10">
+
+
+<p>
+  Install <i>firewalld</i>.
+</p>
+<pre class="example">
+# yum install firewalld
+</pre>
+
+
+<p>
+  Add <i>sambaclient</i> as a service.
+</p>
+
+
+
+<pre class="example"># firewall-cmd --permanent --add-service=sambaclient
+# firewall-cmd --list-services
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Connect from Windows</h2>
+<div class="outline-text-2" id="text-11">
 
 
 <p>
@@ -528,14 +606,29 @@ $ smbclient -L \\192.168.201.123 -U jstudent
 
 </div>
 
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> What to Submit</h2>
-<div class="outline-text-2" id="text-11">
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> What to Submit</h2>
+<div class="outline-text-2" id="text-12">
 
 
 <p>
   Submit a screenshot of the output of the <code>smbclient</code> command showing the Samba share or from Windows showing the connection.
 </p>
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Resources</h2>
+<div class="outline-text-2" id="text-13">
+
+
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html">Red Hat Security Guide</a>
+</li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/">Red Hat Networking Guide</a>
+</li>
+</ul>
 
 </div>
 </div>

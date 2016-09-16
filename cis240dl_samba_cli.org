@@ -1,5 +1,5 @@
 #+SETUPFILE:  ~/.emacs.d/org-templates/level-0.org
-#+TITLE:     Samba on Fedora
+#+TITLE:     Samba on CentOS using CLI tools
 #+AUTHOR:    Dennis Kibbe
 #+EMAIL:     dennis.kibbe@mesacc.edu
 #+DATE:      2016-09-15 Thu
@@ -17,15 +17,16 @@
 
 * Introduction
 
-  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
+  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.  In this assignment you will configuration Samba on CentOS 7 using command line tools.
 
 * Assignment Objectives
 
   When you have successfully completed this assignment you will be able to:
 
-  - Configure a Samba server on Fedora.
+  - Configure a Samba server on CentOS 7.
   - Create a Samba user.
   - Configure SELinux to work with Samba.
+  - Configure a firewall to allow Samba connections.
   - Connect to the Samba server from a Windows workstation.
 
 * Terms You Should Know
@@ -40,9 +41,15 @@
 
 * Preparation
 
-  - Use a Fedora virtual Machine on the 192.168.201.0/24 network.
-  - Set networking to /Bridged adapter/, connect the cable and refresh the MAC address.
+  - Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network.
+  - Set networking to /Bridged Adapter/, connect the cable and refresh the MAC address.
   - Boot the VM and take a [[https://www.virtualbox.org/manual/ch01.html#snapshots][snapshot]] in VirtualBox so you can roll back if you have problems.
+
+* Install Samba
+
+  If needed install =samba=, =samba-client= and =rcpbind=.
+
+  : # yum install samba samba-client rpcbind
 
 * Create Samba User
    
@@ -51,6 +58,10 @@
 #+BEGIN_EXAMPLE
 # useradd jstudent
 #+END_EXAMPLE
+
+   Than add /jstudent/ as a Samba user.
+
+   : # smbpasswd -a jstudent
 
 * Create a Samba Share
 
@@ -63,11 +74,11 @@
    Create a text file in the shared directory.  Change /jstudent/ to your name and the IP address to that of your Samba server.
    : echo "This is Jstudent on 192.168.201.123" > /srv/data/Success!
 
-** Add Samba Group
+** Add a Group
 
    : # groupadd staff
 
-** Add jstudent to the Samba Group
+** Add jstudent to the Group
 
    : # usermod -aG staff jstudent
    : # smbpasswd -a tux
@@ -79,7 +90,7 @@
 
 * SELinux
 
-  The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.
+  The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.  If the necessary SELinux tools are not installed use =yum whatprovides semanage= to find the correct package.
 
 #+BEGIN_EXAMPLE
 # chcon -R -t samba_share_t /srv/smb/data
@@ -87,33 +98,74 @@
 # setsebool -P samba_enable_home_dirs on
 #+END_EXAMPLE
 
-* Install Configuration Tools
-
-#+BEGIN_EXAMPLE
-# dnf install system-config-samba firewall-config
-#+END_EXAMPLE
-
 * Configuration
 
-** Samba
+  Backup =/etc/samba/smb.conf= and uncomment the [public] section.  Change the shared directory to match the one you created.
+
+** Start the Services
+
+   #+BEGIN_EXAMPLE
+# systemctl start smb.service
+# systemctl start nmb.service
+   #+END_EXAMPLE
+
+** Enable the Services on Boot
+
+   #+BEGIN_EXAMPLE
+# systemctl enable smb.service
+# systemctl enable nmb.service
+   #+END_EXAMPLE
+
+** Test the Configuration
+
+   Use =testparm= to test the syntax of the file.
+
+*** Test the Configuration
+
+     You can test the configuration from another Linux VM using =smbclient=.
+
+     : $ smbclient -L \\192.168.201.123 -U jstudent
+
+*** Test the Connection
+
+    Before configuring the firewall you can test the connection from a Windows workstation on the same subnet.  You will be asked to login as the Samba user you created.  If asked for a network password use the one you created for your user.
+
+    : \\192.168.201.123
+
+** COMMENT Samba
 
    Open the Samba configuration tool.
 
    1. Add /jstudent/ as a Samba user.
    2. Add =/srv/data= as a Samba share.
 
-** Firewall
+** COMMENT Firewall
 
    Open the firewall configuration tool.
 
    1. /Sambaclient/ should already be checked as a service.
    2. Make the change permanent.
 
-** Test the Configuration
+* COMMENT Install Configuration Tools
 
-   You can test the configuration from another Linux VM using =smbclient=.
+#+BEGIN_EXAMPLE
+# dnf install system-config-samba firewall-config
+#+END_EXAMPLE
 
-   : $ smbclient -L \\192.168.201.123 -U jstudent
+* Firewall Configuration
+
+  Install /firewalld/.
+
+  : # yum install firewalld
+
+  Add /sambaclient/ as a service.
+
+#+BEGIN_EXAMPLE
+# firewall-cmd --permanent --add-service=sambaclient
+# firewall-cmd --list-services
+#+END_EXAMPLE
+
+# The --permanent --add-interface option is supposed to be used only for interfaces that are not managed by the NetworkManager utility.
 
 * Connect from Windows
 
@@ -127,4 +179,7 @@
 
   Submit a screenshot of the output of the =smbclient= command showing the Samba share or from Windows showing the connection.
 
-* COMMENT Resources
+* Resources
+
+  - [[https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html][Red Hat Security Guide]]
+  - [[https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/][Red Hat Networking Guide]]
