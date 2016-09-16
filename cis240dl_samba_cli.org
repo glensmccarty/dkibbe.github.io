@@ -72,7 +72,7 @@
 ** Add Content
 
    Create a text file in the shared directory.  Change /jstudent/ to your name and the IP address to that of your Samba server.
-   : echo "This is Jstudent on 192.168.201.123" > /srv/data/Success!
+   : # echo "This is Jstudent on 192.168.201.123" > /srv/data/Success!
 
 ** Add a Group
 
