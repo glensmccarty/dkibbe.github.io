@@ -1,5 +1,5 @@
 #+SETUPFILE:  ~/.emacs.d/org-templates/level-0.org
-#+TITLE:     Samba on CentOS using CLI tools
+#+TITLE:     Samba on CentOS Using CLI Tools
 #+AUTHOR:    Dennis Kibbe
 #+EMAIL:     dennis.kibbe@mesacc.edu
 #+DATE:      2016-09-15 Thu

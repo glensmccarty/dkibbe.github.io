@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Your First Bash Shell Script</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Your First Bash Shell Script"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-09-18T14:31-0700"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content=""/>
+<meta name="keywords" content="cis226dl bash"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle.css" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript" src="http://orgmode.org/org-info.js">
+/**
+ *
+ * @source: http://orgmode.org/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://orgmode.org/org-info.js.
+ *
+ * Copyright (C) 2012-2013  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://orgmode.org/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
+org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
+org_html_manager.set("LOCAL_TOC", "above");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Your First Bash Shell Script</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Overview</a></li>
+<li><a href="#sec-2">2 Assignment Objectives</a></li>
+<li><a href="#sec-3">3 Preparation</a></li>
+<li><a href="#sec-4">4 Variables</a>
+<ul>
+<li><a href="#sec-4-1">4.1 The SHELL Environmental Variable</a></li>
+<li><a href="#sec-4-2">4.2 Using Variables in a Script</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5 The Shebang Line</a></li>
+<li><a href="#sec-6">6 Comments</a></li>
+<li><a href="#sec-7">7 Running the Script</a></li>
+<li><a href="#sec-8">8 Testing the Script</a></li>
+<li><a href="#sec-9">9 What to Submit</a>
+<ul>
+<li><a href="#sec-9-1">9.1 How to Use the Pastebin</a></li>
+</ul>
+</li>
+<li><a href="#sec-10">10 Testing the Script</a></li>
+<li><a href="#sec-11">11 What to Submit</a></li>
+<li><a href="#sec-12">12 Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  The Linux shell has a powerful scripting language.  Any command you can run at the prompt you can put into a script to automate it for later use.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Assignment Objectives</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  <i>When you have successfully completed this assignment you will be able to:</i>
+</p>
+<ul>
+<li>Lists the parts of a shell script.
+</li>
+<li>Explain the function of the Shebang line.
+</li>
+<li>Create a simple shell script.
+</li>
+<li>Make the script executable.
+</li>
+<li>Use a pastebin to submit code.
+</li>
+</ul>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Preparation</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Create a new directory in your home directory for the scripts you create.
+</p>
+<pre class="example">
+$ mkdir ~/bin
+cd bin
+</pre>
+
+
+<p>
+  If the directory isn't part of your PATH you can add it temporary with this command.  Adding the directory to your PATH let's the shell run the script directly without the need to enter the full path.
+</p>
+<pre class="example">
+$ PATH=$PATH:/home/tux/bin
+</pre>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Variables</h2>
+<div class="outline-text-2" id="text-4">
+
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> The SHELL Environmental Variable</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<p>
+  A Linux user has several shells to choose from.  On most Linux systems the default shell is <i>bash &ndash; The Bourne Again SHell</i>.  The SHELL variable determines the default shell for an account.
+</p>
+
+
+
+<pre class="example">$ echo $SHELL
+/bin/bash
+</pre>
+
+
+<p>
+  System accounts will have <code>/bin/false</code> or <code>/bin/nologi</code> as a default since there are never used to log into the system,  Here is an example from <code>/etc/passwd</code> for the Pulse sound system.
+</p>
+<pre class="example">
+pulse:x:110:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Using Variables in a Script</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+<p>
+   Variables are useful in scripts and help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value is surrounded by quotes,
+</p>
+<p>
+   This example returns the home directory for the user you are logged in as.
+</p>
+<pre class="example">
+echo "You are logged as $USER and your home directory is $HOME."
+You are logged as tux and your home directory is /home/tux.
+</pre>
+
+
+<p>
+   The <code>env</code> command lists environmental variables.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> The Shebang Line</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  Every script should start with a shebang line that tells the shell what kind of script it is.  The most common shebang line is <b>#!/bin/bash</b>.  However a more portable shebang line is <b>#!/bin/env bash</b>.  The latter does not depend on <code>bash</code> being in <code>/bin</code>.
+</p>
+
+
+
+<pre class="example">#!/bin/bash
+/bin/pwd
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Comments</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p>
+  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (<b>#</b>) sign.
+</p>
+
+
+
+<pre class="example">#!/usr/bin/env bash
+# Prints current directoryg
+/bin/pwd
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Running the Script</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<p>
+  Save the script with a meaningful name and optionally the <b>.sh</b> extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
+</p>
+<p>
+ Make the script executable and run it directly from the shell.
+</p>
+
+
+
+<pre class="example">$ chmod +x myscript.sh
+$ ./myscript.sh
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Testing the Script</h2>
+<div class="outline-text-2" id="text-8">
+
+
+<p>
+ You can run the script as an argument to <code>bash</code> which can be helpful when you need to  debug the script.  Here the <b>-xv</b> option prints what the script actually does line by line.
+</p>
+
+
+
+<pre class="example">$ bash -xv myscript.sh
+</pre>
+
+
+<p>
+ The online site <a href="http://shellcheck.net">ShellCheck</a> can also be used to check the syntax of your code.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> What to Submit</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+   For this assignment you will be using the Fedora Pastebin.  A pastebin is a convenient place to share code and avoid the code from being mangled by a submission textbox that sanitizes the input.
+</p>
+
+</div>
+
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> How to Use the Pastebin</h3>
+<div class="outline-text-3" id="text-9-1">
+
+
+<ol>
+<li>Submit your script at <a href="https://paste.fedoraproject.org/">Fedora Pastebin</a>.
+</li>
+<li>Enter your name under **Your alias** and select **Bash** as the language.
+</li>
+<li>Do not assign a password.
+</li>
+<li>Click <b>PASTE</b> and copy the shortened URL.
+</li>
+<li>You will submit the URL to complete the assignment.
+</li>
+</ol>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Testing the Script</h2>
+<div class="outline-text-2" id="text-10">
+
+
+<p>
+  You can test the execution of a script by running it it with the <code>bash -x</code> command.
+</p>
+
+
+
+<pre class="example">dennisk@clevo:~$ bash -x test.sh 
++ '[' -f foobar ']'
++ mv foobar barfoo
+</pre>
+
+
+
+<pre class="example">dennisk@clevo:~$ bash -x test.sh 
++ '[' -f foobar ']'
++ echo file does not exist
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> What to Submit</h2>
+<div class="outline-text-2" id="text-11">
+
+
+<p>
+  Create a bash shell script the prints a line similar to this to Standard Output.  The <b>bold</b> items must be generated by the script from information available on your system.
+</p>
+<p>
+"You are logged into <b>xps13</b> which has been up <b>2 weeks, 1 day, 12 minutes</b>.  Current load averages are <b>0.06 0.11 0.15</b> and these users are logged in: <b>dennisk dennisk dennisk</b>.
+</p>
+<p>
+Post your script to the Fedora Pastebin and submit the shortened URL you receive.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Resources</h2>
+<div class="outline-text-2" id="text-12">
+
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-getstartedbash/">Bash scripting for beginning system administrators</a>
+</li>
+<li><a href="http://www.maricopa.edu/curriculum/A-C/042cis239dl.html">Linux Shell Scripting</a>
+</li>
+<li><a href="https://en.wikibooks.org/wiki/Bash_Shell_Scripting">Bash Shell Scripting - Wikibooks</a>
+</li>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">Bash Reference Manual</a>
+</li>
+<li><a href="http://bash.cyberciti.biz/guide/Main_Page">Linux Shell Scripting Tutorial</a>
+</li>
+<li><a href="https://google.github.io/styleguide/shell.xml">Google Shell Script Style Guide</a>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a>
+</li>
+<li><a href="http://shellcheck.net">ShellCheck</a>
+</li>
+<li>man uptime
+</li>
+<li>man proc
+</li>
+<li>man users
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-09-18T14:31-0700</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

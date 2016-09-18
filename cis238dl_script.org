@@ -1,8 +1,9 @@
 #+SETUPFILE: ~/.emacs.d/org-templates/level-0.org
-#+TITLE:  Shell Scripting
+#+TITLE:  Your First Bash Shell Script
 #+DESCRIPTION: 
-#+KEYWORDS: cis238dl bash
+#+KEYWORDS: cis226dl bash
 #+LINK: shellcheck http://shellcheck.net
+#+LINK: pastebim https://paste.fedoraproject.org
 
 * Overview
 
@@ -16,20 +17,22 @@
   - Explain the function of the Shebang line.
   - Create a simple shell script.
   - Make the script executable.
+  - Use a pastebin to submit code.
 
 * COMMENT Terms You Should Know
 
-  - `chmod` :: 
+  - =chmod= :: 
   - Shebang :: 
   - POSIX :: 
 
-* COMMENT Preparation
+* Preparation
 
   Create a new directory in your home directory for the scripts you create.
 
   : $ mkdir ~/bin
+  : cd bin
 
-  If the directory isn't part of your PATH you can add it temporary with this command.
+  If the directory isn't part of your PATH you can add it temporary with this command.  Adding the directory to your PATH let's the shell run the script directly without the need to enter the full path.
 
   : $ PATH=$PATH:/home/tux/bin
 
@@ -39,73 +42,79 @@
 
 ** The SHELL Environmental Variable
 
-  A Linux user has several shell to choose from.  On most Linux systems the default shell is bash -- The Bourne Again SHell.  The SHELL variable determines the default shell a user has.
+  A Linux user has several shells to choose from.  On most Linux systems the default shell is /bash -- The Bourne Again SHell/.  The SHELL variable determines the default shell for an account.
 
 #+BEGIN_EXAMPLE
 $ echo $SHELL
 /bin/bash
 #+END_EXAMPLE
 
+  System accounts will have =/bin/false= or =/bin/nologi= as a default since there are never used to log into the system,  Here is an example from =/etc/passwd= for the Pulse sound system.
+
+: pulse:x:110:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+
 ** Using Variables in a Script
 
-#+BEGIN_EXAMPLE
-#!/bin/bash
-echo "What is your name?"
-read name
-echo "How do you do, $name."
-read remark
-echo "I am $remark too!"
-#+END_EXAMPLE
+   Variables are useful in scripts and help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value is surrounded by quotes,
+
+   This example returns the home directory for the user you are logged in as.
+
+   : echo "You are logged as $USER and your home directory is $HOME."
+   : You are logged as tux and your home directory is /home/tux.
+
+   The =env= command lists environmental variables.
 
 * The Shebang Line
 
-  Every script should start with a shebang line that tells the shell what kind of script it is.  The most common shebang line is *#!/bin/bash*.  However a more portable shebang line is *#!/bin/env bash*.
-
-* Comments
-
-  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash (*#*) sign.
+  Every script should start with a shebang line that tells the shell what kind of script it is.  The most common shebang line is *#!/bin/bash*.  However a more portable shebang line is *#!/bin/env bash*.  The latter does not depend on =bash= being in =/bin=.
 
 #+BEGIN_EXAMPLE
 #!/bin/bash
 /bin/pwd
-# Print Working Directory
+#+END_EXAMPLE
+
+* Comments
+
+  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (*#*) sign.
+
+#+BEGIN_EXAMPLE
+#!/usr/bin/env bash
+# Prints current directoryg
+/bin/pwd
 #+END_EXAMPLE
 
 * Running the Script
 
-  Save the script with a meaningful name and optionally the *.sh* extension.  The extension will identify the file as a script and most text editors will apply the correct syntax highlighting.
+  Save the script with a meaningful name and optionally the *.sh* extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
 
-  Execute the script with the =sh= or =bash= command or make the script executable and run it directly from the shell.
+ Make the script executable and run it directly from the shell.
 
 #+BEGIN_EXAMPLE
 $ chmod +x myscript.sh
 $ ./myscript.sh
 #+END_EXAMPLE
 
-Your PATH variable may include a *~/bin* directory.  If it does that would be a good place to keep your scripts.
+* Testing the Script
 
-* COMMENT Tests
-
-  It always a good idea to test for a condition.
+ You can run the script as an argument to =bash= which can be helpful when you need to  debug the script.  Here the *-xv* option prints what the script actually does line by line.
 
 #+BEGIN_EXAMPLE
-if [ -f .bash_profile ]; then
-    echo "You have a .bash_profile. Things are fine."
-else
-    echo "Yikes! You have no .bash_profile!"
-fi
+$ bash -xv myscript.sh
 #+END_EXAMPLE
 
-#+BEGIN_EXAMPLE
-#!/bin/bash
-# test for file
-if [ -f foobar ]
-then mv foobar barfoo 2>/dev/null
-else echo file does not exist
-fi
-#+END_EXAMPLE
+ The online site [[http://shellcheck.net][ShellCheck]] can also be used to check the syntax of your code.
 
-* COMMENT Troubleshoot the Assignment
+* What to Submit
+
+   For this assignment you will be using the Fedora Pastebin.  A pastebin is a convenient place to share code and avoid the code from being mangled by a submission textbox that sanitizes the input.
+
+** How to Use the Pastebin
+
+   1. Submit your script at [[https://paste.fedoraproject.org/][Fedora Pastebin]].
+   2. Enter your name under **Your alias** and select **Bash** as the language.
+   3. Do not assign a password.
+   4. Click *PASTE* and copy the shortened URL.
+   5. You will submit the URL to complete the assignment.
 
 * Testing the Script
 
@@ -125,20 +134,15 @@ dennisk@clevo:~$ bash -x test.sh
 
 * What to Submit
 
-Copy and paste these questions along with your answers into the submission text-box (not the comment box) to receive credit for this assignment.
+  Create a bash shell script the prints a line similar to this to Standard Output.  The *bold* items must be generated by the script from information available on your system.
 
-1. Create a variable named MYVAR with a value of hamster
+"You are logged into *xps13* which has been up *2 weeks, 1 day, 12 minutes*.  Current load averages are *0.06 0.11 0.15* and these users are logged in: *dennisk dennisk dennisk*.
 
-2. Create a script that copies foobar to ~/temp and test that ~/temp exists. 
-
-* COMMENT XKCD
-
-  [[https://sslimgs.xkcd.com/comics/packages.png]]
+Post your script to the Fedora Pastebin and submit the shortened URL you receive.
 
 * Resources
 
   - [[http://www.ibm.com/developerworks/aix/library/au-getstartedbash/][Bash scripting for beginning system administrators]]
-  - [[http://linuxcommand.org][LinuxCommand.org]]
   - [[http://www.maricopa.edu/curriculum/A-C/042cis239dl.html][Linux Shell Scripting]]
   - [[https://en.wikibooks.org/wiki/Bash_Shell_Scripting][Bash Shell Scripting - Wikibooks]]
   - [[https://www.gnu.org/software/bash/manual/bashref.html][Bash Reference Manual]]
@@ -146,3 +150,6 @@ Copy and paste these questions along with your answers into the submission text-
   - [[https://google.github.io/styleguide/shell.xml][Google Shell Script Style Guide]]
   - [[https://en.wikipedia.org/wiki/POSIX][POSIX]]
   - [[shellcheck][ShellCheck]]
+  - man uptime
+  - man proc
+  - man users
