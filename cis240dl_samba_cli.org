@@ -85,16 +85,16 @@
 
 ** Set Permissions and Ownership
 
-   : # chgrp -R staff /srv/smb/data
-   : # chmod 0755 /srv/smb/data
+   : # chgrp -R staff /srv/data
+   : # chmod 0755 /srv/data
 
 * SELinux
 
   The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.  If the necessary SELinux tools are not installed use =yum whatprovides semanage= to find the correct package.
 
 #+BEGIN_EXAMPLE
-# chcon -R -t samba_share_t /srv/smb/data
-# semanage fcontext -a -t samba_share_t /srv/smb/data
+# chcon -R -t samba_share_t /srv/data
+# semanage fcontext -a -t samba_share_t /srv/data
 # setsebool -P samba_enable_home_dirs on
 #+END_EXAMPLE
 
@@ -158,10 +158,10 @@
 
   : # yum install firewalld
 
-  Add /sambaclient/ as a service.
+  Add /samba-client/ as a service.
 
 #+BEGIN_EXAMPLE
-# firewall-cmd --permanent --add-service=sambaclient
+# firewall-cmd --permanent --add-service=samba-client
 # firewall-cmd --list-services
 #+END_EXAMPLE
 

@@ -5,9 +5,25 @@
 #+LINK: shellcheck http://shellcheck.net
 #+LINK: pastebim https://paste.fedoraproject.org
 
+#+TITLE:     Writing Your First Bash Shell Script
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DATE:      2016-09-20 Tue
+#+DESCRIPTION:
+#+KEYWORDS: CIS239DL Bash Shell
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:t toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
 * Overview
 
-  The Linux shell has a powerful scripting language.  Any command you can run at the prompt you can put into a script to automate it for later use.
+  The Linux shell has a powerful scripting language.  Any command or sequence of commands you can run at the prompt you can put into a script to automate it for later use.
 
 * Assignment Objectives
 
@@ -38,31 +54,81 @@
 
 ** COMMENT The ~/bin Directory
 
-* Variables
+* The Shebang Line
 
-** The SHELL Environmental Variable
+  Every script should start with a "shebang" line that tells the shell what kind of script it is.  The most common shebang line is *#!/bin/bash*.  However a more portable shebang line is *#!/bin/env bash*.  The latter does not depend on =bash= being in =/bin=.
 
-  A Linux user has several shells to choose from.  On most Linux systems the default shell is /bash -- The Bourne Again SHell/.  The SHELL environmental variable determines the default shell for an account.
+  This two line script starts with the shebang line and then runs the =pwd= to print the current directory to the command line.  The blank line makes the script easier to read.  Create the script in =gedit= (Fedora, Ubuntu, =kwrite= (KDE) or nano (Ubuntu command line)
 
 #+BEGIN_EXAMPLE
-$ echo $SHELL
-/bin/bash
+#!/bin/bash
+
+/bin/pwd
 #+END_EXAMPLE
 
-  System accounts will have =/bin/false= or =/bin/nologin= as a default since there are never used to log into the system,  Here is an example from =/etc/passwd= for the Pulse sound system.
+* Comments
 
-: pulse:x:110:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (*#*) sign.  Let's add two comments to our script.  Tux has included his email address in case some one needs to contact him about the script he wrote.
 
-** Using Variables in a Script
+#+BEGIN_EXAMPLE
+#!/usr/bin/env bash
 
-   Variables are useful in scripts and help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value is surrounded by quotes,
+# Tux Penguin - tux@iceberg.org
 
-   This example returns the home directory for the user you are logged in as.
+# Prints current directory
+/bin/pwd
+#+END_EXAMPLE
 
-   : echo "You are logged as $USER and your home directory is $HOME."
+* Formatting a Script
+
+  Just like using proper formatting in any written document properly formatting a script makes it earier to understand and more readable.  Follow these rules for most of your scripts.
+
+  - Separate sections with a blank line.
+  - Comments applying the whole script (Description, author, etc.) should be toward the top of the script before any code.
+  - If you need to define custom variables place them near the top of the script.
+  - Use the *.sh* extion for your file name.
+
+* Run the Script
+
+  Our simple script is ready but first we need to make the script executable.  Save the script with a meaningful name and optionally the *.sh* extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
+
+ Make the script executable and run it directly from the shell.
+
+#+BEGIN_EXAMPLE
+$ chmod +x myscript.sh
+$ ./myscript.sh
+#+END_EXAMPLE
+
+* Testing the Script
+
+ If your script doesn't do what you want you can run the script as an argument to =bash= which can be helpful when you need to debug the script.  Here the *-xv* option prints what the script actually does line by line.
+
+#+BEGIN_EXAMPLE
+$ bash -xv test.sh 
+#!/bin/bash
+pet=hamster
++ pet=hamster
+echo "My favorite pet is my $pet."
++ echo 'My favorite pet is my hamster.'
+My favorite pet is my hamster.
+#+END_EXAMPLE
+
+ The online site [[http://shellcheck.net][ShellCheck]] can also be used to check the syntax of your code.
+
+* Using Variables in a Script
+
+  Variables are used to feed information to a script.  You create your own custom variables and the system has many pre-defined environmental variables.  Variables are used to feed information to a script.  You create your own custom variables and the system has many pre-defined environmental variables.
+
+   Variables help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value if surrounded by quotes,
+
+   This example returns the home directory for the user you are logged in as.  When the =echo= command is run.  The values of *USER* and *HOME* are printed instead.  The *$* tells the shell that these are variable names.
+
+   : $ echo "You are logged as $USER and your home directory is $HOME."
    : You are logged as tux and your home directory is /home/tux.
 
-   The =env= command lists environmental variables.
+   The =env= command lists environmental variables.  Piping =env= to =sort= puts the variables in alphabetical order.
+
+   : $ env | sort
 
 *** Custom Variables
 
@@ -77,59 +143,26 @@ echo "My favorite pet is my $pet."
 My favorite pet is my hamster.
 #+END_EXAMPLE
 
-* The Shebang Line
+** COMMENT The SHELL Environmental Variable
 
-  Every script should start with a shebang line that tells the shell what kind of script it is.  The most common shebang line is *#!/bin/bash*.  However a more portable shebang line is *#!/bin/env bash*.  The latter does not depend on =bash= being in =/bin=.
-
-#+BEGIN_EXAMPLE
-#!/bin/bash
-/bin/pwd
-#+END_EXAMPLE
-
-* Comments
-
-  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (*#*) sign.
+  A Linux user has several shells to choose from.  On most Linux systems the default shell is /bash -- The Bourne Again SHell/.  The SHELL environmental variable determines the default shell for an account.
 
 #+BEGIN_EXAMPLE
-#!/usr/bin/env bash
-# Prints current directoryg
-/bin/pwd
+$ echo $SHELL
+/bin/bash
 #+END_EXAMPLE
 
-* Running the Script
+  System accounts will have =/bin/false= or =/bin/nologin= as a default since there are never used to log into the system,  Here is an example from =/etc/passwd= for the Pulse sound system.
 
-  Save the script with a meaningful name and optionally the *.sh* extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
+: pulse:x:110:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
 
- Make the script executable and run it directly from the shell.
-
-#+BEGIN_EXAMPLE
-$ chmod +x myscript.sh
-$ ./myscript.sh
-#+END_EXAMPLE
-
-* Testing the Script
-
- You can run the script as an argument to =bash= which can be helpful when you need to  debug the script.  Here the *-xv* option prints what the script actually does line by line.
-
-#+BEGIN_EXAMPLE
-$ bash -xv test.sh 
-#!/bin/bash
-pet=hamster
-+ pet=hamster
-echo "My favorite pet is my $pet."
-+ echo 'My favorite pet is my hamster.'
-My favorite pet is my hamster.
-#+END_EXAMPLE
-
- The online site [[http://shellcheck.net][ShellCheck]] can also be used to check the syntax of your code.
-
-* What to Submit
+* The Fedora Pastebin
 
    For this assignment you will be using the Fedora Pastebin.  A pastebin is a convenient place to share code and avoid the code from being mangled by a submission textbox that sanitizes the input.
 
 ** How to Use the Pastebin
 
-   [[./images/pastebin.png]]
+   [[https://dkibbe.github.io/images/pastebin.png]]
 
    1. Submit your script at [[https://paste.fedoraproject.org/][Fedora Pastebin]].
    2. Enter your name under *Your alias* and select *Bash* as the language.
@@ -141,7 +174,20 @@ My favorite pet is my hamster.
 
   Create a bash shell script the prints a line similar to this to Standard Output.  The *bold* items must be generated by the script from information available on your system.
 
-"You are logged into *xps13* which has been up *2 weeks, 1 day, 12 minutes* and these users are logged in: *dennisk dennisk dennisk*.
+"You are logged into *xps13* which has been up *2 weeks, 1 day, 12 minutes* and these users are logged in: *dennisk*.
+
+1. Replace *XPS13* with the hostname of your system.
+2. Replace *2 weeks, 1 day, 12 minutes* with the time your system has been running.
+3. Replace *dennisk* with the names of the users logged into your system.
+
+** Commands and Variables
+
+   Some of the commands and variables (in caps) you can use are:
+
+   - HOSTNAME
+   - hostname
+   - uptime
+   - users
 
 Post your script to the Fedora Pastebin and submit the shortened URL you receive.
 

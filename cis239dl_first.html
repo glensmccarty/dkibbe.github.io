@@ -3,14 +3,14 @@
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Your First Bash Shell Script</title>
+<title>Writing Your First Bash Shell Script</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="title" content="Your First Bash Shell Script"/>
+<meta name="title" content="Writing Your First Bash Shell Script"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2016-09-19T08:47-0700"/>
+<meta name="generated" content="2016-09-20 Tue"/>
 <meta name="author" content="Dennis Kibbe"/>
 <meta name="description" content=""/>
-<meta name="keywords" content="cis226dl bash"/>
+<meta name="keywords" content="CIS239DL Bash Shell"/>
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   html { font-family: Times, serif; font-size: 12pt; }
@@ -125,12 +125,12 @@ for the JavaScript code in this tag.
 org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
 org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
-org_html_manager.set("LOCAL_TOC", "above");
+org_html_manager.set("LOCAL_TOC", "1");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
 org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "1");
-org_html_manager.set("VIEW", "info");
+org_html_manager.set("TOC", "0");
+org_html_manager.set("VIEW", "1");
 org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
 </script>
@@ -189,7 +189,8 @@ for the JavaScript code in this tag.
 </div>
 
 <div id="content">
-<h1 class="title">Your First Bash Shell Script</h1>
+<h1 class="title">Writing Your First Bash Shell Script</h1>
+
 
 
 <div id="table-of-contents">
@@ -199,26 +200,30 @@ for the JavaScript code in this tag.
 <li><a href="#sec-1">1 Overview</a></li>
 <li><a href="#sec-2">2 Assignment Objectives</a></li>
 <li><a href="#sec-3">3 Preparation</a></li>
-<li><a href="#sec-4">4 Variables</a>
+<li><a href="#sec-4">4 The Shebang Line</a></li>
+<li><a href="#sec-5">5 Comments</a></li>
+<li><a href="#sec-6">6 Formatting a Script</a></li>
+<li><a href="#sec-7">7 Run the Script</a></li>
+<li><a href="#sec-8">8 Testing the Script</a></li>
+<li><a href="#sec-9">9 Using Variables in a Script</a>
 <ul>
-<li><a href="#sec-4-1">4.1 The SHELL Environmental Variable</a></li>
-<li><a href="#sec-4-2">4.2 Using Variables in a Script</a>
+<li>
 <ul>
-<li><a href="#sec-4-2-1">4.2.1 Custom Variables</a></li>
+<li><a href="#sec-9-1">9.1 Custom Variables</a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-5">5 The Shebang Line</a></li>
-<li><a href="#sec-6">6 Comments</a></li>
-<li><a href="#sec-7">7 Running the Script</a></li>
-<li><a href="#sec-8">8 Testing the Script</a></li>
-<li><a href="#sec-9">9 What to Submit</a>
+<li><a href="#sec-10">10 The Fedora Pastebin</a>
 <ul>
-<li><a href="#sec-9-1">9.1 How to Use the Pastebin</a></li>
+<li><a href="#sec-10-1">10.1 How to Use the Pastebin</a></li>
 </ul>
 </li>
-<li><a href="#sec-10">10 What to Submit</a></li>
-<li><a href="#sec-11">11 Resources</a></li>
+<li><a href="#sec-11">11 What to Submit</a>
+<ul>
+<li><a href="#sec-11-1">11.1 Commands and Variables</a></li>
+</ul>
+</li>
+<li><a href="#sec-12">12 Resources</a></li>
 </ul>
 </div>
 </div>
@@ -229,7 +234,7 @@ for the JavaScript code in this tag.
 
 
 <p>
-  The Linux shell has a powerful scripting language.  Any command you can run at the prompt you can put into a script to automate it for later use.
+  The Linux shell has a powerful scripting language.  Any command or sequence of commands you can run at the prompt you can put into a script to automate it for later use.
 </p>
 </div>
 
@@ -292,106 +297,45 @@ $ PATH=$PATH:/home/tux/bin
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Variables</h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> The Shebang Line</h2>
 <div class="outline-text-2" id="text-4">
 
 
-
-</div>
-
-<div id="outline-container-4-1" class="outline-3">
-<h3 id="sec-4-1"><span class="section-number-3">4.1</span> The SHELL Environmental Variable</h3>
-<div class="outline-text-3" id="text-4-1">
-
-
 <p>
-  A Linux user has several shells to choose from.  On most Linux systems the default shell is <i>bash &ndash; The Bourne Again SHell</i>.  The SHELL environmental variable determines the default shell for an account.
-</p>
-
-
-
-<pre class="example">$ echo $SHELL
-/bin/bash
-</pre>
-
-
-<p>
-  System accounts will have <code>/bin/false</code> or <code>/bin/nologin</code> as a default since there are never used to log into the system,  Here is an example from <code>/etc/passwd</code> for the Pulse sound system.
-</p>
-<pre class="example">
-pulse:x:110:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-4-2" class="outline-3">
-<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Using Variables in a Script</h3>
-<div class="outline-text-3" id="text-4-2">
-
-
-<p>
-   Variables are useful in scripts and help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value is surrounded by quotes,
+  Every script should start with a "shebang" line that tells the shell what kind of script it is.  The most common shebang line is <b>#!/bin/bash</b>.  However a more portable shebang line is <b>#!/bin/env bash</b>.  The latter does not depend on <code>bash</code> being in <code>/bin</code>.
 </p>
 <p>
-   This example returns the home directory for the user you are logged in as.
-</p>
-<pre class="example">
-echo "You are logged as $USER and your home directory is $HOME."
-You are logged as tux and your home directory is /home/tux.
-</pre>
-
-
-<p>
-   The <code>env</code> command lists environmental variables.
-</p>
-
-</div>
-
-<div id="outline-container-4-2-1" class="outline-4">
-<h4 id="sec-4-2-1"><span class="section-number-4">4.2.1</span> Custom Variables</h4>
-<div class="outline-text-4" id="text-4-2-1">
-
-
-<p>
-    You can create your own variables.
-</p>
-<pre class="example">
-pet=hamster
-</pre>
-
-
-<p>
-    And use them in your scripts.
-</p>
-
-
-
-<pre class="example">echo "My favorite pet is my $pet."
-My favorite pet is my hamster.
-</pre>
-
-
-</div>
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> The Shebang Line</h2>
-<div class="outline-text-2" id="text-5">
-
-
-<p>
-  Every script should start with a shebang line that tells the shell what kind of script it is.  The most common shebang line is <b>#!/bin/bash</b>.  However a more portable shebang line is <b>#!/bin/env bash</b>.  The latter does not depend on <code>bash</code> being in <code>/bin</code>.
+  This two line script starts with the shebang line and then runs the <code>pwd</code> to print the current directory to the command line.  The blank line makes the script easier to read.  Create the script in <code>gedit</code> (Fedora, Ubuntu, <code>kwrite</code> (KDE) or nano (Ubuntu command line)
 </p>
 
 
 
 <pre class="example">#!/bin/bash
+
+/bin/pwd
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Comments</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (<b>#</b>) sign.  Let's add two comments to our script.  Tux has included his email address in case some one needs to contact him about the script he wrote.
+</p>
+
+
+
+<pre class="example">#!/usr/bin/env bash
+
+# Tux Penguin - tux@iceberg.org
+
+# Prints current directory
 /bin/pwd
 </pre>
 
@@ -401,20 +345,23 @@ My favorite pet is my hamster.
 </div>
 
 <div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Comments</h2>
+<h2 id="sec-6"><span class="section-number-2">6</span> Formatting a Script</h2>
 <div class="outline-text-2" id="text-6">
 
 
 <p>
-  Every script should be well commented.  Scripts grow over time, change hands and the original programmer either forgets what the script does or can no longer be found.  The comment character for bash is the pound or hash-tag (<b>#</b>) sign.
+  Just like using proper formatting in any written document properly formatting a script makes it earier to understand and more readable.  Follow these rules for most of your scripts.
 </p>
-
-
-
-<pre class="example">#!/usr/bin/env bash
-# Prints current directoryg
-/bin/pwd
-</pre>
+<ul>
+<li>Separate sections with a blank line.
+</li>
+<li>Comments applying the whole script (Description, author, etc.) should be toward the top of the script before any code.
+</li>
+<li>If you need to define custom variables place them near the top of the script.
+</li>
+<li>Use the <b>.sh</b> extion for your file name.
+</li>
+</ul>
 
 
 </div>
@@ -422,12 +369,12 @@ My favorite pet is my hamster.
 </div>
 
 <div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> Running the Script</h2>
+<h2 id="sec-7"><span class="section-number-2">7</span> Run the Script</h2>
 <div class="outline-text-2" id="text-7">
 
 
 <p>
-  Save the script with a meaningful name and optionally the <b>.sh</b> extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
+  Our simple script is ready but first we need to make the script executable.  Save the script with a meaningful name and optionally the <b>.sh</b> extension.  The extension will identify the file as a script and most text editors will then apply the correct syntax highlighting when you open the script for editing.
 </p>
 <p>
  Make the script executable and run it directly from the shell.
@@ -450,7 +397,7 @@ $ ./myscript.sh
 
 
 <p>
- You can run the script as an argument to <code>bash</code> which can be helpful when you need to  debug the script.  Here the <b>-xv</b> option prints what the script actually does line by line.
+ If your script doesn't do what you want you can run the script as an argument to <code>bash</code> which can be helpful when you need to debug the script.  Here the <b>-xv</b> option prints what the script actually does line by line.
 </p>
 
 
@@ -473,8 +420,70 @@ My favorite pet is my hamster.
 </div>
 
 <div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> What to Submit</h2>
+<h2 id="sec-9"><span class="section-number-2">9</span> Using Variables in a Script</h2>
 <div class="outline-text-2" id="text-9">
+
+
+<p>
+  Variables are used to feed information to a script.  You create your own custom variables and the system has many pre-defined environmental variables.  Variables are used to feed information to a script.  You create your own custom variables and the system has many pre-defined environmental variables.
+</p>
+<p>
+   Variables help to make them more readable.  System environmental variables are all CAPS.  Variables you create should be lower case or CamelCaps.  Spaces can't be used in variable names but can be used for the variable value if surrounded by quotes,
+</p>
+<p>
+   This example returns the home directory for the user you are logged in as.  When the <code>echo</code> command is run.  The values of <b>USER</b> and <b>HOME</b> are printed instead.  The <b>$</b> tells the shell that these are variable names.
+</p>
+<pre class="example">
+$ echo "You are logged as $USER and your home directory is $HOME."
+You are logged as tux and your home directory is /home/tux.
+</pre>
+
+
+<p>
+   The <code>env</code> command lists environmental variables.  Piping <code>env</code> to <code>sort</code> puts the variables in alphabetical order.
+</p>
+<pre class="example">
+$ env | sort
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-9-1" class="outline-4">
+<h4 id="sec-9-1"><span class="section-number-4">9.1</span> Custom Variables</h4>
+<div class="outline-text-4" id="text-9-1">
+
+
+<p>
+    You can create your own variables.
+</p>
+<pre class="example">
+pet=hamster
+</pre>
+
+
+<p>
+    And use them in your scripts.
+</p>
+
+
+
+<pre class="example">echo "My favorite pet is my $pet."
+My favorite pet is my hamster.
+</pre>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> The Fedora Pastebin</h2>
+<div class="outline-text-2" id="text-10">
 
 
 <p>
@@ -483,13 +492,13 @@ My favorite pet is my hamster.
 
 </div>
 
-<div id="outline-container-9-1" class="outline-3">
-<h3 id="sec-9-1"><span class="section-number-3">9.1</span> How to Use the Pastebin</h3>
-<div class="outline-text-3" id="text-9-1">
+<div id="outline-container-10-1" class="outline-3">
+<h3 id="sec-10-1"><span class="section-number-3">10.1</span> How to Use the Pastebin</h3>
+<div class="outline-text-3" id="text-10-1">
 
 
 <p>
-   <img src="./images/pastebin.png"  alt="./images/pastebin.png" />
+   <img src="https://dkibbe.github.io/images/pastebin.png"  alt="https://dkibbe.github.io/images/pastebin.png" />
 </p>
 <ol>
 <li>Submit your script at <a href="https://paste.fedoraproject.org/">Fedora Pastebin</a>.
@@ -510,27 +519,61 @@ My favorite pet is my hamster.
 
 </div>
 
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> What to Submit</h2>
-<div class="outline-text-2" id="text-10">
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> What to Submit</h2>
+<div class="outline-text-2" id="text-11">
 
 
 <p>
   Create a bash shell script the prints a line similar to this to Standard Output.  The <b>bold</b> items must be generated by the script from information available on your system.
 </p>
 <p>
-"You are logged into <b>xps13</b> which has been up <b>2 weeks, 1 day, 12 minutes</b> and these users are logged in: <b>dennisk dennisk dennisk</b>.
+"You are logged into <b>xps13</b> which has been up <b>2 weeks, 1 day, 12 minutes</b> and these users are logged in: <b>dennisk</b>.
 </p>
+<ol>
+<li>Replace <b>XPS13</b> with the hostname of your system.
+</li>
+<li>Replace <b>2 weeks, 1 day, 12 minutes</b> with the time your system has been running.
+</li>
+<li>Replace <b>dennisk</b> with the names of the users logged into your system.
+</li>
+</ol>
+
+
+
+</div>
+
+<div id="outline-container-11-1" class="outline-3">
+<h3 id="sec-11-1"><span class="section-number-3">11.1</span> Commands and Variables</h3>
+<div class="outline-text-3" id="text-11-1">
+
+
+<p>
+   Some of the commands and variables (in caps) you can use are:
+</p>
+<ul>
+<li>HOSTNAME
+</li>
+<li>hostname
+</li>
+<li>uptime
+</li>
+<li>users
+</li>
+</ul>
+
+
 <p>
 Post your script to the Fedora Pastebin and submit the shortened URL you receive.
 </p>
 </div>
+</div>
 
 </div>
 
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> Resources</h2>
-<div class="outline-text-2" id="text-11">
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Resources</h2>
+<div class="outline-text-2" id="text-12">
 
 
 <ul>
@@ -563,7 +606,7 @@ Post your script to the Fedora Pastebin and submit the shortened URL you receive
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2016-09-19T08:47-0700</p>
+<p class="date">Date: 2016-09-20 Tue</p>
 <p class="author">Author: Dennis Kibbe</p>
 <p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
