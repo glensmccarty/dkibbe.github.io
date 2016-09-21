@@ -15,129 +15,100 @@
 #+LINK_HOME: 
 #+XSLT:
 
-* Managing Users & Groups
+* Introduction
+
+  Managing users and groups is an important administrative skill.  In this assignment you'll add new user accounts from the command line but before doing that you need to make two changes.
 
 ** Assignment Objectives
-
-   Managing users and groups is an important administrative skill.  In this
-assignment you'll add new user accounts from the command line but before
-doing that you need to make two changes.
 
 /After successfully completing this assignment you will be able to:/
 
 1. Create new user accounts from the command line.
-2. Add a user to supplementary groups with the =usermod= command.
-3. Create content in the =/etc/skel/= directory that will be copied over
-   to the users' home directory.
-4. Describe the difference between a password and a passphrase.
-5. Modify system-wide login defaults.
+2. Add a user to supplementary groups using the =usermod= command.
+3. Create content in the =/etc/skel/= directory that will be copied over to the new users' home directory.
+4. Modify system-wide login defaults.
 
 ** Terms and Commands You Should Know
 
-- /etc/passwd :: A text file that describes user login accounts for the
-system.
+- /etc/passwd :: A text file that describes user login accounts for the system.
 
-- /etc/shadow :: A text file which contains the password information for
-the system's accounts and optional aging information.
+- /etc/shadow :: A text file which contains the password information for the system's accounts and optional aging information.
 
 - /etc/group :: A text file that defines the groups on the system.
 
-- /etc/gshadow :: A text file which contains the password information for
-groups.
+- /etc/gshadow :: A text file which contains the password information for groups.
 
 - /etc/login.defs :: A text file that defines the defaults for accounts.
 
-- /etc/skel :: Files placed in this directory will be copied to new users
-home directory.
+- /etc/skel :: Files placed in this directory will be copied to new users home directory.
 
-- chage :: Change user password expiry information.
+- =chage= :: Change user password expiry information.
 
-- groupadd :: Create a new group.
+- =groupadd= :: Create a new group.
 
-- groupdel :: Remove a group from the system.
+- =groupdel= :: Remove a group from the system.
 
-- groupmod :: Modify a group account.
+- =groupmod= :: Modify a group account.
 
-- passwd :: Change a user's password.
+- =passwd= :: Change a user's password.
 
-- useradd :: Add a new user to the system (red Hat). The =passwd= command needs to be run to set the password for the account.
+- =useradd= :: Add a new user to the system (red Hat). The =passwd= command needs to be run to set the password for the account.
 
-- adduser :: Add a new user to the system (Debian).
+- =adduser= :: Add a new user to the system (Debian).
 
-- userdel :: Remove a user.
+- =userdel= :: Remove a user.
 
-- usermod :: Modify a user account.
+- =usermod= :: Modify a user account.
 
-- vipw :: Safely edit the =/etc/passwd=, =/etc/shadow=, and =/etc/group=
-files.
+- =vipw= :: Safely edit the =/etc/passwd=, =/etc/shadow=, and =/etc/group= files.
 
-- who :: Show who is logged into the system.
+- =who= :: Show who is logged into the system.
 
-- id :: Print real and effective user and group IDs.
+- =id= :: Print real and effective user and group IDs.
 
-- su :: Switch to another user (always use with the *--login* or *-l*.
-
+- =su= :: Switch to another user (always use with the *--login* or *-l*.
+	
 ** Preparations
 
-   Start a CentOS 7 virtual machine.  Commands will be different on a
-Debian-based machine.
+   Start a Fedora virtual machine.  Commands will be different on a Debian-based machine.
 
-** Adding a File to /etc/skel
+** Add a File to /etc/skel
 
-   The =/etc/skel= directory as defined in =/etc/defaults/useradd= is the
-place to put any files or directories you want to be copied to a user's
-home directory when a new user is created.  For this assignment add a
-welcome.txt file (it can be an empty file) to the =/etc/skel= directory
-so it will copied to the home directories of the new accounts you
-create.
+   The =/etc/skel= directory as defined in =/etc/defaults/useradd= is the place to put any files or directories you want to be copied to a user's home directory when a new user is created.  For this assignment add a /welcome.txt/ file (it can be an empty file) to the =/etc/skel= directory so it will copied to the home directories of the new accounts you create.
 
 #+BEGIN_EXAMPLE
 # touch /etc/skel/welcome.txt
 #+END_EXAMPLE
 
-** Changing the Maximum Days a Password May Be Used
+** Change the Maximum Days a Password May Be Used
 
-   The =/etc/login.defs= file sets defaults for creating user accounts such
-as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and
-change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit
-the file.
+   The =/etc/login.defs= file sets defaults for creating user accounts such as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit the file.
 
 #+BEGIN_EXAMPLE
-$ cd
-$ cp /etc/login.defs login.defs.bak
+$ su -login
+# cp /etc/login.defs login.defs.bak
 #+END_EXAMPLE
 
 ** Creating New Users
 
-Use the =useradd= command to create two new accounts.
+*** From the GUI
 
-*** First Account
+    Fedora has a graphical tool for creating new users.  See the Fedora System Administrative Guide under resources for how to use it to create a new user /Jay Student/.  After creating the account logout of Tux and log in as /jaystudent/.  Note that the /welcome.txt/ file you created is in the home directory.  Run =chage -l jaystudent= and note when the password will expire and that the account does not expire.
 
-    Create a new account with the login of =jstudent= with the password
-=Pa$$w0rd=.  Use the *-c* option to add /Jill Student/ to the GECOS
-field.
+*** From the Command Line
 
-#+BEGIN_EXAMPLE
-# useradd -c "Jill Student" jstudent
-# passwd jstudent
-#+END_EXAMPLE
+    While still logged in as /jaystudent/ open a terminal and become root to create the second account.
 
-*** Second Account
-
-    Create a second new account with the login =trillian= and the passphrase
-=Heart of Gold=.  A passphrase can be more secure than a password since a
-passphrase can contain spaces and longer passphrases can be more easily
-remembered.
+    Create a second account with the login =trillian= and the passphrase =Heart of Gold=.  A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.
 
 #+BEGIN_EXAMPLE
 # useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
 # passwd trillian
 #+END_EXAMPLE
 
-**** Add a supplemental Group
+**** Add a Supplemental Group
 
-     Next add =trillian= to the =wheel= supplementary group.  /Be sure to use
-the capital -G option./
+     Next add =trillian= to the =wheel= supplementary group.  Be sure to use the capital *-G* option.
 
 #+BEGIN_EXAMPLE
 # usermod -aG wheel trillian
@@ -145,7 +116,7 @@ the capital -G option./
 
 **** Modify Account Expiration
 
-     Next change the account expiration to 120 days from today.
+     Next change the account expiration to 120 days from today.  First display the account entry in the =passwd= file so you can compare the entry after making the change.
 
 #+BEGIN_EXAMPLE
 $ sudo grep trillian /etc/shadow
@@ -155,7 +126,7 @@ $ sudo grep trillian /etc/shadow
 
 ** What to Submit
 
-/Submit a screenshot of the following:/
+   /Submit a screenshot of the following:/
 
 -  The output of =id jstudent=
 -  The output of =id trillian=.
@@ -163,12 +134,13 @@ $ sudo grep trillian /etc/shadow
 
 ** Resources
 
--  man 5 login.defs
--  man adduser
--  man usermod
--  man userdel
--  man 5 passwd
--  man passwd
--  man chage
--  man 5 login.defs
+- man 5 login.defs
+- man adduser
+- man usermod
+- man userdel
+- man 5 passwd
+- man passwd
+- man chage
+- man 5 login.defs
+- [[https://docs.fedoraproject.org/en-US/Fedora/24/html/System_Administrators_Guide/index.html][Fedora 24 System Administrator's Guide]]
 

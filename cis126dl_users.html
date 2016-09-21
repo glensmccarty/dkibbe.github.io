@@ -125,17 +125,17 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Managing Users &amp; Groups</a>
+<li><a href="#sec-1">1 Introduction</a>
 <ul>
 <li><a href="#sec-1-1">1.1 Assignment Objectives</a></li>
 <li><a href="#sec-1-2">1.2 Terms and Commands You Should Know</a></li>
 <li><a href="#sec-1-3">1.3 Preparations</a></li>
-<li><a href="#sec-1-4">1.4 Adding a File to /etc/skel</a></li>
-<li><a href="#sec-1-5">1.5 Changing the Maximum Days a Password May Be Used</a></li>
+<li><a href="#sec-1-4">1.4 Add a File to /etc/skel</a></li>
+<li><a href="#sec-1-5">1.5 Change the Maximum Days a Password May Be Used</a></li>
 <li><a href="#sec-1-6">1.6 Creating New Users</a>
 <ul>
-<li><a href="#sec-1-6-1">1.6.1 First Account</a></li>
-<li><a href="#sec-1-6-2">1.6.2 Second Account</a></li>
+<li><a href="#sec-1-6-1">1.6.1 From the GUI</a></li>
+<li><a href="#sec-1-6-2">1.6.2 From the Command Line</a></li>
 </ul>
 </li>
 <li><a href="#sec-1-7">1.7 What to Submit</a></li>
@@ -147,10 +147,13 @@ for the JavaScript code in this tag.
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Managing Users &amp; Groups</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 
 
+<p>
+  Managing users and groups is an important administrative skill.  In this assignment you'll add new user accounts from the command line but before doing that you need to make two changes.
+</p>
 
 </div>
 
@@ -160,22 +163,14 @@ for the JavaScript code in this tag.
 
 
 <p>
-   Managing users and groups is an important administrative skill.  In this
-assignment you'll add new user accounts from the command line but before
-doing that you need to make two changes.
-</p>
-<p>
 <i>After successfully completing this assignment you will be able to:</i>
 </p>
 <ol>
 <li>Create new user accounts from the command line.
 </li>
-<li>Add a user to supplementary groups with the <code>usermod</code> command.
+<li>Add a user to supplementary groups using the <code>usermod</code> command.
 </li>
-<li>Create content in the <code>/etc/skel/</code> directory that will be copied over
-   to the users' home directory.
-</li>
-<li>Describe the difference between a password and a passphrase.
+<li>Create content in the <code>/etc/skel/</code> directory that will be copied over to the new users' home directory.
 </li>
 <li>Modify system-wide login defaults.
 </li>
@@ -192,81 +187,61 @@ doing that you need to make two changes.
 
 
 <dl>
-<dt>/etc/passwd</dt><dd>A text file that describes user login accounts for the
-</dd>
-</dl>
+<dt>/etc/passwd</dt><dd>A text file that describes user login accounts for the system.
 
-<p>system.
-</p>
-<dl>
-<dt>/etc/shadow</dt><dd>A text file which contains the password information for
 </dd>
-</dl>
+<dt>/etc/shadow</dt><dd>A text file which contains the password information for the system's accounts and optional aging information.
 
-<p>the system's accounts and optional aging information.
-</p>
-<dl>
+</dd>
 <dt>/etc/group</dt><dd>A text file that defines the groups on the system.
 
 </dd>
-<dt>/etc/gshadow</dt><dd>A text file which contains the password information for
-</dd>
-</dl>
+<dt>/etc/gshadow</dt><dd>A text file which contains the password information for groups.
 
-<p>groups.
-</p>
-<dl>
+</dd>
 <dt>/etc/login.defs</dt><dd>A text file that defines the defaults for accounts.
 
 </dd>
-<dt>/etc/skel</dt><dd>Files placed in this directory will be copied to new users
-</dd>
-</dl>
-
-<p>home directory.
-</p>
-<dl>
-<dt>chage</dt><dd>Change user password expiry information.
+<dt>/etc/skel</dt><dd>Files placed in this directory will be copied to new users home directory.
 
 </dd>
-<dt>groupadd</dt><dd>Create a new group.
+<dt><code>chage</code></dt><dd>Change user password expiry information.
 
 </dd>
-<dt>groupdel</dt><dd>Remove a group from the system.
+<dt><code>groupadd</code></dt><dd>Create a new group.
 
 </dd>
-<dt>groupmod</dt><dd>Modify a group account.
+<dt><code>groupdel</code></dt><dd>Remove a group from the system.
 
 </dd>
-<dt>passwd</dt><dd>Change a user's password.
+<dt><code>groupmod</code></dt><dd>Modify a group account.
 
 </dd>
-<dt>useradd</dt><dd>Add a new user to the system (red Hat). The <code>passwd</code> command needs to be run to set the password for the account.
+<dt><code>passwd</code></dt><dd>Change a user's password.
 
 </dd>
-<dt>adduser</dt><dd>Add a new user to the system (Debian).
+<dt><code>useradd</code></dt><dd>Add a new user to the system (red Hat). The <code>passwd</code> command needs to be run to set the password for the account.
 
 </dd>
-<dt>userdel</dt><dd>Remove a user.
+<dt><code>adduser</code></dt><dd>Add a new user to the system (Debian).
 
 </dd>
-<dt>usermod</dt><dd>Modify a user account.
+<dt><code>userdel</code></dt><dd>Remove a user.
 
 </dd>
-<dt>vipw</dt><dd>Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code>
-</dd>
-</dl>
-
-<p>files.
-</p>
-<dl>
-<dt>who</dt><dd>Show who is logged into the system.
+<dt><code>usermod</code></dt><dd>Modify a user account.
 
 </dd>
-<dt>id</dt><dd>Print real and effective user and group IDs.
+<dt><code>vipw</code></dt><dd>Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code> files.
 
 </dd>
-<dt>su</dt><dd>Switch to another user (always use with the <b>&ndash;login</b> or <b>-l</b>.
+<dt><code>who</code></dt><dd>Show who is logged into the system.
+
+</dd>
+<dt><code>id</code></dt><dd>Print real and effective user and group IDs.
+
+</dd>
+<dt><code>su</code></dt><dd>Switch to another user (always use with the <b>&ndash;login</b> or <b>-l</b>.
 </dd>
 </dl>
 
@@ -281,25 +256,19 @@ doing that you need to make two changes.
 
 
 <p>
-   Start a CentOS 7 virtual machine.  Commands will be different on a
-Debian-based machine.
+   Start a Fedora virtual machine.  Commands will be different on a Debian-based machine.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-1-4" class="outline-3">
-<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Adding a File to /etc/skel</h3>
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Add a File to /etc/skel</h3>
 <div class="outline-text-3" id="text-1-4">
 
 
 <p>
-   The <code>/etc/skel</code> directory as defined in <code>/etc/defaults/useradd</code> is the
-place to put any files or directories you want to be copied to a user's
-home directory when a new user is created.  For this assignment add a
-welcome.txt file (it can be an empty file) to the <code>/etc/skel</code> directory
-so it will copied to the home directories of the new accounts you
-create.
+   The <code>/etc/skel</code> directory as defined in <code>/etc/defaults/useradd</code> is the place to put any files or directories you want to be copied to a user's home directory when a new user is created.  For this assignment add a <i>welcome.txt</i> file (it can be an empty file) to the <code>/etc/skel</code> directory so it will copied to the home directories of the new accounts you create.
 </p>
 
 
@@ -313,21 +282,18 @@ create.
 </div>
 
 <div id="outline-container-1-5" class="outline-3">
-<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Changing the Maximum Days a Password May Be Used</h3>
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Change the Maximum Days a Password May Be Used</h3>
 <div class="outline-text-3" id="text-1-5">
 
 
 <p>
-   The <code>/etc/login.defs</code> file sets defaults for creating user accounts such
-as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and
-change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit
-the file.
+   The <code>/etc/login.defs</code> file sets defaults for creating user accounts such as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit the file.
 </p>
 
 
 
-<pre class="example">$ cd
-$ cp /etc/login.defs login.defs.bak
+<pre class="example">$ su -login
+# cp /etc/login.defs login.defs.bak
 </pre>
 
 
@@ -340,44 +306,31 @@ $ cp /etc/login.defs login.defs.bak
 <div class="outline-text-3" id="text-1-6">
 
 
-<p>
-Use the <code>useradd</code> command to create two new accounts.
-</p>
 
 </div>
 
 <div id="outline-container-1-6-1" class="outline-4">
-<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> First Account</h4>
+<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> From the GUI</h4>
 <div class="outline-text-4" id="text-1-6-1">
 
 
 <p>
-    Create a new account with the login of <code>jstudent</code> with the password
-<code>Pa$$w0rd</code>.  Use the <b>-c</b> option to add <i>Jill Student</i> to the GECOS
-field.
+    Fedora has a graphical tool for creating new users.  See the Fedora System Administrative Guide under resources for how to use it to create a new user <i>Jay Student</i>.  After creating the account logout of Tux and log in as <i>jaystudent</i>.  Note that the <i>welcome.txt</i> file you created is in the home directory.  Run <code>chage -l jaystudent</code> and note when the password will expire and that the account does not expire.
 </p>
-
-
-
-<pre class="example"># useradd -c "Jill Student" jstudent
-# passwd jstudent
-</pre>
-
-
 </div>
 
 </div>
 
 <div id="outline-container-1-6-2" class="outline-4">
-<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> Second Account</h4>
+<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> From the Command Line</h4>
 <div class="outline-text-4" id="text-1-6-2">
 
 
 <p>
-    Create a second new account with the login <code>trillian</code> and the passphrase
-<code>Heart of Gold</code>.  A passphrase can be more secure than a password since a
-passphrase can contain spaces and longer passphrases can be more easily
-remembered.
+    While still logged in as <i>jaystudent</i> open a terminal and become root to create the second account.
+</p>
+<p>
+    Create a second account with the login <code>trillian</code> and the passphrase <code>Heart of Gold</code>.  A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.
 </p>
 
 
@@ -388,10 +341,10 @@ remembered.
 
 
 <ul>
-<li id="sec-1-6-2-1">Add a supplemental Group<br/>
+<li id="sec-1-6-2-1">Add a Supplemental Group<br/>
 
 <p>
-     Next add <code>trillian</code> to the <code>wheel</code> supplementary group.  <i>Be sure to use the capital -G option.</i>
+     Next add <code>trillian</code> to the <code>wheel</code> supplementary group.  Be sure to use the capital <b>-G</b> option.
 </p>
 
 
@@ -406,7 +359,7 @@ remembered.
 <li id="sec-1-6-2-2">Modify Account Expiration<br/>
 
 <p>
-     Next change the account expiration to 120 days from today.
+     Next change the account expiration to 120 days from today.  First display the account entry in the <code>passwd</code> file so you can compare the entry after making the change.
 </p>
 
 
@@ -430,7 +383,7 @@ $ sudo grep trillian /etc/shadow
 
 
 <p>
-<i>Submit a screenshot of the following:</i>
+   <i>Submit a screenshot of the following:</i>
 </p>
 <ul>
 <li>The output of <code>id jstudent</code>
@@ -467,6 +420,8 @@ $ sudo grep trillian /etc/shadow
 <li>man chage
 </li>
 <li>man 5 login.defs
+</li>
+<li><a href="https://docs.fedoraproject.org/en-US/Fedora/24/html/System_Administrators_Guide/index.html">Fedora 24 System Administrator's Guide</a>
 </li>
 </ul>
 
