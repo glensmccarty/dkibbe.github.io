@@ -1,193 +1,487 @@
-<h1 id="managing-users-groups">Managing Users &amp; Groups</h1>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Managing Users and Groups</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Managing Users and Groups"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-09-21 Wed"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle.css" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Managing Users and Groups</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Managing Users &amp; Groups</a>
+<ul>
+<li><a href="#sec-1-1">1.1 Assignment Objectives</a></li>
+<li><a href="#sec-1-2">1.2 Terms and Commands You Should Know</a></li>
+<li><a href="#sec-1-3">1.3 Preparations</a></li>
+<li><a href="#sec-1-4">1.4 Adding a File to /etc/skel</a></li>
+<li><a href="#sec-1-5">1.5 Changing the Maximum Days a Password May Be Used</a></li>
+<li><a href="#sec-1-6">1.6 Creating New Users</a>
+<ul>
+<li><a href="#sec-1-6-1">1.6.1 First Account</a></li>
+<li><a href="#sec-1-6-2">1.6.2 Second Account</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-7">1.7 What to Submit</a></li>
+<li><a href="#sec-1-8">1.8 Resources</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Managing Users &amp; Groups</h2>
+<div class="outline-text-2" id="text-1">
 
 
 
-<h2 id="assignment-objectives">Assignment Objectives</h2>
+</div>
 
-<p>Managing users and groups is an important administrative skill. In this assignment you’ll add new user account from the command line but before doing that you need to make two changes.</p>
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Assignment Objectives</h3>
+<div class="outline-text-3" id="text-1-1">
 
-<p><em>After successfully completing this assignment you will be able to:</em></p>
 
+<p>
+   Managing users and groups is an important administrative skill.  In this
+assignment you'll add new user accounts from the command line but before
+doing that you need to make two changes.
+</p>
+<p>
+<i>After successfully completing this assignment you will be able to:</i>
+</p>
 <ol>
-<li>Create new user accounts from the command line.</li>
-<li>Add a user to supplementary groups with the <code>usermod</code> command.</li>
-<li>Create content in the <code>/etc/skel/</code> directory that will be copied over to the users’ home directory.</li>
-<li>Describe the difference between a password and a passphrase.</li>
-<li>Modify system-wide login defaults.</li>
+<li>Create new user accounts from the command line.
+</li>
+<li>Add a user to supplementary groups with the <code>usermod</code> command.
+</li>
+<li>Create content in the <code>/etc/skel/</code> directory that will be copied over
+   to the users' home directory.
+</li>
+<li>Describe the difference between a password and a passphrase.
+</li>
+<li>Modify system-wide login defaults.
+</li>
 </ol>
 
 
+</div>
 
-<h2 id="terms-and-commands-you-should-know">Terms and Commands You Should Know</h2>
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Terms and Commands You Should Know</h3>
+<div class="outline-text-3" id="text-1-2">
+
 
 <dl>
-<dt>/etc/passwd</dt>
-<dd>A text file that describes user login accounts for the system.</dd>
+<dt>/etc/passwd</dt><dd>A text file that describes user login accounts for the
+</dd>
+</dl>
 
-<dt>/etc/shadow</dt>
-<dd>A text file which contains the password information for the system’s accounts and optional aging information.</dd>
+<p>system.
+</p>
+<dl>
+<dt>/etc/shadow</dt><dd>A text file which contains the password information for
+</dd>
+</dl>
 
-<dt>/etc/group</dt>
-<dd>A text file that defines the groups on the system.</dd>
+<p>the system's accounts and optional aging information.
+</p>
+<dl>
+<dt>/etc/group</dt><dd>A text file that defines the groups on the system.
 
-<dt>/etc/gshadow</dt>
-<dd>A text file which contains the password information for groups.</dd>
+</dd>
+<dt>/etc/gshadow</dt><dd>A text file which contains the password information for
+</dd>
+</dl>
 
-<dt>/etc/login.defs</dt>
-<dd>A text file that defines the defaults for accounts.</dd>
+<p>groups.
+</p>
+<dl>
+<dt>/etc/login.defs</dt><dd>A text file that defines the defaults for accounts.
 
-<dt>/etc/adduser.conf</dt>
-<dd>Configuration file for the <code>adduser</code> command.</dd>
+</dd>
+<dt>/etc/skel</dt><dd>Files placed in this directory will be copied to new users
+</dd>
+</dl>
 
-<dt>/etc/skel</dt>
-<dd>Files placed in this directory will be copied to new users home directory.</dd>
+<p>home directory.
+</p>
+<dl>
+<dt>chage</dt><dd>Change user password expiry information.
 
-<dt>chage</dt>
-<dd>Change user password expiry information.</dd>
+</dd>
+<dt>groupadd</dt><dd>Create a new group.
 
-<dt>chfn</dt>
-<dd>Change real user name and information.</dd>
+</dd>
+<dt>groupdel</dt><dd>Remove a group from the system.
 
-<dt>finger</dt>
-<dd>Read information from a users profile (real name, phone, etc.) if they have one.</dd>
+</dd>
+<dt>groupmod</dt><dd>Modify a group account.
 
-<dt>GECOS</dt>
-<dd>A field in the <code>/etc/passwd</code> file containing the real name and contact information for a user.</dd>
+</dd>
+<dt>passwd</dt><dd>Change a user's password.
 
-<dt>groupadd</dt>
-<dd>Create a new group.</dd>
+</dd>
+<dt>useradd</dt><dd>Add a new user to the system (red Hat). The <code>passwd</code> command needs to be run to set the password for the account.
 
-<dt>groupdel</dt>
-<dd>Remove a group from the system.</dd>
+</dd>
+<dt>adduser</dt><dd>Add a new user to the system (Debian).
 
-<dt>groupmod</dt>
-<dd>Modify a group account.</dd>
+</dd>
+<dt>userdel</dt><dd>Remove a user.
 
-<dt>id</dt>
-<dd>Print user and group information.</dd>
+</dd>
+<dt>usermod</dt><dd>Modify a user account.
 
-<dt>passwd</dt>
-<dd>Change a user’s password.</dd>
+</dd>
+<dt>vipw</dt><dd>Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code>
+</dd>
+</dl>
 
-<dt>useradd</dt>
-<dd>Add a new user to the system (red Hat). The <code>passwd</code> command must also be run.</dd>
+<p>files.
+</p>
+<dl>
+<dt>who</dt><dd>Show who is logged into the system.
 
-<dt>adduser</dt>
-<dd>Add a new user to the system (Debian).</dd>
+</dd>
+<dt>id</dt><dd>Print real and effective user and group IDs.
 
-<dt>userdel</dt>
-<dd>Remove a user.</dd>
-
-<dt>usermod</dt>
-<dd>Modify a user account.</dd>
-
-<dt>vipw</dt>
-<dd>Safely edit the <code>/etc/passwd</code>, <code>/etc/shadow</code>, and <code>/etc/group</code> files.</dd>
-
-<dt>who</dt>
-<dd>Show who is logged into the system.</dd>
-
-<dt>id</dt>
-<dd>Print real and effective user and group IDs.</dd>
-
-<dt>su</dt>
-<dd>Switch to another user (always use with the - dash option.</dd>
+</dd>
+<dt>su</dt><dd>Switch to another user (always use with the <b>&ndash;login</b> or <b>-l</b>.
+</dd>
 </dl>
 
 
+</div>
 
-<h2 id="preparations">Preparations</h2>
+</div>
 
-<p>Start a CentOS 7 virtual machine. Commands will be different on a Debian-based machine.</p>
-
-
-
-<h2 id="adding-a-file-to-etcskel">Adding a File to /etc/skel</h2>
-
-<p>The <code>/etc/skel</code> directory as defined in <code>/etc/defaults/useradd</code> is the place to put any files or directories you want to be copied to a user’s home directory when a new user is created. For this assignment add a welcome.txt file (it can be an empty file) to the <code>/etc/skel</code> directory so it will copied to the home directories of the new accounts you create.</p>
-
-<pre><code># touch /etc/skel/welcome.txt
-</code></pre>
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Preparations</h3>
+<div class="outline-text-3" id="text-1-3">
 
 
+<p>
+   Start a CentOS 7 virtual machine.  Commands will be different on a
+Debian-based machine.
+</p>
+</div>
 
-<h2 id="changing-the-maximum-days-a-password-may-be-used">Changing the Maximum Days a Password May Be Used</h2>
+</div>
 
-<p>The <code>/etc/login.defs</code> file sets defaults for creating user accounts such as when passwords expire. Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90. Be sure you create a backup before you edit the file.</p>
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Adding a File to /etc/skel</h3>
+<div class="outline-text-3" id="text-1-4">
 
-<pre><code>$ cd
+
+<p>
+   The <code>/etc/skel</code> directory as defined in <code>/etc/defaults/useradd</code> is the
+place to put any files or directories you want to be copied to a user's
+home directory when a new user is created.  For this assignment add a
+welcome.txt file (it can be an empty file) to the <code>/etc/skel</code> directory
+so it will copied to the home directories of the new accounts you
+create.
+</p>
+
+
+
+<pre class="example"># touch /etc/skel/welcome.txt
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Changing the Maximum Days a Password May Be Used</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+<p>
+   The <code>/etc/login.defs</code> file sets defaults for creating user accounts such
+as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and
+change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit
+the file.
+</p>
+
+
+
+<pre class="example">$ cd
 $ cp /etc/login.defs login.defs.bak
-</code></pre>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Creating New Users</h3>
+<div class="outline-text-3" id="text-1-6">
+
+
+<p>
+Use the <code>useradd</code> command to create two new accounts.
+</p>
+
+</div>
+
+<div id="outline-container-1-6-1" class="outline-4">
+<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> First Account</h4>
+<div class="outline-text-4" id="text-1-6-1">
+
+
+<p>
+    Create a new account with the login of <code>jstudent</code> with the password
+<code>Pa$$w0rd</code>.  Use the <b>-c</b> option to add <i>Jill Student</i> to the GECOS
+field.
+</p>
 
 
 
-<h2 id="creating-new-users">Creating New Users</h2>
-
-<p>Use the <code>useradd</code> command to create two new accounts.</p>
-
-
-
-<h3 id="first-account">First Account</h3>
-
-<p>Create a new account with the login of <code>jstudent</code> with the password <code>Pa$$w0rd</code>. Use the <strong>-c</strong> option to add <em>Jill Student</em> to the GECOS field.</p>
-
-<pre><code># useradd -c "Jill Student" jstudent
+<pre class="example"># useradd -c "Jill Student" jstudent
 # passwd jstudent
-</code></pre>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-6-2" class="outline-4">
+<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> Second Account</h4>
+<div class="outline-text-4" id="text-1-6-2">
+
+
+<p>
+    Create a second new account with the login <code>trillian</code> and the passphrase
+<code>Heart of Gold</code>.  A passphrase can be more secure than a password since a
+passphrase can contain spaces and longer passphrases can be more easily
+remembered.
+</p>
 
 
 
-<h3 id="second-account">Second Account</h3>
-
-<p>Create a second new account with the login <code>trillian</code> and the passphrase <code>Heart of Gold</code>. A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.</p>
-
-<pre><code># useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
+<pre class="example"># useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
 # passwd trillian
-</code></pre>
+</pre>
+
+
+<ul>
+<li id="sec-1-6-2-1">Add a supplemental Group<br/>
+
+<p>
+     Next add <code>trillian</code> to the <code>wheel</code> supplementary group.  <i>Be sure to use the capital -G option.</i>
+</p>
 
 
 
-<h4 id="add-a-supplemental-group">Add a supplemental Group</h4>
-
-<p>Next add <code>trillian</code> to the <code>wheel</code> supplementary group.  <em>Be sure to use the capital -G option.</em></p>
-
-<pre><code># usermod -aG wheel trillian
-</code></pre>
+<pre class="example"># usermod -aG wheel trillian
+</pre>
 
 
+</li>
+</ul>
+<ul>
+<li id="sec-1-6-2-2">Modify Account Expiration<br/>
 
-<h4 id="modify-account-expiration">Modify Account Expiration</h4>
+<p>
+     Next change the account expiration to 120 days from today.
+</p>
 
-<p>Next change the account expiration to 120 days from today.</p>
 
-<pre><code>$ sudo grep trillian /etc/shadow
+
+<pre class="example">$ sudo grep trillian /etc/shadow
 $ sudo chage -E YYYY-MM-DD trillian
 $ sudo grep trillian /etc/shadow
-</code></pre>
+</pre>
 
 
+</li>
+</ul>
+</div>
+</div>
 
-<h2 id="what-to-submit">What to Submit</h2>
+</div>
 
-<p><em>Submit a screenshot of the following:</em></p>
+<div id="outline-container-1-7" class="outline-3">
+<h3 id="sec-1-7"><span class="section-number-3">1.7</span> What to Submit</h3>
+<div class="outline-text-3" id="text-1-7">
 
+
+<p>
+<i>Submit a screenshot of the following:</i>
+</p>
 <ul>
-<li>The output of <code>id jstudent</code></li>
-<li>The output of <code>id trillian</code>.</li>
-<li>The output of <code>chage -l trillian</code></li>
+<li>The output of <code>id jstudent</code>
+</li>
+<li>The output of <code>id trillian</code>.
+</li>
+<li>The output of <code>chage -l trillian</code>
+</li>
 </ul>
 
 
+</div>
 
-<h2 id="resources">Resources</h2>
+</div>
+
+<div id="outline-container-1-8" class="outline-3">
+<h3 id="sec-1-8"><span class="section-number-3">1.8</span> Resources</h3>
+<div class="outline-text-3" id="text-1-8">
+
 
 <ul>
-<li>man 5 login.defs</li>
-<li>man adduser</li>
-<li>man usermod</li>
-<li>man userdel</li>
-<li>man 5 passwd</li>
-<li>man passwd</li>
-<li>man chage</li>
-<li>man 5 login.defs</li>
+<li>man 5 login.defs
+</li>
+<li>man adduser
+</li>
+<li>man usermod
+</li>
+<li>man userdel
+</li>
+<li>man 5 passwd
+</li>
+<li>man passwd
+</li>
+<li>man chage
+</li>
+<li>man 5 login.defs
+</li>
 </ul>
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-09-21 Wed</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
