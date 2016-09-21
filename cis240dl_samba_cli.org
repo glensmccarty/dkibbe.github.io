@@ -41,9 +41,10 @@
 
 * Preparation
 
-  - Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network.
+  - Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network or if in the lab 192.168.203.0/24.
   - Set networking to /Bridged Adapter/, connect the cable and refresh the MAC address.
   - Boot the VM and take a [[https://www.virtualbox.org/manual/ch01.html#snapshots][snapshot]] in VirtualBox so you can roll back if you have problems.
+  - Change the IP addresses in this assignment to match your IP address. Use =ip addr show=.
 
 * Install Samba
 
@@ -67,12 +68,12 @@
 
   1. Add a directory to share.
 
-  : # mkdir -p /srv/data
+  : # mkdir -p /home/shared
 
 ** Add Content
 
    Create a text file in the shared directory.  Change /jstudent/ to your name and the IP address to that of your Samba server.
-   : # echo "This is Jstudent on 192.168.201.123" > /srv/data/Success!
+   : # echo "This is Jstudent on 192.168.201.123" > /home/shared/Success!
 
 ** Add a Group
 
@@ -85,22 +86,22 @@
 
 ** Set Permissions and Ownership
 
-   : # chgrp -R staff /srv/data
-   : # chmod 0755 /srv/data
+   : # chgrp -R staff /home/shared
+   : # chmod 0755 /home/shared
 
 * SELinux
 
   The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.  If the necessary SELinux tools are not installed use =yum whatprovides semanage= to find the correct package.
 
 #+BEGIN_EXAMPLE
-# chcon -R -t samba_share_t /srv/data
-# semanage fcontext -a -t samba_share_t /srv/data
+# chcon -R -t samba_share_t /home/shared
+# semanage fcontext -a -t samba_share_t /home/shared
 # setsebool -P samba_enable_home_dirs on
 #+END_EXAMPLE
 
 * Configuration
 
-  Backup =/etc/samba/smb.conf= and uncomment the [public] section.  Change the shared directory to match the one you created.
+  Backup =/etc/samba/smb.conf= and uncomment the [public] section by removing the semi-colons from the start of each line.  Change the shared directory to match the one you created.
 
 ** Start the Services
 
@@ -132,36 +133,20 @@
 
     : \\192.168.201.123
 
-** COMMENT Samba
-
-   Open the Samba configuration tool.
-
-   1. Add /jstudent/ as a Samba user.
-   2. Add =/srv/data= as a Samba share.
-
-** COMMENT Firewall
-
-   Open the firewall configuration tool.
-
-   1. /Sambaclient/ should already be checked as a service.
-   2. Make the change permanent.
-
-* COMMENT Install Configuration Tools
-
-#+BEGIN_EXAMPLE
-# dnf install system-config-samba firewall-config
-#+END_EXAMPLE
-
 * Firewall Configuration
 
   Install /firewalld/.
 
   : # yum install firewalld
 
-  Add /samba-client/ as a service.
+  Start the firewall.
+
+  : # systemctl start firewalld
+
+  Add /samba/ as a service.
 
 #+BEGIN_EXAMPLE
-# firewall-cmd --permanent --add-service=samba-client
+# firewall-cmd --permanent --add-service=samba
 # firewall-cmd --list-services
 #+END_EXAMPLE
 

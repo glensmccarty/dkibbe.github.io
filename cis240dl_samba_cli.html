@@ -125,7 +125,7 @@ for the JavaScript code in this tag.
 org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
 org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
-org_html_manager.set("LOCAL_TOC", "above");
+org_html_manager.set("LOCAL_TOC", "1");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
 org_html_manager.set("FIXED_TOC", "0");
@@ -301,11 +301,13 @@ for the JavaScript code in this tag.
 
 
 <ul>
-<li>Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network.
+<li>Use a CentOS 7 virtual Machine on the 192.168.201.0/24 network or if in the lab 192.168.203.0/24.
 </li>
 <li>Set networking to <i>Bridged Adapter</i>, connect the cable and refresh the MAC address.
 </li>
 <li>Boot the VM and take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems.
+</li>
+<li>Change the IP addresses in this assignment to match your IP address. Use <code>ip addr show</code>.
 </li>
 </ul>
 
@@ -370,7 +372,7 @@ for the JavaScript code in this tag.
 
 
 <pre class="example">
-# mkdir -p /srv/data
+# mkdir -p /home/shared
 </pre>
 
 
@@ -385,7 +387,7 @@ for the JavaScript code in this tag.
 <p>
    Create a text file in the shared directory.  Change <i>jstudent</i> to your name and the IP address to that of your Samba server.
 </p><pre class="example">
-# echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
+# echo "This is Jstudent on 192.168.201.123" &gt; /home/shared/Success!
 </pre>
 
 
@@ -428,8 +430,8 @@ for the JavaScript code in this tag.
 
 
 <pre class="example">
-# chgrp -R staff /srv/smb/data
-# chmod 0755 /srv/smb/data
+# chgrp -R staff /home/shared
+# chmod 0755 /home/shared
 </pre>
 
 
@@ -449,8 +451,8 @@ for the JavaScript code in this tag.
 
 
 
-<pre class="example"># chcon -R -t samba_share_t /srv/smb/data
-# semanage fcontext -a -t samba_share_t /srv/smb/data
+<pre class="example"># chcon -R -t samba_share_t /home/shared
+# semanage fcontext -a -t samba_share_t /home/shared
 # setsebool -P samba_enable_home_dirs on
 </pre>
 
@@ -465,7 +467,7 @@ for the JavaScript code in this tag.
 
 
 <p>
-  Backup <code>/etc/samba/smb.conf</code> and uncomment the [public] section.  Change the shared directory to match the one you created.
+  Backup <code>/etc/samba/smb.conf</code> and uncomment the [public] section by removing the semi-colons from the start of each line.  Change the shared directory to match the one you created.
 </p>
 
 </div>
@@ -545,12 +547,6 @@ $ smbclient -L \\192.168.201.123 -U jstudent
 </pre>
 
 
-
-
-
-
-
-
 </div>
 </div>
 </div>
@@ -571,12 +567,20 @@ $ smbclient -L \\192.168.201.123 -U jstudent
 
 
 <p>
-  Add <i>sambaclient</i> as a service.
+  Start the firewall.
+</p>
+<pre class="example">
+# systemctl start firewalld
+</pre>
+
+
+<p>
+  Add <i>samba</i> as a service.
 </p>
 
 
 
-<pre class="example"># firewall-cmd --permanent --add-service=sambaclient
+<pre class="example"># firewall-cmd --permanent --add-service=samba
 # firewall-cmd --list-services
 </pre>
 
