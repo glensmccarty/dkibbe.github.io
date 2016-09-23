@@ -114,7 +114,7 @@ $ ls -i resume_old Docs/resume-2015.odt
 $ 3952491 resume_old 3952647 Docs/resume-2015.odt
 #+END_EXAMPLE
 
-*** Hard Links Limitations
+** Hard Links Limitations
 
     Hard links can not be made across file systems or to directories.
 
