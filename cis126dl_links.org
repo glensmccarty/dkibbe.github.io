@@ -13,133 +13,156 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+LINK_UP: http://dkibbe.github.io.indesx.html
 #+LINK_HOME: http://dkibbe.github.io.indesx.htm
-#+LINK: chain https://dkibbe.github.io/images/links_backup.png
+#+LINK: backup https://dkibbe.github.io/images/links_backup.png
 #+LINK: chain https://dkibbe.github.io/images/links_chain.png
-#+LINK: chain https://dkibbe.github.io/images/links_hard.png
-#+LINK: chain https://dkibbe.github.io/images/links_soft.png
+#+LINK: hard https://dkibbe.github.io/images/links_hard.png
+#+LINK: inode https://dkibbe.github.io/images/links_inode.png
+#+LINK: soft https://dkibbe.github.io/images/links_soft.png
 #+XSLT:
 
-[[chain]]
+* Assignment Objectives
 
-* Links: Hard and Soft
+  In this assignment you will create two types of file links -- a /symbolic/ or soft link and a /hard/ link.  It can be useful to have the same file appear in two different directories.  Links let you do that without duplicating the file.  Systemd which responsible for starting and stopping services on the system uses symbolic links to manage services.
 
-  The =ln= command is used to create links or shortcuts between files and directories.
+/After successfully completing this assignment you will be able to:/
 
-** Linux File Types
+- Create both a soft and hard link to a file.
+- Identify links by file type or number of links to the file.
+- Explain the difference between link types.
 
-   When files are listed with =ls -l= the first character indicates what
-type a file is.
+* Terms You Should Know
 
-There are seven basic types of file types in Linux.
+  - =ln= :: Command to create links.
+  - inode :: An inode is a data structure on a filesystem on Linux and other Unix-like operating systems that stores all the information about a file except its name and its actual data.
+  - Symbolic or soft link :: Points to a file name or directory.
+  - Hard link :: Points the inode of a file.  Can not point to directories of files on another filesystem.
 
-| Symbol     | File Type          |
-|------------+--------------------|
-| - (dash)   | Ordinary file      |
-| d          | Directory          |
-| l          | Symbolic Link      |
-| c          | Character Device   |
-| b          | Block device       |
-| s          | Local socket       |
-| p          | Named pipe         |
+* Linux File Types
 
-The =ls= command is used to show information about a file.
+   When files are listed with =ls -l= the first character indicates the file type.  There are seven file types in Linux.
 
-#+BEGIN_EXAMPLE
-$ touch foo
-$    ls -l foo
--rwxrwxr-x 1 ubuntu ubuntu 0 Feb 13 2012 foo
-#+END_EXAMPLE
 
-The listing shows:
+| Symbol | File Type        |
+|--------+------------------|
+| -      | Ordinary file    |
+| d      | Directory        |
+| l      | Symbolic Link    |
+| c      | Character Device |
+| b      | Block device     |
+| s      | Local socket     |
+| p      | Named pipe       |
+|        |                  |
 
--  File type (-, d-, l, etc.)
--  User, Group, Other permissions
--  User ID and Group ID
--  Link counter
--  Size in bytes
--  Date last modified
--  File name
+* Symbolic Links
 
-* Inode
+[[soft]]
 
-  An inode points to where the data is on disk.
+   A symbolic or soft link links to a file or directory name on the same or different filesystem.  The link in created with the =ln= command.  The first option is the source file and the second the link name.
 
 #+BEGIN_EXAMPLE
-$ ls -il foo
-16914416 -rwxrwxr-x 1 ubuntu ubuntu 0 Feb 13 2012 foo
+$ cd Desktop
+$ ln -s ~/Docs/resume.odt current_resume
 #+END_EXAMPLE
 
-As long as there is at least one pointer to the inode of a file the file is still accessible. When the pointer counter is zero the data is still
-there but the file is not accessible.
-
-The inode of the symbolic link is different from the file it points to. If the original file is deleted the link is broken.
+The =ls= command shows that /current_resume/ is linked to /resume.odt/.  The *l* in the first position of the output shows that this is a symbolic link.
 
 #+BEGIN_EXAMPLE
-$ ls -il /media/Debian/README.txt
-1355 -r--r--r-- 1 dennisk dennisk 5512 Jun 15 16:06 /media/Debian/README.txt
+$ ls -l current_resume
+$ lrwxrwxrwx 1 tux tux 45 Aug 22 15:11 current_resume  -> /home/tux/Docs/resume.odt
 #+END_EXAMPLE
 
-* The =ln= command
+* Inodes
 
-Files with multiple pointers have multiple hard links to the same data.
+[[inode]]
 
-The =ln= or link command is used to create multiple pointers to the
-data.
+  An inode stores all the metadata about a file or directory except its name and the data itself.  The *-i*  option to =ls= shows the inode number.
 
 #+BEGIN_EXAMPLE
 $ ls -il foo
 16914416 -rwxrwxr-x 1 ubuntu ubuntu 0 Feb 13 2012 foo
 #+END_EXAMPLE
 
-$ ln foo foobar
-
-$ ls -il foobar* 16914416 -rwxrwxr-x 2 ubuntu ubuntu 0 Feb 13 2012
-foobar 16914416 -rwxrwxr-x 2 ubuntu ubuntu 0 Feb 13 2012 foo
-
-** Symbolic Links
-
-   Symbolic or soft links can span file systems and can link to directories. Hard links can not.
+As long as there is at least one pointer to an inode the file is still accessible.  When the pointer counter is zero the data is still there until over-written but the file is not accessible.  The inode of the symbolic link is different from the file it points to.  If the original file is deleted the link is broken.
 
 #+BEGIN_EXAMPLE
-$ ln -s /media/Debian/README.txt /home/dennisk
-$ ls -il README.txt
-16914528 lrwxrwxrwx 1 dennisk dennisk 38 Oct  2 13:53 README.txt -> /media/Debian 7.1.0 amd64 1/README.txt
+$ ls -i current_resume
+3952491 current_resume
 #+END_EXAMPLE
 
-** Hard Links
+* Hard Links
+
+[[hard]]
+
+Hard links don't look any different than regular files.  They are just multiple pointers to the same inode number.  Hard links are created the same way as symbolic links except for the *-s* option.
 
 #+BEGIN_EXAMPLE
-$ ls -il foobar*
-16914416 -rwxrwxr-x 2 ubuntu ubuntu 401 Feb 13 2012 foobar
-16914416 -rwxrwxr-x 2 ubuntu ubuntu 401 Feb 13 2012 foo
+$ cd Desktop
+$ ln ~/Docs/resume-2015.odt resume_old
 #+END_EXAMPLE
 
-$ rm foo $ ls -il foobar 16914416 -rwxrwxr-x 1 ubuntu ubuntu 401 Feb 13
-2012 foobar
+The =ls= command shows 2 links to /resume_old/.  Either file could be removed and the data would still be accessible.
+
+#+BEGIN_EXAMPLE
+$ ls -l resume_old
+$ -rwxrwxrwx 2 tux tux 45 Aug 22 15:11 resume_old
+#+END_EXAMPLE
+
+Both /resume_old/ and /resume-2015.odt/ have the same inode.  They both both point to the same data location on the disk.
+
+#+BEGIN_EXAMPLE
+$ ls -i resume_old Docs/resume-2015.odt
+$ 3952491 resume_old 3952647 Docs/resume-2015.odt
+#+END_EXAMPLE
 
 *** Hard Links Limitations
 
     Hard links can not be made across file systems or to directories.
 
-#+BEGIN_EXAMPLE
-$ ln /media/Debian/README.txt /home/dennisk
-ln: failed to create hard link 
-./README.txt => /media/Debian/README.txt: Invalid cross-device link
-#+END_EXAMPLE
-
-$ ls -il /media/Debian/README.txt 1355 -r--r--r-- 1 dennisk dennisk 5512
-Jun 15 16:06 /media/Debian/README.txt
-
-*** Hard Links and Backups
+*** COMMENT Hard Links and Backups
 
     The files in blue are unchanged so a hard link in used to save disk space.
 
-** What to Submit
+* Create a Symbolic Link
 
-   Change to the =/tmp= directory and create a file named =foo= with the =touch= command. Link =foobar= symbolically to =foo= and link =foo2= as a hard link to =foo=. Submit a screenshot of the =ls -li foo*= command showing that the inodes of =foo= and =foo2= are the same and that =foobar= is linked to =foo= and the inode numbers are not the same.
+   1. Change to your *Documents* directory and create a file named /cover_letter/.
+
+      : $ echo "This is a cover letter." > cover_letter
+
+   2. Change to your home directory and create a soft link from /cover_letter/ to /letter_soft/.
+
+      : $ ln -s Documents/cover_letter letter_soft
+
+   3. Use =ls -l= to show that /letter_soft/ is a symbolic link.
+
+      : $ ls -l letter_soft
+
+* Create a Hard Link
+
+  1. Use =ln= to create a hard link to /cover_letter/ named /letter_hard/.
+
+     : $ ln Documents/cover_letter letter_hard
+
+  2. Use =ls -l= to show that /letter_hard/ has 2 links
+
+     : $ ls -l letter_hard
+
+  3. Remove /cover_letter/
+
+     : $ rm Documents/cover_letter
+
+  4. Use =ls= to show that the symbolic link is broken.
+
+  5. Use =cat= to show that the data is still there.
+
+     : $ cat letter_hard
+
+* What to Submit
+
+  Submit a screenshot of =ls -li letter_hard letter_soft= showing that one is a symbolic link and the other a hard link.
 
 * Resources
 
 - [[http://www.ibm.com/developerworks/aix/library/au-speakingunix14/][Speaking UNIX: It is all about the inode]]
 - [[http://www.linux-mag.com/id/8658/][What's an inode?]]
+- [[http://www.linfo.org/inode.html][Inode Definition]]
 

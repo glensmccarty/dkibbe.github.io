@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>File Links</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="File Links"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-09-22 Thu"/>
+<meta name="author" content="Dennis Kibbe"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle.css" /> 
+<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
+<style type="text/css"> code {color: blue; font-weight:bold;} </style>
+<script type="text/javascript" src="http://orgmode.org/org-info.js">
+/**
+ *
+ * @source: http://orgmode.org/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://orgmode.org/org-info.js.
+ *
+ * Copyright (C) 2012-2013  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://orgmode.org/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
+org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "0");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+<div id="org-div-home-and-up" style="text-align:right;font-size:70%;white-space:nowrap;">
+ <a accesskey="h" href="http://dkibbe.github.io.indesx.html"> UP </a>
+ |
+ <a accesskey="H" href="http://dkibbe.github.io.indesx.htm"> HOME </a>
+</div>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">File Links</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Assignment Objectives</a></li>
+<li><a href="#sec-2">2 Terms You Should Know</a></li>
+<li><a href="#sec-3">3 Linux File Types</a></li>
+<li><a href="#sec-4">4 Symbolic Links</a></li>
+<li><a href="#sec-5">5 Inodes</a></li>
+<li><a href="#sec-6">6 Hard Links</a>
+<ul>
+<li>
+<ul>
+<li><a href="#sec-6-1">6.1 Hard Links Limitations</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-7">7 Create a Symbolic Link</a></li>
+<li><a href="#sec-8">8 Create a Hard Link</a></li>
+<li><a href="#sec-9">9 What to Submit</a></li>
+<li><a href="#sec-10">10 Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Assignment Objectives</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  In this assignment you will create two types of file links &ndash; a <i>symbolic</i> or soft link and a <i>hard</i> link.  It can be useful to have the same file appear in two different directories.  Links let you do that without duplicating the file.  Systemd which responsible for starting and stopping services on the system uses symbolic links to manage services.
+</p>
+<p>
+<i>After successfully completing this assignment you will be able to:</i>
+</p>
+<ul>
+<li>Create both a soft and hard link to a file.
+</li>
+<li>Identify links by file type or number of links to the file.
+</li>
+<li>Explain the difference between link types.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Terms You Should Know</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<dl>
+<dt><code>ln</code></dt><dd>Command to create links.
+</dd>
+<dt>inode</dt><dd>An inode is a data structure on a filesystem on Linux and other Unix-like operating systems that stores all the information about a file except its name and its actual data.
+</dd>
+<dt>Symbolic or soft link</dt><dd>Points to a file name or directory.
+</dd>
+<dt>Hard link</dt><dd>Points the inode of a file.  Can not point to directories of files on another filesystem.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Linux File Types</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+   When files are listed with <code>ls -l</code> the first character indicates the file type.  There are seven file types in Linux.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Symbol</th><th scope="col" class="left">File Type</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">-</td><td class="left">Ordinary file</td></tr>
+<tr><td class="left">d</td><td class="left">Directory</td></tr>
+<tr><td class="left">l</td><td class="left">Symbolic Link</td></tr>
+<tr><td class="left">c</td><td class="left">Character Device</td></tr>
+<tr><td class="left">b</td><td class="left">Block device</td></tr>
+<tr><td class="left">s</td><td class="left">Local socket</td></tr>
+<tr><td class="left">p</td><td class="left">Named pipe</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Symbolic Links</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+<img src="https://dkibbe.github.io/images/links_soft.png"  alt="https://dkibbe.github.io/images/links_soft.png" />
+</p>
+<p>
+   A symbolic or soft link links to a file or directory name on the same or different filesystem.  The link in created with the <code>ln</code> command.  The first option is the source file and the second the link name.
+</p>
+
+
+
+<pre class="example">$ cd Desktop
+$ ln -s ~/Docs/resume.odt current_resume
+</pre>
+
+
+<p>
+The <code>ls</code> command shows that <i>current_resume</i> is linked to <i>resume.odt</i>.  The <b>l</b> in the first position of the output shows that this is a symbolic link.
+</p>
+
+
+
+<pre class="example">$ ls -l current_resume
+$ lrwxrwxrwx 1 tux tux 45 Aug 22 15:11 current_resume  -&gt; /home/tux/Docs/resume.odt
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Inodes</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+<img src="https://dkibbe.github.io/images/links_inode.png"  alt="https://dkibbe.github.io/images/links_inode.png" />
+</p>
+<p>
+  An inode stores all the metadata about a file or directory except its name and the data itself.  The <b>-i</b>  option to <code>ls</code> shows the inode number.
+</p>
+
+
+
+<pre class="example">$ ls -il foo
+16914416 -rwxrwxr-x 1 ubuntu ubuntu 0 Feb 13 2012 foo
+</pre>
+
+
+<p>
+As long as there is at least one pointer to an inode the file is still accessible.  When the pointer counter is zero the data is still there until over-written but the file is not accessible.  The inode of the symbolic link is different from the file it points to.  If the original file is deleted the link is broken.
+</p>
+
+
+
+<pre class="example">$ ls -i current_resume
+3952491 current_resume
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Hard Links</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p>
+<img src="https://dkibbe.github.io/images/links_hard.png"  alt="https://dkibbe.github.io/images/links_hard.png" />
+</p>
+<p>
+Hard links don't look any different than regular files.  They are just multiple pointers to the same inode number.  Hard links are created the same way as symbolic links except for the <b>-s</b> option.
+</p>
+
+
+
+<pre class="example">$ cd Desktop
+$ ln ~/Docs/resume-2015.odt resume_old
+</pre>
+
+
+<p>
+The <code>ls</code> command shows 2 links to <i>resume_old</i>.  Either file could be removed and the data would still be accessible.
+</p>
+
+
+
+<pre class="example">$ ls -l resume_old
+$ -rwxrwxrwx 2 tux tux 45 Aug 22 15:11 resume_old
+</pre>
+
+
+<p>
+Both <i>resume_old</i> and <i>resume-2015.odt</i> have the same inode.  They both both point to the same data location on the disk.
+</p>
+
+
+
+<pre class="example">$ ls -i resume_old Docs/resume-2015.odt
+$ 3952491 resume_old 3952647 Docs/resume-2015.odt
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-4">
+<h4 id="sec-6-1"><span class="section-number-4">6.1</span> Hard Links Limitations</h4>
+<div class="outline-text-4" id="text-6-1">
+
+
+<p>
+    Hard links can not be made across file systems or to directories.
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Create a Symbolic Link</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<ol>
+<li>Change to your <b>Documents</b> directory and create a file named <i>cover_letter</i>.
+
+<pre class="example">
+$ echo "This is a cover letter." &gt; cover_letter
+</pre>
+
+
+</li>
+<li>Change to your home directory and create a soft link from <i>cover_letter</i> to <i>letter_soft</i>.
+
+<pre class="example">
+$ ln -s Documents/cover_letter letter_soft
+</pre>
+
+
+</li>
+<li>Use <code>ls -l</code> to show that <i>letter_soft</i> is a symbolic link.
+
+<pre class="example">
+$ ls -l letter_soft
+</pre>
+
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Create a Hard Link</h2>
+<div class="outline-text-2" id="text-8">
+
+
+<ol>
+<li>Use <code>ln</code> to create a hard link to <i>cover_letter</i> named <i>letter_hard</i>.
+
+<pre class="example">
+$ ln Documents/cover_letter letter_hard
+</pre>
+
+
+</li>
+<li>Use <code>ls -l</code> to show that <i>letter_hard</i> has 2 links
+
+<pre class="example">
+$ ls -l letter_hard
+</pre>
+
+
+</li>
+<li>Remove <i>cover_letter</i>
+
+<pre class="example">
+$ rm Documents/cover_letter
+</pre>
+
+
+</li>
+<li>Use <code>ls</code> to show that the symbolic link is broken.
+
+</li>
+<li>Use <code>cat</code> to show that the data is still there.
+
+<pre class="example">
+$ cat letter_hard
+</pre>
+
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> What to Submit</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+  Submit a screenshot of <code>ls -li letter_hard letter_soft</code> showing that one is a symbolic link and the other a hard link.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Resources</h2>
+<div class="outline-text-2" id="text-10">
+
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-speakingunix14/">Speaking UNIX: It is all about the inode</a>
+</li>
+<li><a href="http://www.linux-mag.com/id/8658/">What's an inode?</a>
+</li>
+<li><a href="http://www.linfo.org/inode.html">Inode Definition</a>
+</li>
+</ul>
+
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-09-22 Thu</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
