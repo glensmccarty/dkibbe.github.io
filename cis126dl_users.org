@@ -128,7 +128,7 @@ $ sudo grep trillian /etc/shadow
 
    /Submit a screenshot of the following:/
 
--  The output of =id jstudent=
+-  The output of =id jaystudent=
 -  The output of =id trillian=.
 -  The output of =chage -l trillian=
 

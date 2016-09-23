@@ -11,8 +11,8 @@
 #+INFOJS_OPT: view:info toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
-#+LINK_UP: http://dkibbe.github.io.indesx.html
-#+LINK_HOME: http://dkibbe.github.io.indesx.htm
+#+LINK_UP: http://dkibbe.github.io.index.html
+#+LINK_HOME: http://dkibbe.github.io.index.html
 #+LINK: backup https://dkibbe.github.io/images/links_backup.png
 #+LINK: chain https://dkibbe.github.io/images/links_chain.png
 #+LINK: hard https://dkibbe.github.io/images/links_hard.png
