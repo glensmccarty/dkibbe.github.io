@@ -23,19 +23,22 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Use the CentOS 7 ova for this assignment. CentOS uses a basic <code>vi</code> text editor by default so you might want to install <code>vim</code> or <code>nano</code>.</p>
+<ol>
+<li>Use the CentOS 7 ova for this assignment. CentOS uses a basic <code>vi</code> text editor by default so you might want to install <code>vim</code> or <code>nano</code>.</li>
+<li><p>Since the blue directories are hard to see against the black background of the terminal temporarily alias <code>ls</code> to <code>ls -F</code>.</p>
 
+<h1 id="alias-lsls-f">alias ls=”ls -F”</h1></li>
+</ol>
 
+<p>Now directories will be followed by a slash.</p>
+
+<pre><code># ls
+example.com/ html/ logs/ staff.example.com/
+</code></pre>
 
 <h3 id="set-networking-to-bridged">Set Networking to Bridged</h3>
 
 <p>In VirutalBox set the network adapter to <em>Bridged Network</em> and under <em>Advanced</em> generate a new random MAC address. When you boot up the virtual machine use <code>ip addr show</code> to confirm you are on the 192.168.<strong>2xx</strong>.0/24 network. Where <strong>xx</strong> is the classroom number. <em>Example:</em> BA 1E is 201 and BA 13 is 213.</p>
-
-
-
-<h3 id="snapshot">Snapshot</h3>
-
-<p>Make a snapshot of your virtual machine so you can roll back if needed.</p>
 
 <!--## Terms You Should Know-->
 
@@ -61,7 +64,7 @@
 
 <p>Apache is installed but not yet running. The <em>status</em> option to <code>systemctl</code> show that Apache is not running and disabled on boot.</p>
 
-<pre><code># systemctl status httpd
+<pre><code># systemctl status httpd.service
 </code></pre>
 
 <p>Use <code>systemctl</code> to start Apache and enable it on reboot.</p>
@@ -79,32 +82,72 @@
 
 <p>You should be able to see the test page on the default port 80.</p>
 
-<h2 id="add-the-service-to-the-firewall">Add the Service to the Firewall</h2>
+<h2 id="firewalld">Firewalld</h2>
 
-<p>If Firewalld is not already running and enabled install it with Yum or check its status with <code>systemctl</code>.</p>
+<h3 id="start-the-firewall">Start the Firewall</h3>
+
+<p>If you installed the Basic Web Server Firewalld was also installed but needs to be started with <code>systemctl</code>.</p>
+
+<pre><code># systemctl start firewalld
+</code></pre>
+
+
+
+<h3 id="add-the-http-service-and-port-8080">Add the http Service and port 8080</h3>
 
 <p>Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic. Port 80 is the <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">well-know port</a> for http.</p>
 
+<p>Port 8080 is an alternative port for http so is added as a port not a service.</p>
+
 <pre><code># firewall-cmd --zone=public --add-service=http -permanent
+# firewall-cmd --zone=public --add-port=8080/tcp --permenent
 # firewall-cmd --reload
 </code></pre>
 
+<p>Listing the services and port should show that the commandssucceeded.</p>
+
+<pre><code># firewall-cmd --list-services
+# firewall-cmd --list-ports
+</code></pre>
+
 <p>Refresh the web page in Firefox and you should still see the testing 1, 2, 3 page.</p>
+
+
+
+<h3 id="snapshot">Snapshot</h3>
+
+<p>Now would be a good time to take a snapshot of your virtual machine.</p>
 
 <h3 id="apache-virtual-hosts">Apache Virtual Hosts</h3>
 
 <p>Virtual hosts let one Apache web server deliver content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be served from two separate directories. These directory are the <em>DocumentRoot</em> for each virtual host. It’s important that the <em>DocumentRoot</em> directive match the correct virtual host.</p>
 
-<h4 id="create-the-directories-and-content">Create the Directories and Content</h4>
+<h4 id="create-the-directories">Create the Directories</h4>
 
 <pre><code># mkdir /var/www/example.com /var/www/staff.example.com
-
-# echo "&lt;h1&gt;This is example.com.&lt;/h1&gt;&lt;p&gt;Put your name here if you want credit for the assignment.&lt;/p&gt;" &gt; /var/www/example.com/index.html
-
-# echo "&lt;h1&gt;This is staff.example.com.&lt;/h1&gt;&lt;p&gt;Put your name here if you want credit for the assignment.&lt;/p&gt;" &gt; /var/www/staff.example.com/index.html
+# mkdir /var/www/logs/example.com /var/www/logs/staff.example.com
 </code></pre>
 
 
+
+<h5 id="selinux">SELinux</h5>
+
+<p>You need to configure the logs directory with the correct SELinux context type. Currently it is set to <em>http_sys_content_t</em>.  Change that to <em>http_log_t</em></p>
+
+<pre><code># chcon -R -t http_log_t /var/www/logs
+</code></pre>
+
+<p>Test that you can reach the test page. If not place SELinux in permissiive mode for now.</p>
+
+<pre><code># setenforce 0
+</code></pre>
+
+<h4 id="create-the-content">Create the Content</h4>
+
+<pre><code># echo "&lt;h1&gt;This is example.com.&lt;/h1&gt;&lt;p&gt;Put your name here if you want credit for the assignment.&lt;/p&gt;" &gt; /var/www/example.com/index.html
+
+# echo "&lt;h1&gt;This is staff.example.com.&lt;/h1&gt;&lt;p&gt;Put your name here if you want credit for the assignment.&lt;/p&gt;" &gt; /var/www/staff.example.com/index.html
+</code></pre>
 
 <h4 id="add-the-first-virtual-host">Add the First Virtual Host</h4>
 
@@ -124,30 +167,24 @@
 <li>CustomLog</li>
 </ul>
 
-<p>You should add a <strong>Listen 8080</strong> directive in the configuration file but place it <em>outside</em> the <strong>VirtualHost</strong> tags. Do not add a <strong>Listen</strong> directive for port 80 since that directive already exists in the main configuration file.</p>
+<p>You should add a <strong>Listen 8080</strong> directive at the top of the configuration file but place it <em>outside</em> the first <strong>VirtualHost</strong> tags. Do not add a <strong>Listen</strong> directive for port 80 since that directive already exists in the main configuration file.</p>
 
 <p>When you are finished editing the config file save it and run <code>apachectl configtest</code> to check for errors. You should receive no errors accept for a <em>ServerName not found</em> warning. Follow the directions in the <em>httpd.conf</em> configuration file to fix this error. Run <code>apachectl</code> a second time to see that the error message is gone.</p>
 
 <p>Finally reload the confiuration file.</p>
 
-<pre><code># apachectl graceful
+<pre><code># apachectl restart
 </code></pre>
 
+<h4 id="test-the-examplecom-domain">Test the example.com Domain</h4>
 
-
-<h4 id="test-the-examplecom-domain">Test the example.com domain</h4>
-
-<p>Open the IP address for your <em>example.com</em> in Firefox or Chrome and you should see the correct web page.</p>
-
-
+<p>Open the IP address for your <em>example.com</em> in Firefox or Chrome and you should see the correct web page instead of the test page</p>
 
 <h4 id="add-the-second-virtual-host">Add the Second Virtual Host</h4>
 
-<p>Use the <strong>yy</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created or create a second file..</p>
+<p>Use the <strong>y</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created or create a second file.  The <strong>y</strong> command is prefixed with a number to copy or “yank” multiple lines. Example: 7yy will yank 7 lines. Then move the cursor where you want to paste and press <strong>p</strong>.</p>
 
 <p>Test the configuration and reload the config file with <code>apachectl</code>.</p>
-
-
 
 <h4 id="test-staffexamplecom">Test staff.example.com</h4>
 
@@ -156,27 +193,9 @@
 <pre><code>192.168.201.123:8080
 </code></pre>
 
-<p>It will fail since port 8080 is still closed in the firewall. </p>
-
-
-
-<h3 id="open-port-8080">Open Port 8080</h3>
-
-<p>Our second virtual host, <em>staff.example.com</em> is served from a different port so that port needs to be opened in the firewall. Port 8080 is not a standard port is it needs to be added this way.</p>
-
-<pre><code># firewall-cmd --add-port=8080/tcp --permanent
-# firewall-cmd --reload 
-</code></pre>
-
-<p>Retry the IP address and it will still fail since Apache is listening only on the default port 80.</p>
-
-<!--### Listen on Port 8080&#10;&#10;Add a *Listen* directive to the top of the *vhosts.conf* file outside of the virtual host stanza. Reload the config file as you did above and retry *staff.example.com*. You should see the correct content.-->
-
-<!--## Debug the Assignment-->
-
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Let me verify your work by connecting to your virtual machine from the instructor workstation.</p>
+<p>Let me verify your work by connecting to your virtual machine from the instructor workstation in class.</p>
 
 <h2 id="resources">Resources</h2>
 
