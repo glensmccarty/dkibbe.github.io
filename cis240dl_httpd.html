@@ -2,6 +2,10 @@
 
 
 
+<h2 id="introduction">Introduction</h2>
+
+<p>Apache is the most popular web server and is the program that made Linux popular with ISPs.</p>
+
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
 <p><em>After successfully completing this assignment you will be able to:</em></p>
@@ -21,17 +25,23 @@
 
 <p>Use the CentOS 7 ova for this assignment. CentOS uses a basic <code>vi</code> text editor by default so you might want to install <code>vim</code> or <code>nano</code>.</p>
 
+
+
 <h3 id="set-networking-to-bridged">Set Networking to Bridged</h3>
 
 <p>In VirutalBox set the network adapter to <em>Bridged Network</em> and under <em>Advanced</em> generate a new random MAC address. When you boot up the virtual machine use <code>ip addr show</code> to confirm you are on the 192.168.<strong>2xx</strong>.0/24 network. Where <strong>xx</strong> is the classroom number. <em>Example:</em> BA 1E is 201 and BA 13 is 213.</p>
 
+
+
+<h3 id="snapshot">Snapshot</h3>
+
+<p>Make a snapshot of your virtual machine so you can roll back if needed.</p>
+
 <!--## Terms You Should Know-->
-
-
 
 <h3 id="install-apache">Install Apache</h3>
 
-<p>Use <code>yum grouplist</code> to find the <em>Basic Web Server</em> and the install it using group install.</p>
+<p>Use <code>yum grouplist</code> to find the <em>Basic Web Server</em> and the install it using <code>groupinstall</code>.</p>
 
 <pre><code># yum groupinstall "Basic Web Server"
 </code></pre>
@@ -47,11 +57,9 @@
 # rpm -qc httpd
 </code></pre>
 
-
-
 <h4 id="start-apache">Start Apache</h4>
 
-<p>Apache is installed but not yet running. The <em>status</em> option to <code>systemctl</code> show that A[ache is not running and disabled on boot.</p>
+<p>Apache is installed but not yet running. The <em>status</em> option to <code>systemctl</code> show that Apache is not running and disabled on boot.</p>
 
 <pre><code># systemctl status httpd
 </code></pre>
@@ -62,8 +70,6 @@
 # systemctl enable httpd.service
 </code></pre>
 
-
-
 <h2 id="test-apache">Test Apache</h2>
 
 <p>Try opening the default web page from Firefox or Chrome on the Windows host. Use <code>ip</code> to discover the correct IP address for your server.</p>
@@ -71,25 +77,23 @@
 <pre><code># ip addr show
 </code></pre>
 
-<p>The web page can not be reached yet since the <em>http</em> service has not been added to the firewall.</p>
+<p>You should be able to see the test page on the default port 80.</p>
 
+<h2 id="add-the-service-to-the-firewall">Add the Service to the Firewall</h2>
 
+<p>If Firewalld is not already running and enabled install it with Yum or check its status with <code>systemctl</code>.</p>
 
-<h2 id="adding-a-service-to-the-firewall">Adding a Service to the Firewall</h2>
+<p>Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic. Port 80 is the <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">well-know port</a> for http.</p>
 
-<p>If Firewalld is not already running and enabled if install it with Yum. Use the <code>firewall-cmd</code> command to open the default port 80 for Web traffic. Port 80 is the <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">well-know port</a> for http.</p>
-
-<pre><code># firewall-cmd --add-service http
-# firewall-cmd --list-services
+<pre><code># firewall-cmd --zone=public --add-service=http -permanent
+# firewall-cmd --reload
 </code></pre>
 
 <p>Refresh the web page in Firefox and you should still see the testing 1, 2, 3 page.</p>
 
 <h3 id="apache-virtual-hosts">Apache Virtual Hosts</h3>
 
-<p>Virtual hosts let one Apache web server deliver content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be served from two separate directories <em>/var/www/example.com</em> and <em>/var/www/staff.example.com</em>.</p>
-
-
+<p>Virtual hosts let one Apache web server deliver content for many domains. There are two types of virtual hosts <em>IP-based</em> and <em>named-based</em>. You will be creating two IP-based virtual hosts <em>example.com</em> on port 80 and <em>staff.example.com</em> on port 8080. The content for these sites will be served from two separate directories. These directory are the <em>DocumentRoot</em> for each virtual host. It’s important that the <em>DocumentRoot</em> directive match the correct virtual host.</p>
 
 <h4 id="create-the-directories-and-content">Create the Directories and Content</h4>
 
@@ -129,15 +133,21 @@
 <pre><code># apachectl graceful
 </code></pre>
 
+
+
 <h4 id="test-the-examplecom-domain">Test the example.com domain</h4>
 
 <p>Open the IP address for your <em>example.com</em> in Firefox or Chrome and you should see the correct web page.</p>
+
+
 
 <h4 id="add-the-second-virtual-host">Add the Second Virtual Host</h4>
 
 <p>Use the <strong>yy</strong> command in <strong>vi</strong> to copy and paste a second virtual host stanza for <em>staff.example.com</em> in the <em>vhosts.conf</em> file you created or create a second file..</p>
 
 <p>Test the configuration and reload the config file with <code>apachectl</code>.</p>
+
+
 
 <h4 id="test-staffexamplecom">Test staff.example.com</h4>
 
@@ -154,31 +164,19 @@
 
 <p>Our second virtual host, <em>staff.example.com</em> is served from a different port so that port needs to be opened in the firewall. Port 8080 is not a standard port is it needs to be added this way.</p>
 
-<pre><code># firewall-cmd --add-port=8080/tcp
-# firewall-cmd --list-ports 
+<pre><code># firewall-cmd --add-port=8080/tcp --permanent
+# firewall-cmd --reload 
 </code></pre>
 
 <p>Retry the IP address and it will still fail since Apache is listening only on the default port 80.</p>
 
+<!--### Listen on Port 8080&#10;&#10;Add a *Listen* directive to the top of the *vhosts.conf* file outside of the virtual host stanza. Reload the config file as you did above and retry *staff.example.com*. You should see the correct content.-->
 
-
-<h3 id="listen-on-port-8080">Listen on Port 8080</h3>
-
-<p>Add a <em>Listen</em> directive to the top of the <em>vhosts.conf</em> file outside of the virtual host stanza. Reload the config file as you did above and retry <em>staff.example.com</em>. You should see the correct content.</p>
-
-
-
-<h2 id="debug-the-assignment">Debug the Assignment</h2>
-
-
+<!--## Debug the Assignment-->
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Use the Snipping tool in Windows (or Screenshot in Linux) to submit a cropped screenshot of the contents of the index.html page for each site being displayed in a browser on Windows.  <em>Be sure to include the address bar in your screenshot.</em> See example below.</p>
-
-<p><img src="http://classfiles.dennisk.fastmail.net/apache_submit.png" alt="enter image description here" title=""></p>
-
-
+<p>Let me verify your work by connecting to your virtual machine from the instructor workstation.</p>
 
 <h2 id="resources">Resources</h2>
 
