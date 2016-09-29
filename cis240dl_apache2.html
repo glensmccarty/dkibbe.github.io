@@ -67,8 +67,8 @@ p apache2  - Apache HTTP Server metapackage
 
 <p>Current status of the firewall.</p>
 
-<p>sudo ufw status <br>
-tatus: inactive</p>
+<p>$ sudo ufw status <br>
+status: inactive</p>
 
 <p>Open port 80 for web traffic.</p>
 
@@ -82,6 +82,11 @@ Rule added (v6)
 <pre><code>$ sudo ufw allow 8080
 Rule added
 Rule added (v6)
+</code></pre>
+
+<p>Enable firewall.</p>
+
+<pre><code>$ sudo ufw enable
 </code></pre>
 
 <p>New status of the firewall</p>
@@ -124,8 +129,6 @@ New profile: skip
 </tbody></table>
 
 
-
-
 <h2 id="apache-configuration-files">Apache Configuration Files</h2>
 
 <p>On Ubuntu the Apache2 configuration files are in <em>/etc/apache2</em> and are split between several files. see <a href="https://help.ubuntu.com/12.04/serverguide/httpd.html#http-configuration">this page</a> for what each file does.</p>
@@ -140,12 +143,15 @@ New profile: skip
 
 <p>See the last lines in <em>/etc/apache2/apache2.conf</em> for more information.  Especially the <em>README.Debian</em> file in <em>/usr/share/doc/apache2.</em></p>
 
-<p>You can copy the default virtual host file to use as a template for the new virtual host. Give the new file the name <em>001-.example-com.conf.</em></p>
+<p>You can copy the default virtual host file to use as a template for the new virtual hosts. Give the new file the name <em>001-.example-com.conf.</em></p>
 
 <pre><code>$ sudo cp 000-default.conf 000-example-com.conf
 </code></pre>
 
-<p>Then edit <strong>ServerAdmin</strong> and <strong>DocumentRoot</strong>. You do not need toedit the log entries.</p>
+<p>Then edit <strong>ServerAdmin</strong> and <strong>DocumentRoot</strong>. You do not need to edit the log entries. Change the <strong>VirtualHost *:80&gt;</strong> tag and replace the asterisk with your IP address.</p>
+
+<pre><code>&lt;VirtualHost 192.168.201.123:80&gt;
+</code></pre>
 
 <p>The files in <em>/etc/apache2/sites-available</em> need to be linked to <em>/etc/apache2/sites-enabled</em>. The <code>a2ensite</code> command makes that easy.</p>
 
@@ -161,6 +167,11 @@ New profile: skip
 
 <p>As in CentOS you need to create the DocumentRoot directories and create an <em>index.html</em> file in each.  Create  <em>/var/www/example.com/</em> and <em>/var/www/staff.example.com/</em>. Place a unique <em>index.html</em> file there.</p>
 
+<p>Repeat for staff.example.com making the appropriate  changes. Set the virtual tag to your IP address and port 8080.</p>
+
+<pre><code>&lt;VirtualHost 192.168.203.123:8080&gt;
+</code></pre>
+
 <h2 id="portsconf">Ports.conf</h2>
 
 <p>This file is where you add the <strong>Listen 8080</strong> directive.</p>
@@ -169,14 +180,14 @@ New profile: skip
 
 <p>Don’t forget to restart Apache.</p>
 
-<pre><code>$ sudo apachectl restart
+<pre><code>$ sudo apachectl graceful
 </code></pre>
+
+<p>The <strong>graceful</strong> option causes Apache to reread the configuration files without dropping connections.</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a cropped screenshot of configuration file for the staff.example.com virtual host and upload it to the assignment.</p>
-
-
+<p>I’ll verify your results in class.</p>
 
 <h2 id="resources">Resources</h2>
 
