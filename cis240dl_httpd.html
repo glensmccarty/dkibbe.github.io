@@ -160,11 +160,11 @@ example.com/ html/ logs/ staff.example.com/
 <p>The Apache Docs under <em>Resources</em> below will explain the purpose of each directive.  Add directives for each domain as follows:</p>
 
 <ul>
-<li>ServerAdmin</li>
-<li>DocumentRoot</li>
-<li>ServerName</li>
-<li>ErrorLog</li>
-<li>CustomLog</li>
+<li>ServerAdmin (Use webmaster@example.com or webmaster@staff.example.com.)</li>
+<li>DocumentRoot (Make sure this is correct.)</li>
+<li>ServerName (example.com or staff.example.com)</li>
+<li>ErrorLog (Use the full path to the logs directory you created.)</li>
+<li>CustomLog (Use the full path to the logs directory you created.)</li>
 </ul>
 
 <p>You should add a <strong>Listen 8080</strong> directive at the top of the configuration file but place it <em>outside</em> the first <strong>VirtualHost</strong> tags. Do not add a <strong>Listen</strong> directive for port 80 since that directive already exists in the main configuration file.</p>
