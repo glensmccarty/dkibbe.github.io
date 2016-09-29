@@ -2,9 +2,13 @@
 
 <p><img src="http://rtfq.net/wp-content/uploads/2012/01/apache-ubuntu1.png" alt="Apache on Ubuntu" title=""></p>
 
+
+
 <h2 id="overview">Overview</h2>
 
 <p>Installing Apache on Ubuntu is different than the installation on CentOS.  The package name is different.  Configuration files are different as well. </p>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -15,6 +19,8 @@
 <li><strong>/usr/share/doc/apache2:</strong> Contains sample configuration files and READMEs <em>Note:</em> This directory should be one of the first places to look for additional documentation about a package.</li>
 <li><strong>a2ensite:</strong> Created the symlink in <em>/etc/apache2/sites-enabled</em></li>
 </ul>
+
+
 
 <h2 id="preparation">Preparation</h2>
 
@@ -29,6 +35,8 @@
 <p><strong>tasksel</strong> is a Debian tool for installing services that require multiple packages similar to <strong>yum groupinstall.</strong>  When you first install Ubuntu Server it will offer to install a LAMP server.  You can run <strong>tasksel</strong> later to install any services such as a mail server or OpenSSH server.</p>
 
 <p>Since we don’t need all the features of a LAMP (Linux, Apache, MySQL, PHP) server for this assignment you will just install Apache2.</p>
+
+
 
 <h2 id="installing-apache2">Installing Apache2</h2>
 
@@ -49,6 +57,8 @@ p apache2  - Apache HTTP Server metapackage
 </code></pre>
 
 <p>Did you notice that Apache was already up and running?  You still need to configure the firewall which is disabled by default.</p>
+
+
 
 <h2 id="the-ufw-firewall-tool">The ufw Firewall Tool</h2>
 
@@ -115,9 +125,13 @@ New profile: skip
 </tbody></table>
 
 
+
+
 <h2 id="apache-configuration-files">Apache Configuration Files</h2>
 
 <p>On Ubuntu the Apache2 configuration files are in <em>/etc/apache2</em> and are split between several files. see <a href="https://help.ubuntu.com/12.04/serverguide/httpd.html#http-configuration">this page</a> for what each file does.</p>
+
+<p>The <code>dpkg -L apache2</code> command will list all the files installed by Apache.</p>
 
 <h2 id="creating-an-ip-based-virtual-hosts">Creating an IP-Based Virtual Hosts</h2>
 
@@ -127,27 +141,36 @@ New profile: skip
 
 <p>See the last lines in <em>/etc/apache2/apache2.conf</em> for more information.  Especially the <em>README.Debian</em> file in <em>/usr/share/doc/apache2.</em></p>
 
-<p>You can copy the default virtual host file to use as template for the new virtual host. Give the new file the name <em>001-staff.example.conf.</em></p>
+<p>You can copy the default virtual host file to use as a template for the new virtual host. Give the new file the name <em>001-.example-com.conf.</em></p>
 
-<p>The <em>Listen 8080</em> is placed in <em>ports.conf.</em></p>
+<pre><code>$ sudo cp 000-default.conf 000-example-com.conf
+</code></pre>
+
+<p>Then edit <strong>ServerAdmin</strong> and <strong>DocumentRoot</strong>. You do not need toedit the log entries.</p>
 
 <p>The files in <em>/etc/apache2/sites-available</em> need to be linked to <em>/etc/apache2/sites-enabled</em>. The <code>a2ensite</code> command makes that easy.</p>
 
+<p>First disable the default conf file in <em>sites-enabled</em></p>
+
+<pre><code>$ sudo a2dissite 000-default.conf
+</code></pre>
+
+<p>Next enable the virtual hosts.</p>
+
+<pre><code>$ sudo a2ensite 001-example-com.conf
+</code></pre>
+
 <p>As in CentOS you need to create the DocumentRoot directories and create an <em>index.html</em> file in each.  Create  <em>/var/www/example.com/</em> and <em>/var/www/staff.example.com/</em>. Place a unique <em>index.html</em> file there.</p>
+
+<h2 id="portsconf">Ports.conf</h2>
+
+<p>This file is where you add the <strong>Listen 8080</strong> directive.</p>
+
+<h2 id="restart-apache">Restart Apache</h2>
 
 <p>Don’t forget to restart Apache.</p>
 
-<pre><code>$ sudo /etc/init.d/apache2 restart
-</code></pre>
-
-<p>or</p>
-
-<pre><code>$ sudo service restart apache2
-</code></pre>
-
-<p>or</p>
-
-<pre><code>$ sudo apache2crl restart
+<pre><code>$ sudo apachectl restart
 </code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
