@@ -1,131 +1,625 @@
-<h1 id="fail2ban-logwatch">Fail2ban &amp; Logwatch</h1>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Fail2ban</title>
+<!-- 2016-10-07 Fri 10:10 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Dennis Kibbe" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
 
-<p>Fail2ban and Logwatch are easy to configure utilities that increase security on services.</p>
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
 
-<p>Fail2ban will block the IP address of failed login attempt and Logwatch will email you with a log summary of suspicious activity.</p>
+<script type="text/javascript" src="http://orgmode.org/org-info.js">
+/**
+ *
+ * @source: http://orgmode.org/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://orgmode.org/org-info.js.
+ *
+ * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://orgmode.org/org-info.js.
+ *
+ */
+</script>
 
-<h2 id="assignment-objectives">Assignment Objectives</h2>
+<script type="text/javascript">
 
-<p><em>After successfully completing this assignment you will be able to:</em></p>
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
 
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "0");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Fail2ban</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
 <ul>
-<li>Install and configure fail2ban.</li>
-<li>Install and configure logwatch.</li>
+<li><a href="#sec-1">1. Introduction</a></li>
+<li><a href="#sec-2">2. Assignment Objectives</a></li>
+<li><a href="#sec-3">3. Terms to Know</a></li>
+<li><a href="#sec-4">4. Preparation</a>
+<ul>
+<li><a href="#sec-4-1">4.1. Install EPEL</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. Install Fail2ban</a></li>
+<li><a href="#sec-6">6. Firewalld</a></li>
+<li><a href="#sec-7">7. Configuration</a>
+<ul>
+<li><a href="#sec-7-1">7.1. <code>fail2ban.local</code></a></li>
+<li><a href="#sec-7-2">7.2. <code>jail.local</code></a></li>
+</ul>
+</li>
+<li><a href="#sec-8">8. Start and Enable fail2ban</a></li>
+<li><a href="#sec-9">9. fail2ban-client</a></li>
+<li><a href="#sec-10">10. Protect SSH</a>
+<ul>
+<li><a href="#sec-10-1">10.1. Edit jail.local</a></li>
+<li><a href="#sec-10-2">10.2. Restart the Service</a></li>
+</ul>
+</li>
+<li><a href="#sec-11">11. Firewall Rules</a></li>
+<li><a href="#sec-12">12. What to Submit</a></li>
+<li><a href="#sec-13">13. Test Fail2ban</a>
+<ul>
+<li><a href="#sec-13-1">13.1. Watch the Log</a></li>
+<li><a href="#sec-13-2">13.2. Login</a></li>
+</ul>
+</li>
+<li><a href="#sec-14">14. What to Submit</a></li>
+<li><a href="#sec-15">15. Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Fail2ban is a service that runs in the background to mitigate attackes on services such as SSH. It does this by creating a custom firewall chain to which it adds the IP address of the attacker for a set period of time &#x2013; 10 minutes by default.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Assignment Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<i>After successfully completing this assignment you will be able to:</i>
+</p>
+
+<ul class="org-ul">
+<li>Install fail2ban.
+</li>
+<li>Configure Fail2ban to protect a service.
+</li>
+<li>Identify Firewall rules.
+</li>
+<li>Demonstrate how Fail2ban is used to block an IP Address.
+</li>
+<li>Identify banned IP addresses in the Fail2ban log.
+</li>
+<li>Use iptables to list filewall rules.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Terms to Know</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+• fail2ban.conf
+• jail.conf
+• iptables
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Preparation</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<i>Before starting this assignment you should:</i>
+</p>
+
+<ol class="org-ol">
+<li>Set networking for the CentOS 7 virtual machine to Bridged Adapter.
+</li>
+<li>Refresh the MAC address.
+</li>
+<li>Take a snapshot of the virtual machine before starting.
+</li>
+<li>Test that the IP address of the virtual machine is on the classroom network.
+</li>
+<li>Confirm that you can login to the virtual machine using puTTY.
+</li>
+<li>Read /usr/share/doc/fail2ban-server-0.9.3/README.md for a quick introduction to Fail2ban.
+</li>
+</ol>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Install EPEL</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+EPEL or <i>Extra Packages for Enterprise Linux</i> is a repo with packages from Fedora compiled to run on CentOS or Red Hat Enterprise Linux.
+</p>
+
+<pre class="example">
+# yum install epel-release
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Install Fail2ban</h2>
+<div class="outline-text-2" id="text-5">
+<pre class="example">
+# yum install fail2ban
+</pre>
+
+<p>
+Installing Fail2ban should also install firewalld as a dependency.
+</p>
+
+<p>
+After installation start fail2ban.
+</p>
+
+<pre class="example">
+# systemctl start fail2ban.service
+</pre>
+
+<p>
+then enable it on boot.
+</p>
+
+<pre class="example">
+# system enable fail2ban.service
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Firewalld</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Installing <code>fail2ban</code> should also install firewalld.  Firewalld should be started and enabled as well.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Configuration</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+The main configuration files are <i>fail2ban.conf</i> and <i>jail.conf</i>  but you should not edit these directly. Instead copy these to <i>fail2ban.local</i> and <i>jail.local</i> respectively. You will make changes to these copies.
+</p>
+
+<pre class="example">
+# cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
+</pre>
+
+<p>
+and
+</p>
+
+<pre class="example">
+# cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+</pre>
+</div>
+
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> <code>fail2ban.local</code></h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+In this file you can set gobal defaults such as:
+</p>
+
+<ul class="org-ul">
+<li>Loglevel
+</li>
+<li>Logtarget
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> <code>jail.local</code></h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+<i>jail.local</i> contains a section for default settings plus a section for each service.
+</p>
+
+<p>
+<i>The settings made here include:</i>
+</p>
+
+<ul class="org-ul">
+<li>IP addresses to ignore.
+</li>
+<li>Length of time in seconds to ban an IP address.
+</li>
+<li>findtime is the length of time in which retries are counted.
+</li>
+<li>Maximum number of retries before an IP address is banned.
+</li>
 </ul>
 
-<h2 id="preparation">Preparation</h2>
+<p>
+The file is long and well commented.  You can use this <code>grep</code> command to make it easier to read.
+</p>
 
-<ul>
-<li>Set networking for the CentOS 7 virtual machine to bridged.</li>
-<li>Take a snapshot of the virtual machine before starting.</li>
-<li>Test IP address.</li>
-</ul>
-
-<h3 id="install-epel">Install EPEL</h3>
-
-<pre><code># yum install epel-release
-</code></pre>
-
-<h2 id="install-fail2ban">Install Fail2ban</h2>
-
-<pre><code># yum install fail2ban
-</code></pre>
-
-<p>After installation <code>rpm -qi fail2ban</code> will give you a description of the program.</p>
-
-<h2 id="firewalld">Firewalld</h2>
-
-<p>Install and enable firewalld if needed.</p>
-
-<h2 id="configuration">Configuration</h2>
-
-<!--### Filters and Actions&#10;&#10;Fail2ban definds a number of filters..&#10;&#10;    # ls /etc/fail2ban/filter.d/ | sed -e 's,\.config'-->
-
-<p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/customisation.local</em> and edit this file rather than the main config file.</p>
-
-<h3 id="ip-addresses-to-ignore">IP Addresses to Ignore</h3>
-
-<p>You can set IP addresses that will never be blocked by fail2ban.</p>
-
-<pre><code>[DEFAULT]
-# "ignoreip" can be an IP address, a CIDR mask or a DNS host
-ignoreip = 127.0.0.1
-bantime  = 3600
-maxretry = 3
-</code></pre>
-
-<h3 id="email">Email</h3>
-
-<p>If you wish to be notified of bans by email, modify this line with your email address:</p>
-
-<pre><code>destemail = your_email@domain.com
-</code></pre>
-
-<p>Then find the line:</p>
-
-<pre><code>action = %(action_)s 
-</code></pre>
-
-<p>and change it to</p>
-
-<pre><code>action = %(action_mw)s
-</code></pre>
+<pre class="example">
+# grep -vE '(^#|^$)' jail.local | less
+</pre>
+</div>
+</div>
+</div>
 
 
-
-<h3 id="jails">Jails</h3>
-
-<p>Jails are the rules which fail2ban apply to a given application/log. Here is an example for the SSH server.</p>
-
-<pre><code>[ssh]
-
-enabled = true
-port    = ssh
-filter  = sshd
-logpath  = /var/log/auth.log
-maxretry = 3
-</code></pre>
-
-<h3 id="logging">Logging</h3>
-
-<pre><code>Fail2ban writes to /var/log/fail2ban.
-</code></pre>
-
-<h2 id="start-and-enable-fail2ban">Start and Enable fail2ban</h2>
-
-<pre><code># systemctl start fail2ban
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Start and Enable fail2ban</h2>
+<div class="outline-text-2" id="text-8">
+<pre class="example">
+# systemctl start fail2ban
 # systemctl enable fail2ban
-</code></pre>
+</pre>
+</div>
+</div>
 
-<h2 id="fail2ban-client">fail2ban-client</h2>
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> fail2ban-client</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+You can use the <code>fail2ban-client</code> utility to monitor bans.
+</p>
 
-<p>You can use the <code>fail2ban-client</code> utility to monitor bans.</p>
+<pre class="example">
+# fail2ban-client status sshd
+</pre>
+</div>
+</div>
 
-<pre><code># fail2ban-client status sshd
-</code></pre>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Protect SSH</h2>
+<div class="outline-text-2" id="text-10">
+</div><div id="outline-container-sec-10-1" class="outline-3">
+<h3 id="sec-10-1"><span class="section-number-3">10.1</span> Edit jail.local</h3>
+<div class="outline-text-3" id="text-10-1">
+<ol class="org-ol">
+<li>To protect the SSH daemon uncomment the [sshd] section in JailLocal.
+</li>
+<li>Change bantime to 60 seconds.
+</li>
+<li>Change maxretry to 3.
+</li>
+</ol>
 
-<h2 id="logwatch">Logwatch</h2>
+<p>
+After making the changes use the diff command to check your changes. Your output should look something link this.
+</p>
 
-<p>Logwatch monitors logs for "interesting" activity. Logwatch can be configured to email you each day or you can access it directly.</p>
+<pre class="example">
+[root@centos-fail2ban fail2ban]# diff jail.conf jail.local 
+20,25c20,25
+&lt; # [DEFAULT]
+&lt; # bantime = 3600
+&lt; #
+&lt; # [sshd]
+&lt; # enabled = true
+&lt; #
+---
+&gt; [DEFAULT]
+&gt; bantime = 60
+&gt; 
+&gt; [sshd]
+&gt; enabled = true
+&gt;
+</pre>
+</div>
+</div>
 
-<pre><code># logwatch --service sshd --range=Today
-</code></pre>
+<div id="outline-container-sec-10-2" class="outline-3">
+<h3 id="sec-10-2"><span class="section-number-3">10.2</span> Restart the Service</h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+After making changes to the configuration files restart the service.
+</p>
 
+<pre class="example">
+# systemctl restart fail2ban.service
+</pre>
 
+<p>
+FIXME: Firewalld should be enabled. Add this somewhere.
+</p>
+</div>
+</div>
+</div>
 
-<h2 id="what-to-submit">What to Submit</h2>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Firewall Rules</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Fail2ban creates a new firewall chain named f2b-sshd. Until an IP address is banned the chain does nothing.
+</p>
 
-<p>Sumit a screenshot of a log entry showing that Fail2ban blocked an IP address.</p>
+<pre class="example">
+:f2b-sshd - [0:0]
+-A INPUT -p tcp -m multiport --dports 22 -j f2b-sshd
+-A f2b-sshd -j RETURN
+</pre>
 
-<h2 id="resources">Resources</h2>
+<p>
+But when an IP address is banned a rule is added to the chain banning the IP address for the time configured in bantime.
+</p>
 
-<ul>
-<li><a href="http://lintut.com/install-fail2ban-on-centos-7/">fail2ban</a></li>
-<li><a href="https://www.youtube.com/watch?v=xcXheAWy7cU#t=190">Fail2ban at pycon 2014</a></li>
-<li>man 5 jail.conf</li>
-<li><a href="http://www.linux-mag.com/id/7800/">Linux Magazine: Logwatch</a></li>
+<pre class="example">
+:f2b-sshd - [0:0]
+-A INPUT -p tcp -m multiport --dports 22 -j f2b-sshd
+-A f2b-sshd -s 104.236.19.197/32 -j REJECT --reject-with icmp-port-unreachable
+-A f2b-sshd -j RETURN
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> What to Submit</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+Sumit a screenshot of a log entry showing that Fail2ban blocked an IP address.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Test Fail2ban</h2>
+<div class="outline-text-2" id="text-13">
+</div><div id="outline-container-sec-13-1" class="outline-3">
+<h3 id="sec-13-1"><span class="section-number-3">13.1</span> Watch the Log</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+Open a new terminal and use tail to continuously watch the Fail2ban log.
+</p>
+
+<pre class="example">
+# tail -F /var/log/fail2ban.log
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-13-2" class="outline-3">
+<h3 id="sec-13-2"><span class="section-number-3">13.2</span> Login</h3>
+<div class="outline-text-3" id="text-13-2">
+<ol class="org-ol">
+<li>From CentOS open a second terminal.
+</li>
+<li>Log in using the correct password. You should be able to log in easily Fail2ban will record the log in.
+</li>
+<li>Try to log in using the wrong password. After you exceed the maxretry value fail2ban will lock you out.
+</li>
+<li>Check the log and you will see that your IP address is now banned.
+</li>
+<li>Try logging again and you can't.
+</li>
+<li>Wait 60 seconds and you will see that the ban has been lifted.
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> What to Submit</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+Sumit a screenshot of the last 10 lines of <code>/var/log/fail2ban.log</code> showing that Fail2ban blocked your IP address.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> Resources</h2>
+<div class="outline-text-2" id="text-15">
+<ul class="org-ul">
+<li><a href="http://lintut.com/install-fail2ban-on-centos-7/">Install fail2ban on CentOS 7</a>
+</li>
+<li>See /usr/share/doc/fail2ban-server-0.9.3/README.md (A quick intro to Fail2ban)
+</li>
 </ul>
-
-<blockquote>
-  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
-</blockquote>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2016-09-23 Fri</p>
+<p class="author">Author: Dennis Kibbe</p>
+<p class="date">Created: 2016-10-07 Fri 10:10</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

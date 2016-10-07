@@ -7,3 +7,5 @@
 *.toc
 *.vrb
 *.el
+*.html~
+*.org~

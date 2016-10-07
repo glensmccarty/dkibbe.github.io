@@ -6,35 +6,37 @@
 #+DESCRIPTION:
 #+KEYWORDS:
 #+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
-#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+INFOJS_OPT: view:info toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
-#+LINK_UP:   
-#+LINK_HOME: 
+#+LINK_UP:   dkibbe.github.io/index.html
+#+LINK_HOME: dkibbe.github.io/index.html
+#+LINK: fedora_admin_guide  https://docs.fedoraproject.org/en-US/Fedora/24/html/System_Administrators_Guide/index.html
 #+XSLT:
 
 * Introduction
 
-  Managing users and groups is an important administrative skill.  In this assignment you'll add new user accounts from the command line but before doing that you need to make two changes.
+  Managing users and groups is an important administrative skill.  In this assignment you'll add new user accounts from the desktop and the command line.  The you will modify some account perimeters.
 
-** Assignment Objectives
+* Assignment Objectives
 
 /After successfully completing this assignment you will be able to:/
 
-1. Create new user accounts from the command line.
-2. Add a user to supplementary groups using the =usermod= command.
-3. Create content in the =/etc/skel/= directory that will be copied over to the new users' home directory.
-4. Modify system-wide login defaults.
+1. Create content in the =/etc/skel/= directory that will be copied to a new users' home directory.
+2. Modify system-wide login defaults.
+3. Create new user accounts using a desktop configuration tool
+4. Create a new user account from the command line.
+5. Add a user to a supplementary group using the =usermod= command.
 
-** Terms and Commands You Should Know
+* Terms You Should Know
 
 - /etc/passwd :: A text file that describes user login accounts for the system.
 
-- /etc/shadow :: A text file which contains the password information for the system's accounts and optional aging information.
+- /etc/shadow :: A text file which contains the passwords for accounts and optional password aging information.
 
-- /etc/group :: A text file that defines the groups on the system.
+- /etc/group :: A text file listing the members of groups on the system.
 
 - /etc/gshadow :: A text file which contains the password information for groups.
 
@@ -52,7 +54,7 @@
 
 - =passwd= :: Change a user's password.
 
-- =useradd= :: Add a new user to the system (red Hat). The =passwd= command needs to be run to set the password for the account.
+- =useradd= :: Add a new user to the system (Red Hat). The =passwd= command also needs to be run to set the password for the account.
 
 - =adduser= :: Add a new user to the system (Debian).
 
@@ -62,17 +64,17 @@
 
 - =vipw= :: Safely edit the =/etc/passwd=, =/etc/shadow=, and =/etc/group= files.
 
-- =who= :: Show who is logged into the system.
+- =who= or =w= :: Show who is logged into the system.
 
 - =id= :: Print real and effective user and group IDs.
 
-- =su= :: Switch to another user (always use with the *--login* or *-l*.
+- =su= :: Switch to another user (always use with the =--login= or =-l=).
 	
-** Preparations
+* Preparations
 
    Start a Fedora virtual machine.  Commands will be different on a Debian-based machine.
 
-** Add a File to /etc/skel
+* Add a File to /etc/skel
 
    The =/etc/skel= directory as defined in =/etc/defaults/useradd= is the place to put any files or directories you want to be copied to a user's home directory when a new user is created.  For this assignment add a /welcome.txt/ file (it can be an empty file) to the =/etc/skel= directory so it will copied to the home directories of the new accounts you create.
 
@@ -80,59 +82,70 @@
 # touch /etc/skel/welcome.txt
 #+END_EXAMPLE
 
-** Change the Maximum Days a Password May Be Used
+* Change the Maximum Days a Password May Be Used
 
-   The =/etc/login.defs= file sets defaults for creating user accounts such as when passwords expire.  Find the line that reads PASSMAXDAYS 99999 and change it to PASSMAXDAYS 90.  Be sure you create a backup before you edit the file.
+  The =/etc/login.defs= file sets defaults for creating user accounts such as when passwords expire.
+
+  Be sure you create a backup before you edit the file.
 
 #+BEGIN_EXAMPLE
-$ su -login
+$ su --login
 # cp /etc/login.defs login.defs.bak
 #+END_EXAMPLE
 
-** Creating New Users
+  Find the line that reads *PASSMAXDAYS 99999* and change it to *PASSMAXDAYS 90*.
 
-*** From the GUI
+* Creating New Users
 
-    Fedora has a graphical tool for creating new users.  See the Fedora System Administrative Guide under resources for how to use it to create a new user /Jay Student/.  After creating the account logout of Tux and log in as /jaystudent/.  Note that the /welcome.txt/ file you created is in the home directory.  Run =chage -l jaystudent= and note when the password will expire and that the account does not expire.
+** From the GUI
 
-*** From the Command Line
+   Fedora has a graphical tool for creating new users.  See the Fedora System Administrative Guide under resources for how to use it to create a new user /Jay Student/ with login as /jstudent/.  After creating the account logout as Tux and log in as /jstudent/.  Note that the /welcome.txt/ file you created is in the home directory.  Run =chage -l jstudent= and note when the password will expire and that the account does not expire.
 
-    While still logged in as /jaystudent/ open a terminal and become root to create the second account.
+   While still logged in as /jstudent/ open a terminal and become root to create the second account.  Enter the root password when prompted.
 
-    Create a second account with the login =trillian= and the passphrase =Heart of Gold=.  A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.
+#+BEGIN_EXAMPLE
+$ su --login
+Password:
+#
+#+END_EXAMPLE
+
+** From the Command Line
+
+   Create a second account with the login =trillian= and the passphrase =Heart of Gold=.  A passphrase can be more secure than a password since a passphrase can contain spaces and longer passphrases can be more easily remembered.
 
 #+BEGIN_EXAMPLE
 # useradd -c "Tricia McMillan, Starship Heart of Gold" trillian
 # passwd trillian
 #+END_EXAMPLE
 
-**** Add a Supplemental Group
+* Add a Supplemental Group
 
-     Next add =trillian= to the =wheel= supplementary group.  Be sure to use the capital *-G* option.
+  Next add =trillian= to the =wheel= supplementary group.  Be sure to use a capital *
+G*.
 
 #+BEGIN_EXAMPLE
 # usermod -aG wheel trillian
 #+END_EXAMPLE
 
-**** Modify Account Expiration
+* Modify Account Expiration
 
-     Next change the account expiration to 120 days from today.  First display the account entry in the =passwd= file so you can compare the entry after making the change.
+   Next change the account expiration to approx. *120 days* from today.  First display the account entry in the =shadow= file so you can compare the entry after making the change.
 
 #+BEGIN_EXAMPLE
-$ sudo grep trillian /etc/shadow
-$ sudo chage -E YYYY-MM-DD trillian
-$ sudo grep trillian /etc/shadow
+# grep trillian /etc/shadow
+# chage -E YYYY-MM-DD trillian
+# grep trillian /etc/shadow
 #+END_EXAMPLE
 
-** What to Submit
+* What to Submit
 
-   /Submit a screenshot of the following:/
+   /Logged in as root submit a single screenshot of the following:/
 
--  The output of =id jaystudent=
+-  The output of =id jstudent=
 -  The output of =id trillian=.
 -  The output of =chage -l trillian=
 
-** Resources
+* Resources
 
 - man 5 login.defs
 - man adduser

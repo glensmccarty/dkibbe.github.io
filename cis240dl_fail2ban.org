@@ -1,0 +1,207 @@
+#+SETUPFIlE: ~/.emacs.d/org-templates/level-0.org
+#+TITLE:     Fail2ban
+#+AUTHOR:    Dennis Kibbe
+#+EMAIL:     dennis.kibbe@mesacc.edu
+#+DATE:      2016-09-23 Fri
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:info toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:  http://dkibbe.github.io/index.html
+#+LINK_HOME: http://dkibbe.github.io/index.html
+#+LINK: 
+#+XSLT:
+
+* Introduction
+
+  Fail2ban is a service that runs in the background to mitigate attacks on services such as SSH. It does this by creating a custom firewall chain to which it adds the IP address of the attacker for a set period of time -- 10 minutes by default.
+
+* Assignment Objectives
+
+/After successfully completing this assignment you will be able to:/
+
+- Install fail2ban.
+- Configure Fail2ban to protect a service.
+- Identify Firewall rules.
+- Demonstrate how Fail2ban is used to block an IP Address.
+- Identify banned IP addresses in the Fail2ban log.
+- Use iptables to list filewall rules.
+
+* Terms to Know
+
+• fail2ban.conf
+• jail.conf
+• iptables
+
+* Preparation
+
+/Before starting this assignment you should:/
+
+1. Set networking for the CentOS 7 virtual machine to Bridged Adapter.
+2. Refresh the MAC address.
+3. Take a snapshot of the virtual machine before starting.
+4. Test that the IP address of the virtual machine is on the classroom network.
+5. Confirm that you can login to the virtual machine using puTTY.
+6. Read /usr/share/doc/fail2ban-server-0.9.3/README.md for a quick introduction to Fail2ban.
+
+** Install EPEL
+
+   EPEL or /Extra Packages for Enterprise Linux/ is a repo with packages from Fedora compiled to run on CentOS or Red Hat Enterprise Linux.
+
+    : # yum install epel-release
+
+* Install Fail2ban
+
+   : # yum install fail2ban
+
+Installing Fail2ban should also install firewalld as a dependency.
+
+After installation start fail2ban.
+
+ : # systemctl start fail2ban.service
+
+then enable it on boot.
+
+: # system enable fail2ban.service
+
+* Firewalld
+
+  Installing =fail2ban= should also install firewalld.  Firewalld should be started and enabled as well.
+
+* Configuration
+
+The main configuration files are /fail2ban.conf/ and /jail.conf/  but you should not edit these directly. Instead copy these to /fail2ban.local/ and /jail.local/ respectively. You will make changes to these copies.
+
+: # cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
+
+and
+
+: # cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+** =fail2ban.local=
+
+   In this file you can set gobal defaults such as:
+
+- Loglevel
+- Logtarget
+
+** =jail.local=
+
+   /jail.local/ contains a section for default settings plus a section for each service.
+
+/The settings made here include:/
+
+- IP addresses to ignore.
+- Length of time in seconds to ban an IP address.
+- findtime is the length of time in which retries are counted.
+- Maximum number of retries before an IP address is banned.
+
+The file is long and well commented.  You can use this =grep= command to make it easier to read.
+
+: # grep -vE '(^#|^$)' jail.local | less
+
+
+* Start and Enable fail2ban
+
+#+BEGIN_EXAMPLE
+    # systemctl start fail2ban
+    # systemctl enable fail2ban
+#+END_EXAMPLE
+
+* fail2ban-client
+
+   You can use the =fail2ban-client= utility to monitor bans.
+
+#+BEGIN_EXAMPLE
+    # fail2ban-client status sshd
+#+END_EXAMPLE
+
+* Protect SSH
+
+** Edit jail.local
+
+1. To protect the SSH daemon uncomment the [sshd] section in JailLocal.
+2. Change bantime to 60 seconds.
+3. Change maxretry to 3.
+
+After making the changes use the diff command to check your changes. Your output should look something link this.
+
+#+BEGIN_EXAMPLE
+[root@centos-fail2ban fail2ban]# diff jail.conf jail.local 
+20,25c20,25
+< # [DEFAULT]
+< # bantime = 3600
+< #
+< # [sshd]
+< # enabled = true
+< #
+---
+> [DEFAULT]
+> bantime = 60
+> 
+> [sshd]
+> enabled = true
+>
+#+END_EXAMPLE
+
+** Restart the Service
+
+   After making changes to the configuration files restart the service.
+
+: # systemctl restart fail2ban.service
+
+FIXME: Firewalld should be enabled. Add this somewhere.
+
+* Firewall Rules
+
+  Fail2ban creates a new firewall chain named f2b-sshd. Until an IP address is banned the chain does nothing.
+
+#+BEGIN_EXAMPLE
+:f2b-sshd - [0:0]
+-A INPUT -p tcp -m multiport --dports 22 -j f2b-sshd
+-A f2b-sshd -j RETURN
+#+END_EXAMPLE
+
+But when an IP address is banned a rule is added to the chain banning the IP address for the time configured in bantime.
+
+#+BEGIN_EXAMPLE
+:f2b-sshd - [0:0]
+-A INPUT -p tcp -m multiport --dports 22 -j f2b-sshd
+-A f2b-sshd -s 104.236.19.197/32 -j REJECT --reject-with icmp-port-unreachable
+-A f2b-sshd -j RETURN
+ #+END_EXAMPLE
+
+* What to Submit
+
+  Sumit a screenshot of a log entry showing that Fail2ban blocked an IP address.
+
+* Test Fail2ban
+
+** Watch the Log
+
+   Open a new terminal and use tail to continuously watch the Fail2ban log.
+
+: # tail -F /var/log/fail2ban.log
+
+** Login
+
+1. From CentOS open a second terminal.
+2. Log in using the correct password. You should be able to log in easily Fail2ban will record the log in.
+3. Try to log in using the wrong password. After you exceed the maxretry value fail2ban will lock you out.
+4. Check the log and you will see that your IP address is now banned.
+5. Try logging again and you can't.
+6. Wait 60 seconds and you will see that the ban has been lifted.
+
+* What to Submit
+
+Sumit a screenshot of the last 10 lines of =/var/log/fail2ban.log= showing that Fail2ban blocked your IP address.
+
+* Resources
+
+- [[http://lintut.com/install-fail2ban-on-centos-7/][Install fail2ban on CentOS 7]]
+- See /usr/share/doc/fail2ban-server-0.9.3/README.md (A quick intro to Fail2ban)
+
