@@ -1,10 +1,12 @@
-<h1 id="the-apache-web-server-on-ubuntu-1404-lts">The Apache Web Server on Ubuntu 14.04 LTS</h1>
+<h1 id="the-apache-web-server-on-ubuntu-1604-lts">The Apache Web Server on Ubuntu 16.04 LTS</h1>
 
 <p><img src="http://rtfq.net/wp-content/uploads/2012/01/apache-ubuntu1.png" alt="Apache on Ubuntu" title=""></p>
 
 <h2 id="overview">Overview</h2>
 
 <p>Installing Apache on Ubuntu is different than the installation on CentOS.  The package name is different.  Configuration files are different as well. </p>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -13,7 +15,10 @@
 <li><strong>tasksel:</strong> A user interface for installing tasks such as a LAMP server.</li>
 <li><strong>aptitude:</strong> High-level interface to the package manager <em>dpkg</em>.</li>
 <li><strong>/usr/share/doc/apache2:</strong> Contains sample configuration files and READMEs <em>Note:</em> This directory should be one of the first places to look for additional documentation about a package.</li>
+<li><strong>sites-available:</strong> Directory containing virtual host config files.</li>
+<li><strong>site-enabled:</strong> Sites linked here are active.</li>
 <li><strong>a2ensite:</strong> Created the symlink in <em>/etc/apache2/sites-enabled</em></li>
+<li><strong>a2dissite:</strong> Remove the symlink in <em>/etc/apache2/sites-enabled</em></li>
 </ul>
 
 <h2 id="preparation">Preparation</h2>
@@ -29,6 +34,8 @@
 <p><strong>tasksel</strong> is a Debian tool for installing services that require multiple packages similar to <strong>yum groupinstall.</strong>  When you first install Ubuntu Server it will offer to install a LAMP server.  You can run <strong>tasksel</strong> later to install any services such as a mail server or OpenSSH server.</p>
 
 <p>Since we don’t need all the features of a LAMP (Linux, Apache, MySQL, PHP) server for this assignment you will just install Apache2.</p>
+
+
 
 <h2 id="installing-apache2">Installing Apache2</h2>
 
@@ -50,6 +57,8 @@ p apache2  - Apache HTTP Server metapackage
 
 <p>Did you notice that Apache was already up and running?  You still need to configure the firewall which is disabled by default.</p>
 
+
+
 <h2 id="the-ufw-firewall-tool">The ufw Firewall Tool</h2>
 
 <p>Ubuntu comes with <strong>ufw</strong> which is a very friendly and intuitive command line tool for configuring the Linux firewall.  You can type <strong>ufw help</strong> for a list of options.</p>
@@ -58,8 +67,8 @@ p apache2  - Apache HTTP Server metapackage
 
 <p>Current status of the firewall.</p>
 
-<p>sudo ufw status <br>
-tatus: inactive</p>
+<p>$ sudo ufw status <br>
+status: inactive</p>
 
 <p>Open port 80 for web traffic.</p>
 
@@ -73,6 +82,11 @@ Rule added (v6)
 <pre><code>$ sudo ufw allow 8080
 Rule added
 Rule added (v6)
+</code></pre>
+
+<p>Enable firewall.</p>
+
+<pre><code>$ sudo ufw enable
 </code></pre>
 
 <p>New status of the firewall</p>
@@ -119,6 +133,8 @@ New profile: skip
 
 <p>On Ubuntu the Apache2 configuration files are in <em>/etc/apache2</em> and are split between several files. see <a href="https://help.ubuntu.com/12.04/serverguide/httpd.html#http-configuration">this page</a> for what each file does.</p>
 
+<p>The <code>dpkg -L apache2</code> command will list all the files installed by Apache.</p>
+
 <h2 id="creating-an-ip-based-virtual-hosts">Creating an IP-Based Virtual Hosts</h2>
 
 <p>Since we can’t use domain names in Firefox to identify our virtual host because there are no DNS records for them we will set up IP address-based hosts on ports 80 and  8080.</p>
@@ -127,34 +143,51 @@ New profile: skip
 
 <p>See the last lines in <em>/etc/apache2/apache2.conf</em> for more information.  Especially the <em>README.Debian</em> file in <em>/usr/share/doc/apache2.</em></p>
 
-<p>You can copy the default virtual host file to use as template for the new virtual host. Give the new file the name <em>001-staff.example.conf.</em></p>
+<p>You can copy the default virtual host file to use as a template for the new virtual hosts. Give the new file the name <em>001-.example-com.conf.</em></p>
 
-<p>The <em>Listen 8080</em> is placed in <em>ports.conf.</em></p>
+<pre><code>$ sudo cp 000-default.conf 000-example-com.conf
+</code></pre>
+
+<p>Then edit <strong>ServerAdmin</strong> and <strong>DocumentRoot</strong>. You do not need to edit the log entries. Change the <strong>VirtualHost *:80&gt;</strong> tag and replace the asterisk with your IP address.</p>
+
+<pre><code>&lt;VirtualHost 192.168.201.123:80&gt;
+</code></pre>
 
 <p>The files in <em>/etc/apache2/sites-available</em> need to be linked to <em>/etc/apache2/sites-enabled</em>. The <code>a2ensite</code> command makes that easy.</p>
 
+<p>First disable the default conf file in <em>sites-enabled</em></p>
+
+<pre><code>$ sudo a2dissite 000-default.conf
+</code></pre>
+
+<p>Next enable the virtual hosts.</p>
+
+<pre><code>$ sudo a2ensite 001-example-com.conf
+</code></pre>
+
 <p>As in CentOS you need to create the DocumentRoot directories and create an <em>index.html</em> file in each.  Create  <em>/var/www/example.com/</em> and <em>/var/www/staff.example.com/</em>. Place a unique <em>index.html</em> file there.</p>
+
+<p>Use <em>001-example-com.conf</em> as a template for a <em>staff.example.com</em> configuration file making the appropriate changes. Set the virtual tag to your IP address and port 8080.</p>
+
+<pre><code>&lt;VirtualHost 192.168.203.123:8080&gt;
+</code></pre>
+
+<h2 id="portsconf">Ports.conf</h2>
+
+<p>This file is where you add the <strong>Listen 8080</strong> directive.</p>
+
+<h2 id="restart-apache">Restart Apache</h2>
 
 <p>Don’t forget to restart Apache.</p>
 
-<pre><code>$ sudo /etc/init.d/apache2 restart
+<pre><code>$ sudo apachectl graceful
 </code></pre>
 
-<p>or</p>
-
-<pre><code>$ sudo service restart apache2
-</code></pre>
-
-<p>or</p>
-
-<pre><code>$ sudo apache2crl restart
-</code></pre>
+<p>The <strong>graceful</strong> option causes Apache to reread the configuration files without dropping connections.</p>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a cropped screenshot of configuration file for the staff.example.com virtual host and upload it to the assignment.</p>
-
-
+<p>I’ll verify your results in class.</p>
 
 <h2 id="resources">Resources</h2>
 

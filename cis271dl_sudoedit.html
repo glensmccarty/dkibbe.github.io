@@ -1,0 +1,86 @@
+<h1 id="sudoedit">Sudoedit</h1>
+
+
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<ol>
+<li>Demonstrate that sudo can be insecure.</li>
+<li>Block execution using NOEXEC</li>
+<li>Use sudoedit to enhance security,</li>
+</ol>
+
+
+
+<h2 id="terms">Terms</h2>
+
+
+
+<h2 id="preparation">Preparation</h2>
+
+<ol>
+<li>CentOS 7</li>
+<li>Install Apache</li>
+<li>Create ssh keys</li>
+<li>reate user</li>
+</ol>
+
+
+
+<h2 id="scenario">Scenario</h2>
+
+<p>You want jstudent to edit a news page on the company web site. You give jstudent sudo permission to edit a single file. Jstudent uses that to escalate permissions and steal the private key to the company credit card server.</p>
+
+<h2 id="title"> </h2>
+
+<p>visudo -f /etc/sudoers.d/jstudent</p>
+
+<pre><code>jstudent ALL = (root) /bin/vi /var/www/html/news.html
+</code></pre>
+
+
+
+<h3 id="steal-the-keys">Steal the keys</h3>
+
+<p>Use sudo to open the news file</p>
+
+<pre><code>$ sudo vi /var/www/html/news.html
+</code></pre>
+
+
+
+<h3 id="open-a-root-shell">Open a root shell</h3>
+
+<p>From vi</p>
+
+<pre><code>:!bash
+</code></pre>
+
+<p>Copy the keys from roots home directory.</p>
+
+<h3 id="log">Log</h3>
+
+<p>Nothing suspicious in the log.</p>
+
+<pre><code># tail /var/log/secure
+</code></pre>
+
+
+
+<h2 id="defense">Defense</h2>
+
+<h3 id="noexec">NOEXEC</h3>
+
+<pre><code>jstudent ALL = NOEXEC:/bin/vi /var/www/html/news.html
+</code></pre>
+
+<h3 id="sudoedit-1">sudoedit</h3>
+
+<pre><code>jstudent ALL = sudoedit /var/www/html/news.html
+</code></pre>
+
+<p>Opens tmp file using jstudents permissions not roots</p>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
