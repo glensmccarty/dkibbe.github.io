@@ -1,2 +1,4 @@
 name: dennisk.github.io
+gems:
+  - jekyll-sitemap
 markdown: kramdown
