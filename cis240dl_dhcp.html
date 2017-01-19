@@ -4,13 +4,11 @@
 
 <h3 id="preparation">Preparation</h3>
 
-<p>Boot into CerntOS 7 minimal</p>
-
-
+<p>Boot into CentOS 7 minimal.</p>
 
 <h2 id="network-configuration-scripts">Network Configuration Scripts</h2>
 
-<p>Interfaces are configured throught scrips located in <code>/etc/sysconfig/network-scripts/</code>. <br>
+<p>Interfaces are configured through scrips located in <code>/etc/sysconfig/network-scripts/</code>. <br>
 Use <code>ip addr show</code> to list network interfaces.</p>
 
 <h2 id="release-the-current-address">Release the Current Address</h2>
@@ -19,9 +17,7 @@ Use <code>ip addr show</code> to list network interfaces.</p>
 
 <h3 id="edit-the-network-script">Edit the Network Script</h3>
 
-<p>Comment out the <strong>BOOTPROTO</strong> line in the appropriate and change the <strong>ONBOOT</strong> line to “no” in the script to disable networking on boot. Reboot the system.</p>
-
-
+<p>Comment out the <strong>BOOTPROTO</strong> line in the appropriate file and change the <strong>ONBOOT</strong> line to <strong>no</strong> in the script to disable networking on boot. Reboot the system.</p>
 
 <h2 id="bring-up-the-network">Bring Up the Network</h2>
 
@@ -37,25 +33,29 @@ Use <code>ip addr show</code> to list network interfaces.</p>
 <li>The <code>ip r</code> command does not return a route.</li>
 </ol>
 
-<p>DHCP to te Rescue</p>
+
+
+<h3 id="dhcp-to-the-rescue">DHCP to the Rescue</h3>
 
 <p>Use the DHCP client to bring up the network interface.</p>
-
-<pre><code># dhclient -r
-</code></pre>
-
-<p>Test the network again and you will see that you have an IP address and can ping Google because a route exists.</p>
-
-<h2 id="request-a-new-address">Request a New Address</h2>
 
 <pre><code># dhclient -v
 </code></pre>
 
-<p>DHCP will ask for a new lease half way and then again at 7/8th if not received.</p>
+<p>Test the network again and you will see that you have an IP address and can ping Google because a route exists.</p>
 
-<h2 id="configure-a-static-ip-address">Configure a Static IP Address</h2>
+<p>DHCP will ask for a new lease half way through the lease period and then again at 7/8th if not received.</p>
 
-<p>CentOS 7 comes with NetworkManager install. You’ll use that to configure a static IP address for the Network Interface Card (NIC).</p>
+<h2 id="request-a-new-address">Request a New Address</h2>
+
+<p>You can use <code>dhclient</code> to release an address.</p>
+
+<pre><code># dhclient -r
+</code></pre>
+
+<h2 id="configure-nameservers">Configure nameservers</h2>
+
+<p>CentOS 7 comes with NetworkManager installed. You’ll use that to configure different nameservers for the Network Interface Card (NIC).</p>
 
 <pre><code># nmtui edit
 </code></pre>
@@ -63,8 +63,7 @@ Use <code>ip addr show</code> to list network interfaces.</p>
 <p><img src="http://dennisk.fastmail.net/gallery/nm-edit-1.png" alt="NetworkManager TUI" title=""></p>
 
 <ol>
-<li>Use <code>nmtui</code> to set a static IP address.</li>
-<li>Change the hostname</li>
+<li>Use <code>nmtui</code> Change the hostname to your last name</li>
 <li>Set name servers to Google’s public name servers.</li>
 </ol>
 
@@ -72,6 +71,8 @@ Use <code>ip addr show</code> to list network interfaces.</p>
 
 <ul>
 <li><a href="http://linux.die.net/man/8/dhclient">dhclient man page</a></li>
+<li><a href="https://www.youtube.com/watch?v=5RmfF4aruzk">DHCP Addressing Overview</a> (YouTube)</li>
+<li><a href="https://www.youtube.com/watch?v=cFbxF0Sfxd4">DHCP Leases</a> (YouTube)</li>
 </ul>
 
 <hr>
