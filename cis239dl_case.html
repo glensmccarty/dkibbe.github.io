@@ -1,10 +1,8 @@
 <h1 id="case-statements">Case Statements</h1>
 
-
-
 <h2 id="introduction">Introduction</h2>
 
-<p>A case statement lets you express a series of if-then-else statements in a concise way. You can test a condition against the wildcard * for no matches.</p>
+<p>A case statement lets you express a series of if-then-else statements in a concise way. You can test a condition against the wildcard * if there are no matches.</p>
 
 <p><em>Points to remember:</em></p>
 
@@ -15,82 +13,67 @@
 <li>If there is no match the exit status is zero.</li>
 </ul>
 
-
-
 <h2 id="syntax">Syntax</h2>
 
-<pre><code>case $VARIABLE in
-match_1)
-commands_to_execute
-;;
-match_2)
-commands_to_execute
-;;
-match_3)
-commands_to_execute
-;;
-*)  No match was found.
-commands_to_execute_for_no_match
-;;
-esac
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$VAR</span>"</span> <span class="hljs-keyword">in</span>
+match_1) commands_to_execute ;;
+match_2) commands_to_execute ;;
+match_3) commands_to_execute ;;
+*) commands_to_execute_<span class="hljs-keyword">for</span>_no_match ;;
+<span class="hljs-keyword">esac</span></code></pre>
 
 <h2 id="example-if-then-else">Example if, then, else</h2>
 
-<p>This example reads the value of the <strong>LANG</strong> environmental variable to determine the language to use. To set a “fake” <strong>LANG</strong> open a sub-shell by typing type <code>bash</code> then <code>LANG=de</code> for example.</p>
+<p>This example reads the value of the <strong>day</strong> to determine what should be done on that day.</p>
 
-<pre><code>if [[ $LANG = en* ]]; then
-    echo 'Hello!'
-elif [[ $LANG = fr* ]]; then
-    echo 'Salut!'
-elif [[ $LANG = de* ]]; then
-    echo 'Guten Tag!'
-elif [[ $LANG = nl* ]]; then
-    echo 'Hallo!'
-elif [[ $LANG = it* ]]; then
-    echo 'Ciao!'
-elif [[ $LANG = es* ]]; then
-    echo 'Hola!'
-elif [[ $LANG = @(C|POSIX) ]]; then
-    echo 'hello world'
-else
-    echo 'I do not speak your language.'
-fi
-</code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-built_in">read</span> -p <span class="hljs-string">"What day of the week is it?: "</span> day
+<span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$day</span> = Mon ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Laundry"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Tues ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Recycle"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Wed ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Bills"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Thu ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Trash"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Fri ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"TGIF"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Sat ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hike"</span>
+    <span class="hljs-keyword">elif</span> [[ <span class="hljs-variable">$day</span> = Sun ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Relax"</span>
+    <span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Sorry, I do not understand."</span>
+<span class="hljs-keyword">fi</span></code></pre>
 
 <h2 id="example-case-statement">Example Case Statement</h2>
 
-<p>Set fake <strong>LANG</strong> first.</p>
+<p>The case statement is more concise.</p>
 
-<pre><code>case $LANG in
-en*) echo 'Hello!' ;;
-fr*) echo 'Salut!' ;;
-de*) echo 'Guten Tag!' ;;
-nl*) echo 'Hallo!' ;;
-it*) echo 'Ciao!' ;;
-es*) echo 'Hola!' ;;
-*)   echo 'I do not speak your language.' ;;
-esac
-</code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-built_in">read</span> -p <span class="hljs-string">"What day of the week is it?: "</span> day
+<span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$day</span>"</span> <span class="hljs-keyword">in</span>
+m|Monday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Do laundry today!"</span> ;;
+t|Tuesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the recycle!"</span> ;;
+w|Wednesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Pay bills today!"</span> ;;
+t|Thursday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the trash!"</span> ;;
+f|Friday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"TGIF!"</span> ;;
+s|Saturday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hike Papago Park!"</span> ;;
+s|Sunday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"My one day to relax!"</span> ;;
+*) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Sorry, I do not understand."</span> ;;
+<span class="hljs-keyword">esac</span></code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a script containing a case statement that prints to stdout the appropriate statement when rock, paper or scissors is given. <em>Example:</em> If scissors is given then “Rock beats scissors” is the statement printed.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rock-paper-scissors.svg" alt="Rock, paper, scissors" title="">   </p>
 
-<p>For 2 points extra credit use a wildcard set to accept the first letter upper or lower case (either <strong>Rock</strong> or <strong>rock</strong>).</p>
+<p>Create a script containing a case statement that prints to stdout the appropriate statement when rock, paper or scissors is given. <em>Example:</em> If scissors is given then “Rock beats scissors” is the statement printed. Script should accept either Rock or rock, etc.</p>
 
 <h1 id="resources">Resources</h1>
 
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rock-paper-scissors.svg" alt="Rock, paper, scissors" title="">   </p>
-
 <ul>
 <li><a href="https://bash.cyberciti.biz/guide/The_case_statement">The Case Statement</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/TestsAndConditionals#Choices_.28case_and_select.29">Tests And Conditionals</a></li>
 </ul>
 
 <blockquote>
