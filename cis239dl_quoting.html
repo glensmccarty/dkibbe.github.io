@@ -1,0 +1,128 @@
+<h1 id="quoting">Quoting</h1>
+
+<p>Quoting is used in Bash to allow the use of some special characters that are reserved by the shell. Proper quoting assures that your scripts work as expected. See the Bash Reference Manual for a complete list of special characters. Here we’ll look at the <strong>space</strong> and <strong>dollar sign</strong> reserved characters.</p>
+
+<h2 id="strong-or-single-quotes">Strong or Single Quotes</h2>
+
+<p>Use strong quotes  ( ’ ) when you want all characters in the string to be treated literally.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'$var1 is set to 10 in this example.'</span>
+<span class="hljs-variable">$var1</span> is <span class="hljs-keyword">set</span> to <span class="hljs-number">10</span> <span class="hljs-keyword">in</span> this example.</code></pre>
+
+
+
+<h2 id="weak-or-double-quotes">Weak or Double Quotes</h2>
+
+<p>Use weak quotes  ( ” ) when you want reserved characters to be seen by the shell.</p>
+
+<p>*In this example <strong>var1</strong> has not been set so the shell prints the null string.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$var1</span> is set to 10 in this example."</span>
+is <span class="hljs-keyword">set</span> to <span class="hljs-number">10</span> <span class="hljs-keyword">in</span> this example.</code></pre>
+
+<p>The shell looks for a variable named <strong>var1</strong> and returns it’s value which is the null string “” since the variable has not yet been set.</p>
+
+<h2 id="missing-quotes">Missing Quotes</h2>
+
+<p><em>Example 1: Missing quotes - Three files are created because the shell receives the space characters.</em></p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ touch some new file.txt
+$ ls -C
+file.txt    new some</code></pre>
+
+<p><em>Example 2 - Normal quotes - Quoting the string prevents the shell from receiving the spaces.</em></p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ touch <span class="hljs-string">"some new file.txt"</span>
+$ ls -C
+some new file.txt</code></pre>
+
+<p><em>Example 3: Quoting preserves spaces.</em></p>
+
+<p>Create a variable with extra spaces between words.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ budget2015=<span class="hljs-string">"2015   Budget.ods"</span></code></pre>
+
+<p>Without quotes the shell truncates the spaces.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$budget2015</span>
+<span class="hljs-number">2015</span> Budget.ods</code></pre>
+
+<p>Spacing is preserved with proper quoting.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$budget2015</span>"</span>
+<span class="hljs-number">2015</span>   Budget.ods    </code></pre>
+
+<p>Strong quotes prevents the shell from interpreting the variable.</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'$budget2015'</span>
+    <span class="hljs-variable">$budget2015</span></code></pre>
+
+
+
+<h2 id="escape-character">Escape Character</h2>
+
+<p>The back slash can be used to escape special characters so they are not received by the shell.</p>
+
+<p><em>Dollar sign not escaped:</em></p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ var1=<span class="hljs-number">10</span>
+$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$var1</span> is <span class="hljs-keyword">set</span> to <span class="hljs-variable">$var1</span>
+<span class="hljs-number">10</span> is <span class="hljs-keyword">set</span> to <span class="hljs-number">10</span></code></pre>
+
+<p><em>Dollar sign escaped:</em></p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"\$var1 is set to <span class="hljs-variable">$var1</span>."</span>
+var1 is <span class="hljs-keyword">set</span> to <span class="hljs-number">10</span></code></pre>
+
+
+
+<h2 id="commands-as-variables">Commands as Variables</h2>
+
+<p>Often you will assign a command to a variable to make it easier to call that command in a script.</p>
+
+<p><em>Example 1: Create a command variable and ping the argument given to the script.</em></p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">!/usr/bin/env bash
+
+png=<span class="hljs-string">"/bin/ping -q -c4"</span>
+srv=<span class="hljs-variable">$1</span>
+
+<span class="hljs-string">"<span class="hljs-variable">$png</span>"</span> <span class="hljs-variable">$1</span>
+
+<span class="hljs-keyword">if</span> [[ $? = <span class="hljs-number">0</span> ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$1</span> is responding."</span>
+    <span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Houston, we have a problem."</span>
+<span class="hljs-keyword">fi</span></code></pre>
+
+<p><em>Example 2: Without quotes the output can be messy.</em></p>
+
+<p>Compare:</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> $(ls -al)</code></pre>
+
+<p>and:</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$(ls -al)</span>"</span></code></pre>
+
+<p><em>Example 3:  Curly brackets let you use a variable in a word.</em></p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ beer=Oktober
+
+$ <span class="hljs-variable">${beer}</span>fest
+Oktoberfest</code></pre>
+
+<h1 id="resources">Resources</h1>
+
+<ul>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">Bash Reference Manual</a></li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/Practices#Quoting">Greg’s Bash Guide</a></li>
+</ul>
