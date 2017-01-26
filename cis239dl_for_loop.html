@@ -18,57 +18,56 @@
 <li>Character classes</li>
 </ul>
 
+
+
 <h2 id="for-loop">For Loop</h2>
 
 <p>The syntax for the <code>for</code> loop looks like this:</p>
 
-<pre><code>for i in &lt;list&gt;
-do
-&lt;do something to $i&gt;
-done
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> &lt;list&gt;;<span class="hljs-keyword">do</span>
+&lt;<span class="hljs-keyword">do</span> something to <span class="hljs-variable">$i</span>&gt;
+<span class="hljs-keyword">done</span></code></pre>
 
 <h3 id="example">Example</h3>
 
-<p>Type at the shell prompt:</p>
+<p>Type at the shell prompt. Press enter at the end of each line.</p>
 
-<pre><code>for i in cat dog mouse snake
-do
-echo "My favorite pet is my $i"
-done
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> cat dog mouse snake;<span class="hljs-keyword">do</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"My favorite pet is my <span class="hljs-variable">$i</span>"</span>
+<span class="hljs-keyword">done</span></code></pre>
 
 <h2 id="seq-command"><code>seq</code> Command</h2>
 
 <p>You can also create the files using a <code>for</code> loop and the <code>{ }</code> command. <em>Note:</em> The <code>{ }</code> command replaces the <code>seq</code> command which is deprecated in the latest version of GNU/Bash.</p>
 
-<pre><code>$ for i in {1..9}; do touch file"$i"; done
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {<span class="hljs-number">1</span>..<span class="hljs-number">9</span>}; <span class="hljs-keyword">do</span> touch foo<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>; <span class="hljs-keyword">done</span></code></pre>
 
 <p>This will create a sequence from 1 (start) to 9 (end). Each instance of the variable <strong>i</strong> is replaced by the output of the <code>{ }</code> command. You specify a increment after the end number <code>{1..10..2}</code>. When typed on one line the semi-colon (<strong>;</strong>) replaces enter.</p>
-
-
 
 <h2 id="using-echo-to-test">Using echo to Test</h2>
 
 <p>This for loop will rename file1, file2, file3, etc. to FOO1, FOO2, FOO3, etc.</p>
 
-<pre><code>$ for i in {1..9}; do mv file"$i" FOO"$i"; done
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {<span class="hljs-number">1</span>..<span class="hljs-number">9</span>}; <span class="hljs-keyword">do</span> mv file<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> FOO<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>; <span class="hljs-keyword">done</span></code></pre>
 
 <p>Placing the <code>echo</code> command in front of the <code>mv</code> command lets you test the command first.</p>
 
-<pre><code>$ for i in {1..9}; do echo mv file"$i" FOO"$i"; done
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {<span class="hljs-number">1</span>..<span class="hljs-number">9</span>}; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> mv foo<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> FOO<span class="hljs-string">"<span class="hljs-variable">$i</span>"</span>; <span class="hljs-keyword">done</span>
 mv file1 FOO1
 mv file2 FOO2
-mv file3 FOO3
-</code></pre>
+mv file3 FOO3</code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Write a script that uses a <code>for</code> loop to remove (<strong>rm</strong>) the files you created. For 2 extra points use a <code>for</code> to remove only the odd numbered files leaving the even numbered files untouched. Submit the assignemnt using <a href="https://paste.fedoraproject.org/">Fedora pastebin</a>.</p>
+<p>Write a script that uses a <code>for</code> loop to remove (<strong>rm</strong>) the files you created. For 2 extra points use a <code>for</code> to remove only the odd numbered files leaving the even numbered files untouched. Submit the assignment using <a href="https://paste.fedoraproject.org/">Fedora pastebin</a>.</p>
 
 <h2 id="resources">Resources</h2>
 
