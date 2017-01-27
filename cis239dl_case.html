@@ -1,5 +1,7 @@
 <h1 id="case-statements">Case Statements</h1>
 
+
+
 <h2 id="introduction">Introduction</h2>
 
 <p>A case statement lets you express a series of if-then-else statements in a concise way. You can test a condition against the wildcard * if there are no matches.</p>
@@ -13,6 +15,8 @@
 <li>If there is no match the exit status is zero.</li>
 </ul>
 
+
+
 <h2 id="syntax">Syntax</h2>
 
 
@@ -24,9 +28,13 @@ match_3) commands_to_execute ;;
 *) commands_to_execute_<span class="hljs-keyword">for</span>_no_match ;;
 <span class="hljs-keyword">esac</span></code></pre>
 
+
+
 <h2 id="example-if-then-else">Example if, then, else</h2>
 
 <p>This example reads the value of the <strong>day</strong> to determine what should be done on that day.</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-built_in">read</span> -p <span class="hljs-string">"What day of the week is it?: "</span> day
 <span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$day</span> = Mon ]]; <span class="hljs-keyword">then</span>
@@ -47,19 +55,23 @@ match_3) commands_to_execute ;;
     <span class="hljs-built_in">echo</span> <span class="hljs-string">"Sorry, I do not understand."</span>
 <span class="hljs-keyword">fi</span></code></pre>
 
+
+
 <h2 id="example-case-statement">Example Case Statement</h2>
 
 <p>The case statement is more concise.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-built_in">read</span> -p <span class="hljs-string">"What day of the week is it?: "</span> day
 <span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$day</span>"</span> <span class="hljs-keyword">in</span>
-m|Monday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Do laundry today!"</span> ;;
-t|Tuesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the recycle!"</span> ;;
-w|Wednesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Pay bills today!"</span> ;;
-t|Thursday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the trash!"</span> ;;
-f|Friday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"TGIF!"</span> ;;
-s|Saturday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hike Papago Park!"</span> ;;
-s|Sunday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"My one day to relax!"</span> ;;
+[mM]onday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Do laundry today!"</span> ;;
+[tT]uesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the recycle!"</span> ;;
+[wW]ednesday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Pay bills today!"</span> ;;
+[tT]hursday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Take out the trash!"</span> ;;
+[fF]riday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"TGIF!"</span> ;;
+[sS]aturday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hike Papago Park!"</span> ;;
+[sS]unday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"My one day to relax!"</span> ;;
 *) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Sorry, I do not understand."</span> ;;
 <span class="hljs-keyword">esac</span></code></pre>
 
@@ -68,6 +80,8 @@ s|Sunday) <span class="hljs-built_in">echo</span> <span class="hljs-string">"My 
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rock-paper-scissors.svg" alt="Rock, paper, scissors" title="">   </p>
 
 <p>Create a script containing a case statement that prints to stdout the appropriate statement when rock, paper or scissors is given. <em>Example:</em> If scissors is given then “Rock beats scissors” is the statement printed. Script should accept either Rock or rock, etc.</p>
+
+
 
 <h1 id="resources">Resources</h1>
 
