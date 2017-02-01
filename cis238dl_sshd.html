@@ -55,6 +55,8 @@
 
 <p>Start both a CentOS 7 (or Fedora 7)  and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine.</p>
 
+
+
 <h3 id="networking">Networking</h3>
 
 <ol>
@@ -70,6 +72,8 @@
 
 <p>Use <code>yum</code> or <code>apt-get</code> as appropriate to install <code>nmap</code> and possibly <code>zenmap</code> If you have a graphical desktop.</p>
 
+
+
 <h3 id="scanning-ports">Scanning Ports</h3>
 
 <p>Use <code>nmap</code> to do a simple scan of the SSH server and you should see that port 22 is open for ssh traffic.</p>
@@ -78,8 +82,14 @@
 
 <h2 id="connect-to-the-ssh-server">Connect to the SSH Server</h2>
 
-<p>See the rubric on how you must meet this criteria. <br>
-</p>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">
+`ssh root@<span class="hljs-number">192.169</span>.<span class="hljs-number">201</span>.nnn` </code></pre>
+
+<p>Replace <em>nnn</em> with the last octet of the actual IP address of the SSH server. The first time you connect SSH will ask you to confirm the connection.</p>
+
+<p>After you accept the connection you will be logged in as root. Type <code>exit</code> to close the connection.–&gt;</p>
 
 <h2 id="securing-the-ssh-server-daemon">Securing the SSH Server Daemon</h2>
 
@@ -89,22 +99,35 @@
 
 <p>Use the <code>rpm -qc openssh-server</code> command to show that the SSH server configuration settings are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>systemctl restart sshd.service</code> command.</p>
 
+
+
 <h3 id="disabling-root-logins">Disabling Root Logins</h3>
 
-<p>You must not be able to log in as root. <br>
-</p>
+<p>There is no reason for the <em>root</em> user to login directly. Root should also have an ordinary user account for that purpose and that use either <code>su</code> or <code>sudo</code> to perform root functions. Change this line in the <code>/etc/ssh/sshd_conf</code> file from <strong>PermitRootLogin</strong> <em>yes</em> to <em>no</em>. <em>Note:</em> In <code>vi</code> use /Root to search for the line.</p>
+
+<p>Restart the service and attempt to log in again as <em>root</em> this time the attempt will fail.</p>
+
+<p>You should be able to log in as the user you created. For example:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh tux@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.123</span></code></pre>
 
 <h3 id="change-default-port">Change Default Port</h3>
 
-<p>See the rubric for the criteria you must meet. <br>
-<!--SSH by default listens on port 22. You can change this by uncommenting the line **port 22** and changing the port number to an unused port in the **registered** or **ephemeral** range. See Wikipedia link to ports under *Resources* below.--></p>
+<p>SSH by default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
 <p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
 
 <h4 id="open-the-port-in-the-firewall">Open the Port in the Firewall</h4>
 
 <p>Use <code>firewalld</code> to close the default port and open the appropriate port. <br>
-</p>
+Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) is not a standard service you need to use this command to open the port.</p>
+
+<pre><code># firewall-cmd --add-port=2222/tcp
+</code></pre>
+
+<p>Use <code>firewall-cmd --list-ports</code> to see that the change was made.</p>
 
 <h4 id="disable-port-22">Disable Port 22</h4>
 
@@ -117,6 +140,8 @@
 
 <p>Run a <code>nmap</code> scan and there should be no “interesting” ports open.</p>
 
+
+
 <h4 id="making-changes-permanent">Making Changes Permanent</h4>
 
 <p>None of these changes will survive a reboot unless the <strong>–permanent</strong> option is added to the above commands.</p>
@@ -125,20 +150,17 @@
 
 <h3 id="selinux">SELinux</h3>
 
-<p>Use the instructions in the configuration file to configure SELinux to recognise the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
-
-
+<p>Use the instructions in the configuration file to configure SELinux to recognize the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
 
 <h2 id="mapping-the-new-port">Mapping the New Port</h2>
 
 <p>Run a<code>nmap</code> scan on a port range that includes the port you opened for SSH.</p>
 
-<pre><code>$ nmap -p 2200-2250 192.168.201.nnn
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ nmap -p <span class="hljs-number">2200</span>-<span class="hljs-number">2250</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">201</span>.nnn</code></pre>
 
 <p>The Netcat command can useful as well. It has different package names on different Linux distros so use <code>yum search</code> or <code>apt-cache search</code>.</p>
-
-
 
 <h3 id="protocol">Protocol</h3>
 
@@ -148,8 +170,7 @@
 
 <h3 id="reducing-the-number-of-login-tries">Reducing the Number of Login Tries</h3>
 
-<p>See the rubric. <br>
-<!--The default is **6** failed attempt but you can reduce this to a smaller number by changing **MaxAuthTries**. Edit **MaxAuthTries** to allow only attempts.--></p>
+<p>The default is <strong>6</strong> failed attempt but you can reduce this to a smaller number by changing <strong>MaxAuthTries</strong>. Edit <strong>MaxAuthTries</strong> to allow only attempts.</p>
 
 <h3 id="disabling-password-logins-optional">Disabling Password Logins (Optional)</h3>
 
@@ -169,7 +190,15 @@
 
 <p>Now reload the configuration file for the change to take effect.</p>
 
-<!--## SSH to the New Port&#10;&#10;Since port 22 is no longer used the ssh command much be modified. For example:&#10;&#10;    $ ssh -p 222 tux@192.168.201.123-->
+
+
+<h2 id="ssh-to-the-new-port">SSH to the New Port</h2>
+
+<p>Since port 22 is no longer used the ssh command much be modified. For example:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh -p <span class="hljs-number">222</span> tux@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.123</span></code></pre>
 
 <h2 id="what-to-submit">What to Submit</h2>
 
