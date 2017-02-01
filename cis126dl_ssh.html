@@ -1,20 +1,10 @@
 <p><img src="http://openssh.com/images/openssh.gif" alt="OpenSSH" title=""></p>
 
-
-
 <h2 id="using-ssh-for-remote-connections">Using SSH for remote connections</h2>
 
-<p>The suite of tools that make up the OpenSSH package replace <code>telnet</code>, <code>ftp</code> and rtools for connecting over insecure networks.</p>
+<p>The suite of tools that make up the OpenSSH package replace <code>telnet</code>, <code>ftp</code> and rtools for connecting over insecure networks. Secure Shell or SSH, as we know it creates a secure end-to-end tunnel using strong encryption.</p>
 
-<p>In this assignment you’ll use <code>ssh</code>, <code>scp</code> and <code>sftp</code> to connect to another workstation and transfer files. </p>
-
-
-
-<h2 id="preparation">Preparation</h2>
-
-<p>On later versions of CentOS and Ubuntu OpenSSH server is installed and running so you may not need to install the service.</p>
-
-
+<p>In this assignment you’ll use <code>ssh</code>, <code>scp</code> and <code>sftp</code> to connect to another workstation and transfer files.</p>
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -62,46 +52,31 @@
 
 
 
-<h2 id="preparation-1">Preparation</h2>
+<h2 id="preparation">Preparation</h2>
 
-<p>In this assignment you will be working with two computer – the workstation you are sitting at and a virtual machine that will be the SSH server. To make it clear what commands are run on each I’ll use this prompt for the workstation:</p>
+<p>On later versions of CentOS and Ubuntu OpenSSH server is installed and running so you may not need to install the service.</p>
 
-<pre><code>    tux@instr $
-</code></pre>
-
-<p>And this prompt for the virtual machine:</p>
-
-<pre><code>    jstudent@vm1 $
-</code></pre>
-
-<p>or if root access is required on the virtual machine:</p>
-
-<pre><code>    root@vm1 #
-</code></pre>
-
-
+<p>In this assignment you will be working with another student. Setup Ubuntu as the SSH client and CentOS as the SSH server.</p>
 
 <h3 id="bridging-the-network">Bridging the Network</h3>
 
-<p>Both hosts need top be on the same network and have different IP addresses. Before starting the CentOS minimum virtual machine set networking in VirtualBox to bridging:</p>
+<p>Both hosts need to be on the same network and have different IP addresses. Before starting the CentOS minimum virtual machine set networking in VirtualBox to bridging and under Advanced refresh the MAC address.:</p>
 
 <p><img src="https://s3.amazonaws.com/CIS126DL/Images/vbox_bridged.png" alt="Network bridge settings in VirtualBox" title="Network bridge setting in VirtualBox"></p>
-
-
 
 <h3 id="check-that-the-host-is-reachable">Check that the Host is Reachable</h3>
 
 <p>Make note of the IP address of the virtual machine. You’ll use the IP address to connect to the virtual machine.</p>
 
-<pre><code>    jstudent@vm1 $ ip addr show
-</code></pre>
-
-<p>Check that you can reach the virtual machine on the network. The virtual machine must have an IP address on the 192.168.201.0 network. For example:</p>
-
-<pre><code>    tux@instr $ ping 192.168.201.106 -c4
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ ip addr show</code></pre>
+
+<p>Check that you can reach the virtual machine on the network. The virtual machine must have an IP address on the 192.168.201.0/24 network. For example:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ping <span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span> -c4</code></pre>
 
 <h3 id="create-an-account-on-the-host">Create an Account on the Host</h3>
 
@@ -109,82 +84,39 @@
 
 <p>Set up accounts on each virtual machine so that you can each log in remotely. Use a login name appropriate for the student logging in. Login names should be short, lower case and not contain spaces. Be sure to assign a password to the accounts.</p>
 
-<pre><code>    root@vm1 # adduser -m -c "Jack Student" jstudent # -m is the default on CentOS
-    root@vm1 # passwd jstudent
-</code></pre>
 
 
+<h4 id="centos">CentOS</h4>
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># useradd -m -c "Jack Student" jstudent</span>
+
+<span class="hljs-comment"># passwd jstudent</span></code></pre>
+
+
+
+<h4 id="ubuntu">Ubuntu</h4>
+
+<p>You can use the <em>Tux</em> on Ubuntu</p>
 
 <h3 id="openssh-server">OpenSSH Server</h3>
 
-<p>Both the OpenSSH client and server should already be installed but the server may need to be started. The service command is used to start and stop services. The <code>chkconfig</code> command configures services to start on boot.</p>
+<p>Both the OpenSSH client and server should already be installed but the server may need to be started. Check with the <strong>status</strong> option then use the <strong>start</strong> option if needed.</p>
 
-<p>The OpenSSH client is installed on most Linux systems but you may need to install the server to complete this assignment.</p>
-
-
-
-<h3 id="is-the-service-installed">Is the Service Installed?</h3>
-
-<pre><code># systemctl status sshd
-</code></pre>
-
-<p>The SSH server listens on port 22. You can use <code>netstat</code> from the virtual machine to confirm that the SSH server is listening on port 22.</p>
-
-<pre><code># netstat -luntp
-</code></pre>
-
-<p>Use the <code>service</code> command to see check the status of the service. If the <strong>openssh-server</strong> is installed it may just need to be started.</p>
-
-<pre><code># service sshd status
-</code></pre>
+<h4 id="centos-1">CentOS</h4>
 
 
 
-<h4 id="install-openssh-server-if-needed">Install OpenSSH Server (if needed)</h4>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl status sshd.service</span></code></pre>
 
-<p>On CentOS</p>
+<p>The SSH server listens on port 22. You can use <code>netstat</code> on the server virtual machine to confirm that the SSH server is listening on port 22.</p>
 
-<pre><code># yum install sshd
-</code></pre>
-
-<p>On Ubuntu</p>
-
-<pre><code>$ sudo apt-get install openssh-server
-</code></pre>
-
-<p>The configuration file for the ssh server (sshd) is:</p>
-
-<pre><code>/etc/ssh/sshd_config
-</code></pre>
-
-<p>Start the server using the <code>service</code> command:</p>
-
-<pre><code>    # service sshd start
-</code></pre>
-
-<p>You can check that sshd is running with:</p>
-
-<pre><code># service sshd status
-</code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># netstat -luntp</span></code></pre>
 
 <h3 id="firewall">Firewall</h3>
 
-<p>Starting the SSH server is not enough you also need to open port 22 in the firewall. The easiest way to do this is with a firewall configuration tool. If <code>system-config-firewall-tui</code> is not install you can install it with <code>yum</code>.</p>
+<p>Install <strong>firewalld</strong> on the server and add <strong>ssh</strong> to the list of trusted services.</p>
 
-<p>Check that the firewall allows traffic over <strong>port 22</strong> on the remote or bring down the firewall for this assignment:</p>
-
-<pre><code># iptables-save
-</code></pre>
-
-<p>If not install and use <code>system-config-firewall-tui</code> to open port 22.</p>
-
-<p><img src="https://s3.amazonaws.com/CIS126DL/Images/firewall-tui_trusted.png" alt="system-config-firewall-tui" title="system-config-firewall-tui"></p>
-
-<p>This command line tool makes it easy to configure the firewall. Select <em>customize</em> and use the Tab or arrow keys to move between options and the space bar to select and deselect an option.</p>
-
-
+<p>See the Digital Ocean link under resources for a  tutorial</p>
 
 <h2 id="use-ssh-to-login">Use SSH to Login</h2>
 
@@ -192,61 +124,50 @@
 
 <p>Use <code>ssh</code> to login:</p>
 
-<pre><code>$ ssh user@remote
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh user@remote</code></pre>
 
 <p>You can omit the user name if it’s the same as the local user.</p>
 
-<pre><code>$ ssh remote
-</code></pre>
-
 <p>The first time you connect you will be presented with the fingerprint of the server to confirm you are connecting to the correct host. After giving the password for the remote account you will be logged into the remote machine. To close the connection type <code>exit</code> and you will be returned to your own virtual machine.</p>
-
-
 
 <h2 id="secure-ftp">Secure FTP</h2>
 
 <p>The secure FTP command is used to transfer files to and from the remote host.</p>
 
-<p>Create a file on your workstation to practice with.</p>
+<p>Copy the <em>copyright</em> file in <em>/usr/share/doc/bash/</em> to your home directory than connect using <code>sftp</code></p>
 
-<pre><code>S touch example.txt
-</code></pre>
 
-<p>Now connect using secure FTP.</p>
 
-<pre><code>$ sftp -i .ssh/id_rsa jstudent@192.168.201.106
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs ">$ sftp -i .ssh/id_rsa jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span></code></pre>
 
-<p>You are now at a Secure FTP prompt and can use commands to list files, get files from and put files on the remote host. Type <strong>help</strong> for a list of commands.</p>
+<p>You will now have a new prompt and be connectied to the remote host. The <strong>help</strong> command lists the commands available</p>
 
-<p>The <strong>put</strong> command will upload example.txt on your local machine to the remote host.</p>
+<p>The <strong>put</strong> command will upload <em>copyright</em> on your local machine to the remote host.</p>
 
-<pre><code>sftp&gt; put example.txt
-Uploading example.txt to 192.168.201.106/home/jstudent/example.txt
-example.txt                                   100%    0     0.0KB/s   00:00
-sftp&gt; ls
-example.txt 
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">sftp&gt; put copyright
+Uploading copyright</code></pre>
 
 <p>Use the <strong>bye</strong> command to close the connection.</p>
 
-<pre><code>sftp&gt; bye
-tux@instr $
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">sftp&gt; bye</code></pre>
 
 
 
 <h2 id="secure-copy">Secure Copy</h2>
 
-<p>Secure Copy can be used to copy a single file to the remote host.</p>
+<p>Secure Copy can be used to copy a single file to the remote host or download a single file. The syntax is the came as the <strong>cp</strong> command with one important difference – a trailing semi-colon (<strong>;</strong>) tell the shell that this is a remote host.</p>
 
-<pre><code>$ scp exaample.txt jstudent@192.168.201.106:
-</code></pre>
+<p>Delete <em>copyright</em> from the local directory then download the copy from the server.</p>
 
-<p>Notice the colon at the end of the command. Without the colon <code>scp</code> just creates a new file named <code>jstudent@192.168.201.106</code> in the current directory. If you want the file to have a different name on the remote system place the new name after the colon.</p>
+<pre class="prettyprint"><code class="language-bash hljs ">$ scp jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span>:copyright .</code></pre>
 
-
+<p>The final period (<strong>.</strong>) represent the current directory.</p>
 
 <h2 id="using-ssh-with-public-key-authorization">Using SSH with Public Key Authorization</h2>
 
@@ -256,33 +177,31 @@ tux@instr $
 
 <p>You should not create the keys as root!</p>
 
-<pre><code>    tux@vm1 $ ssh-keygen
-    Generating public/private rsa key pair.
-    Enter file in which to save the key (/home/jstudent/.ssh/id_rsa):
-    Enter passphrase (empty for no passphrase): 
-    Enter same passphrase again: 
-    Your identification has been saved in /home/jstudent/.ssh/id_rsa.
-    Your public key has been saved in /home/jstudent/.ssh/id_rsa.pub.
-    The key fingerprint is:
-    51:75:0f:56:08:7f:78:d4:dd:87:0d:de:1e:d4:f9:dd
-    The key's randomart image is:
-    +--[ RSA 2048]----+
-    |        E        |
-    |         +       |
-    |  . o   o o      |
-    |   = o o +       |
-    |    o + S o      |
-    |     . o O o     |
-    |        + =..    |
-    |         ....    |
-    |         .o...   |
-    +-----------------+
-    [jstudent@d630 ~]$
-</code></pre>
-
-<p>The randomart image serves the same purpose as the artwork you may have selected when you set up online access to your bank account. It helps assure you are connected to the correct host.</p>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file <span class="hljs-keyword">in</span> which to save the key (/home/jstudent/.ssh/id_rsa):
+Enter passphrase (empty <span class="hljs-keyword">for</span> no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved <span class="hljs-keyword">in</span> /home/jstudent/.ssh/id_rsa.
+Your public key has been saved <span class="hljs-keyword">in</span> /home/jstudent/.ssh/id_rsa.pub.
+The key fingerprint is:
+<span class="hljs-number">51</span>:<span class="hljs-number">75</span>:<span class="hljs-number">0</span>f:<span class="hljs-number">56</span>:<span class="hljs-number">08</span>:<span class="hljs-number">7</span>f:<span class="hljs-number">78</span>:d4:dd:<span class="hljs-number">87</span>:<span class="hljs-number">0</span>d:de:<span class="hljs-number">1</span>e:d4:f9:dd
+The key<span class="hljs-string">'s randomart image is:
++--[ RSA 2048]----+
+|        E        |
+|         +       |
+|  . o   o o      |
+|   = o o +       |
+|    o + S o      |
+|     . o O o     |
+|        + =..    |
+|         ....    |
+|         .o...   |
++-----------------+</span></code></pre>
+
+<p>The <em>randomart</em> serves the same purpose as the artwork you may have selected when you set up online access to your bank account. It helps assure you are connected to the correct host.</p>
 
 <h2 id="placing-the-public-key-on-the-remote-host">Placing the Public Key on the Remote Host</h2>
 
@@ -294,21 +213,19 @@ tux@instr $
 
 <p>The <code>ssh-copy-id</code> command makes the task of uploading the public key easy.</p>
 
-<pre><code>    tux@instr $ ssh-copy-id -i .ssh/id_rsa.pub jstudent@192.168.201.106
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh-copy-id -i .ssh/id_rsa.pub jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span></code></pre>
 
 <h2 id="connecting-using-publicprivate-keys">Connecting Using Public/Private Keys</h2>
 
 <p>Now that you have the public key added to <em>authorized_keys</em> on the virtual machine you can connect using the private key.</p>
 
-<pre><code>    tux@instr $ ssh -i .ssh/id_rsa jstudent@192.168.201.106
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh -i .ssh/id_rsa jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span></code></pre>
 
 <p>If you used a passphrase to protect the private you will need to enter it. If not after a short wait you should see the shell prompt on the virtual machine.</p>
-
-
 
 <h2 id="ssh-agent-and-key-chain">SSH Agent and Key Chain</h2>
 
@@ -318,19 +235,18 @@ tux@instr $
 
 <h2 id="the-ssh-client-configuration">The SSH Client Configuration</h2>
 
-<p>The global SSH client file is <em>/etc/ssh/ssh_config</em> and each user can have a local configuration file named <em>config</em> in that user’s `~/.ssh* directory. The customizations make it easy to log in to multiple hosts. Here is an example from my <em>config</em>:</p>
+<p>The global SSH client file is <em>/etc/ssh/ssh_config</em> (<em>Do not edit this file.*and each user can have a local configuration file named *config</em> in that user’s <em>~/.ssh</em> directory. The customizations make it easy to log in to multiple hosts. Here is an example from my <em>config</em>:</p>
 
-<pre><code>    Host ironman
-        HostName 72.208.176.109
-        Port 4444
-        User profx
-        PubkeyAuthentication yes
-        IdentityFile ~/.ssh/srv.rsa
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs ">Host ironman
+    HostName <span class="hljs-number">72.208</span>.<span class="hljs-number">176.109</span>
+    Port <span class="hljs-number">4444</span>
+    User profx
+    PubkeyAuthentication yes
+    IdentityFile ~/.ssh/srv.rsa</code></pre>
 
-<p>With this entry you just need to type <code>ssh ironman</code> to connect to the host.</p>
+<p>Create your own <em>config</em> file (<em>Note:</em> Do not edit the file in the etc/ directory.) using mine as a template. Be sure the change the <em>Host</em>, <em>HostName</em>, <em>Port</em>, <em>User</em> and <em>IdentityFile</em>.</p>
 
-
+<p>*With this entry you just need to type  <code>ssh</code> plus the Host name you chose to connect to the host.</p>
 
 <h2 id="troubleshot-the-assignment">Troubleshot the Assignment</h2>
 
@@ -347,9 +263,7 @@ tux@instr $
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a screenshot of the ~/.ssh/config file you created to automate login to the virtual machine. For full credit include the two lines that shoe public key encription is being used to login.</p>
-
-
+<p>Submit a screenshot of the ~/.ssh/config file you created to automate login to the virtual machine. For full credit include the two lines that show that public key encryption is being used to login.</p>
 
 <h2 id="resources">Resources</h2>
 
@@ -359,6 +273,7 @@ tux@instr $
 <li><a href="http://linux.die.net/man/5/ssh_config" title="ssh_config(5) - Linux man page">ssh_config(5) - Linux man page</a></li>
 <li><a href="http://linux.die.net/man/5/sshd_config" title="sshd_config(5) - Linux man page">sshd_config(5) - Linux man page</a></li>
 <li><a href="http://openssh.com">OpenSSH.com</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7">How To Set Up a Firewall Using FirewallD on CentOS 7</a></li>
 </ol>
 
 <blockquote>
