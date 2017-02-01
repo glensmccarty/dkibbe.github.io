@@ -82,10 +82,7 @@
 
 <h2 id="connect-to-the-ssh-server">Connect to the SSH Server</h2>
 
-
-
-<pre class="prettyprint"><code class="language-bash hljs ">
-`ssh root@<span class="hljs-number">192.169</span>.<span class="hljs-number">201</span>.nnn` </code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ssh root@192.169.201.nnn</span></code></pre>
 
 <p>Replace <em>nnn</em> with the last octet of the actual IP address of the SSH server. The first time you connect SSH will ask you to confirm the connection.</p>
 
@@ -124,23 +121,25 @@
 <p>Use <code>firewalld</code> to close the default port and open the appropriate port. <br>
 Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) is not a standard service you need to use this command to open the port.</p>
 
-<pre><code># firewall-cmd --add-port=2222/tcp
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># firewall-cmd --add-port=2222/tcp</span></code></pre>
 
 <p>Use <code>firewall-cmd --list-ports</code> to see that the change was made.</p>
+
+
 
 <h4 id="disable-port-22">Disable Port 22</h4>
 
 <p>And remove the default port.</p>
 
-<pre><code># firewall-cmd --remove-service ssh
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># firewall-cmd --remove-service ssh</span></code></pre>
 
 <p>Use <code>firewall-cmd --list-services</code> to see that the change was made.</p>
 
 <p>Run a <code>nmap</code> scan and there should be no “interesting” ports open.</p>
-
-
 
 <h4 id="making-changes-permanent">Making Changes Permanent</h4>
 
@@ -152,6 +151,8 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 
 <p>Use the instructions in the configuration file to configure SELinux to recognize the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
 
+
+
 <h2 id="mapping-the-new-port">Mapping the New Port</h2>
 
 <p>Run a<code>nmap</code> scan on a port range that includes the port you opened for SSH.</p>
@@ -161,6 +162,8 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 <pre class="prettyprint"><code class="language-bash hljs ">$ nmap -p <span class="hljs-number">2200</span>-<span class="hljs-number">2250</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">201</span>.nnn</code></pre>
 
 <p>The Netcat command can useful as well. It has different package names on different Linux distros so use <code>yum search</code> or <code>apt-cache search</code>.</p>
+
+
 
 <h3 id="protocol">Protocol</h3>
 
@@ -172,13 +175,13 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 
 <p>The default is <strong>6</strong> failed attempt but you can reduce this to a smaller number by changing <strong>MaxAuthTries</strong>. Edit <strong>MaxAuthTries</strong> to allow only attempts.</p>
 
-<h3 id="disabling-password-logins-optional">Disabling Password Logins (Optional)</h3>
+
+
+<h3 id="disabling-password-logins-optional">Disabling Password Logins (optional)</h3>
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
 
-
-
-<h2 id="adding-an-ssh-banner">Adding an SSH Banner</h2>
+<h2 id="adding-an-ssh-banner-optional">Adding an SSH Banner (optional)</h2>
 
 <p>Adding a welcome banner that warns that all activity on the server is a good idea. Creating a banner text file and adding a line to the <em>sshd_config</em> file is all that is needed.</p>
 
@@ -189,8 +192,6 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 <p>Next add this line to the <em>/etc/ssh/sshd_config</em> file.</p>
 
 <p>Now reload the configuration file for the change to take effect.</p>
-
-
 
 <h2 id="ssh-to-the-new-port">SSH to the New Port</h2>
 
