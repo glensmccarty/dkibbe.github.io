@@ -53,9 +53,12 @@
 
 <h2 id="preparation">Preparation</h2>
 
-<p>Start both a CentOS 7 (or Fedora 7)  and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine.</p>
+<p>Start both a CentOS 7  and Ubuntu virtual machine or work with another student using two CentOS 7 VMs. Create an ordinary account on the CentOS 7 Virtual machine. <br>
+The CentOS VM will be the SSH server. Change the hostname on the server so it is easy to identify.</p>
 
 
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># hostname set-hostname ssh-server</span></code></pre>
 
 <h3 id="networking">Networking</h3>
 
@@ -80,7 +83,7 @@
 
 
 
-<h2 id="connect-to-the-ssh-server">Connect to the SSH Server</h2>
+<h2 id="connect-to-the-ssh-server-as-root">Connect to the SSH Server as Root</h2>
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ssh root@192.169.201.nnn</span></code></pre>
 
@@ -88,13 +91,27 @@
 
 <p>After you accept the connection you will be logged in as root. Type <code>exit</code> to close the connection.–&gt;</p>
 
+
+
 <h2 id="securing-the-ssh-server-daemon">Securing the SSH Server Daemon</h2>
 
 
 
+<h3 id="selinux">SELinux</h3>
+
+<p>The SSH daemon is monitored by SELinux. before we can configure the server to listen on a different port SELinux needs to update it’s policy. <code>semanage</code> is thee program you will use to do that.</p>
+
+<p>Use the instructions in the configuration file to configure SELinux to recognize the new port. Use <code>yum provides</code> if needed to find the correct package which contains <code>semanage</code>.to install .</p>
+
 <h3 id="the-ssh-server-configuration-file">The SSH Server Configuration File</h3>
 
-<p>Use the <code>rpm -qc openssh-server</code> command to show that the SSH server configuration settings are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>systemctl restart sshd.service</code> command.</p>
+<p>Use the <code>rpm -qc openssh-server</code> command to show that the SSH server configuration settings are in <code>/etc/ssh/sshd_conf</code>. Like most Linux configuration files it is plain text and, at least, on CentOS is well commented. Notice that lines need to be uncommented for a change to be effective. Also, You need to reload the configuration file for changes to become effective using the <code>systemctl stop sshd.service</code> command then <code>systemctl start sshd.service</code>.</p>
+
+<p>Before you edit the file it’s a good idea to back it up.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># cp /etc/ssh/sshd_config /root/sshd_config.bak</span></code></pre>
 
 
 
@@ -110,11 +127,13 @@
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ ssh tux@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.123</span></code></pre>
 
+
+
 <h3 id="change-default-port">Change Default Port</h3>
 
 <p>SSH by default listens on port 22. You can change this by uncommenting the line <strong>port 22</strong> and changing the port number to an unused port in the <strong>registered</strong> or <strong>ephemeral</strong> range. See Wikipedia link to ports under <em>Resources</em> below.</p>
 
-<p>Be sure to follow the instructions in the <em>sshd_config</em> to set SELinux. Use <code>yum whatprovides</code> to see what package contains <code>semanage</code>.</p>
+
 
 <h4 id="open-the-port-in-the-firewall">Open the Port in the Firewall</h4>
 
@@ -141,15 +160,11 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 
 <p>Run a <code>nmap</code> scan and there should be no “interesting” ports open.</p>
 
+
+
 <h4 id="making-changes-permanent">Making Changes Permanent</h4>
 
 <p>None of these changes will survive a reboot unless the <strong>–permanent</strong> option is added to the above commands.</p>
-
-
-
-<h3 id="selinux">SELinux</h3>
-
-<p>Use the instructions in the configuration file to configure SELinux to recognize the new port. Use <code>yum provides</code> if needed to find the correct package to install.</p>
 
 
 
@@ -181,6 +196,8 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 
 <p>If you created SSH keys you can disable password logins entirely. Uncomment and change <strong>PasswordAuthentication</strong> to <em>no</em> to disable password logins. <em>Warning:</em> If you lose your SSH keys you will not be able to login.</p>
 
+
+
 <h2 id="adding-an-ssh-banner-optional">Adding an SSH Banner (optional)</h2>
 
 <p>Adding a welcome banner that warns that all activity on the server is a good idea. Creating a banner text file and adding a line to the <em>sshd_config</em> file is all that is needed.</p>
@@ -192,6 +209,8 @@ Install <code>firewalld</code>. Since port <strong>2222</strong> (our example) i
 <p>Next add this line to the <em>/etc/ssh/sshd_config</em> file.</p>
 
 <p>Now reload the configuration file for the change to take effect.</p>
+
+
 
 <h2 id="ssh-to-the-new-port">SSH to the New Port</h2>
 
