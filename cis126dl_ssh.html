@@ -1,10 +1,14 @@
 <p><img src="http://openssh.com/images/openssh.gif" alt="OpenSSH" title=""></p>
 
+
+
 <h2 id="using-ssh-for-remote-connections">Using SSH for remote connections</h2>
 
 <p>The suite of tools that make up the OpenSSH package replace <code>telnet</code>, <code>ftp</code> and rtools for connecting over insecure networks. Secure Shell or SSH, as we know it creates a secure end-to-end tunnel using strong encryption.</p>
 
 <p>In this assignment you’ll use <code>ssh</code>, <code>scp</code> and <code>sftp</code> to connect to another workstation and transfer files.</p>
+
+
 
 <h2 id="assignment-objectives">Assignment Objectives</h2>
 
@@ -58,11 +62,15 @@
 
 <p>In this assignment you will be working with another student. Setup Ubuntu as the SSH client and CentOS as the SSH server.</p>
 
+
+
 <h3 id="bridging-the-network">Bridging the Network</h3>
 
 <p>Both hosts need to be on the same network and have different IP addresses. Before starting the CentOS minimum virtual machine set networking in VirtualBox to bridging and under Advanced refresh the MAC address.:</p>
 
 <p><img src="https://s3.amazonaws.com/CIS126DL/Images/vbox_bridged.png" alt="Network bridge settings in VirtualBox" title="Network bridge setting in VirtualBox"></p>
+
+
 
 <h3 id="check-that-the-host-is-reachable">Check that the Host is Reachable</h3>
 
@@ -78,29 +86,39 @@
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ ping <span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span> -c4</code></pre>
 
+
+
+<h3 id="hostname">Hostname</h3>
+
+<p>If you are using two CentOS VM’s changing the <strong>hostname</strong> on the server will make easier to know when you are loginto the server.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># hostname set-hostname ssh-server</span></code></pre>
+
 <h3 id="create-an-account-on-the-host">Create an Account on the Host</h3>
 
-<p>To complete this lab you’ll need to work with another student.</p>
+<p>To complete this lab you’ll need to work with another student or have two VMs running on two workstations.</p>
 
-<p>Set up accounts on each virtual machine so that you can each log in remotely. Use a login name appropriate for the student logging in. Login names should be short, lower case and not contain spaces. Be sure to assign a password to the accounts.</p>
-
-
+<p>Create user <em>jstudent</em> on the client and user <em>tux</em> on the server.</p>
 
 <h4 id="centos">CentOS</h4>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># useradd -m -c "Jack Student" jstudent</span>
 
 <span class="hljs-comment"># passwd jstudent</span></code></pre>
 
-
-
 <h4 id="ubuntu">Ubuntu</h4>
 
-<p>You can use the <em>Tux</em> on Ubuntu</p>
+<p>You can use the <em>Tux</em> user on Ubuntu or</p>
 
 <h3 id="openssh-server">OpenSSH Server</h3>
 
 <p>Both the OpenSSH client and server should already be installed but the server may need to be started. Check with the <strong>status</strong> option then use the <strong>start</strong> option if needed.</p>
+
+
 
 <h4 id="centos-1">CentOS</h4>
 
@@ -110,7 +128,11 @@
 
 <p>The SSH server listens on port 22. You can use <code>netstat</code> on the server virtual machine to confirm that the SSH server is listening on port 22.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># netstat -luntp</span></code></pre>
+
+
 
 <h3 id="firewall">Firewall</h3>
 
@@ -131,6 +153,8 @@
 <p>You can omit the user name if it’s the same as the local user.</p>
 
 <p>The first time you connect you will be presented with the fingerprint of the server to confirm you are connecting to the correct host. After giving the password for the remote account you will be logged into the remote machine. To close the connection type <code>exit</code> and you will be returned to your own virtual machine.</p>
+
+
 
 <h2 id="secure-ftp">Secure FTP</h2>
 
@@ -165,9 +189,13 @@ Uploading copyright</code></pre>
 
 <p>Delete <em>copyright</em> from the local directory then download the copy from the server.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ scp jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span>:copyright .</code></pre>
 
 <p>The final period (<strong>.</strong>) represent the current directory.</p>
+
+
 
 <h2 id="using-ssh-with-public-key-authorization">Using SSH with Public Key Authorization</h2>
 
@@ -179,7 +207,7 @@ Uploading copyright</code></pre>
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">$ ssh-keygen
+<pre class="prettyprint"><code class="language-bash hljs ">$ ssh-keygen <span class="hljs-operator">-f</span> tux_rsa
 Generating public/private rsa key pair.
 Enter file <span class="hljs-keyword">in</span> which to save the key (/home/jstudent/.ssh/id_rsa):
 Enter passphrase (empty <span class="hljs-keyword">for</span> no passphrase): 
@@ -203,6 +231,8 @@ The key<span class="hljs-string">'s randomart image is:
 
 <p>The <em>randomart</em> serves the same purpose as the artwork you may have selected when you set up online access to your bank account. It helps assure you are connected to the correct host.</p>
 
+
+
 <h2 id="placing-the-public-key-on-the-remote-host">Placing the Public Key on the Remote Host</h2>
 
 <p>Before you can use the keys the public key must be appended to <em>~.ssh/authorized_keys</em> on the remote host. You will use <code>ssh-copy-id</code> to copy the <em>public key</em> to the remote host.</p>
@@ -217,6 +247,8 @@ The key<span class="hljs-string">'s randomart image is:
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ ssh-copy-id -i .ssh/id_rsa.pub jstudent@<span class="hljs-number">192.168</span>.<span class="hljs-number">201.106</span></code></pre>
 
+
+
 <h2 id="connecting-using-publicprivate-keys">Connecting Using Public/Private Keys</h2>
 
 <p>Now that you have the public key added to <em>authorized_keys</em> on the virtual machine you can connect using the private key.</p>
@@ -227,6 +259,8 @@ The key<span class="hljs-string">'s randomart image is:
 
 <p>If you used a passphrase to protect the private you will need to enter it. If not after a short wait you should see the shell prompt on the virtual machine.</p>
 
+
+
 <h2 id="ssh-agent-and-key-chain">SSH Agent and Key Chain</h2>
 
 <p>The <code>ssh-agent</code> command caches the private key passphrase so you only need to enter it once per session. Refer to this <a href="http://www.ibm.com/developerworks/library/l-keyc/index.html" title="Setting up SSH Agent">IBM developerworks</a> tutorial on setting up SSH-Agent and key chain.</p>
@@ -236,6 +270,8 @@ The key<span class="hljs-string">'s randomart image is:
 <h2 id="the-ssh-client-configuration">The SSH Client Configuration</h2>
 
 <p>The global SSH client file is <em>/etc/ssh/ssh_config</em> (<em>Do not edit this file.*and each user can have a local configuration file named *config</em> in that user’s <em>~/.ssh</em> directory. The customizations make it easy to log in to multiple hosts. Here is an example from my <em>config</em>:</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">Host ironman
     HostName <span class="hljs-number">72.208</span>.<span class="hljs-number">176.109</span>
@@ -264,6 +300,8 @@ The key<span class="hljs-string">'s randomart image is:
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of the ~/.ssh/config file you created to automate login to the virtual machine. For full credit include the two lines that show that public key encryption is being used to login.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
