@@ -1,10 +1,14 @@
-<h1 id="introduction">Introduction</h1>
+<h1 id="bash-functions">Bash Functions</h1>
+
+
+
+<h2 id="introduction">Introduction</h2>
 
 <p>A <strong>function</strong> is a script within a script. Using functions in your scripts makes the script cleaner. A function can contain any commands you can place in a script.</p>
 
 
 
-<h1 id="terms-and-concepts">Terms and Concepts</h1>
+<h2 id="terms-and-concepts">Terms and Concepts</h2>
 
 <ul>
 <li>declare (-f, -F)</li>
@@ -15,19 +19,32 @@
 
 
 
-<h1 id="create-first-function">Create First Function</h1>
+<h2 id="order-of-precedence">Order of Precedence</h2>
 
-<pre><code>#!/usr/bin/env bash
+<p>Commands are run in this order:</p>
 
-# Date: Today
-# Author: Tux Penguin
-# Purpose: Demo functions
+<ol>
+<li>Aliases</li>
+<li>Keywords</li>
+<li>Functions</li>
+<li>Scripts &amp; Programs</li>
+</ol>
 
-function showdate() {
-  date +%F
-}
 
-function showtime() {
+
+<h2 id="create-first-function">Create First Function</h2>
+
+<p>#!/usr/bin/env bash</p>
+
+<p># Date: Today <br>
+  # Author: Tux Penguin <br>
+  # Purpose: Demo functions</p>
+
+<p>function showdate() { <br>
+    date +%F <br>
+    }</p>
+
+<pre><code>function showtime() {
   date +%r
 }
 
@@ -45,64 +62,52 @@ function getname() {
 
 
 
-<h1 id="source-the-script">Source the Script</h1>
+<h2 id="source-the-script">Source the Script</h2>
 
-<p>When a script is called directory Bash opens a subshell to run the script. Calling the script with the <code>source</code> command assures that the functions are available to the current shell and not a subshell.</p>
+<p>When a script is called directly either with <code>bash</code> or by making the script executable Bash opens a subshell to run the script. Calling the script with the <code>source</code> command assures that the functions are available to the current shell and not a subshell.</p>
 
 <p><img src="https://s3.amazonaws.com/CIS239DL/img/bash_subshell.png" alt="Diagram showing running a script in a shell vs. a subshell." title=""></p>
 
-<p>You can demonstrate this by creating a simple script that echos a message to the console and then exits.</p>
+<p>You can demonstrate this by creating a simple script that prints a message to the console and then exits.</p>
 
-<pre><code>#!/bin/bash
 
-echo Bye now
 
-exit
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash
+</span>
+<span class="hljs-built_in">echo</span> Bye now
+
+<span class="hljs-keyword">exit</span></code></pre>
 
 <p>Run the script first with <code>source</code>.</p>
 
-<pre><code>$ bash exit.sh
-Bye now
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">source</span> exit.sh</code></pre>
 
 <p>then with <code>bash</code></p>
 
-<p>Since <code>source</code> runs the script in the same shell the <code>exit</code> command exits from the shell. Run from <code>bash</code> the script runs in a subshell than returns to the main shell.</p>
-
-<pre><code>#END
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ bash exit.sh</code></pre>
 
-<h1 id="profile-or-bashprofile">~/.profile or ~/.bash_profile</h1>
-
-<p>To have functions available after login you can put the functions in ~/.bashrc or source a separate function library.</p>
+<p>Since <code>source</code> runs the script in the same shell the <code>exit</code> command exits from the shell. Run from <code>bash</code> the script runs in a subshell than returns to the main shell. The shell remains open.</p>
 
 
 
-<h1 id="what-to-submit">What to Submit</h1>
+<h2 id="make-functions-and-custom-commands-available">Make Functions and Custom Commands Available</h2>
 
-<p>Create simple Bash script containing a function.</p>
-
-
-
-<h1 id="order-of-precedence">Order of Precedence</h1>
-
-<table border="1">
-<tbody><tr><td>Aliases</td></tr>
-<tr><td>Keywords</td></tr>
-<tr><td>Functions</td></tr>
-<tr><td>Build-ins</td></tr>
-<tr><td>Scripts &amp; Programs</td></tr>
-</tbody></table>
+<p>To have functions available after login you can put the functions in ~/.bashrc or source a separate function library. On Ubuntu the file is named ~/.bash_aliases`.</p>
 
 
 
-<h1 id="resources">Resources</h1>
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Take the script from Assignment 1 and re-write the read statements as functions. Call the function in place of the read statement.</p>
+
+<h2 id="resources">Resources</h2>
 
 <ul>
-<li>Chapter 3</li>
+<li><a href="http://mywiki.wooledge.org/BashGuide/CompoundCommands#Functions">Greg’s Bash Guide</a></li>
 </ul>
 
 <p></p>
