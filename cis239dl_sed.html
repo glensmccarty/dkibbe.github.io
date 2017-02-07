@@ -2,57 +2,66 @@
 
 <p><code>sed</code> is a stream editor for filtering and transforming text and supports regular expressions. By default <code>sed</code> outputs to STDOUT and does not alter the original file.</p>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
-<p>Create a file to work on.</p>
 
-<pre><code>$ cat &gt; twain.txt
+
+<h3 id="create-a-file-to-work-on">Create a file to work on.</h3>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ cat &gt; twain.txt
 Mark Twain
 Mr. Mark Twain
 Samuel Clemens
-mark twain
-</code></pre>
+mark twain</code></pre>
 
-<p>Create asecond file.</p>
+<p>Type <strong>Ctrl+D</strong> on a line by itself to end entering text.</p>
 
-<pre><code>$ cat &gt; linux.txt
-http://example.com/tux/
-</code></pre>
+<h3 id="create-a-second-file">Create a second file.</h3>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ cat &gt; linux.txt
+http://example.com/tux/</code></pre>
 
 <p>Type <strong>Ctrl+D</strong> on a line by itself to end the file.</p>
 
 <h3 id="substitution">Substitution</h3>
 
-<pre><code>$ sed 's/Mark/Mary/' twain.txt
-</code></pre>
 
-<p>Sed is case sensitive so <em>mark twain</em> isn't changed. The single quotes are necessary to protect the shell from forward slashes. If you only want to see the lines changed use the <strong>-n</strong> and <strong>p</strong> options.</p>
 
-<pre><code>sed -n 's/mark twain/Tom Sawyer/p' twain.txt
-</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed <span class="hljs-string">'s/Mark/Mary/'</span> twain.txt</code></pre>
+
+<p>Sed is case sensitive so <em>mark twain</em> isn’t changed. The single quotes are necessary to protect the shell from forward slashes. If you only want to see the lines changed use the <strong>-n</strong> and <strong>p</strong> options.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed -n <span class="hljs-string">'s/mark twain/Tom Sawyer/p'</span> twain.txt</code></pre>
 
 <h3 id="multiple-substitutions">Multiple Substitutions</h3>
 
 <p>Sed statements are separated by a semicolon so you can use more than one substitution.</p>
 
-<pre><code>$ sed 's/Mark/Samuel/ ; s/Mr./Ms./' twain.txt
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed <span class="hljs-string">'s/Mark/Samuel/ ; s/Mr./Ms./'</span> twain.txt</code></pre>
 
 <h3 id="deletion">Deletion</h3>
 
 <p>The <strong>d</strong> instruction tells <code>sed</code> to delete the line rather than make a substitution.</p>
 
-<pre><code>$ sed '/Mark/d' twain.txt
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed <span class="hljs-string">'/Mark/d'</span> twain.txt</code></pre>
 
 <h3 id="sed-scripts">Sed Scripts</h3>
 
 <p>Sed scripts can be placed in a file. One script per line with no quotes.</p>
 
-<pre><code>$ cat &gt; sed.txt
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ cat &gt; sed.txt
 s/Mark/Samuel/
-/Mr. /d
-</code></pre>
+/Mr. /d</code></pre>
 
 <p>Type <strong>Ctrl+D</strong> on a line by itself to end the file.</p>
 
@@ -60,33 +69,31 @@ s/Mark/Samuel/
 
 <p>Sed can edit the original file with the <strong>-i</strong> option.</p>
 
-<pre><code>$ sed -i 's/mark twain/Tom Sawyer/' twain.txt
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed -i <span class="hljs-string">'s/mark twain/Tom Sawyer/'</span> twain.txt</code></pre>
 
 <p>And make a backup if a suffix is given.</p>
 
-<pre><code>$ sed -i.bak 's/mark twain/Tom Sawyer/' twain.txt
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed -i.bak <span class="hljs-string">'s/mark twain/Tom Sawyer/'</span> twain.txt</code></pre>
 
 <h3 id="write-to-a-file">Write to a File</h3>
 
 <p>The <strong>w</strong> instruction writes changes to the named file. The <strong>-n</strong> option suppresses output to the command line.</p>
 
-<pre><code> $ sed -n 's/Mark/Tom/w twain.new' twain.txt
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed -n <span class="hljs-string">'s/Mark/Tom/w twain.new'</span> twain.txt</code></pre>
 
 <h3 id="display-pattern">Display Pattern</h3>
 
-<p>Here <code>sed</code> just displays the pattern "PASS" at the start of a line.</p>
-
-<pre><code>$ sed -n '/^PASS/p' /etc/login.defs
-</code></pre>
+<p>Here <code>sed</code> just displays the pattern “PASS” at the start of a line.</p>
 
 
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed -n <span class="hljs-string">'/^PASS/p'</span> /etc/login.defs</code></pre>
 
 <h3 id="replace-the-default-separator">Replace the Default Separator</h3>
 
@@ -94,21 +101,28 @@ s/Mark/Samuel/
 
 <p>Instead of:</p>
 
-<pre><code>$ sed 's/http:\/\/example.com\/tux\//http:\/\/tux.example.com/' linux.txt
-</code></pre>
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed <span class="hljs-string">'s/http:\/\/example.com\/tux\//http:\/\/tux.example.com/'</span> linux.txt</code></pre>
 
 <p>You can substitute another character for the separator.</p>
 
-<pre><code>$ sed 's_http://example.com/tux/_http://tux.example.com_' linux.txt
-</code></pre>
 
 
+<pre class="prettyprint"><code class="language-bash hljs ">$ sed <span class="hljs-string">'s_http://example.com/tux/_http://tux.example.com_'</span> linux.txt</code></pre>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Using two <code>sed</code> statements separated by a semi-color ( <strong>;</strong> ) to replace every instant of GNU in /usr/share/doc/bash/copyright with your initials then print <em>only</em> those lines to STDOUT..</p>
 
 <h2 id="resources">Resources</h2>
 
 <ul>
-<li><a href="https://www.gnu.org/software/sed/manual/">GNU sed Users' Manual</a></li>
+<li><a href="https://www.gnu.org/software/sed/manual/">GNU sed Users’ Manual</a></li>
 <li><a href="http://www.ibm.com/developerworks/library/l-sed1/">Sed by Example</a></li>
+<li><a href="http://sed.sourceforge.net/sed1line.txt">Sed One-Liners</a></li>
 <li><a href="http://www.ibm.com/developerworks/aix/tutorials/au-unixtips3/index.html">Introducing filters and regular expressions</a></li>
 <li><a href="http://www.regular-expressions.info/posixbrackets.html">POSIX Character Classes</a></li>
 </ul>
