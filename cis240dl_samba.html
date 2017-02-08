@@ -37,15 +37,13 @@
 
 <p>Use a CentOS7 virtual Machine on the 192.168.201.0/24 network.</p>
 
-<p>Take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems.</p>
-
-
+<p>Take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems. Clear Bash history as well.</p>
 
 <h2 id="install-samba">Install Samba</h2>
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install samba samba-commons samba-client cups-libs cifs-utils policycoreutils-python</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install samba samba-common samba-client cups-libs cifs-utils policycoreutils-python</span></code></pre>
 
 <h2 id="create-directory-to-share">Create directory to share</h2>
 
@@ -110,20 +108,9 @@
 
 <p><em>Be sure to uncomment options that you change.</em></p>
 
-
-
-<h3 id="interfaces-and-hosts-global">Interfaces and Hosts [global]</h3>
-
-
-
-<pre class="prettyprint"><code class="language-samba hljs fix"><span class="hljs-attribute">interfaces </span>=<span class="hljs-string"> lo eth0 192.168.201.0/24
-hosts allow = 127. 192.168.201.</span></code></pre>
-
-<p><em>Make sure the interface you enter is your active interface!</em></p>
-
 <h3 id="public-share-public">Public Share [public]</h3>
 
-<p>At the bottom of <code>/etc/samba/smb.conf</code>edit and uncomment the appropriate lines in [public]</p>
+<p>Copy the <strong>[public]</strong> section from <em>/etc/samba/smb.conf.example</em> to <em>/etc/samba/smb.conf</em>. Edit the section as needed.</p>
 
 <h2 id="testing-the-configuration">Testing the Configuration</h2>
 
@@ -138,12 +125,16 @@ hosts allow = 127. 192.168.201.</span></code></pre>
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl start smb.service</span>
 <span class="hljs-comment"># systemctl start nmb.service</span></code></pre>
 
+
+
 <h2 id="enable-samba-on-boot">Enable Samba On Boot</h2>
 
 
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl enable smb.service</span>
 <span class="hljs-comment"># systemctl enable nmb.service</span></code></pre>
+
+
 
 <h2 id="netbios-ports">NetBIOS Ports</h2>
 
@@ -152,6 +143,14 @@ hosts allow = 127. 192.168.201.</span></code></pre>
 
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># grep netbios /etc/services</span></code></pre>
+
+
+
+<h2 id="test-the-connection">Test the Connection</h2>
+
+<p>Before setting up the firewall test the connection. From the Windows Run Dialog box connect to the Samba server.</p>
+
+<pre class="prettyprint"><code class=" hljs tex"><span class="hljs-command">\\</span>192.168.201.123</code></pre>
 
 <h2 id="firewall">Firewall</h2>
 
@@ -163,19 +162,23 @@ hosts allow = 127. 192.168.201.</span></code></pre>
 
 # firewall-cmd --reload</code></pre>
 
+
+
 <h2 id="connect-from-windoze">Connect from Windoze</h2>
 
 <p>From the Windows Run Dialog box connect to the Samba server.</p>
 
 
 
-<pre class="prettyprint"><code class=" hljs tex"><span class="hljs-command">\\</span>192.168.201.123<span class="hljs-command">\srv</span><span class="hljs-command">\smb</span><span class="hljs-command">\data</span></code></pre>
+<pre class="prettyprint"><code class=" hljs tex"><span class="hljs-command">\\</span>192.168.201.123</code></pre>
 
 <h2 id="connect-from-linux">Connect from Linux</h2>
 
 
 
 <pre class="prettyprint"><code class="language-bash hljs ">    $ smbclient -L \\<span class="hljs-number">192.168</span>.<span class="hljs-number">201.123</span> -U tux</code></pre>
+
+
 
 <h2 id="mount-samba-directory">Mount Samba Directory</h2>
 
