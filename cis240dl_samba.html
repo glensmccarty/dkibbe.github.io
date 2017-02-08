@@ -1,553 +1,208 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>Samba on Fedora</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="title" content="Samba on Fedora"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2016-09-15 Thu"/>
-<meta name="author" content="Dennis Kibbe"/>
-<meta name="description" content=""/>
-<meta name="keywords" content=""/>
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
-  html { font-family: Times, serif; font-size: 12pt; }
-  .title  { text-align: center; }
-  .todo   { color: red; }
-  .done   { color: green; }
-  .tag    { background-color: #add8e6; font-weight:normal }
-  .target { }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
-  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
-  .center {margin-left:auto; margin-right:auto; text-align:center;}
-  p.verse { margin-left: 3% }
-  pre {
-	border: 1pt solid #AEBDCC;
-	background-color: #F3F5F7;
-	padding: 5pt;
-	font-family: courier, monospace;
-        font-size: 90%;
-        overflow:auto;
-  }
-  table { border-collapse: collapse; }
-  td, th { vertical-align: top;  }
-  th.right  { text-align:center;  }
-  th.left   { text-align:center;   }
-  th.center { text-align:center; }
-  td.right  { text-align:right;  }
-  td.left   { text-align:left;   }
-  td.center { text-align:center; }
-  dt { font-weight: bold; }
-  div.figure { padding: 0.5em; }
-  div.figure p { text-align: center; }
-  div.inlinetask {
-    padding:10px;
-    border:2px solid gray;
-    margin:10px;
-    background: #ffffcc;
-  }
-  textarea { overflow-x: auto; }
-  .linenr { font-size:smaller }
-  .code-highlighted {background-color:#ffff00;}
-  .org-info-js_info-navigation { border-style:none; }
-  #org-info-js_console-label { font-size:10px; font-weight:bold;
-                               white-space:nowrap; }
-  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
-                                 font-weight:bold; }
-  /*]]>*/-->
-</style>
-<link rel="stylesheet" type="text/css" href="http://www.w3.org/StyleSheets/Core/Oldstyle.css" /> 
-<style type="text/css"> pre {font-size: 80%; font-weight:bold; line-height: 120%; padding-top: 0.2em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; border-style: solid; border-left-width: 1em; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-color: #95ABD0; color: #00428c; background-color: #e4e5e7;} </style>
-<style type="text/css"> code {color: blue; font-weight:bold;} </style>
-<script type="text/javascript" src="http://orgmode.org/org-info.js">
-/**
- *
- * @source: http://orgmode.org/org-info.js
- *
- * @licstart  The following is the entire license notice for the
- *  JavaScript code in http://orgmode.org/org-info.js.
- *
- * Copyright (C) 2012-2013  Sebastian Rose
- *
- *
- * The JavaScript code in this tag is free software: you can
- * redistribute it and/or modify it under the terms of the GNU
- * General Public License (GNU GPL) as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option)
- * any later version.  The code is distributed WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you
- * may distribute non-source (e.g., minimized or compacted) forms of
- * that code without the copy of the GNU GPL normally required by
- * section 4, provided you include this license notice and a URL
- * through which recipients can access the Corresponding Source.
- *
- * @licend  The above is the entire license notice
- * for the JavaScript code in http://orgmode.org/org-info.js.
- *
- */
-</script>
+<h1 id="samba">Samba</h1>
 
-<script type="text/javascript">
+<h2 id="overview">Overview</h2>
 
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
+<p>Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.</p>
 
 
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
 
-<!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "http://dkibbe.github.io");
-org_html_manager.set("LINK_UP", "http://dkibbe.github.io");
-org_html_manager.set("LOCAL_TOC", "above");
-org_html_manager.set("VIEW_BUTTONS", "0");
-org_html_manager.set("MOUSE_HINT", "underline");
-org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "0");
-org_html_manager.set("VIEW", "info");
-org_html_manager.setup();  // activate after the parameters are set
-/*]]>*///-->
-</script>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
+<h2 id="assignment-objectives">Assignment Objectives</h2>
 
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
+<p><em>When you have successfully completed this assignment you will be able to:</em> </p>
 
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
-
-</head>
-<body>
-
-<div id="preamble">
-
-</div>
-
-<div id="content">
-<h1 class="title">Samba on Fedora</h1>
-
-
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Introduction</a></li>
-<li><a href="#sec-2">2 Assignment Objectives</a></li>
-<li><a href="#sec-3">3 Terms You Should Know</a></li>
-<li><a href="#sec-4">4 Preparation</a></li>
-<li><a href="#sec-5">5 Create Samba User</a></li>
-<li><a href="#sec-6">6 Create a Samba Share</a>
-<ul>
-<li><a href="#sec-6-1">6.1 Add Content</a></li>
-<li><a href="#sec-6-2">6.2 Add Samba Group</a></li>
-<li><a href="#sec-6-3">6.3 Add jstudent to the Samba Group</a></li>
-<li><a href="#sec-6-4">6.4 Set Permissions and Ownership</a></li>
-</ul>
-</li>
-<li><a href="#sec-7">7 SELinux</a></li>
-<li><a href="#sec-8">8 Install Configuration Tools</a></li>
-<li><a href="#sec-9">9 Configuration</a>
-<ul>
-<li><a href="#sec-9-1">9.1 Samba</a></li>
-<li><a href="#sec-9-2">9.2 Firewall</a></li>
-<li><a href="#sec-9-3">9.3 Test the Configuration</a></li>
-</ul>
-</li>
-<li><a href="#sec-10">10 Connect from Windows</a></li>
-<li><a href="#sec-11">11 What to Submit</a></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
-
-
-<p>
-  Samba provides secure, stable and fast file and print services for Linux and Windows clients using the SMB/CIFS protocol.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Assignment Objectives</h2>
-<div class="outline-text-2" id="text-2">
-
-
-<p>
-  When you have successfully completed this assignment you will be able to:
-</p>
-<ul>
-<li>Configure a Samba server on Fedora.
-</li>
-<li>Create a Samba user.
-</li>
-<li>Configure SELinux to work with Samba.
-</li>
-<li>Connect to the Samba server from a Windows workstation.
-</li>
+<li>Configure a Samba server on CentOS &amp;</li>
+<li>Configure SELinux to work with Samba</li>
+<li>Connect to the Samba server from a Windows workstation.</li>
 </ul>
 
 
-</div>
 
-</div>
-
-<div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Terms You Should Know</h2>
-<div class="outline-text-2" id="text-3">
-
+<h2 id="terms-you-should-know">Terms You Should Know</h2>
 
 <dl>
-<dt>/etc/samba/smb.conf</dt><dd>The Samba configuration file.
-</dd>
-<dt>smb</dt><dd>Server Message Block daemon
-</dd>
-<dt>nmb</dt><dd>NetBIOS Message Block daemon
-</dd>
-<dt>smbclient</dt><dd>CLI tool to show Samba configuration.
-</dd>
-<dt>testparm</dt><dd>CLI tool to check /etc/samba/smb.conf syntax.
-</dd>
-<dt>system-config-samba</dt><dd>GUI configuration tool for Samba
-</dd>
-<dt>firewall-config</dt><dd>GUI firewall configuration tool
-</dd>
+<dt>/etc/samba/smb.conf</dt>
+<dd>The Samba configuration file.</dd>
+
+<dt>smb</dt>
+<dd>Server Message Block daemon</dd>
+
+<dt>nmb</dt>
+<dd>NetBIOS Message Block daemon</dd>
 </dl>
 
 
-</div>
 
-</div>
+<h2 id="preparation">Preparation</h2>
 
-<div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Preparation</h2>
-<div class="outline-text-2" id="text-4">
+<p>Use a CentOS7 virtual Machine on the 192.168.201.0/24 network.</p>
 
+<p>Take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems.</p>
+
+
+
+<h2 id="install-samba">Install Samba</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install samba samba-commons samba-client cups-libs cifs-utils policycoreutils-python</span></code></pre>
+
+<h2 id="create-directory-to-share">Create directory to share</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># mkdir -p /srv/smb/data</span></code></pre>
+
+<p>Add a file SUCCESS.txt to the directory.</p>
+
+<h3 id="add-samba-group">Add Samba Group</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># groupadd staff</span></code></pre>
+
+<h3 id="set-permissions-and-ownership">Set Permissions and Ownership</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># chgrp -R staff /srv/smb/data</span>
+<span class="hljs-comment"># chmod 0755 /srv/smb/data</span></code></pre>
+
+<h3 id="set-security">Set Security</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># chcon -R -t samba_share_t /srv/smb/data</span>
+<span class="hljs-comment"># semanage fcontext -a -t samba_share_t /srv/smb/data</span>
+<span class="hljs-comment"># setsebool -P samba_enable_home_dirs on</span></code></pre>
+
+<h2 id="add-user">Add User</h2>
+
+<p>If you haven’t done so already add a user.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># useradd tux</span>
+<span class="hljs-comment"># passwd tux</span></code></pre>
+
+<h3 id="add-to-samba-group">Add to Samba Group</h3>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># usermod -aG staff tux</span>
+<span class="hljs-comment"># smbpasswd -a tux</span></code></pre>
+
+<h2 id="configure-samba">Configure Samba</h2>
+
+
+
+<h3 id="the-comment-characters">The Comment Characters</h3>
+
+<p><em>Samba configuration file uses two types of comments.</em></p>
+
+<dl>
+<dt>(hash) #</dt>
+<dd>Comments and text</dd>
+
+<dt>(semicolon) ;</dt>
+<dd>Options</dd>
+</dl>
+
+<p><em>Be sure to uncomment options that you change.</em></p>
+
+
+
+<h3 id="interfaces-and-hosts-global">Interfaces and Hosts [global]</h3>
+
+
+
+<pre class="prettyprint"><code class="language-samba hljs fix"><span class="hljs-attribute">interfaces </span>=<span class="hljs-string"> lo eth0 192.168.201.0/24
+hosts allow = 127. 192.168.201.</span></code></pre>
+
+<p><em>Make sure the interface you enter is your active interface!</em></p>
+
+<h3 id="public-share-public">Public Share [public]</h3>
+
+<p>At the bottom of <code>/etc/samba/smb.conf</code>edit and uncomment the appropriate lines in [public]</p>
+
+<h2 id="testing-the-configuration">Testing the Configuration</h2>
+
+<p>Use <code>testparm</code> to check the configuration. </p>
+
+
+
+<h2 id="start-samba">Start Samba</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl start smb.service</span>
+<span class="hljs-comment"># systemctl start nmb.service</span></code></pre>
+
+<h2 id="enable-samba-on-boot">Enable Samba On Boot</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl enable smb.service</span>
+<span class="hljs-comment"># systemctl enable nmb.service</span></code></pre>
+
+<h2 id="netbios-ports">NetBIOS Ports</h2>
+
+<p>Should already be there.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># grep netbios /etc/services</span></code></pre>
+
+<h2 id="firewall">Firewall</h2>
+
+
+
+<pre class="prettyprint"><code class=" hljs erlang"># firewall-cmd --permanent --add-rich-rule='rule family=<span class="hljs-string">"ipv4"</span> source address=<span class="hljs-string">"192.168.201.0/24"</span> service name=<span class="hljs-string">"samba"</span> log prefix=<span class="hljs-string">"samba"</span> level=<span class="hljs-string">"info"</span> limit value=<span class="hljs-string">"1/m"</span> accept'
+
+# firewall-cmd --add-service=samba
+
+# firewall-cmd --reload</code></pre>
+
+<h2 id="connect-from-windoze">Connect from Windoze</h2>
+
+<p>From the Windows Run Dialog box connect to the Samba server.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs tex"><span class="hljs-command">\\</span>192.168.201.123<span class="hljs-command">\srv</span><span class="hljs-command">\smb</span><span class="hljs-command">\data</span></code></pre>
+
+<h2 id="connect-from-linux">Connect from Linux</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">    $ smbclient -L \\<span class="hljs-number">192.168</span>.<span class="hljs-number">201.123</span> -U tux</code></pre>
+
+<h2 id="mount-samba-directory">Mount Samba Directory</h2>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># mount -cifs //192.168.201.123/srv/smb/data -o username=tux /mnt/</span></code></pre>
+
+<h2 id="from-ubuntu">From Ubuntu</h2>
+
+<p>Click Dash and type <code>smb://192.168.201.123/</code></p>
+
+
+
+<h2 id="what-to-submit">What to Submit</h2>
+
+<p>Submit a screenshot of Windows or Linux accessing the Samba server.</p>
+
+<h2 id="resources">Resources</h2>
 
 <ul>
-<li>Use a Fedora virtual Machine on the 192.168.201.0/24 network.
-</li>
-<li>Set networking to <i>Bridged adapter</i>, connect the cable and refresh the MAC address.
-</li>
-<li>Boot the VM and take a <a href="https://www.virtualbox.org/manual/ch01.html#snapshots">snapshot</a> in VirtualBox so you can roll back if you have problems.
-</li>
+<li><a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-File_and_Print_Servers.html#s1-Samba">Red Hat Deployment Guide</a></li>
+<li>Samba Documentation</li>
+<li>man (5) smb.conf</li>
+<li><a href="http://samba.org">Samba Website</a></li>
+<li><a href="https://dkibbe.github.io/cis240dl_samba.html">Latest version of this assignment</a></li>
 </ul>
 
-
-</div>
-
-</div>
-
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Create Samba User</h2>
-<div class="outline-text-2" id="text-5">
-
-
-<p>   
-   Create a new user that you will add as a Samba user.
-</p>
-
-
-
-<pre class="example"># useradd jstudent
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Create a Samba Share</h2>
-<div class="outline-text-2" id="text-6">
-
-
-<ol>
-<li>Add a directory to share.
-</li>
-</ol>
-
-
-<pre class="example">
-# mkdir -p /srv/data
-</pre>
-
-
-
-</div>
-
-<div id="outline-container-6-1" class="outline-3">
-<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Add Content</h3>
-<div class="outline-text-3" id="text-6-1">
-
-
-<p>
-   Create a text file in the shared directory.  Change <i>jstudent</i> to your name and the IP address to that of your Samba server.
-</p>
-<pre class="example">
-# echo "This is Jstudent on 192.168.201.123" &gt; /srv/data/Success!
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6-2" class="outline-3">
-<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Add Samba Group</h3>
-<div class="outline-text-3" id="text-6-2">
-
-
-<pre class="example">
-# groupadd staff
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6-3" class="outline-3">
-<h3 id="sec-6-3"><span class="section-number-3">6.3</span> Add jstudent to the Samba Group</h3>
-<div class="outline-text-3" id="text-6-3">
-
-
-<pre class="example">
-# usermod -aG staff jstudent
-# smbpasswd -a tux
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6-4" class="outline-3">
-<h3 id="sec-6-4"><span class="section-number-3">6.4</span> Set Permissions and Ownership</h3>
-<div class="outline-text-3" id="text-6-4">
-
-
-<pre class="example">
-# chgrp -R staff /srv/smb/data
-# chmod 0755 /srv/smb/data
-</pre>
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> SELinux</h2>
-<div class="outline-text-2" id="text-7">
-
-
-<p>
-  The directory you created needs the correct SELinux security context.  The last command will allow Samba users to access their home directories as well.
-</p>
-
-
-
-<pre class="example"># chcon -R -t samba_share_t /srv/smb/data
-# semanage fcontext -a -t samba_share_t /srv/smb/data
-# setsebool -P samba_enable_home_dirs on
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Install Configuration Tools</h2>
-<div class="outline-text-2" id="text-8">
-
-
-
-
-
-<pre class="example"># dnf install system-config-samba firewall-config
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> Configuration</h2>
-<div class="outline-text-2" id="text-9">
-
-
-
-</div>
-
-<div id="outline-container-9-1" class="outline-3">
-<h3 id="sec-9-1"><span class="section-number-3">9.1</span> Samba</h3>
-<div class="outline-text-3" id="text-9-1">
-
-
-<p>
-   Open the Samba configuration tool.
-</p>
-<ol>
-<li>Add <i>jstudent</i> as a Samba user.
-</li>
-<li>Add <code>/srv/data</code> as a Samba share.
-</li>
-</ol>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9-2" class="outline-3">
-<h3 id="sec-9-2"><span class="section-number-3">9.2</span> Firewall</h3>
-<div class="outline-text-3" id="text-9-2">
-
-
-<p>
-   Open the firewall configuration tool.
-</p>
-<ol>
-<li><i>Sambaclient</i> should already be checked as a service.
-</li>
-<li>Make the change permanent.
-</li>
-</ol>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9-3" class="outline-3">
-<h3 id="sec-9-3"><span class="section-number-3">9.3</span> Test the Configuration</h3>
-<div class="outline-text-3" id="text-9-3">
-
-
-<p>
-   You can test the configuration from another Linux VM using <code>smbclient</code>.
-</p>
-<pre class="example">
-$ smbclient -L \\192.168.201.123 -U jstudent
-</pre>
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Connect from Windows</h2>
-<div class="outline-text-2" id="text-10">
-
-
-<p>
-  From the Windows Run dialog box using the IP address of your Samba server.
-</p>
-<pre class="example">
-\\192.168.201.123
-</pre>
-
-
-<p>
-  You will be asked for the user name and password for <i>jstudent</i>.  The network password will be the same.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> What to Submit</h2>
-<div class="outline-text-2" id="text-11">
-
-
-<p>
-  Submit a screenshot of the output of the <code>smbclient</code> command showing the Samba share or from Windows showing the connection.
-</p>
-
-</div>
-</div>
-</div>
-
-<div id="postamble">
-<p class="date">Date: 2016-09-15 Thu</p>
-<p class="author">Author: Dennis Kibbe</p>
-<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
-<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
-
-</div>
-</body>
-</html>
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
