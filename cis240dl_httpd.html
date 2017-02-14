@@ -114,19 +114,17 @@ example.com/ html/ logs/ staff.example.com/
 <p>Port 8080 is an alternative port for http so is added as a port not a service.</p>
 
 <pre><code># firewall-cmd --zone=public --add-service=http -permanent
-# firewall-cmd --zone=public --add-port=8080/tcp --permenent
+# firewall-cmd --zone=public --add-port=8080/tcp --permanent
 # firewall-cmd --reload
 </code></pre>
 
-<p>Listing the services and port should show that the commandssucceeded.</p>
+<p>Listing the services and port should show that the commands succeeded.</p>
 
 <pre><code># firewall-cmd --list-services
 # firewall-cmd --list-ports
 </code></pre>
 
 <p>Refresh the web page in Firefox and you should still see the testing 1, 2, 3 page.</p>
-
-
 
 <h3 id="snapshot">Snapshot</h3>
 
