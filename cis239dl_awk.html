@@ -1,4 +1,4 @@
-<h1 id="awk-awk-awk">AWK, AWK ,AWK!</h1>
+<h1 id="awk-awk-awk">AWK, AWK, AWK!</h1>
 
 <h2 id="introduction">Introduction</h2>
 
@@ -25,6 +25,8 @@
 <li><strong>gawk (GNU AWK)</strong></li>
 </ul>
 
+
+
 <h2 id="preparation">Preparation</h2>
 
 <ol>
@@ -36,7 +38,7 @@
 
 <blockquote>
   <p>Mark Twain <br>
-    Huckleberry "Huck" Finn <br>
+    Huckleberry “Huck” Finn <br>
     Tom Sawyer <br>
     Pap Finn <br>
     Samuel Clements <br>
@@ -61,8 +63,6 @@
 
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk <span class="hljs-string">'{print}'</span> twain.txt</code></pre>
-
-<p>// $ awk '{print}' twain.txt</p>
 
 <p>or</p>
 
@@ -152,7 +152,7 @@
 
 <pre class="prettyprint"><code class="language-awk hljs ruby"><span class="hljs-variable">$ </span>awk /<span class="hljs-constant">Finn</span>/<span class="hljs-string">'{print $0} /berry/{print $0}'</span> twain.txt</code></pre>
 
-<p>And you can add a comment or anything else to the output. <em>Huckleberry "Huck" Finn</em> is printed twice since it matches both patterns.</p>
+<p>And you can add a comment or anything else to the output. <em>Huckleberry “Huck” Finn</em> is printed twice since it matches both patterns.</p>
 
 
 
@@ -208,7 +208,7 @@
 
 <h3 id="use-a-variable-v">Use a Variable (-v)</h3>
 
-<p>You can use variables wit AWK. Here we'll create a Variable that will print some text.</p>
+<p>You can use variables wit AWK. Here we’ll create a Variable that will print some text.</p>
 
 
 
@@ -224,7 +224,7 @@
 
 <h2 id="begin-end">BEGIN &amp; END</h2>
 
-<p>In the previous examples AWK printed text after every line. Let's change that with BEGIN and END.</p>
+<p>In the previous examples AWK printed text after every line. Let’s change that with BEGIN and END.</p>
 
 <p>At the beginning of the file:</p>
 
@@ -242,15 +242,13 @@
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Submit a one line AWK program (not in a text/script file) that will output the <em>login</em> and <em>GECOS</em> fields in <em>/etc/passwd</em> for each account to STDOUT. Separate the fields with a <em>space</em> followed by a <em>dash</em> followed by a <em>space</em>. Remove any trailing commas from the GECOS field. The first line in the output should read "Accounts on xps13". Replace <strong>xps13</strong> with the actual hostname of the system you ran the script on. Sort the output by the login field.</p>
+<p>Submit a one line AWK program (not in a text/script file) that will output the <em>login</em> and <em>GECOS</em> fields in the provided <em>/etc/passwd</em> for each account to STDOUT. Separate the fields with a <em>space</em> followed by a <em>dash</em> followed by a <em>space</em>. Remove any trailing commas from the GECOS field. The first line in the output should read “Accounts on the Memphis Belle”. Replace <strong>Memphis Belle</strong> with the actual hostname of the system you ran the script on. Sort the output by the login field.</p>
 
-<p>Submit the assignment on <a href="http://fpastebin.net">Fedora pastebin</a>.</p>
+<p>Submit the assignment on <a href="https://paste.fedoraproject.org/">Fedora pastebin</a>.</p>
 
 <p><em>Hint: </em> Think outside the AWK. Pipe is your friend.</p>
 
 <p>Sample output :</p>
-
-
 
 <pre class="prettyprint"><code class=" hljs livecodeserver">Accounts <span class="hljs-command"><span class="hljs-keyword">on</span> <span class="hljs-title">xps13</span></span>
 avahi - Avahi mDNS daemon
@@ -261,6 +259,8 @@ daemon - daemon
 dennisk - Dennis Kibbe</code></pre>
 
 <p>For 2 points extra arrange the commands so that the <em>Accounts on xps13</em> stays at the top of the output.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
