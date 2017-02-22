@@ -1,6 +1,6 @@
 <h1 id="here-documents">Here Documents</h1>
 
-<p>A here document contained in a script can be used to deliver information when the script is run similar to the <code>echo</code> command. Here is an example from Greg's Bash Guide:</p>
+<p>A here document contained in a script can be used to deliver information when the script is run similar to the <code>echo</code> command. Here is an example from Greg’s Bash Guide:</p>
 
 <pre><code>usage() {
     cat &lt;&lt;EOF
@@ -11,7 +11,7 @@
 }
 </code></pre>
 
-<p>The actual here document starts with <code>cat</code> and ends with <strong>EOF</strong>. The text between the End Of File markers is the text that is printed out. To make the here document easier to call in thwe script it has been wrapped in a function.</p>
+<p>The actual here document starts with <code>cat</code> and ends with <strong>EOF</strong>. The text between the End Of File markers is the text that is printed out. To make the here document easier to call in the script it has been wrapped in a function.</p>
 
 <p>If the text of the here Doc is indented with Tabs. use the dash (<strong>-</strong>) option to remove them before printing.</p>
 
@@ -20,7 +20,7 @@
 
 <h2 id="feeding-data-to-a-command">Feeding Data to a Command</h2>
 
-<p>Just as text is feed to the screen using <code>cat</code> data can be input to a command the same way.</p>
+<p>Just as text is feed to the screen using <code>cat</code> data can be input to a command the same way. A token indicating the end of the input (here EOF) is entered on a line by itself.</p>
 
 <pre><code>ftp -n &lt;&lt; EOF
 open mirrors.xmission.com
@@ -34,16 +34,7 @@ EOF
 
 <h2 id="what-to-submit">What to Submit</h2>
 
-<p>Create a script containing a here document that prints the following information. </p>
-
-<pre><code>Today is Tuesday
-You are logged into a Linux system named xps13.
-Here is some info about the root partition:
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda4        99G   26G   68G  28% /
-</code></pre>
-
-<p>In your script <strong>Tuesday</strong>, <strong>Linux</strong>, <strong>xps13</strong> and the last line (<strong>/dev/sda4...</strong>) should be replaced with the appropriate values from the system the script will be run on.</p>
+<p>Add a here document to the Rock, Paper, Scissors assignment that prints usage if the wrong entry is given.</p>
 
 <h2 id="resources">Resources</h2>
 
