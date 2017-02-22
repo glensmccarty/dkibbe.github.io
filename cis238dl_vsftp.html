@@ -29,22 +29,40 @@
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
-<ul>
-<li><strong>FTP</strong> - File Transfer Protocol</li>
-<li><code>/usr/sbin/vsftpd</code> - The Very Secure FTP server</li>
-<li><code>/etc/vsftpd/vsftpd.conf</code> - Main configuration file for <code>vsftp</code>.</li>
-<li><code>/etc/vsftpd/ftpusers</code> - Lists users <em>not</em> allowed to log into the FTP server.</li>
-<li><code>/etc/vsftpd/userlist</code> - Either allow or deny users depending on <code>userlist_deny</code> in <code>vsftpd.conf</code>.</li>
-<li><code>/var/ftp</code>- FTP working directory</li>
-<li><code>/var/ftp/pub</code> - Directory for anonymous FTP access.</li>
-<li><code>etc/services</code> - A plain  ASCII  text file  that provides a mapping between human-friendly textual names for internet services, and their  underlying assigned port numbers and protocol types.</li>
-<li><strong>MOTD</strong> - Message of the Day</li>
-<li>Client/Server model</li>
-<li><strong>FileZilla</strong> - Popular cross-platform FTP client.</li>
-<li><strong>SELinux</strong> - Security Enhanced Linux</li>
-</ul>
+<dl>
+<dt><strong>FTP</strong></dt>
+<dd>File Transfer Protocol</dd>
 
+<dt><code>/usr/sbin/vsftpd</code></dt>
+<dd>The Very Secure FTP server</dd>
 
+<dt><code>/etc/vsftpd/vsftpd.conf</code></dt>
+<dd>Main configuration file for <code>vsftp</code></dd>
+
+<dt><code>/etc/vsftpd/ftpusers</code></dt>
+<dd>Lists users <em>not</em> allowed to log into the FTP server.</dd>
+
+<dt><code>/etc/vsftpd/userlist</code></dt>
+<dd>Either allow or deny users depending on <code>userlist_deny</code> in <code>vsftpd.conf</code>.</dd>
+
+<dt><code>/var/ftp</code></dt>
+<dd>FTP working directory</dd>
+
+<dt><code>/var/ftp/pub</code></dt>
+<dd>Directory for anonymous FTP access.</dd>
+
+<dt><code>etc/services</code></dt>
+<dd>A plain  ASCII  text file  that provides a mapping between human-friendly textual names for Internet services, and their  underlying assigned port numbers and protocol types.</dd>
+
+<dt><strong>MOTD</strong></dt>
+<dd>Message of the Day</dd>
+
+<dt><strong>FileZilla</strong></dt>
+<dd>Popular cross-platform FTP client.</dd>
+
+<dt><strong>SELinux</strong></dt>
+<dd>Security Enhanced Linux</dd>
+</dl>
 
 <h2 id="how-ftp-works">How FTP works</h2>
 
@@ -75,10 +93,11 @@
 
 <p>Open a terminal and type <code>ftp</code> to start an FTP session.</p>
 
-<pre><code>$ ftp&gt; open ftp.freebsd.org
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ ftp&gt; open ftp.freebsd.org
 Connected to ftp.geo.freebsd.org.
-220 This is ftp0.nyi.freebsd.org - hosted at NYI.net.
-</code></pre>
+<span class="hljs-number">220</span> This is ftp0.nyi.freebsd.org - hosted at NYI.net.</code></pre>
 
 <p>You will be asked to login as <em>anonymous</em>. (No not that anonymous) There is no password but as a courtesy you could enter your email address.</p>
 
@@ -86,17 +105,13 @@ Connected to ftp.geo.freebsd.org.
 
 <p>Change to the <em>pub</em> directory then the <em>FreeBSD</em> directory. Use <em>get</em> to fetch the <em>README.TXT</em> file to your local current directory. Type <em>exit</em> to close the connection.</p>
 
-
-
 <h2 id="install-the-very-secure-ftp-server-and-ftp-client">Install the Very Secure FTP server and FTP client</h2>
 
 <p>vsFTPd is in the CentOS official repository and can be installed using <code>yum</code>. The FTP client is not installed by default and can be installed at the same time as the server.</p>
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># yum install vsftpd ftp</span></code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install vsftpd ftp</span></code></pre>
 
 <h3 id="starting-the-service">Starting the Service</h3>
 
@@ -104,21 +119,15 @@ Connected to ftp.geo.freebsd.org.
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl start vsftpd.service</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl start vsftpd.service</span></code></pre>
 
 <p>You can check if the server is running with this command.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl status vsftpd.service</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl status vsftpd.service</span></code></pre>
 
 <p>To make sure the service starts on reboot.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl enable vsftpd</span></code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl enable vsftpd</span></code></pre>
 
 <h2 id="configure-the-firewall">Configure the Firewall</h2>
 
@@ -126,26 +135,25 @@ Connected to ftp.geo.freebsd.org.
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># systemctl start firewalld.service</span>
-<span class="hljs-preprocessor"># systemctl enable firewalld.service</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl start firewalld.service</span>
+<span class="hljs-comment"># systemctl enable firewalld.service</span></code></pre>
 
 <p>Next add the default port for FTP.</p>
 
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># firewall-cmd --add-service ftp</span>
+<span class="hljs-comment"># firewall-cmd --list-services</span></code></pre>
+
+<p>You should see the service enable in the firewall.</p>
 
 
-<pre class="prettyprint"><code class=" hljs livecodeserver"><span class="hljs-comment"># firewall-cmd --add-service ftp</span>
-<span class="hljs-comment"># firewall-cmd --list-services</span>
-``
 
-You should see <span class="hljs-operator">the</span> service enable <span class="hljs-operator">in</span> <span class="hljs-operator">the</span> firewall.</code></pre>
-
-<h2 id="ftp-banner">FTP Banner</h2>
+<pre class="prettyprint"><code class=" hljs markdown"><span class="hljs-code">```</span> bash
+<span class="hljs-header">## FTP Banner</span>
+</code></pre>
 
 <p>First make a backup of the <code>vsftpd</code> main configuration file to root’s home directory.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># cp /etc/vsftpd/vsftpd.conf ~/vsftpd.conf.bak</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># cp /etc/vsftpd/vsftpd.conf ~/vsftpd.conf.bak</span></code></pre>
 
 <p>Find the section with the login banner string.</p>
 
@@ -157,10 +165,8 @@ You should see <span class="hljs-operator">the</span> service enable <span class
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># cd /var/ftp</span>
-<span class="hljs-preprocessor"># touch hello.txt</span></code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># cd /var/ftp</span>
+<span class="hljs-comment"># touch hello.txt</span></code></pre>
 
 <h2 id="use-ftp-to-access-the-file">Use FTP to access the file</h2>
 
@@ -168,8 +174,8 @@ You should see <span class="hljs-operator">the</span> service enable <span class
 
 <p>Start the FTP client and try to open a connection to <em>localhost</em> .</p>
 
-<pre class="prettyprint"><code class=" hljs livecodeserver">    <span class="hljs-comment"># ftp</span>
-    <span class="hljs-keyword">ftp</span>&gt; <span class="hljs-built_in">open</span> localhost</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs ">    <span class="hljs-comment"># ftp</span>
+    ftp&gt; open localhost</code></pre>
 
 <p>Login as user <em>anonymous</em> with no password. You can than type <code>help</code> to get a list of commands. Refer to the FTP beginner’s guide under <em>Resources</em> below.</p>
 
@@ -229,24 +235,18 @@ You should see <span class="hljs-operator">the</span> service enable <span class
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls </span>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ls </span>
 anaconda-ks.cfg
-<span class="hljs-preprocessor"># cp anaconda-ks.cfg anaconda-ks.cfg.copy</span>
-<span class="hljs-preprocessor"># cp anaconda-ks.cfg anaconda-ks.cfg.move</span></code></pre>
-
-
+<span class="hljs-comment"># cp anaconda-ks.cfg anaconda-ks.cfg.copy</span>
+<span class="hljs-comment"># cp anaconda-ks.cfg anaconda-ks.cfg.move</span></code></pre>
 
 <h4 id="check-the-selinux-security-context">Check the SELinux Security Context</h4>
 
-<p>Use the <code>ls -Z</code> command to list the SELinux</p>
+<p>Use the <code>ls -Z</code> command to list the SELinux security contexts.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -Z anaconda*</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ls -Z anaconda*</span></code></pre>
 
 <p>All three files have the same security context - <em>admin_home_t</em>.</p>
-
-
 
 <h3 id="copy-and-move-the-files">Copy and Move the files</h3>
 
@@ -254,15 +254,11 @@ anaconda-ks.cfg
 
 
 
-<pre class="prettyprint"><code class=" hljs rust">#  cp anaconda-ks.cfg.<span class="hljs-keyword">copy</span> /var/ftp/<span class="hljs-keyword">pub</span>/</code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment">#  cp anaconda-ks.cfg.copy /var/ftp/pub/</span></code></pre>
 
 <p>and the <code>mv</code> command to <em>move</em> <code>anaconda-ks.cfg.move</code> to <code>/var/ftp/pub</code></p>
 
-
-
-<pre class="prettyprint"><code class=" hljs rust"># mv anaconda-ks.cfg.<span class="hljs-keyword">move</span> /var/ftp/<span class="hljs-keyword">pub</span></code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># mv anaconda-ks.cfg.move /var/ftp/pub</span></code></pre>
 
 <h4 id="use-ftp-to-list-the-files">Use FTP to list the files</h4>
 
@@ -277,12 +273,8 @@ anaconda-ks.cfg
 <p>SELinux has stepped in to block vsFTP from serving the file because the security context is wrong. Use the following command to show that  <br>
 <code>anaconda-ks.cfg.move</code> has the wrong security context.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs bash"><span class="hljs-comment"># cd /var/ftp/pub</span>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># cd /var/ftp/pub</span>
 ls <span class="hljs-operator">-l</span>Z</code></pre>
-
-
 
 <h3 id="restoring-the-correct-security-context">Restoring the correct security context</h3>
 
@@ -290,15 +282,11 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -ldZ /var/ftp/pub</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ls -ldZ /var/ftp/pub</span></code></pre>
 
 <p>shows that the correct security context for files in this directory is <em>public_content_t</em>.</p>
 
-
-
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># ls -lZ /var/ftp/pub/*</span></code></pre>
-
-
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># ls -lZ /var/ftp/pub/*</span></code></pre>
 
 <h2 id="selinux-1">SELinux</h2>
 
@@ -308,11 +296,9 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># setenforce 0</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># setenforce 0</span></code></pre>
 
 <p>Refresh the listing and <code>anaconda-ks.cfg.move</code> now shows up.</p>
-
-
 
 <h2 id="correcting-a-mis-configured-file">Correcting a Mis-configured File</h2>
 
@@ -326,7 +312,7 @@ ls <span class="hljs-operator">-l</span>Z</code></pre>
 
 
 
-<pre class="prettyprint"><code class=" hljs vala"><span class="hljs-preprocessor"># restorecon -r /var/ftp/*</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># restorecon -r /var/ftp/*</span></code></pre>
 
 <h3 id="change-the-security-context-of-a-file">Change the Security Context of a File</h3>
 
