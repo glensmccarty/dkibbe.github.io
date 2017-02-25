@@ -13,25 +13,26 @@
 <ul>
 <li>Install and configure fail2ban.</li>
 <li>Install and configure logwatch.</li>
+<li>Install and activate bash-completion.</li>
 </ul>
-
-
 
 <h2 id="preparation">Preparation</h2>
 
 <ul>
-<li>Set networking for the CentOS 7 virtual machine to bridged.</li>
+<li>Set networking for the CentOS 7 virtual machine to bridged adapter.</li>
 <li>Take a snapshot of the virtual machine before starting.</li>
-<li>Test IP address.</li>
+<li>Test that the IP address of CentOS is on the classroom network.</li>
+<li>Determine the IP address of the Windows workstation or another VM on the classroom network.</li>
+<li>Make sure that the OpenSSH server is listening on the default port 22.</li>
 </ul>
-
-
 
 <h3 id="install-epel">Install EPEL</h3>
 
-
+<p>The EPEL (Extrra Packages for Enterprise Linux) contains packages from Fedora that have been tested to work well with Red Hat Enterprise Linux and CentOS. Both Fail2ban and Logwatch are EPEL packages.</p>
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install epel-release</span></code></pre>
+
+
 
 <h2 id="install-fail2ban">Install Fail2ban</h2>
 
@@ -39,15 +40,23 @@
 
 <pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install fail2ban</span></code></pre>
 
-<p>After installation <code>rpm -qi fail2ban</code> will give you a description of the program.</p>
+<p>After installation <code>rpm -qi fail2ban</code> will give you a description of the program. You can do the same with logwatch.</p>
 
 <h2 id="firewalld">Firewalld</h2>
 
-<p>Install and enable firewalld if needed.</p>
+<p>Install and enable firewalld if needed. Make sure The ssh service is listed.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># yum install firewalld</span>
+<span class="hljs-comment"># systemctl start firewalld</span>
+<span class="hljs-comment"># firewall-cmd --list-all</span></code></pre>
 
 
 
 <h2 id="configuration">Configuration</h2>
+
+<p>Fail2ban is controlled by configuration files in <code>/etc/fail2ban</code>. See <code>jail.conf</code> and it’s man page for details. For this assignment you will put custom configurations in <code>/etc/fail2ban/fail2ban.d/</code></p>
 
 <p></p>
 
@@ -55,11 +64,17 @@
 
 <p>Copy <em>jail.conf</em> to <em>jail.local</em> or <em>/etc/fail2ban/jail.d/customisation.local</em> and edit this file rather than the main config file.</p>
 
-<h3 id="ip-addresses-to-ignore">IP Addresses to Ignore</h3>
-
-<p>You can set IP addresses that will never be blocked by fail2ban.</p>
 
 
+<h3 id="set-custom-options">Set Custom Options</h3>
+
+<p>Create <code>01-fail2ban</code> in <code>/etc/fail2ban/fail2ban.d</code>Configuration files in a directory ending with <strong>.d</strong> will be included in the main configuration. This makes configuration easier and avoids editing the main configuration file.</p>
+
+
+
+<h4 id="defaults">Defaults</h4>
+
+<p>In a DEFAULTS section you will list any IP addresses that you never want blocked, how long an IP address will be banned and after how many tries the address will be baned. Shorten the <em>bantime</em> from 3600 seconds (60 minutes) to 60 seconds to make it easier to see Fail2ban at work. Change <em>maxretry to 2</em>.</p>
 
 <pre class="prettyprint"><code class="language-bash hljs ">[DEFAULT]
 
@@ -68,11 +83,7 @@
     bantime  = <span class="hljs-number">3600</span>
     maxretry = <span class="hljs-number">3</span></code></pre>
 
-<h3 id="email">Email</h3>
-
-<p>If you wish to be notified of bans by email, modify this line with your email address:</p>
-
-
+<p></p>
 
 <pre class="prettyprint"><code class="language-bash hljs ">destemail = your_email@domain.com</code></pre>
 
@@ -88,30 +99,28 @@
 
 <pre class="prettyprint"><code class="language-bash hljs ">action = %(action_mw)s</code></pre>
 
+<p>–&gt;</p>
+
 <h3 id="jails">Jails</h3>
 
-<p>Jails are the rules which fail2ban apply to a given application/log. Here is an example for the SSH server.</p>
-
-
+<p>Jails are the rules which fail2ban applies to a given application. Here is an example for the SSH server. This goes in the same custom configuration file allong with thr default settings.</p>
 
 <pre class="prettyprint"><code class="language-bash hljs ">[ssh]
-
     enabled = <span class="hljs-literal">true</span>
     port    = ssh
-    filter  = sshd
-    logpath  = /var/log/auth.log
-    maxretry = <span class="hljs-number">3</span></code></pre>
+    filter  = sshd</code></pre>
+
+
+
+<h4 id="test-the-configuration">Test the Configuration</h4>
+
+<p>Use <code>`fail2ban-clienf -d</code> to test the configuration.</p>
+
+<p><code>fail2ban-client status</code></p>
 
 <h3 id="logging">Logging</h3>
 
-<p>Fail2ban writes to /var/log/fail2ban.</p>
-
-<h2 id="start-and-enable-fail2ban">Start and Enable fail2ban</h2>
-
-
-
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># systemctl start fail2ban</span>
-<span class="hljs-comment"># systemctl enable fail2ban</span></code></pre>
+<p>Fail2ban writes to /var/log/fail2ban. Use<code>tail -f</code> to watch the log and fail2ban in action.</p>
 
 <h2 id="fail2ban-client">fail2ban-client</h2>
 
@@ -119,7 +128,13 @@
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># fail2ban-client status sshd</span></code></pre>
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-comment"># fail2ban-client status sshd</span>
+
+<span class="hljs-comment">## Log in with PuTTY</span>
+
+Use PuTTY, the free SSH client <span class="hljs-keyword">for</span> Windows to confirm you can log into the server as tux. If successful you should see an entry <span class="hljs-keyword">in</span> the log file.
+
+Now log out and purposely login with the wrong password. Again there should be an entry <span class="hljs-keyword">in</span> the log. After two tries you should see the IP address of the client banned.</code></pre>
 
 <h2 id="logwatch">Logwatch</h2>
 
@@ -132,6 +147,8 @@
 <h2 id="what-to-submit">What to Submit</h2>
 
 <p>Submit a screenshot of a log entry showing that Fail2ban blocked an IP address.</p>
+
+
 
 <h2 id="resources">Resources</h2>
 
