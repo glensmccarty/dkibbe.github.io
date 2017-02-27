@@ -26,6 +26,8 @@
 <pre class="prettyprint"><code class="language-bash hljs ">$ mkdir -p ~/temp/backup
 $ <span class="hljs-built_in">cd</span> temp</code></pre>
 
+
+
 <h2 id="why-use-arrays">Why use Arrays?</h2>
 
 <p>Arrays assure that your script will work properly regardless of input.</p>
@@ -42,6 +44,8 @@ $ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span
 
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ files=(*.txt); cp <span class="hljs-string">"<span class="hljs-variable">${files[@]}</span>"</span> backup/</code></pre>
+
+
 
 <h2 id="terms-you-should-know">Terms You Should Know</h2>
 
@@ -73,11 +77,11 @@ $ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ alias lls=<span class="hljs-string">'ls -l'</span></code></pre>
 
+
+
 <h2 id="functions">Functions</h2>
 
-<p>Functions can contain more than one command and be use in scripts.</p>
-
-
+<p>Functions can contain more than one command and be used in scripts.</p>
 
 <h2 id="arrays-1">Arrays</h2>
 
@@ -93,6 +97,8 @@ $ files=<span class="hljs-string">"<span class="hljs-variable">$(ls *.txt)</span
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ names=(Bob Carol Ted Alice)</code></pre>
 
+
+
 <h3 id="whats-in-the-array">What’s in the Array?</h3>
 
 <p>You can display all the elements of an array this way.</p>
@@ -104,8 +110,12 @@ Bob Carol Ted Alice</code></pre>
 
 <p>Or a single element by its position in the array. Note that the first element is <strong>0</strong>.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${names[0]}</span>"</span>
 Bob</code></pre>
+
+
 
 <h4 id="adding-to-an-array">Adding to an Array</h4>
 
@@ -118,10 +128,14 @@ Bob</code></pre>
 
 <p>Elements are assigned an index number starting with zero.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ names[<span class="hljs-number">5</span>]=<span class="hljs-string">"Big Bopper"</span>
 Big Bopper</code></pre>
 
 <p>It’s OK to skip index numbers as we did here.</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">    $ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${!names[@]}</span>"</span>
     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">5</span>
@@ -142,6 +156,8 @@ Big Bopper</code></pre>
 
 <p>Since index <strong>4</strong> was not assigned it is not printed.</p>
 
+
+
 <h4 id="find-the-length-of-an-element">Find the Length of an Element</h4>
 
 <p>The length of element <strong>0</strong> (Bob):</p>
@@ -152,6 +168,8 @@ Big Bopper</code></pre>
     <span class="hljs-number">3</span></code></pre>
 
 <p>The length of element <strong>5</strong> (Big Bopper):</p>
+
+
 
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${#names[5]}</span>"</span>
 <span class="hljs-number">10</span></code></pre>
@@ -173,9 +191,13 @@ alice</code></pre>
 
 <p>or unset all</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-built_in">unset</span> names <span class="hljs-comment"># or unset names[@]</span>
 $ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-variable">${names[*]}</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>; <span class="hljs-keyword">done</span>
 (No output)</code></pre>
+
+
 
 <h2 id="word-splitting">Word Splitting</h2>
 
@@ -196,15 +218,21 @@ $ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <
 
 <p>Make the script executable and run it with this example.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ ./args.sh hello world <span class="hljs-string">"how are you?"</span>
 <span class="hljs-number">3</span> args: &lt;hello&gt; &lt;world&gt; &lt;how are you?&gt;</code></pre>
 
 <p>This time without the quotes.</p>
 
+
+
 <pre class="prettyprint"><code class="language-bash hljs ">$ ./args.sh hello world how are you?
 <span class="hljs-number">5</span> args: &lt;hello&gt; &lt;world&gt; &lt;how&gt; &lt;are&gt; &lt;you?&gt;</code></pre>
 
 <p>The expansion is very different.</p>
+
+
 
 <h3 id="word-splitting-examples-with-an-arrays">Word Splitting Examples with an Arrays</h3>
 
@@ -212,7 +240,7 @@ $ <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <
 
 
 
-<pre class="prettyprint"><code class="language-bash hljs ">$ array=(testing testing <span class="hljs-string">"1 2 3"</span>)
+<pre class="prettyprint"><code class="language-bash hljs ">$ array=(testing testing <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>)
 $ ./args.sh <span class="hljs-variable">${array[@]}</span>
 <span class="hljs-number">5</span> args: &lt;testing&gt; &lt;testing&gt; &lt;<span class="hljs-number">1</span>&gt; &lt;<span class="hljs-number">2</span>&gt; &lt;<span class="hljs-number">3</span>&gt;</code></pre>
 
@@ -231,6 +259,8 @@ $ ./args.sh <span class="hljs-string">"<span class="hljs-variable">${array[@]}</
 <pre class="prettyprint"><code class="language-bash hljs ">$ <span class="hljs-keyword">declare</span> -A FullNames
 $ FullNames=( [MT]=<span class="hljs-string">"Mark Twain"</span> [TS]=<span class="hljs-string">"Tom Sawyer"</span> [HF]=<span class="hljs-string">"Huckleberry Finn"</span> )
 $ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">${FullNames[MT]}</span>"</span></code></pre>
+
+
 
 <h2 id="what-to-submit">What to Submit</h2>
 
